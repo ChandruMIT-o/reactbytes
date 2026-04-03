@@ -16,12 +16,25 @@ const navItems: NavItem[] = [
 	{ id: "changelog", label: "Changelog" },
 ];
 
-export default function LeftSidebarMenu() {
+export default function LeftSidebarRefMenu() {
 	const [activeItem, setActiveItem] = useState<string>("intro");
 	const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
 
 	const activeIndex = navItems.findIndex((item) => item.id === activeItem);
 	const hoverIndex = navItems.findIndex((item) => item.id === hoveredItemId);
+
+	const [itemWidths, setItemWidths] = useState<{ [key: string]: number }>({});
+	const handleRef = (id: string, el: HTMLButtonElement | null) => {
+		if (el) {
+			const width = el.getBoundingClientRect().width;
+			if (itemWidths[id] !== width) {
+				setItemWidths((prev) => ({ ...prev, [id]: width }));
+			}
+		}
+	};
+
+	const activeWidth = itemWidths[activeItem] || 150;
+	const hoverWidth = hoveredItemId ? itemWidths[hoveredItemId] || 150 : 0;
 
 	// Spring configurations for premium feel
 	const springConfig = {
@@ -51,7 +64,7 @@ export default function LeftSidebarMenu() {
 
 				{/* Navigation Items */}
 				<nav
-					className="relative z-10 flex flex-col gap-[1px]"
+					className="relative z-10 flex flex-col"
 					onMouseLeave={() => setHoveredItemId(null)}
 				>
 					{/* LAYER 1: Hover Slider (Bottom) */}
@@ -62,39 +75,34 @@ export default function LeftSidebarMenu() {
 								initial={{ opacity: 0 }}
 								animate={{
 									opacity: 1,
-									top: hoverIndex * 45,
+									top: hoverIndex * 39,
+									width: hoverWidth,
 								}}
 								exit={{ opacity: 0 }}
 								transition={springConfig}
-								className="absolute left-[18px] -right-[18px] h-[44px] bg-[#1D1C21] rounded-xl z-0 pointer-events-none"
+								className="absolute left-[18px] h-[38px] bg-[#060010] rounded-xl z-0 pointer-events-none"
 							>
 								{/* Hover Pill (Left) */}
 								<motion.div
-									className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-[#F2EEE9] scale-y-75"
-									transition={springConfig}
-								/>
-								{/* Hover Dot (Right) */}
-								<motion.div
-									className="absolute right-[14px] top-[18.5px] w-[7px] h-[7px] rounded-full bg-[#F2EEE9] scale-75"
+									className="absolute left-[10px] top-[9px] w-[6px] h-[20px] rounded-full bg-[#F2EEE9]/30 scale-y-75"
 									transition={springConfig}
 								/>
 							</motion.div>
 						)}
 					</AnimatePresence>
 
-					{/* LAYER 2: Active Selection Indicator (Above Hover Slider) */}
-					{/* This is the primary indicator that slides upon selection */}
 					<motion.div
 						animate={{
-							top: activeIndex * 45,
+							top: activeIndex * 39,
+							width: activeWidth,
 						}}
 						transition={springConfig}
-						className="absolute left-[18px] -right-[18px] h-[44px] bg-[#F2EEE9] rounded-xl z-10 pointer-events-none"
+						className="absolute left-[18px] h-[38px] bg-[#060010] rounded-xl z-10 pointer-events-none"
 					>
 						{/* Active Pill (Left) */}
-						<div className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-[#060010] scale-y-85" />
+						<div className="absolute left-[10px] top-[9px] w-[6px] h-[20px] rounded-full bg-[#F2EEE9] scale-y-85" />
 						{/* Active Dot (Right) */}
-						<div className="absolute right-[14px] top-[18.5px] w-[7px] h-[7px] rounded-full bg-[#060010]" />
+						<div className="absolute right-[5px] top-[16px] w-[6px] h-[6px] rounded-full bg-[#F2EEE9]" />
 					</motion.div>
 
 					{/* LAYER 3: Navigation Buttons (Top Layer) */}
@@ -105,19 +113,19 @@ export default function LeftSidebarMenu() {
 						return (
 							<button
 								key={item.id}
+								ref={(el) => handleRef(item.id, el)}
 								onMouseEnter={() => setHoveredItemId(item.id)}
 								onClick={() => setActiveItem(item.id)}
-								className="group relative ml-[18px] flex h-[44px] w-full items-center justify-between px-[10px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#060010] active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
+								className="group relative ml-[18px] flex h-[38px] w-fit items-center justify-between pl-[10px] pr-[35px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#F2EEE9] active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
 							>
 								<div className="flex items-center gap-5 z-10">
-									{/* Spacer for Marker Alignment */}
 									<div className="w-[6px] invisible" />
 
 									<motion.span
 										className="text-[16px] tracking-tight transition-transform duration-300 ease-out group-hover:translate-x-[3px]"
 										animate={{
 											color: isActive
-												? "#060010"
+												? "#F2EEE9"
 												: isHovered
 													? "#F2EEE9"
 													: "#CECECE",
