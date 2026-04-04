@@ -35,20 +35,24 @@ export default function HeaderText({
 }: HeaderTextProps) {
 	const [isHovered, setIsHovered] = React.useState(false);
 	const Tag = `h${option}` as "h1" | "h2" | "h3" | "h4" | "h5";
+	const handleScroll = () => {
+		window.scrollTo({ top: 0, behavior: "smooth" });
+	};
 
 	return (
 		<div
-			className="group flex flex-row items-center gap-4 py-4 w-fit"
+			className="group flex flex-row items-center gap-4 py-2 w-fit"
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}
 		>
 			<Tag
 				className={cn(
 					headerStyles[option],
-					"select-none transition-all duration-300 ease-in-out cursor-default",
-					className
+					"select-none transition-all duration-300 ease-in-out cursor-pointer",
+					className,
 				)}
 				style={{ color: textColor }}
+				onClick={handleScroll}
 				{...props}
 			>
 				{text}
@@ -56,17 +60,26 @@ export default function HeaderText({
 			<AnimatePresence>
 				{isHovered && (
 					<motion.button
-						initial={{ opacity: 0, x: -20, scale: 0.5, rotate: -45 }}
+						initial={{
+							opacity: 0,
+							x: -20,
+							scale: 0.5,
+							rotate: -45,
+						}}
 						animate={{ opacity: 1, x: 0, scale: 1, rotate: 0 }}
 						exit={{ opacity: 0, x: -20, scale: 0.5, rotate: -45 }}
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
-						className="relative flex items-center justify-center w-[38px] h-[38px] rounded-full bg-[#181A1E] text-[#E6DFF1] hover:text-[#060010] transition-all duration-300 cursor-pointer overflow-hidden group/btn"
+						onClick={handleScroll}
+						className="relative flex items-center justify-center w-[38px] h-[38px] rounded-full bg-rb-neutral-3 text-rb-accent-2 hover:text-rb-neutral-2 transition-all duration-200 cursor-pointer overflow-hidden group/btn"
 					>
-						{/* Active Background Layer */}
-						<div className="absolute inset-0 bg-gradient-to-tr from-[#F2EEE9] to-[#E5E0D8] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-						
-						<ArrowUp size={20} strokeWidth={2.5} className="relative z-10" />
+						<div className="absolute inset-0 bg-gradient-to-tr from-rb-accent-1 to-rb-accent-2 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200" />
+
+						<ArrowUp
+							size={20}
+							strokeWidth={2.5}
+							className="relative z-10"
+						/>
 					</motion.button>
 				)}
 			</AnimatePresence>

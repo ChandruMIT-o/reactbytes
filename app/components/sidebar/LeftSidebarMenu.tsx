@@ -34,15 +34,15 @@ export default function LeftSidebarMenu() {
 		<div className="min-h-screen flex font-sans">
 			<div className="relative w-56 flex flex-col">
 				{/* Continuous Vertical Connecting Line */}
-				<div className="absolute left-[30px] top-[20px] bottom-8 w-[3px] bg-[#1D1C21] z-0 rounded-full" />
+				<div className="absolute left-[30px] top-[20px] bottom-8 w-[3px] bg-rb-neutral-4 z-0 rounded-full" />
 
 				{/* Top Home Icon */}
 				<div className="relative z-10 mb-3 ml-[20px]">
-					<button className="w-6 h-6 bg-[#F2EEE9] hover:bg-white transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110 hover:-rotate-6 active:scale-90 rounded-[7px] flex items-center justify-center">
+					<button className="w-6 h-6 bg-rb-accent-1 hover:bg-rb-accent-2 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110 hover:-rotate-6 active:scale-90 rounded-[7px] flex items-center justify-center">
 						<svg
 							viewBox="0 0 24 24"
 							fill="currentColor"
-							className="w-4 h-4 text-[#060010]"
+							className="w-4 h-4 text-rb-neutral-2"
 						>
 							<path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.99 9a.75.75 0 1 1-1.06 1.06l-.46-.46V20.5a1.5 1.5 0 0 1-1.5 1.5H15a.75.75 0 0 1-.75-.75V15a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75v6.25c0 .414-.336.75-.75.75H5.5a1.5 1.5 0 0 1-1.5-1.5v-7.059l-.46.46a.75.75 0 1 1-1.06-1.06l8.99-9Z" />
 						</svg>
@@ -66,16 +66,16 @@ export default function LeftSidebarMenu() {
 								}}
 								exit={{ opacity: 0 }}
 								transition={springConfig}
-								className="absolute left-[18px] -right-[18px] h-[44px] bg-[#1D1C21] rounded-xl z-0 pointer-events-none"
+								className="absolute left-[18px] -right-[18px] h-[44px] bg-rb-neutral-4 rounded-xl z-0 pointer-events-none"
 							>
 								{/* Hover Pill (Left) */}
 								<motion.div
-									className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-[#F2EEE9] scale-y-75"
+									className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-accent-1 scale-y-75"
 									transition={springConfig}
 								/>
 								{/* Hover Dot (Right) */}
 								<motion.div
-									className="absolute right-[14px] top-[18.5px] w-[7px] h-[7px] rounded-full bg-[#F2EEE9] scale-75"
+									className="absolute right-[14px] top-[18.5px] w-[7px] h-[7px] rounded-full bg-rb-accent-1 scale-75"
 									transition={springConfig}
 								/>
 							</motion.div>
@@ -89,12 +89,12 @@ export default function LeftSidebarMenu() {
 							top: activeIndex * 45,
 						}}
 						transition={springConfig}
-						className="absolute left-[18px] -right-[18px] h-[44px] bg-[#F2EEE9] rounded-xl z-10 pointer-events-none"
+						className="absolute left-[18px] -right-[18px] h-[44px] bg-rb-accent-1 rounded-xl z-10 pointer-events-none"
 					>
 						{/* Active Pill (Left) */}
-						<div className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-[#060010] scale-y-85" />
+						<div className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-neutral-2 scale-y-85" />
 						{/* Active Dot (Right) */}
-						<div className="absolute right-[14px] top-[18.5px] w-[7px] h-[7px] rounded-full bg-[#060010]" />
+						<div className="absolute right-[14px] top-[18.5px] w-[7px] h-[7px] rounded-full bg-rb-neutral-2" />
 					</motion.div>
 
 					{/* LAYER 3: Navigation Buttons (Top Layer) */}
@@ -107,7 +107,7 @@ export default function LeftSidebarMenu() {
 								key={item.id}
 								onMouseEnter={() => setHoveredItemId(item.id)}
 								onClick={() => setActiveItem(item.id)}
-								className="group relative ml-[18px] flex h-[44px] w-full items-center justify-between px-[10px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-[#060010] active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
+								className="group relative ml-[18px] flex h-[44px] w-full items-center justify-between px-[10px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-rb-neutral-2 active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
 							>
 								<div className="flex items-center gap-5 z-10">
 									{/* Spacer for Marker Alignment */}
@@ -117,10 +117,10 @@ export default function LeftSidebarMenu() {
 										className="text-[16px] tracking-tight transition-transform duration-300 ease-out group-hover:translate-x-[3px]"
 										animate={{
 											color: isActive
-												? "#060010"
+												? "var(--rb-neutral-2)"
 												: isHovered
-													? "#F2EEE9"
-													: "#CECECE",
+													? "var(--rb-accent-1)"
+													: "var(--rb-font-secondary)",
 											fontWeight:
 												isActive || isHovered
 													? 500

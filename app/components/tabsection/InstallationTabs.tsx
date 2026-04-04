@@ -19,13 +19,13 @@ export const InstallationTabs = () => {
 	return (
 		<div className="w-full max-w-4xl font-sans">
 			{/* Tabs Row Wrapper */}
-			<div className="bg-[#181A1E] p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max">
+			<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max">
 				<button
 					onClick={() => setActiveTab("cli")}
 					className={`px-3 py-1.5 text-[16px] font-medium rounded-full transition-all duration-300 ${
 						activeTab === "cli"
-							? "bg-[#F2EEE9] text-[#060010]"
-							: "text-[#E6DFF1] hover:bg-[#25282e]"
+							? "bg-rb-accent-1 text-rb-neutral-2"
+							: "text-rb-accent-2 hover:bg-rb-neutral-4"
 					}`}
 				>
 					CLI
@@ -34,8 +34,8 @@ export const InstallationTabs = () => {
 					onClick={() => setActiveTab("manual")}
 					className={`px-3 py-1.5 text-[16px] font-medium rounded-full transition-all duration-300 ${
 						activeTab === "manual"
-							? "bg-[#F2EEE9] text-[#060010]"
-							: "text-[#E6DFF1] hover:bg-[#25282e]"
+							? "bg-rb-accent-1 text-rb-neutral-2"
+							: "text-rb-accent-2 hover:bg-rb-neutral-4"
 					}`}
 				>
 					Manual
@@ -43,23 +43,23 @@ export const InstallationTabs = () => {
 			</div>
 
 			{/* Main Content Outer Wrapper (Acts as the thick grey border) */}
-			<div className="bg-[#181A1E] p-1.5 rounded-[24px] rounded-tl-none w-full relative">
+			<div className="bg-rb-neutral-3 p-1.5 rounded-[24px] rounded-tl-none w-full relative">
 				{/* Actual Content Area */}
-				<div className="bg-black rounded-[18px] w-full p-5 pr-14 text-[#E6DFF1]/60 font-mono text-[16px] border border-[#1D1C21] min-h-[82px] flex flex-col justify-center">
+				<div className="bg-rb-neutral-1 rounded-[18px] w-full p-5 pr-14 text-rb-accent-2/60 font-mono text-[16px] border border-rb-neutral-4 min-h-[82px] flex flex-col justify-center">
 					{activeTab === "cli" ? (
 						<div className="flex flex-col gap-2">
 							<div className="flex items-center gap-3">
-								<span className="text-[#F2EEE9] select-none">
+								<span className="text-rb-accent-1 select-none">
 									$
 								</span>
-								<span className="text-[#F2EEE9]">
+								<span className="text-rb-accent-1">
 									npm install your-package-name
 								</span>
 							</div>
 						</div>
 					) : (
 						<div className="flex flex-col gap-2 font-sans">
-							<p className="text-[#F2EEE9]">
+							<p className="text-rb-accent-1">
 								1. Download the latest release from GitHub.
 							</p>
 						</div>
@@ -69,7 +69,7 @@ export const InstallationTabs = () => {
 				{/* Copy Button */}
 				<button
 					onClick={handleCopy}
-					className="absolute top-4 right-4 p-2.5 items-center justify-center rounded-full bg-[#181A1E] text-[#E6DFF1]/40 border border-[#1D1C21] hover:text-[#E6DFF1] hover:bg-[#1f2126] transition-all group"
+					className="absolute top-4 right-4 p-2.5 items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
 					title="Copy to clipboard"
 				>
 					{copied ? (

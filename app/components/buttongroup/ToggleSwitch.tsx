@@ -5,10 +5,10 @@ const ToggleSwitch = () => {
 		<div className="flex items-center justify-center">
 			<label
 				htmlFor="themeToggle"
-				className="relative w-[38px] h-[38px] flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 bg-[#181A1E] text-[#E6DFF1] hover:bg-[#25282e] active:scale-95 group overflow-hidden"
+				className="relative w-[38px] h-[38px] flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 bg-rb-neutral-3 text-rb-accent-2 hover:bg-rb-neutral-4 active:scale-95 group overflow-hidden"
 			>
 				{/* Background layer for active state to support gradient transitions */}
-				<div className="absolute inset-0 bg-gradient-to-tr from-[#F2EEE9] to-[#E5E0D8] opacity-0 group-has-[:checked]:opacity-100 transition-opacity duration-300" />
+				<div className="absolute inset-0 bg-gradient-to-tr from-rb-accent-1 to-rb-accent-2 opacity-0 group-has-[:checked]:opacity-100 transition-opacity duration-300" />
 				
 				<input
 					type="checkbox"
@@ -19,7 +19,7 @@ const ToggleSwitch = () => {
 					viewBox="0 0 20 20"
 					fill="currentColor"
 					stroke="none"
-					className="w-5 h-5 relative z-10 transition-all duration-500 transform rotate-[40deg] group-has-[:checked]:rotate-[90deg] group-has-[:checked]:text-[#060010] pointer-events-none"
+					className="w-5 h-5 relative z-10 transition-all duration-500 transform rotate-[40deg] group-has-[:checked]:rotate-[90deg] group-has-[:checked]:text-rb-neutral-2 pointer-events-none"
 				>
 					<mask id="moon-mask">
 						<rect x={0} y={0} width={20} height={20} fill="white" />
