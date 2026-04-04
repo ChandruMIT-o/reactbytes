@@ -51,6 +51,45 @@
 	--radius: 0.625rem;
 }
 
+.light,
+[data-theme="light"] {
+	/* Neutrals */
+	--rb-neutral-1: #ffffff;
+	--rb-neutral-2: #f1f5fb;
+	--rb-neutral-3: #ecebff;
+	--rb-neutral-4: #f0f3ff;
+
+	/* Accents */
+	--rb-accent-1: #35012c;
+	--rb-accent-2: #4f0147;
+	--rb-accent-3: #3a015c;
+
+	/* Fonts */
+	--rb-font-primary: #060010;
+	--rb-font-secondary: #929292;
+
+	/* Functional Aliases (Light) */
+	--background: var(--rb-neutral-2);
+	--foreground: var(--rb-font-primary);
+	--background-layer3: var(--rb-neutral-1);
+
+	--card: var(--rb-neutral-1);
+	--card-foreground: var(--rb-font-primary);
+	--popover: var(--rb-neutral-1);
+	--popover-foreground: var(--rb-font-primary);
+	--primary: var(--rb-accent-1);
+	--primary-foreground: var(--rb-neutral-1);
+	--secondary: var(--rb-neutral-3);
+	--secondary-foreground: var(--rb-font-primary);
+	--muted: var(--rb-neutral-3);
+	--muted-foreground: var(--rb-font-secondary);
+	--accent: var(--rb-neutral-4);
+	--accent-foreground: var(--rb-accent-2);
+	--border: var(--rb-neutral-4);
+	--input: var(--rb-neutral-4);
+	--ring: var(--rb-accent-2);
+}
+
 @theme inline {
 	--color-background: var(--background);
 	--color-foreground: var(--foreground);
@@ -77,14 +116,34 @@ body {
 	font-family: var(--font-outfit);
 }
 
-/* Custom Scrollbar Styling */
-::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
+/* View Transition Styles */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+	mix-blend-mode: normal;
 }
 
+::view-transition-old(root) {
+	z-index: 1;
+}
+
+::view-transition-new(root) {
+	z-index: 2;
+}
+
+.light::view-transition-old(root) {
+	z-index: 1;
+}
+
+.light::view-transition-new(root) {
+	z-index: 2;
+}
+
+
+/* Custom Scrollbar Styling */
 ::-webkit-scrollbar-track {
 	background: var(--rb-neutral-2);
+	transition: background-color 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb {

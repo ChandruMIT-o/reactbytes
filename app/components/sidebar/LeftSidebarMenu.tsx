@@ -10,14 +10,20 @@ type NavItem = {
 const navItems: NavItem[] = [
 	{ id: "intro", label: "Introduction" },
 	{ id: "install", label: "Installation" },
+	{ id: "blur-text", label: "Blur Text" },
 	{ id: "a11y", label: "Accessibility" },
 	{ id: "mcp", label: "MCP" },
 	{ id: "troubleshoot", label: "Troubleshooting" },
 	{ id: "changelog", label: "Changelog" },
 ];
 
-export default function LeftSidebarMenu() {
-	const [activeItem, setActiveItem] = useState<string>("intro");
+export default function LeftSidebarMenu({ 
+	activeItem, 
+	setActiveItem 
+}: { 
+	activeItem: string; 
+	setActiveItem: (id: string) => void; 
+}) {
 	const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
 
 	const activeIndex = navItems.findIndex((item) => item.id === activeItem);

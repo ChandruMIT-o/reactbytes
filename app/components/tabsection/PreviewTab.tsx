@@ -1,17 +1,18 @@
 "use client";
-import { useState } from "react";
-import { RefreshCcwDot, RefreshCw } from "lucide-react";
+import React, { useState } from "react";
+import { Copy, Check } from "lucide-react";
 
-export const PreviewTab = () => {
-	const [activeTab, setActiveTab] = useState<"cli" | "manual">("cli");
+interface PreviewTabProps {
+	previewContent: React.ReactNode;
+	codeContent: string;
+}
+
+export const PreviewTab: React.FC<PreviewTabProps> = ({ previewContent, codeContent }) => {
+	const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
 	const [copied, setCopied] = useState(false);
 
 	const handleCopy = () => {
-		const text =
-			activeTab === "cli"
-				? "npm install your-package-name"
-				: "Download latest release from GitHub";
-		navigator.clipboard.writeText(text);
+		navigator.clipboard.writeText(codeContent);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
 	};
@@ -21,9 +22,9 @@ export const PreviewTab = () => {
 			{/* Tabs Row Wrapper */}
 			<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max">
 				<button
-					onClick={() => setActiveTab("cli")}
+					onClick={() => setActiveTab("preview")}
 					className={`px-3 py-1.5 text-[16px] font-medium rounded-full transition-all duration-300 ${
-						activeTab === "cli"
+						activeTab === "preview"
 							? "bg-rb-accent-1 text-rb-neutral-2"
 							: "text-rb-accent-2 hover:bg-rb-neutral-4"
 					}`}
@@ -31,9 +32,9 @@ export const PreviewTab = () => {
 					Preview
 				</button>
 				<button
-					onClick={() => setActiveTab("manual")}
+					onClick={() => setActiveTab("code")}
 					className={`px-3 py-1.5 text-[16px] font-medium rounded-full transition-all duration-300 ${
-						activeTab === "manual"
+						activeTab === "code"
 							? "bg-rb-accent-1 text-rb-neutral-2"
 							: "text-rb-accent-2 hover:bg-rb-neutral-4"
 					}`}
@@ -42,26 +43,19 @@ export const PreviewTab = () => {
 				</button>
 			</div>
 
-			{/* Main Content Outer Wrapper (Acts as the thick grey border) */}
+			{/* Main Content Outer Wrapper */}
 			<div className="bg-rb-neutral-3 p-1.5 rounded-[24px] rounded-tl-none w-full relative">
 				{/* Actual Content Area */}
-				<div className="bg-rb-neutral-1 rounded-[18px] w-full p-5 pr-14 text-rb-accent-2/60 font-mono text-[16px] border border-rb-neutral-4 min-h-[82px] flex flex-col justify-center">
-					{activeTab === "cli" ? (
-						<div className="flex flex-col gap-2">
-							<div className="flex items-center gap-3">
-								<span className="text-rb-accent-1 select-none">
-									$
-								</span>
-								<span className="text-rb-accent-1">
-									npm install your-package-name
-								</span>
-							</div>
+				<div className="bg-rb-neutral-1 rounded-[18px] w-full min-h-[400px] border border-rb-neutral-4 overflow-hidden">
+					{activeTab === "preview" ? (
+						<div className="w-full h-full min-h-[400px] flex items-center justify-center p-5">
+							{previewContent}
 						</div>
 					) : (
-						<div className="flex flex-col gap-2 font-sans">
-							<p className="text-rb-accent-1">
-								1. Download the latest release from GitHub.
-							</p>
+						<div className="p-5 overflow-auto max-h-[600px]">
+							<pre className="text-rb-accent-2/80 font-mono text-sm whitespace-pre-wrap">
+								{codeContent}
+							</pre>
 						</div>
 					)}
 				</div>
@@ -73,9 +67,9 @@ export const PreviewTab = () => {
 					title="Copy to clipboard"
 				>
 					{copied ? (
-						<RefreshCw size={14} className="text-emerald-500" />
+						<Check size={14} className="text-emerald-500" />
 					) : (
-						<RefreshCcwDot
+						<Copy
 							size={14}
 							className="group-hover:scale-110 transition-transform"
 						/>

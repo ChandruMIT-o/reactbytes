@@ -42,7 +42,7 @@ export default function ButtonGroup({
 						{isActive && (
 							<motion.div
 								layoutId={`${groupId}-active-pill`}
-								className="absolute inset-0 bg-gradient-to-tr from-rb-accent-1 to-rb-accent-2 rounded-full z-10"
+								className="absolute inset-0 bg-rb-accent-3 rounded-full z-10"
 								transition={{
 									type: "spring",
 									bounce: 0.3,

@@ -41,7 +41,7 @@ export function GitHubStarButton({
 			<GithubStarsParticles>
 				<Button
 					type="button"
-					className={`inline-flex items-center justify-center gap-2 hover:scale-100 whitespace-nowrap rounded-full bg-gradient-to-tr from-rb-accent-1 to-rb-accent-2 px-3 py-[7px] text-[16px] font-medium text-rb-neutral-2 transition-colors hover:opacity-90 focus:outline-none focus:ring-1 disabled:pointer-events-none disabled:opacity-50 ${className}`}
+					className={`inline-flex items-center justify-center gap-2 hover:scale-100 whitespace-nowrap rounded-full bg-rb-accent-1 px-3 py-[7px] text-[16px] font-medium text-rb-neutral-2 transition-colors hover:opacity-90 focus:outline-none focus:ring-1 disabled:pointer-events-none disabled:opacity-50 ${className}`}
 					{...props}
 				>
 					<GithubStarsLogo className="h-5 w-5" />
