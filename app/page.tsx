@@ -13,6 +13,10 @@ import ParagraphText from "./components/textfields/ParagraphText";
 // Modularized Page Components
 import { InstallationPage } from "./pages/InstallationPage/InstallationPage";
 import { BlurTextPage } from "./pages/BlurTextPage/BlurTextPage";
+import { MagneticDotMeshPage } from "./pages/MagneticDotMeshPage/MagneticDotMeshPage";
+import { FallDownPage } from "./pages/FallDownPage/FallDownPage";
+import { BlurInPage } from "./pages/BlurInPage/BlurInPage";
+import { RevealUnderPage } from "./pages/RevealUnderPage/RevealUnderPage";
 
 export default function Home() {
 	const [activeItem, setActiveItem] = React.useState("install");
@@ -52,6 +56,14 @@ export default function Home() {
 						<InstallationPage />
 					) : activeItem === "blur-text" ? (
 						<BlurTextPage />
+					) : activeItem === "magnetic-dots" ? (
+						<MagneticDotMeshPage />
+					) : activeItem === "fall-down" ? (
+						<FallDownPage />
+					) : activeItem === "blur-in" ? (
+						<BlurInPage />
+					) : activeItem === "reveal-under" ? (
+						<RevealUnderPage />
 					) : (
 						<div className="flex flex-col gap-5">
 							<HeaderText

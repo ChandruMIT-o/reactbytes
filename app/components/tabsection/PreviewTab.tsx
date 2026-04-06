@@ -80,7 +80,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 				{/* Actual Content Area */}
 				<div className="bg-rb-neutral-1 rounded-[18px] w-full min-h-[400px] border border-rb-neutral-4 overflow-hidden">
 					{activeTab === "preview" ? (
-						<div className="w-full h-full min-h-[400px] flex items-center justify-center p-5">
+						<div className="w-full h-full min-h-[400px] flex items-center justify-center">
 							{previewContent}
 						</div>
 					) : activeTab === "usage" ? (
