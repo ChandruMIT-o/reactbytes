@@ -11,8 +11,6 @@ export interface BlurTextProps {
 	maxBlur?: string;
 	/** Tailwind class for text color */
 	textColorClass?: string;
-	/** Whether the loader should cover the entire screen (fixed) or fill its parent (relative) */
-	isOverlay?: boolean;
 	/** Additional wrapper CSS classes */
 	containerClassName?: string;
 	/** Additional text container CSS classes (useful for font families) */
@@ -25,7 +23,6 @@ export const BlurText: React.FC<BlurTextProps> = ({
 	staggerDelay = 0.2,
 	maxBlur = "4px",
 	textColorClass = "text-white",
-	isOverlay = true,
 	containerClassName = "",
 	textClassName = "",
 }) => {
@@ -44,12 +41,7 @@ export const BlurText: React.FC<BlurTextProps> = ({
         }
       `}</style>
 
-			<div
-				className={`
-          ${isOverlay ? "fixed inset-0 z-[9999]" : "relative w-full h-full"}
-          ${containerClassName}
-        `}
-			>
+			<div className={`relative w-full h-full ${containerClassName}`}>
 				<div
 					className={`
             absolute inset-0 m-auto flex items-center justify-center

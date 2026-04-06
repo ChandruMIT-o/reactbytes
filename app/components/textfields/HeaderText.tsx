@@ -5,7 +5,7 @@ import { ArrowUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-type HeaderOption = 1 | 2 | 3 | 4 | 5;
+type HeaderOption = 1 | 2 | 3 | 4 | 5 | 6;
 
 interface HeaderTextProps extends React.HTMLAttributes<HTMLHeadingElement> {
 	text: string;
@@ -19,6 +19,7 @@ const headerStyles: Record<HeaderOption, string> = {
 	3: "text-3xl md:text-5xl font-bold tracking-tight",
 	4: "text-2xl md:text-4xl font-semibold",
 	5: "text-xl md:text-3xl font-medium",
+	6: "text-lg md:text-2xl font-medium",
 };
 
 /**
@@ -34,7 +35,7 @@ export default function HeaderText({
 	...props
 }: HeaderTextProps) {
 	const [isHovered, setIsHovered] = React.useState(false);
-	const Tag = `h${option}` as "h1" | "h2" | "h3" | "h4" | "h5";
+	const Tag = `h${option}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 	const handleScroll = () => {
 		window.scrollTo({ top: 0, behavior: "smooth" });
 	};

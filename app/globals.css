@@ -139,7 +139,6 @@ body {
 	z-index: 2;
 }
 
-
 /* Custom Scrollbar Styling */
 ::-webkit-scrollbar-track {
 	background: var(--rb-neutral-2);

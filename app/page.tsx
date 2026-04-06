@@ -40,9 +40,12 @@ export default function Home() {
 					<GitHubStarButton starCount={134} username="ChandruMIT-o" />
 				</div>
 			</div>
-			
+
 			<div className="flex items-start w-full max-w-[100vw] justify-between gap-5 px-5">
-				<LeftSidebarMenu activeItem={activeItem} setActiveItem={setActiveItem} />
+				<LeftSidebarMenu
+					activeItem={activeItem}
+					setActiveItem={setActiveItem}
+				/>
 
 				<div className="w-full h-full flex flex-col gap-5 p-10 pl-30">
 					{activeItem === "install" ? (
@@ -51,8 +54,17 @@ export default function Home() {
 						<BlurTextPage />
 					) : (
 						<div className="flex flex-col gap-5">
-							<HeaderText text={activeItem.charAt(0).toUpperCase() + activeItem.slice(1)} option={3} />
-							<ParagraphText text="Content for this section is coming soon." option={4} />
+							<HeaderText
+								text={
+									activeItem.charAt(0).toUpperCase() +
+									activeItem.slice(1)
+								}
+								option={3}
+							/>
+							<ParagraphText
+								text="Content for this section is coming soon."
+								option={4}
+							/>
 						</div>
 					)}
 				</div>
@@ -62,4 +74,3 @@ export default function Home() {
 		</div>
 	);
 }
-

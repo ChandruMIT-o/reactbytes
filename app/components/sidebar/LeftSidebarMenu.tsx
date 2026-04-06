@@ -17,12 +17,12 @@ const navItems: NavItem[] = [
 	{ id: "changelog", label: "Changelog" },
 ];
 
-export default function LeftSidebarMenu({ 
-	activeItem, 
-	setActiveItem 
-}: { 
-	activeItem: string; 
-	setActiveItem: (id: string) => void; 
+export default function LeftSidebarMenu({
+	activeItem,
+	setActiveItem,
+}: {
+	activeItem: string;
+	setActiveItem: (id: string) => void;
 }) {
 	const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
 

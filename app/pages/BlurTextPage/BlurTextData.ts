@@ -41,13 +41,6 @@ export const loaderProps = [
 				description: "Tailwind class for the text color.",
 			},
 			{
-				name: "isOverlay",
-				type: "boolean",
-				defaultValue: "true",
-				description:
-					"If true, applies fixed inset-0. If false, fills parent container.",
-			},
-			{
 				name: "containerClassName",
 				type: "string",
 				defaultValue: "''",
@@ -71,7 +64,6 @@ export interface BlurTextProps {
   staggerDelay?: number;
   maxBlur?: string;
   textColorClass?: string;
-  isOverlay?: boolean;
   containerClassName?: string;
   textClassName?: string;
 }
@@ -82,7 +74,6 @@ export const BlurText: React.FC<BlurTextProps> = ({
   staggerDelay = 0.2,
   maxBlur = '4px',
   textColorClass = 'text-white',
-  isOverlay = true,
   containerClassName = '',
   textClassName = '',
 }) => {
@@ -98,12 +89,7 @@ export const BlurText: React.FC<BlurTextProps> = ({
         }
       \`}</style>
       
-      <div
-        className={\`
-          \${isOverlay ? 'fixed inset-0 z-[9999]' : 'relative w-full h-full'}
-          \${containerClassName}
-        \`}
-      >
+      <div className={\`relative w-full h-full \${containerClassName}\`}>
         <div
           className={\`
             absolute inset-0 m-auto flex items-center justify-center
@@ -131,3 +117,36 @@ export const BlurText: React.FC<BlurTextProps> = ({
 };
 
 export default BlurText;`;
+
+export const creditsData = [
+	{
+		title: "Component Source",
+		items: [
+			{
+				name: "React Bytes",
+				role: "Collection",
+				url: "https://reactbytes.dev",
+			},
+		],
+	},
+	{
+		title: "Open Source Libraries",
+		items: [
+			{
+				name: "React",
+				role: "UI Framework",
+				url: "https://react.dev",
+			},
+			{
+				name: "Tailwind CSS",
+				role: "Styling",
+				url: "https://tailwindcss.com",
+			},
+			{
+				name: "Lucide",
+				role: "Iconography",
+				url: "https://lucide.dev",
+			},
+		],
+	},
+];

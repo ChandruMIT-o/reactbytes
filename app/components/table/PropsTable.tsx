@@ -38,7 +38,7 @@ export const PropsTable: React.FC<PropsTableProps> = ({
 	return (
 		<div className={`w-full font-sans ${className}`}>
 			{/* Main Content Outer Wrapper (Acts as the thick grey border/container) */}
-			<div className="bg-rb-neutral-3 p-1.5 rounded-[24px] w-full relative shadow-2xl">
+			<div className="bg-rb-neutral-3 p-1.5 rounded-[24px] w-full relative">
 				{/* Actual Content Area */}
 				<div className="bg-rb-neutral-1 rounded-[18px] w-full overflow-hidden border border-rb-neutral-4">
 					<table className="w-full text-left text-[14px] text-rb-accent-2/60 border-collapse">

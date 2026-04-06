@@ -26,6 +26,8 @@ interface DiscreteSliderProps {
 	showTicks?: boolean;
 	showValue?: boolean;
 	label?: string;
+	maxDecimals?: number;
+	showMinMax?: boolean;
 }
 
 export const DiscreteSlider: React.FC<DiscreteSliderProps> = ({
@@ -38,6 +40,8 @@ export const DiscreteSlider: React.FC<DiscreteSliderProps> = ({
 	showTicks = true,
 	showValue = true,
 	label = "Value",
+	maxDecimals,
+	showMinMax = false,
 }) => {
 	const [internalValue, setInternalValue] = useState(controlledValue ?? min);
 	const sliderRef = useRef<HTMLDivElement>(null);
@@ -46,7 +50,11 @@ export const DiscreteSlider: React.FC<DiscreteSliderProps> = ({
 	const value = controlledValue ?? internalValue;
 	const steps: number[] = [];
 	for (let i = min; i <= max; i += step) {
-		steps.push(i);
+		let s = i;
+		if (maxDecimals !== undefined) {
+			s = Number(s.toFixed(maxDecimals));
+		}
+		steps.push(s);
 	}
 
 	const initialPercentage = ((value - min) / (max - min)) * 100;
@@ -81,9 +89,13 @@ export const DiscreteSlider: React.FC<DiscreteSliderProps> = ({
 		const rawValue = (rawPercentage / 100) * (max - min) + min;
 
 		// Find closest discrete step for value logic
-		const closest = steps.reduce((prev, curr) =>
+		let closest = steps.reduce((prev, curr) =>
 			Math.abs(curr - rawValue) < Math.abs(prev - rawValue) ? curr : prev,
 		);
+
+		if (maxDecimals !== undefined) {
+			closest = Number(closest.toFixed(maxDecimals));
+		}
 
 		// Update visual percentage freely during drag
 		visualPercentage.set(rawPercentage);
@@ -139,7 +151,7 @@ export const DiscreteSlider: React.FC<DiscreteSliderProps> = ({
 		<div className={cn("w-full py-4 select-none", className)}>
 			{/* Label / Value Display */}
 			<div className="flex justify-between items-end mb-1.5 px-1">
-				<span className="text-xs font-bold text-rb-accent-2/40 uppercase tracking-[0.2em] leading-none mb-0.5">
+				<span className="text-sm font-medium text-rb-accent-1/60 font-sans leading-none mb-0.5">
 					{label}
 				</span>
 				{showValue && (
@@ -147,9 +159,11 @@ export const DiscreteSlider: React.FC<DiscreteSliderProps> = ({
 						key={value}
 						initial={{ opacity: 0, y: 3 }}
 						animate={{ opacity: 1, y: 0 }}
-						className="text-[18px] font-medium text-rb-accent-1 tabular-nums leading-none tracking-tight"
+						className="text-[16px] font-medium text-rb-accent-1 tabular-nums leading-none tracking-tight"
 					>
-						{value}
+						{maxDecimals !== undefined
+							? value.toFixed(maxDecimals)
+							: value}
 					</motion.span>
 				)}
 			</div>
@@ -211,10 +225,12 @@ export const DiscreteSlider: React.FC<DiscreteSliderProps> = ({
 			</div>
 
 			{/* Min/Max indicators */}
-			<div className="flex justify-between mt-2.5 px-1 text-xs font-bold text-rb-accent-2/20 uppercase tracking-[0.2em]">
-				<span>{min}</span>
-				<span>{max}</span>
-			</div>
+			{showMinMax && (
+				<div className="flex justify-between mt-2.5 px-1 text-xs font-bold text-rb-accent-2/20 uppercase tracking-[0.2em]">
+					<span>{min}</span>
+					<span>{max}</span>
+				</div>
+			)}
 		</div>
 	);
 };
