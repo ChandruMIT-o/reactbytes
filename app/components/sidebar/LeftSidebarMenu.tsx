@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 type NavItem = {
 	id: string;
@@ -262,36 +263,38 @@ export default function LeftSidebarMenu({
 						const isHovered = hoveredItemId === item.id;
 
 						return (
-							<motion.button
+							<Link
 								key={item.id}
+								href={`/${item.id}`}
 								onMouseEnter={() => setHoveredItemId(item.id)}
-								onClick={() => setActiveItem(item.id)}
-								initial={false}
-								animate={
-									isCollapsed
-										? {
-												x: -20,
-												opacity: 0,
-												scale: 0.9,
-												filter: "blur(10px)",
-											}
-										: {
-												x: 0,
-												opacity: 1,
-												scale: 1,
-												filter: "blur(0px)",
-											}
-								}
-								transition={{
-									...springConfig,
-									delay: isCollapsed
-										? (items.length - index - 1) * 0.015
-										: index * 0.025,
-									opacity: { duration: 0.2 },
-								}}
-								className="group relative ml-[18px] flex h-[44px] w-full items-center px-[10px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-rb-neutral-2 active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
+								className="group relative ml-[18px] flex h-[44px] items-center px-[10px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-rb-neutral-2 active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
 							>
-								<div className="flex items-center gap-5 z-10 w-full overflow-hidden">
+								<motion.div
+									initial={false}
+									animate={
+										isCollapsed
+											? {
+													x: -20,
+													opacity: 0,
+													scale: 0.9,
+													filter: "blur(10px)",
+												}
+											: {
+													x: 0,
+													opacity: 1,
+													scale: 1,
+													filter: "blur(0px)",
+												}
+									}
+									transition={{
+										...springConfig,
+										delay: isCollapsed
+											? (items.length - index - 1) * 0.015
+											: index * 0.025,
+										opacity: { duration: 0.2 },
+									}}
+									className="flex items-center gap-5 z-10 w-full overflow-hidden"
+								>
 									<div className="w-[6px] shrink-0 invisible" />
 									<motion.span
 										className="text-[16px] tracking-tight"
@@ -309,8 +312,8 @@ export default function LeftSidebarMenu({
 									>
 										{item.label}
 									</motion.span>
-								</div>
-							</motion.button>
+								</motion.div>
+							</Link>
 						);
 					})}
 				</motion.nav>

@@ -2,6 +2,13 @@
 import React, { useState } from "react";
 import { Copy, Check, ChevronDown, ChevronUp, Play, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Editor from "react-simple-code-editor";
+import Prism from "prismjs";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-tsx";
+import "prismjs/themes/prism-tomorrow.css";
 
 interface PreviewTabProps {
 	previewContent: React.ReactNode;
@@ -140,20 +147,48 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 									)}
 								</>
 							) : activeTab === "usage" ? (
-								<div className="p-5 overflow-auto max-h-[600px]">
-									<pre className="text-rb-accent-2/80 font-mono text-sm whitespace-pre-wrap">
-										{usageCode}
-									</pre>
+								<div className="p-5 overflow-auto max-h-[600px] edit-container">
+									<Editor
+										value={usageCode || ""}
+										onValueChange={() => {}}
+										highlight={(code) => Prism.highlight(code, Prism.languages.tsx, 'tsx')}
+										padding={0}
+										textareaClassName="focus:outline-none"
+										className="text-rb-accent-2/80 font-mono text-sm editor-styles"
+										style={{
+											fontFamily: 'inherit',
+											backgroundColor: 'transparent'
+										}}
+									/>
 								</div>
 							) : (
-								<div className="p-5 overflow-auto max-h-[600px]">
-									<pre className="text-rb-accent-2/80 font-mono text-sm whitespace-pre-wrap">
-										{codeContent}
-									</pre>
+								<div className="p-5 overflow-auto max-h-[600px] edit-container">
+									<Editor
+										value={codeContent || ""}
+										onValueChange={() => {}}
+										highlight={(code) => Prism.highlight(code, Prism.languages.tsx, 'tsx')}
+										padding={0}
+										textareaClassName="focus:outline-none"
+										className="text-rb-accent-2/80 font-mono text-sm editor-styles"
+										style={{
+											fontFamily: 'inherit',
+											backgroundColor: 'transparent'
+										}}
+									/>
 								</div>
 							)}
 						</motion.div>
 					</AnimatePresence>
+					
+					<style jsx global>{`
+						.editor-styles textarea {
+							outline: none !important;
+						}
+						.editor-styles pre {
+							white-space: pre-wrap !important;
+							word-break: break-word !important;
+						}
+					`}</style>
 				</div>
 
 				{/* Copy Button */}

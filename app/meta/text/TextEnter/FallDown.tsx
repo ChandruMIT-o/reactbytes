@@ -33,7 +33,7 @@ export const FallDown: React.FC<FallDownProps> = ({
 	initialY = -60,
 	textColorClass = "text-rb-accent-1",
 	containerClassName = "",
-	textClassName = "font-mono",
+	textClassName = "font-sans",
 }) => {
 	const letters = useMemo(() => text.split(""), [text]);
 

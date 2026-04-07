@@ -33,7 +33,7 @@ export const BlurIn: React.FC<BlurInProps> = ({
 	endOpacity = 1,
 	textColorClass = "text-rb-accent-1",
 	containerClassName = "",
-	textClassName = "font-mono",
+	textClassName = "font-sans",
 }) => {
 	const letters = useMemo(() => text.split(""), [text]);
 
@@ -57,8 +57,14 @@ export const BlurIn: React.FC<BlurInProps> = ({
 					<motion.span
 						key={`${index}-${char}`}
 						variants={{
-							hidden: { opacity: 0, filter: `blur(${initialBlur}px)` },
-							visible: { opacity: endOpacity, filter: "blur(0px)" },
+							hidden: {
+								opacity: 0,
+								filter: `blur(${initialBlur}px)`,
+							},
+							visible: {
+								opacity: endOpacity,
+								filter: "blur(0px)",
+							},
 						}}
 						transition={{
 							duration: duration,

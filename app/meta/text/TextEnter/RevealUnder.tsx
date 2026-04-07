@@ -33,7 +33,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 	easing = [0.785, 0.135, 0.15, 0.86],
 	textColorClass = "text-rb-accent-1",
 	containerClassName = "",
-	textClassName = "font-mono font-bold text-5xl",
+	textClassName = "font-sans font-bold text-5xl",
 }) => {
 	const isHorizontal = direction === "right" || direction === "left";
 
