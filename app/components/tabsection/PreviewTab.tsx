@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Copy, Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Copy, Check, ChevronDown, ChevronUp, Play, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface PreviewTabProps {
@@ -11,6 +11,7 @@ interface PreviewTabProps {
 	header?: React.ReactNode;
 	collapsible?: boolean;
 	defaultExpanded?: boolean;
+	onReplay?: () => void;
 }
 
 export const PreviewTab: React.FC<PreviewTabProps> = ({
@@ -21,6 +22,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 	header,
 	collapsible = false,
 	defaultExpanded = true,
+	onReplay,
 }) => {
 	const [activeTab, setActiveTab] = useState<"preview" | "code" | "usage">(
 		"preview",
@@ -37,65 +39,121 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 		}
 	};
 
+	const springConfig = {
+		type: "spring",
+		stiffness: 260,
+		damping: 30,
+	} as const;
+
+	const tabs = [
+		{ id: "preview", label: "Preview" },
+		...(usageCode ? [{ id: "usage", label: "Usage" }] : []),
+		{ id: "code", label: "Code" },
+	] as const;
+
 	return (
 		<div className="w-full max-w-4xl font-sans">
 			{/* Tabs Row Wrapper */}
 			<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max">
-				<button
-					onClick={() => setActiveTab("preview")}
-					className={`px-3 py-1.5 text-[16px] font-medium rounded-full transition-all duration-300 ${
-						activeTab === "preview"
-							? "bg-rb-accent-1 text-rb-neutral-2"
-							: "text-rb-accent-2 hover:bg-rb-neutral-4"
-					}`}
-				>
-					Preview
-				</button>
-				{usageCode && (
-					<button
-						onClick={() => setActiveTab("usage")}
-						className={`px-3 py-1.5 text-[16px] font-medium rounded-full transition-all duration-300 ${
-							activeTab === "usage"
-								? "bg-rb-accent-1 text-rb-neutral-2"
-								: "text-rb-accent-2 hover:bg-rb-neutral-4"
-						}`}
+				{tabs.map((tab) => (
+					<motion.button
+						key={tab.id}
+						onClick={() => setActiveTab(tab.id as any)}
+						className="relative px-3 py-1.5 text-[16px] font-medium rounded-full outline-none transition-colors duration-300"
+						style={{
+							color: activeTab === tab.id ? "var(--rb-neutral-2)" : "var(--rb-accent-2)",
+						}}
+						whileHover="hover"
 					>
-						Usage
-					</button>
-				)}
-				<button
-					onClick={() => setActiveTab("code")}
-					className={`px-3 py-1.5 text-[16px] font-medium rounded-full transition-all duration-300 ${
-						activeTab === "code"
-							? "bg-rb-accent-1 text-rb-neutral-2"
-							: "text-rb-accent-2 hover:bg-rb-neutral-4"
-					}`}
-				>
-					Code
-				</button>
+						<span className="relative z-10">{tab.label}</span>
+
+						{activeTab === tab.id && (
+							<motion.div
+								layoutId="preview-active-pill"
+								className="absolute inset-0 bg-rb-accent-1 rounded-full z-0"
+								transition={springConfig}
+							/>
+						)}
+
+						{activeTab !== tab.id && (
+							<motion.div
+								className="absolute inset-0 rounded-full z-0"
+								variants={{
+									hover: { backgroundColor: "var(--rb-neutral-4)" },
+								}}
+								transition={{ duration: 0.2 }}
+							/>
+						)}
+					</motion.button>
+				))}
 			</div>
 
 			{/* Main Content Outer Wrapper */}
 			<div className="bg-rb-neutral-3 p-1.5 rounded-[24px] rounded-tl-none w-full relative">
 				{/* Actual Content Area */}
-				<div className="bg-rb-neutral-1 rounded-[18px] w-full min-h-[400px] border border-rb-neutral-4 overflow-hidden">
-					{activeTab === "preview" ? (
-						<div className="w-full h-full min-h-[400px] flex items-center justify-center">
-							{previewContent}
-						</div>
-					) : activeTab === "usage" ? (
-						<div className="p-5 overflow-auto max-h-[600px]">
-							<pre className="text-rb-accent-2/80 font-mono text-sm whitespace-pre-wrap">
-								{usageCode}
-							</pre>
-						</div>
-					) : (
-						<div className="p-5 overflow-auto max-h-[600px]">
-							<pre className="text-rb-accent-2/80 font-mono text-sm whitespace-pre-wrap">
-								{codeContent}
-							</pre>
-						</div>
-					)}
+				<div className="bg-rb-neutral-1 rounded-[18px] w-full min-h-[400px] border border-rb-neutral-4 overflow-hidden relative">
+					<AnimatePresence mode="wait">
+						<motion.div
+							key={activeTab}
+							initial={{ 
+								opacity: 0, 
+								y: 12, 
+								filter: "blur(12px)", 
+								scale: 0.99 
+							}}
+							animate={{ 
+								opacity: 1, 
+								y: 0, 
+								filter: "blur(0px)", 
+								scale: 1 
+							}}
+							exit={{ 
+								opacity: 0, 
+								y: -12, 
+								filter: "blur(12px)", 
+								scale: 0.99 
+							}}
+							transition={{ 
+								duration: 0.35, 
+								ease: [0.19, 1, 0.22, 1] // Ease out expo
+							}}
+							className="w-full h-full min-h-[400px]"
+						>
+							{activeTab === "preview" ? (
+								<>
+									<div className="w-full h-full min-h-[400px] flex items-center justify-center">
+										{previewContent}
+									</div>
+									{onReplay && (
+										<button
+											onClick={onReplay}
+											className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 bg-rb-neutral-3 text-rb-accent-2 border border-rb-neutral-4 hover:text-rb-accent-1 hover:bg-rb-neutral-4 rounded-full transition-all duration-300 text-sm font-medium z-10 group"
+											title="Replay Animation"
+										>
+											<Play
+												size={14}
+												className="group-hover:scale-110 transition-transform"
+												fill="currentColor"
+											/>
+											<span>Replay</span>
+										</button>
+									)}
+								</>
+							) : activeTab === "usage" ? (
+								<div className="p-5 overflow-auto max-h-[600px]">
+									<pre className="text-rb-accent-2/80 font-mono text-sm whitespace-pre-wrap">
+										{usageCode}
+									</pre>
+								</div>
+							) : (
+								<div className="p-5 overflow-auto max-h-[600px]">
+									<pre className="text-rb-accent-2/80 font-mono text-sm whitespace-pre-wrap">
+										{codeContent}
+									</pre>
+								</div>
+							)}
+						</motion.div>
+					</AnimatePresence>
 				</div>
 
 				{/* Copy Button */}
@@ -153,7 +211,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 									}}
 									className="overflow-hidden relative px-2 z-10"
 								>
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
 										{children}
 									</div>
 								</motion.div>

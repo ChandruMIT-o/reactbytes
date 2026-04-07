@@ -119,124 +119,123 @@ export const FallDownPage = () => {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<HeaderText text="Fall Down" option={3} />
+			<div id="fall-down-title">
+				<HeaderText text="Fall Down" option={3} />
+			</div>
 			<ParagraphText
 				text="A dynamic entrance animation where characters drop in from above. Inspired by JP Belley's work, this component features a custom bounce easing and staggered timing."
 				option={4}
 			/>
 
-			<PreviewTab
-				previewContent={
-					<div className="w-full h-[400px] relative overflow-hidden flex items-center justify-center p-10">
-						<FallDown
-							key={key}
-							text={text}
-							duration={duration}
-							stagger={stagger}
-							initialY={initialY}
-							textColorClass={textColorClass}
-							textClassName="text-6xl font-bold tracking-tight font-mono"
-						/>
-						<button
-							onClick={handleReplay}
-							className="absolute bottom-4 mx-auto flex items-center gap-2 px-6 py-2 bg-rb-accent-1/10 border border-rb-accent-1/20 hover:bg-rb-accent-1/20 text-rb-accent-1 rounded-full transition-all text-xs font-mono tracking-widest uppercase"
-						>
-							<Play size={12} fill="currentColor" />
-							Replay
-						</button>
-					</div>
-				}
-				usageCode={usageCode}
-				codeContent={componentCode}
-				collapsible={true}
-				header={
-					<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
-						<div className="flex flex-col gap-1">
-							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
-								Props
-							</h3>
+			<div id="preview">
+				<PreviewTab
+					previewContent={
+						<div className="w-full h-[400px] relative overflow-hidden flex items-center justify-center p-10">
+							<FallDown
+								key={key}
+								text={text}
+								duration={duration}
+								stagger={stagger}
+								initialY={initialY}
+								textColorClass={textColorClass}
+								textClassName="text-6xl font-bold tracking-tight font-mono"
+							/>
 						</div>
-						<div className="flex items-center gap-3">
-							<div className="w-[180px]">
+					}
+					onReplay={handleReplay}
+					usageCode={usageCode}
+					codeContent={componentCode}
+					collapsible={true}
+					header={
+						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+							<div className="flex flex-col gap-1">
+								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
+									Props
+								</h3>
+							</div>
+							<div className="flex items-center gap-3">
 								<DefaultComboBox
 									options={presets}
 									value={currentPreset}
 									onChange={applyPreset}
+									dynamicWidth={true}
 								/>
+								<button
+									onClick={handleReset}
+									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+									title="Reset to Defaults"
+								>
+									<RotateCcw
+										size={16}
+										className="group-hover:rotate-[-90deg] transition-transform duration-500"
+									/>
+								</button>
 							</div>
-							<button
-								onClick={handleReset}
-								className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
-								title="Reset to Defaults"
-							>
-								<RotateCcw
-									size={16}
-									className="group-hover:rotate-[-90deg] transition-transform duration-500"
-								/>
-							</button>
 						</div>
-					</div>
-				}
-			>
-				<TextInput
-					label="Text Content"
-					value={text}
-					onChange={(e) => {
-						setText(e.target.value);
-						setKey((prev) => prev + 1); // Auto-replay on text change
-					}}
-					placeholder="Enter text..."
-					onClear={() => setText("")}
-				/>
+					}
+				>
+					<TextInput
+						label="Text Content"
+						value={text}
+						onChange={(e) => {
+							setText(e.target.value);
+							setKey((prev) => prev + 1); // Auto-replay on text change
+						}}
+						placeholder="Enter text..."
+						onClear={() => setText("")}
+					/>
 
-				<ComboBox
-					label="Text Color"
-					options={colorOptions}
-					value={textColorClass}
-					onChange={setTextColorClass}
-				/>
+					<ComboBox
+						label="Text Color"
+						options={colorOptions}
+						value={textColorClass}
+						onChange={setTextColorClass}
+					/>
 
-				<DiscreteSlider
-					label="Duration (s)"
-					min={0.1}
-					max={3}
-					step={0.1}
-					value={duration}
-					onChange={setDuration}
-					maxDecimals={1}
-					showTicks={false}
-				/>
+					<DiscreteSlider
+						label="Duration (s)"
+						min={0.1}
+						max={3}
+						step={0.1}
+						value={duration}
+						onChange={setDuration}
+						maxDecimals={1}
+						showTicks={false}
+					/>
 
-				<DiscreteSlider
-					label="Stagger (s)"
-					min={0}
-					max={0.5}
-					step={0.005}
-					value={stagger}
-					onChange={setStagger}
-					maxDecimals={3}
-					showTicks={false}
-				/>
+					<DiscreteSlider
+						label="Stagger (s)"
+						min={0}
+						max={0.5}
+						step={0.005}
+						value={stagger}
+						onChange={setStagger}
+						maxDecimals={3}
+						showTicks={false}
+					/>
 
-				<DiscreteSlider
-					label="Initial Y Offset"
-					min={-400}
-					max={0}
-					step={10}
-					value={initialY}
-					onChange={setInitialY}
-					showTicks={false}
-				/>
-			</PreviewTab>
+					<DiscreteSlider
+						label="Initial Y Offset"
+						min={-400}
+						max={0}
+						step={10}
+						value={initialY}
+						onChange={setInitialY}
+						showTicks={false}
+					/>
+				</PreviewTab>
+			</div>
 
-			<InstallationTabs />
+			<div id="installation-tabs">
+				<InstallationTabs />
+			</div>
 
-			<div className="flex flex-col gap-5">
+			<div id="api-reference" className="flex flex-col gap-5">
 				<HeaderText text="API Reference" option={6} />
 				<PropsTable categories={loaderProps} />
 			</div>
 
-			<div className="w-full max-w-5xl mx-auto py-10">
+			<div id="credits" className="w-full max-w-5xl mx-auto py-10">
 				<Credits data={creditsData} />
 			</div>
 		</div>

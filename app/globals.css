@@ -140,8 +140,13 @@ body {
 }
 
 /* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
 ::-webkit-scrollbar-track {
-	background: var(--rb-neutral-2);
+	background: transparent;
 	transition: background-color 0.3s ease;
 }
 
@@ -156,8 +161,21 @@ body {
 	background: var(--rb-neutral-3);
 }
 
+/* Utilities */
+.scrollbar-none::-webkit-scrollbar {
+	display: none;
+}
+.scrollbar-none {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+	width: 4px;
+}
+
 /* Firefox Support */
 * {
 	scrollbar-width: thin;
-	scrollbar-color: var(--rb-neutral-4) var(--rb-neutral-2);
+	scrollbar-color: var(--rb-neutral-4) transparent;
 }

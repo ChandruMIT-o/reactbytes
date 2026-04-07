@@ -82,104 +82,110 @@ export const MagneticDotMeshPage = () => {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<HeaderText text="Magnetic Dot Mesh" option={3} />
+			<div id="magnetic-dots-title">
+				<HeaderText text="Magnetic Dot Mesh" option={3} />
+			</div>
 			<ParagraphText
 				text="An interactive, high-performance background component using Canvas. Dots repel from the mouse and form interconnected mesh lines based on proximity. Supports click-triggered shockwaves."
 				option={4}
 			/>
 
-			<PreviewTab
-				previewContent={
-					<div className="w-full h-[500px] border border-rb-neutral-4 rounded-3xl overflow-hidden shadow-2xl shadow-rb-accent-1/5 bg-rb-neutral-2">
-						<MagneticDotMesh
-							gap={gap}
-							repelRadius={repelRadius}
-							repelForce={repelForce}
-							lineDist={lineDist}
-						/>
-					</div>
-				}
-				usageCode={usageCode}
-				codeContent={componentCode}
-				collapsible={true}
-				header={
-					<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
-						<div className="flex flex-col gap-1">
-							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
-								Props
-							</h3>
+			<div id="preview">
+				<PreviewTab
+					previewContent={
+						<div className="w-full h-[500px] border border-rb-neutral-4 rounded-3xl overflow-hidden shadow-2xl shadow-rb-accent-1/5 bg-rb-neutral-2">
+							<MagneticDotMesh
+								gap={gap}
+								repelRadius={repelRadius}
+								repelForce={repelForce}
+								lineDist={lineDist}
+							/>
 						</div>
-						<div className="flex items-center gap-3">
-							<div className="w-[180px]">
-								<DefaultComboBox
-									options={presets}
-									value={currentPreset}
-									onChange={applyPreset}
-								/>
+					}
+					usageCode={usageCode}
+					codeContent={componentCode}
+					collapsible={true}
+					header={
+						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+							<div className="flex flex-col gap-1">
+								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
+									Props
+								</h3>
 							</div>
-							<button
-								onClick={handleReset}
-								className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
-								title="Reset to Defaults"
-							>
-								<RotateCcw
-									size={16}
-									className="group-hover:rotate-[-90deg] transition-transform duration-500"
-								/>
-							</button>
+							<div className="flex items-center gap-3">
+								<div className="w-[180px]">
+									<DefaultComboBox
+										options={presets}
+										value={currentPreset}
+										onChange={applyPreset}
+									/>
+								</div>
+								<button
+									onClick={handleReset}
+									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+									title="Reset to Defaults"
+								>
+									<RotateCcw
+										size={16}
+										className="group-hover:rotate-[-90deg] transition-transform duration-500"
+									/>
+								</button>
+							</div>
 						</div>
-					</div>
-				}
-			>
-				<DiscreteSlider
-					label="Grid Gap"
-					min={20}
-					max={120}
-					step={2}
-					value={gap}
-					onChange={setGap}
-					showTicks={false}
-				/>
+					}
+				>
+					<DiscreteSlider
+						label="Grid Gap"
+						min={20}
+						max={120}
+						step={2}
+						value={gap}
+						onChange={setGap}
+						showTicks={false}
+					/>
 
-				<DiscreteSlider
-					label="Repel Radius"
-					min={50}
-					max={400}
-					step={10}
-					value={repelRadius}
-					onChange={setRepelRadius}
-					showTicks={false}
-				/>
+					<DiscreteSlider
+						label="Repel Radius"
+						min={50}
+						max={400}
+						step={10}
+						value={repelRadius}
+						onChange={setRepelRadius}
+						showTicks={false}
+					/>
 
-				<DiscreteSlider
-					label="Repel Force"
-					min={1}
-					max={50}
-					step={1}
-					value={repelForce}
-					onChange={setRepelForce}
-					showTicks={false}
-				/>
+					<DiscreteSlider
+						label="Repel Force"
+						min={1}
+						max={50}
+						step={1}
+						value={repelForce}
+						onChange={setRepelForce}
+						showTicks={false}
+					/>
 
-				<DiscreteSlider
-					label="Line Connection Distance"
-					min={10}
-					max={200}
-					step={5}
-					value={lineDist}
-					onChange={setLineDist}
-					showTicks={false}
-				/>
-			</PreviewTab>
+					<DiscreteSlider
+						label="Line Connection Distance"
+						min={10}
+						max={200}
+						step={5}
+						value={lineDist}
+						onChange={setLineDist}
+						showTicks={false}
+					/>
+				</PreviewTab>
+			</div>
 
-			<InstallationTabs />
+			<div id="installation-tabs">
+				<InstallationTabs />
+			</div>
 
-			<div className="flex flex-col gap-5">
+			<div id="api-reference" className="flex flex-col gap-5">
 				<HeaderText text="API Reference" option={6} />
 				<PropsTable categories={loaderProps} />
 			</div>
 
-			<div className="w-full max-w-5xl mx-auto py-10">
+			<div id="credits" className="w-full max-w-5xl mx-auto py-10">
 				<Credits data={creditsData} />
 			</div>
 		</div>

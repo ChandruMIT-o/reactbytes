@@ -7,21 +7,21 @@ type NavItem = {
 	label: string;
 };
 
-const navItems: NavItem[] = [
-	{ id: "intro", label: "Introduction" },
-	{ id: "install", label: "Installation" },
-	{ id: "a11y", label: "Accessibility" },
-	{ id: "mcp", label: "MCP" },
-	{ id: "troubleshoot", label: "Troubleshooting" },
-	{ id: "changelog", label: "Changelog" },
-];
+interface LeftSidebarRefMenuProps {
+	items?: NavItem[];
+	activeId?: string;
+	onItemClick?: (id: string) => void;
+}
 
-export default function LeftSidebarRefMenu() {
-	const [activeItem, setActiveItem] = useState<string>("intro");
+export default function LeftSidebarRefMenu({
+	items = [],
+	activeId,
+	onItemClick,
+}: LeftSidebarRefMenuProps) {
 	const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
 
-	const activeIndex = navItems.findIndex((item) => item.id === activeItem);
-	const hoverIndex = navItems.findIndex((item) => item.id === hoveredItemId);
+	const activeIndex = items.findIndex((item) => item.id === activeId);
+	const hoverIndex = items.findIndex((item) => item.id === hoveredItemId);
 
 	const [itemWidths, setItemWidths] = useState<{ [key: string]: number }>({});
 	const handleRef = (id: string, el: HTMLButtonElement | null) => {
@@ -33,7 +33,7 @@ export default function LeftSidebarRefMenu() {
 		}
 	};
 
-	const activeWidth = itemWidths[activeItem] || 150;
+	const activeWidth = activeId ? itemWidths[activeId] || 150 : 0;
 	const hoverWidth = hoveredItemId ? itemWidths[hoveredItemId] || 150 : 0;
 
 	// Spring configurations for premium feel
@@ -44,70 +44,82 @@ export default function LeftSidebarRefMenu() {
 	} as const;
 
 	return (
-		<div className="min-h-screen flex font-sans">
+		<div className="flex font-sans w-56">
 			<div className="relative w-56 flex flex-col">
 				{/* Continuous Vertical Connecting Line */}
-				<div className="absolute left-[30px] top-[20px] bottom-8 w-[3px] bg-rb-neutral-4 z-0 rounded-full" />
+				<div className="absolute left-[29px] top-[14px] bottom-8 w-[2px] bg-rb-neutral-4 z-0 rounded-full" />
 
-				{/* Top Home Icon */}
-				<div className="relative z-10 mb-3 ml-[20px]">
-					<button className="w-6 h-6 bg-rb-accent-1 hover:bg-rb-accent-2 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-110 hover:-rotate-6 active:scale-90 rounded-[7px] flex items-center justify-center">
+				<div className="relative z-10 mb-2 ml-[18px] flex items-center gap-3">
+					<div className="w-[24px] h-[24px] bg-rb-accent-1 rounded-[6px] flex items-center justify-center shrink-0">
 						<svg
 							viewBox="0 0 24 24"
-							fill="currentColor"
-							className="w-4 h-4 text-rb-neutral-2"
+							fill="none"
+							stroke="currentColor"
+							strokeWidth="2.5"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							className="w-[14px] h-[14px] text-rb-neutral-2"
 						>
-							<path d="M11.47 3.841a.75.75 0 0 1 1.06 0l8.99 9a.75.75 0 1 1-1.06 1.06l-.46-.46V20.5a1.5 1.5 0 0 1-1.5 1.5H15a.75.75 0 0 1-.75-.75V15a.75.75 0 0 0-.75-.75h-3a.75.75 0 0 0-.75.75v6.25c0 .414-.336.75-.75.75H5.5a1.5 1.5 0 0 1-1.5-1.5v-7.059l-.46.46a.75.75 0 1 1-1.06-1.06l8.99-9Z" />
+							<line x1="8" y1="6" x2="21" y2="6" />
+							<line x1="8" y1="12" x2="21" y2="12" />
+							<line x1="8" y1="18" x2="21" y2="18" />
+							<line x1="3" y1="6" x2="3.01" y2="6" />
+							<line x1="3" y1="12" x2="3.01" y2="12" />
+							<line x1="3" y1="18" x2="3.01" y2="18" />
 						</svg>
-					</button>
+					</div>
+					<div className="text-[12px] text-rb-accent-1 font-semibold tracking-wide uppercase">
+						On this page
+					</div>
 				</div>
 
 				{/* Navigation Items */}
 				<nav
-					className="relative z-10 flex flex-col"
+					className="relative z-10 flex flex-col pt-2"
 					onMouseLeave={() => setHoveredItemId(null)}
 				>
 					{/* LAYER 1: Hover Slider (Bottom) */}
-					{/* Moves behind all buttons and the active indicator */}
 					<AnimatePresence>
-						{hoveredItemId && (
+						{hoveredItemId && hoverIndex !== -1 && (
 							<motion.div
 								initial={{ opacity: 0 }}
 								animate={{
 									opacity: 1,
-									top: hoverIndex * 39,
+									top: hoverIndex * 46 + 8,
 									width: hoverWidth,
 								}}
 								exit={{ opacity: 0 }}
 								transition={springConfig}
-								className="absolute left-[18px] h-[38px] bg-rb-neutral-2 rounded-xl z-0 pointer-events-none"
+								className="absolute left-[18px] h-[44px] bg-rb-neutral-2 rounded-xl z-0 pointer-events-none"
 							>
 								{/* Hover Pill (Left) */}
 								<motion.div
-									className="absolute left-[10px] top-[9px] w-[6px] h-[20px] rounded-full bg-rb-accent-1/30 scale-y-75"
+									className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-accent-1/30 scale-y-75"
 									transition={springConfig}
 								/>
 							</motion.div>
 						)}
 					</AnimatePresence>
 
-					<motion.div
-						animate={{
-							top: activeIndex * 39,
-							width: activeWidth,
-						}}
-						transition={springConfig}
-						className="absolute left-[18px] h-[38px] bg-rb-neutral-2 rounded-xl z-10 pointer-events-none"
-					>
-						{/* Active Pill (Left) */}
-						<div className="absolute left-[10px] top-[9px] w-[6px] h-[20px] rounded-full bg-rb-accent-1 scale-y-85" />
-						{/* Active Dot (Right) */}
-						<div className="absolute right-[5px] top-[16px] w-[6px] h-[6px] rounded-full bg-rb-accent-1" />
-					</motion.div>
+					{activeId && activeIndex !== -1 && (
+						<motion.div
+							animate={{
+								top: activeIndex * 46 + 8,
+								width: activeWidth,
+							}}
+							transition={springConfig}
+							className="absolute left-[18px] h-[44px] bg-rb-neutral-2 rounded-xl z-10 pointer-events-none"
+						>
+							{/* Active Pill (Left) */}
+							<div className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-accent-1 scale-y-85" />
+							{/* Active Dot (Right) */}
+							<div className="absolute right-[5px] top-[19px] w-[6px] h-[6px] rounded-full bg-rb-accent-1" />
+						</motion.div>
+					)}
 
 					{/* LAYER 3: Navigation Buttons (Top Layer) */}
-					{navItems.map((item) => {
-						const isActive = activeItem === item.id;
+					{items.map((item) => {
+						const isActive = activeId === item.id;
 						const isHovered = hoveredItemId === item.id;
 
 						return (
@@ -115,14 +127,14 @@ export default function LeftSidebarRefMenu() {
 								key={item.id}
 								ref={(el) => handleRef(item.id, el)}
 								onMouseEnter={() => setHoveredItemId(item.id)}
-								onClick={() => setActiveItem(item.id)}
-								className="group relative ml-[18px] flex h-[38px] w-fit items-center justify-between pl-[10px] pr-[35px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-rb-accent-1 active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
+								onClick={() => onItemClick?.(item.id)}
+								className="group relative ml-[18px] flex h-[44px] w-fit items-center justify-between pl-[10px] pr-[35px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-rb-accent-1 active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
 							>
 								<div className="flex items-center gap-5 z-10">
 									<div className="w-[6px] invisible" />
 
 									<motion.span
-										className="text-[16px] tracking-tight transition-transform duration-300 ease-out group-hover:translate-x-[3px]"
+										className="text-[16px] tracking-tight transition-transform duration-300 ease-out group-hover:translate-x-[3px] text-left"
 										animate={{
 											color: isActive
 												? "var(--rb-accent-1)"

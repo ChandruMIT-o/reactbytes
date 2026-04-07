@@ -17,6 +17,8 @@ interface ComboBoxProps {
 	onChange?: (value: string) => void;
 	className?: string;
 	label?: string;
+	maxWidth?: string;
+	dynamicWidth?: boolean;
 }
 
 export const ComboBox: React.FC<ComboBoxProps> = ({
@@ -26,6 +28,8 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 	onChange,
 	className = "",
 	label,
+	maxWidth = "400px",
+	dynamicWidth = false,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -123,7 +127,8 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 	return (
 		<div
 			ref={containerRef}
-			className={`relative w-full flex flex-col gap-2 ${isOpen ? "z-[2000]" : "z-0"} ${className}`}
+			style={{ maxWidth: dynamicWidth ? maxWidth : undefined }}
+			className={`relative flex flex-col gap-2 ${dynamicWidth ? "w-fit" : "w-full"} ${isOpen ? "z-[2000]" : "z-0"} ${className}`}
 		>
 			{label && (
 				<label className="text-sm font-medium tracking-tight text-rb-accent-1/60 px-1">
@@ -134,7 +139,7 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 			<div className="group relative">
 				<div
 					onClick={() => !isOpen && setIsOpen(true)}
-					className={`relative flex items-center gap-3 px-4 py-[9px] rounded-full transition-all duration-300 cursor-pointer border border-transparent ${
+					className={`relative flex items-center gap-3 px-4 py-[9px] rounded-full transition-all duration-300 cursor-pointer border border-transparent overflow-hidden ${
 						isOpen
 							? "bg-rb-accent-3 text-rb-neutral-2 shadow-[0_0_20px_rgba(192,222,221,0.3)]"
 							: "bg-rb-neutral-3 text-rb-accent-2 hover:bg-rb-neutral-4 hover:border-rb-neutral-4/50"
@@ -147,23 +152,37 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 						}`}
 					/>
 
-					<input
-						ref={inputRef}
-						type="text"
-						value={
-							isOpen ? searchTerm : selectedOption?.label || ""
-						}
-						onChange={(e) => {
-							setSearchTerm(e.target.value);
-							if (!isOpen) setIsOpen(true);
-						}}
-						onFocus={() => setIsOpen(true)}
-						onKeyDown={handleKeyDown}
-						placeholder={placeholder}
-						className={`bg-transparent border-none outline-none flex-1 min-w-0 text-[16px] font-medium font-sans tracking-tight placeholder:text-current/30 ${
-							isOpen ? "text-rb-neutral-2" : "text-rb-accent-2"
-						}`}
-					/>
+					<div className={`relative flex-1 min-w-0 ${dynamicWidth ? "grid" : ""}`}>
+						{dynamicWidth && (
+							<span
+								className={`col-start-1 row-start-1 invisible whitespace-pre text-[16px] font-medium font-sans tracking-tight px-0 ${
+									isOpen
+										? "text-rb-neutral-2"
+										: "text-rb-accent-2"
+								}`}
+							>
+								{(isOpen ? searchTerm : selectedOption?.label) ||
+									placeholder}
+							</span>
+						)}
+						<input
+							ref={inputRef}
+							type="text"
+							value={
+								isOpen ? searchTerm : selectedOption?.label || ""
+							}
+							onChange={(e) => {
+								setSearchTerm(e.target.value);
+								if (!isOpen) setIsOpen(true);
+							}}
+							onFocus={() => setIsOpen(true)}
+							onKeyDown={handleKeyDown}
+							placeholder={placeholder}
+							className={`${dynamicWidth ? "col-start-1 row-start-1 w-full" : "flex-1 min-w-0"} bg-transparent border-none outline-none text-[16px] font-medium font-sans tracking-tight placeholder:text-current/30 ${
+								isOpen ? "text-rb-neutral-2" : "text-rb-accent-2"
+							}`}
+						/>
+					</div>
 
 					<div
 						className={`transition-transform duration-300 shrink-0 ${

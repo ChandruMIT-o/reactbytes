@@ -16,7 +16,9 @@ export const InstallationPage = () => {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<HeaderText text="Installation" option={3} />
+			<div id="installation-title">
+				<HeaderText text="Installation" option={3} />
+			</div>
 			<ParagraphText
 				text="A premium collection of high-performance React components designed for modern web applications. Speed, style, and simplicity in every byte."
 				option={4}
@@ -32,7 +34,9 @@ export const InstallationPage = () => {
 				codeContent="npm install react-bytes"
 			/>
 
-			<InstallationTabs />
+			<div id="installation-tabs">
+				<InstallationTabs />
+			</div>
 
 			<div className="max-w-md w-full pt-10">
 				<DiscreteSlider 
@@ -45,12 +49,12 @@ export const InstallationPage = () => {
 				/>
 			</div>
 
-			<div className="max-w-5xl mx-auto py-10 w-full">
+			<div id="api-reference" className="max-w-5xl mx-auto py-10 w-full">
 				<HeaderText text="API Reference" option={4} />
 				<PropsTable categories={componentDocsData} />
 			</div>
 
-			<div className="w-full max-w-5xl mx-auto py-10">
+			<div id="credits" className="w-full max-w-5xl mx-auto py-10">
 				<Credits data={creditsData} />
 			</div>
 

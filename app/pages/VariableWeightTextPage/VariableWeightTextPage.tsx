@@ -6,96 +6,85 @@ import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
-import { BlurIn } from "../../meta/text/TextEnter/BlurIn";
-import { loaderProps, componentCode, creditsData } from "./BlurInData";
-import { ComboBox } from "../../components/combobox/ComboBox";
+import { VariableWeightText } from "../../meta/text/TextEnter/VariableWeightText";
+import {
+	loaderProps,
+	componentCode,
+	creditsData,
+} from "./VariableWeightTextData";
 import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
 import { TextInput } from "../../components/textinput/TextInput";
 import { RotateCcw, Play } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
+import ToggleSwitch from "../../components/buttongroup/ToggleSwitch";
 import { Credits } from "../../components/buttongroup/Credits";
+import ComboBox from "@/app/components/combobox/ComboBox";
 
-const DEFAULT_TEXT = "All Hail Rameez";
-const DEFAULT_DURATION = 0.6;
-const DEFAULT_STAGGER = 0.04;
-const DEFAULT_BLUR = 12;
-const DEFAULT_COLOR = "text-rb-accent-1";
+const DEFAULT_TEXT = "VARIABLE OUTFIT";
+const DEFAULT_INITIAL_WEIGHT = 100;
+const DEFAULT_TARGET_WEIGHT = 900;
+const DEFAULT_DURATION = 0.8;
+const DEFAULT_STAGGER = 0.1;
 
 const presets = [
 	{
 		id: "default",
-		label: "Default Style",
+		label: "Default Bold",
 		config: {
-			text: "All Hail Rameez",
-			duration: 0.6,
-			stagger: 0.04,
-			initialBlur: 12,
-			color: "text-rb-accent-1",
-		},
-	},
-	{
-		id: "ethereal",
-		label: "Ethereal Mist",
-		config: {
-			text: "ETHEREAL",
-			duration: 1.5,
+			text: "VARIABLE OUTFIT",
+			initialWeight: 100,
+			targetWeight: 900,
+			duration: 0.8,
 			stagger: 0.1,
-			initialBlur: 32,
-			color: "text-rb-accent-2",
+			pulse: false,
 		},
 	},
 	{
-		id: "sharp",
-		label: "Rapid Entry",
+		id: "pulse",
+		label: "Breathing Cycle",
 		config: {
-			text: "REACTION",
-			duration: 0.3,
-			stagger: 0.02,
-			initialBlur: 8,
-			color: "text-rb-accent-3",
-		},
-	},
-	{
-		id: "cascade",
-		label: "Slow Cascade",
-		config: {
-			text: "BLURRING",
+			text: "BREATHING",
+			initialWeight: 100,
+			targetWeight: 800,
 			duration: 2.0,
+			stagger: 0.2,
+			pulse: true,
+		},
+	},
+	{
+		id: "rapid",
+		label: "Rapid Wave",
+		config: {
+			text: "VELOCITY",
+			initialWeight: 200,
+			targetWeight: 700,
+			duration: 0.4,
 			stagger: 0.05,
-			initialBlur: 24,
-			color: "text-rose-400",
+			pulse: false,
 		},
 	},
 ];
 
-const colorOptions = [
-	{ id: "text-rb-accent-1", label: "Accent 1" },
-	{ id: "text-rb-accent-2", label: "Accent 2" },
-	{ id: "text-rb-accent-3", label: "Accent 3" },
-	{ id: "text-white", label: "White" },
-	{ id: "text-emerald-400", label: "Emerald" },
-	{ id: "text-rose-400", label: "Rose" },
-	{ id: "text-amber-400", label: "Amber" },
-];
-
-export const BlurInPage = () => {
+export const VariableWeightTextPage = () => {
 	const [text, setText] = useState(DEFAULT_TEXT);
+	const [initialWeight, setInitialWeight] = useState(DEFAULT_INITIAL_WEIGHT);
+	const [targetWeight, setTargetWeight] = useState(DEFAULT_TARGET_WEIGHT);
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [stagger, setStagger] = useState(DEFAULT_STAGGER);
-	const [initialBlur, setInitialBlur] = useState(DEFAULT_BLUR);
-	const [textColorClass, setTextColorClass] = useState(DEFAULT_COLOR);
-	const [currentPreset, setCurrentPreset] = useState("default");
+	const [pulse, setPulse] = useState(false);
 	const [key, setKey] = useState(0);
+	const [currentPreset, setCurrentPreset] = useState("default");
 
 	const applyPreset = (presetId: string) => {
 		const preset = presets.find((p) => p.id === presetId);
 		if (preset) {
 			setCurrentPreset(presetId);
 			setText(preset.config.text);
+			setInitialWeight(preset.config.initialWeight);
+			setTargetWeight(preset.config.targetWeight);
 			setDuration(preset.config.duration);
 			setStagger(preset.config.stagger);
-			setInitialBlur(preset.config.initialBlur);
-			setTextColorClass(preset.config.color);
+			setPulse(preset.config.pulse);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -108,40 +97,42 @@ export const BlurInPage = () => {
 		applyPreset("default");
 	};
 
-	const usageCode = `<BlurIn
+	const usageCode = `<VariableWeightText
   text="${text}"
+  initialWeight={${initialWeight}}
+  targetWeight={${targetWeight}}
   duration={${duration}}
   stagger={${stagger}}
-  initialBlur={${initialBlur}}
-  textColorClass="${textColorClass}"
+  pulse={${pulse}}
 />`;
 
 	return (
 		<div className="flex flex-col gap-5">
-			<div id="blur-in-title">
-				<HeaderText text="Blur In" option={3} />
+			<div id="variable-weight-title">
+				<HeaderText text="Variable Weight Text" option={3} />
 			</div>
 			<ParagraphText
-				text="A smooth staggered entrance animation where characters materialize from a blurred state. Fully customizable timing and blur intensity."
+				text="A novel animation leveraging modern variable fonts. Characters shift their font weight in a staggered sequence, creating a wave-like breathing effect or a punchy entry."
 				option={4}
 			/>
 
 			<div id="preview">
 				<PreviewTab
 					previewContent={
-						<div className="w-full h-[400px] relative overflow-hidden flex items-center justify-center p-10">
-							<BlurIn
+						<div className="w-full h-[350px] relative overflow-hidden flex items-center justify-center">
+							<VariableWeightText
 								key={key}
 								text={text}
+								initialWeight={initialWeight}
+								targetWeight={targetWeight}
 								duration={duration}
 								stagger={stagger}
-								initialBlur={initialBlur}
-								textColorClass={textColorClass}
-								textClassName="text-6xl font-bold tracking-tight font-mono"
+								pulse={pulse}
+								textClassName="text-7xl tracking-tighter"
 							/>
 						</div>
 					}
-					onReplay={handleReplay}
+					onReplay={!pulse ? handleReplay : undefined}
 					usageCode={usageCode}
 					codeContent={componentCode}
 					collapsible={true}
@@ -182,14 +173,25 @@ export const BlurInPage = () => {
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
-						onClear={() => setText("")}
 					/>
 
-					<ComboBox
-						label="Text Color"
-						options={colorOptions}
-						value={textColorClass}
-						onChange={setTextColorClass}
+					<DiscreteSlider
+						label="Initial Weight"
+						min={100}
+						max={900}
+						step={100}
+						value={initialWeight}
+						onChange={setInitialWeight}
+						showTicks={false}
+					/>
+					<DiscreteSlider
+						label="Target Weight"
+						min={100}
+						max={900}
+						step={100}
+						value={targetWeight}
+						onChange={setTargetWeight}
+						showTicks={false}
 					/>
 
 					<DiscreteSlider
@@ -203,24 +205,24 @@ export const BlurInPage = () => {
 						showTicks={false}
 					/>
 
+					<ComboBox
+						label="Pulse Mode"
+						options={[
+							{ id: "true", label: "Enabled" },
+							{ id: "false", label: "Disabled" },
+						]}
+						value={pulse.toString()}
+						onChange={(val: string) => setPulse(val === "true")}
+					/>
+
 					<DiscreteSlider
 						label="Stagger (s)"
 						min={0}
 						max={0.5}
-						step={0.005}
+						step={0.01}
 						value={stagger}
 						onChange={setStagger}
-						maxDecimals={3}
-						showTicks={false}
-					/>
-
-					<DiscreteSlider
-						label="Initial Blur (px)"
-						min={0}
-						max={100}
-						step={2}
-						value={initialBlur}
-						onChange={setInitialBlur}
+						maxDecimals={2}
 						showTicks={false}
 					/>
 				</PreviewTab>
@@ -242,4 +244,4 @@ export const BlurInPage = () => {
 	);
 };
 
-export default BlurInPage;
+export default VariableWeightTextPage;

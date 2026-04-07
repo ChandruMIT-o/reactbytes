@@ -111,66 +111,62 @@ export const RevealUnderPage = () => {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<HeaderText text="Reveal Under" option={3} />
+			<div id="reveal-under-title">
+				<HeaderText text="Reveal Under" option={3} />
+			</div>
 			<ParagraphText
 				text="A sophisticated reveal animation where one word slides away to uncover another word hidden beneath it. Now upgraded with multi-directional support."
 				option={4}
 			/>
 
-			<PreviewTab
-				previewContent={
-					<div className="w-full h-[400px] relative overflow-hidden flex items-center justify-center p-10">
-						<RevealUnder
-							key={key}
-							firstWord={firstWord}
-							secondWord={secondWord}
-							direction={direction}
-							duration={duration}
-							textColorClass={textColorClass}
-							textClassName="text-6xl font-bold tracking-tight font-mono"
-						/>
-						<button
-							onClick={handleReplay}
-							className="absolute bottom-4 mx-auto flex items-center gap-2 px-6 py-2 bg-rb-accent-1/10 border border-rb-accent-1/20 hover:bg-rb-accent-1/20 text-rb-accent-1 rounded-full transition-all text-xs font-mono tracking-widest uppercase"
-						>
-							<Play size={12} fill="currentColor" />
-							Replay
-						</button>
-					</div>
-				}
-				usageCode={usageCode}
-				codeContent={componentCode}
-				collapsible={true}
-				header={
-					<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
-						<div className="flex flex-col gap-1">
-							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
-								Props
-							</h3>
+			<div id="preview">
+				<PreviewTab
+					previewContent={
+						<div className="w-full h-[400px] relative overflow-hidden flex items-center justify-center p-10">
+							<RevealUnder
+								key={key}
+								firstWord={firstWord}
+								secondWord={secondWord}
+								direction={direction}
+								duration={duration}
+								textColorClass={textColorClass}
+								textClassName="text-6xl font-bold tracking-tight font-mono"
+							/>
 						</div>
-						<div className="flex items-center gap-3">
-							<div className="w-[180px]">
-								<DefaultComboBox
-									options={presets}
-									value={currentPreset}
-									onChange={applyPreset}
-								/>
+					}
+					onReplay={handleReplay}
+					usageCode={usageCode}
+					codeContent={componentCode}
+					collapsible={true}
+					header={
+						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+							<div className="flex flex-col gap-1">
+								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
+									Props
+								</h3>
 							</div>
-							<button
-								onClick={handleReset}
-								className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
-								title="Reset to Defaults"
-							>
-								<RotateCcw
-									size={16}
-									className="group-hover:rotate-[-90deg] transition-transform duration-500"
-								/>
-							</button>
+							<div className="flex items-center gap-3">
+								<div className="w-[180px]">
+									<DefaultComboBox
+										options={presets}
+										value={currentPreset}
+										onChange={applyPreset}
+									/>
+								</div>
+								<button
+									onClick={handleReset}
+									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+									title="Reset to Defaults"
+								>
+									<RotateCcw
+										size={16}
+										className="group-hover:rotate-[-90deg] transition-transform duration-500"
+									/>
+								</button>
+							</div>
 						</div>
-					</div>
-				}
-			>
-				<div className="grid grid-cols-2 gap-4">
+					}
+				>
 					<TextInput
 						label="First Word"
 						value={firstWord}
@@ -189,45 +185,47 @@ export const RevealUnderPage = () => {
 						}}
 						placeholder="Enter word..."
 					/>
-				</div>
 
-				<ComboBox
-					label="Reveal Direction"
-					options={directionOptions}
-					value={direction}
-					onChange={(val) => {
-						setDirection(val);
-						setKey((prev) => prev + 1);
-					}}
-				/>
+					<ComboBox
+						label="Reveal Direction"
+						options={directionOptions}
+						value={direction}
+						onChange={(val) => {
+							setDirection(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
 
-				<ComboBox
-					label="Text Color"
-					options={colorOptions}
-					value={textColorClass}
-					onChange={setTextColorClass}
-				/>
+					<ComboBox
+						label="Text Color"
+						options={colorOptions}
+						value={textColorClass}
+						onChange={setTextColorClass}
+					/>
 
-				<DiscreteSlider
-					label="Duration (s)"
-					min={0.1}
-					max={3}
-					step={0.1}
-					value={duration}
-					onChange={setDuration}
-					maxDecimals={1}
-					showTicks={false}
-				/>
-			</PreviewTab>
+					<DiscreteSlider
+						label="Duration (s)"
+						min={0.1}
+						max={3}
+						step={0.1}
+						value={duration}
+						onChange={setDuration}
+						maxDecimals={1}
+						showTicks={false}
+					/>
+				</PreviewTab>
+			</div>
 
-			<InstallationTabs />
+			<div id="installation-tabs">
+				<InstallationTabs />
+			</div>
 
-			<div className="flex flex-col gap-5">
+			<div id="api-reference" className="flex flex-col gap-5">
 				<HeaderText text="API Reference" option={6} />
 				<PropsTable categories={loaderProps} />
 			</div>
 
-			<div className="w-full max-w-5xl mx-auto py-10">
+			<div id="credits" className="w-full max-w-5xl mx-auto py-10">
 				<Credits data={creditsData} />
 			</div>
 		</div>
