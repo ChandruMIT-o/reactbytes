@@ -18,6 +18,10 @@ import { FallDownPage } from "./pages/FallDownPage/FallDownPage";
 import { BlurInPage } from "./pages/BlurInPage/BlurInPage";
 import { RevealUnderPage } from "./pages/RevealUnderPage/RevealUnderPage";
 import VariableWeightTextPage from "./pages/VariableWeightTextPage/VariableWeightTextPage";
+import { WaveTextPage } from "./pages/WaveTextPage/WaveTextPage";
+import { FocalBlurTextPage } from "./pages/FocalBlurTextPage/FocalBlurTextPage";
+import { MagneticTextPage } from "./pages/MagneticTextPage/MagneticTextPage";
+import { ShatterTextPage } from "./pages/ShatterTextPage/ShatterTextPage";
 
 const generalItems = [
 	{ id: "intro", label: "Introduction" },
@@ -34,6 +38,10 @@ const textItems = [
 	{ id: "blur-in", label: "Blur In" },
 	{ id: "reveal-under", label: "Reveal Under" },
 	{ id: "variable-weight", label: "Variable Weight" },
+	{ id: "wave-text", label: "Proximity Ripple" },
+	{ id: "focal-blur", label: "Focal Blur" },
+	{ id: "magnetic-text", label: "Magnetic Repel" },
+	{ id: "shatter-text", label: "Cinematic Shatter" },
 ];
 
 const backgroundItems = [{ id: "magnetic-dots", label: "Magnetic Dot Mesh" }];
@@ -81,6 +89,30 @@ export default function Home() {
 		],
 		"variable-weight": [
 			{ id: "variable-weight-title", label: "Preview" },
+			{ id: "installation-tabs", label: "Installation" },
+			{ id: "api-reference", label: "API Reference" },
+			{ id: "credits", label: "Credits" },
+		],
+		"wave-text": [
+			{ id: "wave-text-title", label: "Preview" },
+			{ id: "installation-tabs", label: "Installation" },
+			{ id: "api-reference", label: "API Reference" },
+			{ id: "credits", label: "Credits" },
+		],
+		"focal-blur": [
+			{ id: "focal-blur-title", label: "Preview" },
+			{ id: "installation-tabs", label: "Installation" },
+			{ id: "api-reference", label: "API Reference" },
+			{ id: "credits", label: "Credits" },
+		],
+		"magnetic-text": [
+			{ id: "magnetic-text-title", label: "Preview" },
+			{ id: "installation-tabs", label: "Installation" },
+			{ id: "api-reference", label: "API Reference" },
+			{ id: "credits", label: "Credits" },
+		],
+		"shatter-text": [
+			{ id: "shatter-text-title", label: "Preview" },
 			{ id: "installation-tabs", label: "Installation" },
 			{ id: "api-reference", label: "API Reference" },
 			{ id: "credits", label: "Credits" },
@@ -208,6 +240,14 @@ export default function Home() {
 							<RevealUnderPage />
 						) : activeItem === "variable-weight" ? (
 							<VariableWeightTextPage />
+						) : activeItem === "wave-text" ? (
+							<WaveTextPage />
+						) : activeItem === "focal-blur" ? (
+							<FocalBlurTextPage />
+						) : activeItem === "magnetic-text" ? (
+							<MagneticTextPage />
+						) : activeItem === "shatter-text" ? (
+							<ShatterTextPage />
 						) : (
 							<div className="flex flex-col gap-5">
 								<HeaderText
