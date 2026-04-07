@@ -61,7 +61,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 	return (
 		<div className="w-full max-w-4xl font-sans">
 			{/* Tabs Row Wrapper */}
-			<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max">
+			<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max max-w-full overflow-x-auto scrollbar-none">
 				{tabs.map((tab) => (
 					<motion.button
 						key={tab.id}

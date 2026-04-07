@@ -9,6 +9,7 @@ import LeftSidebarRefMenu from "../sidebar/LeftSidebarRefMenu";
 import { GitHubStarButton } from "../buttons/GitHubStarsButton";
 import ToggleSwitch from "../buttongroup/ToggleSwitch";
 import SearchInput from "../buttons/SearchInput";
+import { Menu, X } from "lucide-react";
 
 const generalItems = [
 	{ id: "intro", label: "Introduction" },
@@ -110,7 +111,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	const activeItem = pathname === "/" ? "install" : pathname.slice(1);
 	
 	const [activeSection, setActiveSection] = React.useState<string>("");
+	const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
 	const scrollContainerRef = React.useRef<HTMLElement>(null);
+	// Close mobile menu when active item changes
+	React.useEffect(() => {
+		setIsMobileMenuOpen(false);
+	}, [activeItem]);
 
 	const currentSections = pageSections[activeItem] || [];
 
@@ -156,10 +163,20 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	};
 
 	return (
-		<div className="flex flex-col h-screen overflow-hidden font-sans bg-background text-foreground transition-colors duration-500">
+		<div className="flex flex-col h-[100dvh] overflow-hidden font-sans bg-background text-foreground transition-colors duration-500">
 			{/* Fixed Header */}
-			<header className="flex items-center justify-between w-full px-8 py-4 border-b border-white/5 bg-background/80 backdrop-blur-md z-50 flex-shrink-0">
-				<div className="flex items-center gap-2">
+			<header className="flex items-center justify-between w-full px-5 md:px-8 py-4 border-b border-white/5 bg-background/80 backdrop-blur-md z-50 flex-shrink-0">
+				<div className="flex items-center gap-2 md:gap-4">
+					<button
+						type="button"
+						className="md:hidden p-3 -ml-2 text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-white/5 rounded-md transition-colors relative z-[60]"
+						onClick={(e) => {
+							e.stopPropagation();
+							setIsMobileMenuOpen(!isMobileMenuOpen);
+						}}
+					>
+						<Menu size={24} />
+					</button>
 					<div className="flex items-center gap-2 group cursor-pointer" onClick={() => router.push("/")}>
 						<div className="relative">
 							<div className="absolute inset-0 bg-rb-accent-1/20 blur-lg rounded-full group-hover:bg-rb-accent-1/40 transition-colors" />
@@ -171,31 +188,81 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 								className="relative z-10"
 							/>
 						</div>
-						<div className="text-[16px] text-rb-accent-2 font-medium tracking-tight">
+						<div className="hidden md:block text-[16px] text-rb-accent-2 font-medium tracking-tight">
 							React Bytes
 						</div>
 					</div>
-					<ButtonGroup
-						groupId="main-nav"
-						items={[
-							{ id: "components", label: "Components" },
-							{ id: "docs", label: "Docs" },
-							{ id: "icons", label: "Icons" },
-						]}
-					/>
+					<div className="hidden md:flex ml-2">
+						<ButtonGroup
+							groupId="main-nav"
+							items={[
+								{ id: "components", label: "Components" },
+								{ id: "docs", label: "Docs" },
+								{ id: "icons", label: "Icons" },
+							]}
+						/>
+					</div>
 				</div>
-				<div className="flex items-center gap-2">
-					<SearchInput />
-					<ToggleSwitch />
-					<GitHubStarButton starCount={134} username="ChandruMIT-o" />
+				<div className="flex items-center gap-2 flex-1 md:flex-none justify-end md:justify-start">
+					<div className="w-full max-w-[160px] md:max-w-none">
+						<SearchInput />
+					</div>
+					<div className="hidden md:flex items-center gap-2">
+						<ToggleSwitch />
+						<GitHubStarButton starCount={134} username="ChandruMIT-o" />
+					</div>
 				</div>
 			</header>
 
 			{/* Main Content Area with independent scrolling */}
-			<div className="flex flex-1 overflow-hidden w-full max-w-[100vw] justify-between px-5 py-2">
+			<div className="flex flex-1 overflow-hidden w-full max-w-[100vw] justify-between md:px-5 md:py-2 relative">
+				{/* Mobile Backdrop */}
+				<AnimatePresence>
+					{isMobileMenuOpen && (
+						<motion.div
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							onClick={() => setIsMobileMenuOpen(false)}
+							className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[60] md:hidden"
+						/>
+					)}
+				</AnimatePresence>
+
 				{/* Left Sidebar - Scrollable */}
-				<aside className="h-full overflow-y-auto flex flex-col pt-4 pr-2 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent">
-					<div className="flex flex-col gap-1 pb-20">
+				<aside 
+					className={`fixed inset-y-0 left-0 z-[70] w-[280px] max-w-[85vw] bg-rb-neutral-2 border-r border-white/5 md:bg-transparent md:border-none md:relative md:w-auto h-full overflow-y-auto flex flex-col pt-4 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent transform transition-transform duration-300 ease-in-out ${
+						isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+					}`}
+				>
+					<div className="flex flex-col gap-1 pb-20 px-4 md:px-0 mt-4 md:mt-0">
+						<div className="flex md:hidden items-center justify-between mb-6 pb-4 border-b border-white/5">
+							<span className="text-rb-accent-2 font-medium text-lg">Menu</span>
+							<button 
+								type="button"
+								onClick={() => setIsMobileMenuOpen(false)}
+								className="p-1.5 text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-white/5 rounded-md transition-colors"
+							>
+								<X size={20} />
+							</button>
+						</div>
+
+						{/* Mobile Header Actions */}
+						<div className="flex flex-col md:hidden gap-4 mb-6 pb-4 border-b border-white/5">
+							<ButtonGroup
+								groupId="mobile-main-nav"
+								items={[
+									{ id: "components", label: "Components" },
+									{ id: "docs", label: "Docs" },
+									{ id: "icons", label: "Icons" },
+								]}
+							/>
+							<div className="flex items-center gap-3">
+								<ToggleSwitch />
+								<GitHubStarButton starCount={134} username="ChandruMIT-o" />
+							</div>
+						</div>
+
 						<LeftSidebarMenu
 							activeItem={activeItem}
 							setActiveItem={handleSetActiveItem}
@@ -220,7 +287,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 				{/* Center Content - Scrollable */}
 				<main
 					ref={scrollContainerRef}
-					className="flex-1 h-full overflow-y-auto pl-20 pr-10 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
+					className="flex-1 h-full w-full overflow-y-auto px-4 md:pl-20 md:pr-10 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
 				>
 					<div className="max-w-4xl mx-auto pb-40">
 						{children}
@@ -228,7 +295,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 				</main>
 
 				{/* Right Sidebar - Scrollable */}
-				<aside className="h-full overflow-y-auto pt-6 pl-4 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent">
+				<aside className="hidden md:block h-full overflow-y-auto pt-6 pl-4 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent">
 					<LeftSidebarRefMenu
 						items={currentSections}
 						activeId={activeSection}
