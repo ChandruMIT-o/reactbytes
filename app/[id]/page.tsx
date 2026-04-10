@@ -9,6 +9,7 @@ import ParagraphText from "../components/textfields/ParagraphText";
 import { InstallationPage } from "../pages/InstallationPage/InstallationPage";
 import { BlurTextPage } from "../pages/BlurTextPage/BlurTextPage";
 import { MagneticDotMeshPage } from "../pages/MagneticDotMeshPage/MagneticDotMeshPage";
+import BubbleGradientPage from "../pages/BubbleGradientPage/BubbleGradientPage";
 import { FallDownPage } from "../pages/FallDownPage/FallDownPage";
 import { BlurInPage } from "../pages/BlurInPage/BlurInPage";
 import { RevealUnderPage } from "../pages/RevealUnderPage/RevealUnderPage";
@@ -17,6 +18,9 @@ import { WaveTextPage } from "../pages/WaveTextPage/WaveTextPage";
 import { FocalBlurTextPage } from "../pages/FocalBlurTextPage/FocalBlurTextPage";
 import { MagneticTextPage } from "../pages/MagneticTextPage/MagneticTextPage";
 import { ShatterTextPage } from "../pages/ShatterTextPage/ShatterTextPage";
+import { FractalBackgroundPage } from "../pages/FractalBackgroundPage/FractalBackgroundPage";
+import { CellularAutomataPage } from "../pages/CellularAutomataPage/CellularAutomataPage";
+
 
 export default function DynamicComponentPage() {
 	const params = useParams();
@@ -26,6 +30,7 @@ export default function DynamicComponentPage() {
 		if (id === "install") return <InstallationPage />;
 		if (id === "blur-text") return <BlurTextPage />;
 		if (id === "magnetic-dots") return <MagneticDotMeshPage />;
+		if (id === "bubble-gradient") return <BubbleGradientPage />;
 		if (id === "fall-down") return <FallDownPage />;
 		if (id === "blur-in") return <BlurInPage />;
 		if (id === "reveal-under") return <RevealUnderPage />;
@@ -34,6 +39,9 @@ export default function DynamicComponentPage() {
 		if (id === "focal-blur") return <FocalBlurTextPage />;
 		if (id === "magnetic-text") return <MagneticTextPage />;
 		if (id === "shatter-text") return <ShatterTextPage />;
+		if (id === "fractal-background") return <FractalBackgroundPage />;
+		if (id === "cellular-automata") return <CellularAutomataPage />;
+
 
 		return (
 			<div className="flex flex-col gap-5">

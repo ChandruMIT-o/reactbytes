@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { useRouter, useParams, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import LeftSidebarMenu from "../sidebar/LeftSidebarMenu";
 import ButtonGroup from "../buttongroup/ButtonGroup";
@@ -14,9 +14,6 @@ import { Menu, X } from "lucide-react";
 const generalItems = [
 	{ id: "intro", label: "Introduction" },
 	{ id: "install", label: "Installation" },
-	{ id: "a11y", label: "Accessibility" },
-	{ id: "mcp", label: "MCP" },
-	{ id: "troubleshoot", label: "Troubleshooting" },
 	{ id: "changelog", label: "Changelog" },
 ];
 
@@ -32,7 +29,12 @@ const textItems = [
 	{ id: "shatter-text", label: "Cinematic Shatter" },
 ];
 
-const backgroundItems = [{ id: "magnetic-dots", label: "Magnetic Dot Mesh" }];
+const backgroundItems = [
+	{ id: "magnetic-dots", label: "Magnetic Dot Mesh" },
+	{ id: "bubble-gradient", label: "Bubble Gradient" },
+	{ id: "fractal-background", label: "Fractal Background" },
+	{ id: "cellular-automata", label: "Cellular Automata" },
+];
 
 const pageSections: Record<string, { id: string; label: string }[]> = {
 	install: [
@@ -48,6 +50,12 @@ const pageSections: Record<string, { id: string; label: string }[]> = {
 	],
 	"magnetic-dots": [
 		{ id: "magnetic-dots-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"bubble-gradient": [
+		{ id: "bubble-gradient-title", label: "Preview" },
 		{ id: "installation-tabs", label: "Installation" },
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },
@@ -100,12 +108,24 @@ const pageSections: Record<string, { id: string; label: string }[]> = {
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },
 	],
+	"fractal-background": [
+		{ id: "fractal-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"cellular-automata": [
+		{ id: "cellular-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
 };
+
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const params = useParams();
 
 	// Extract activeItem from pathname if it's not and-redirect
 	const activeItem = pathname === "/" ? "install" : pathname.slice(1);
@@ -119,7 +139,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 		setIsMobileMenuOpen(false);
 	}, [activeItem]);
 
-	const currentSections = pageSections[activeItem] || [];
+	const currentSections = React.useMemo(
+		() => pageSections[activeItem] || [],
+		[activeItem],
+	);
 
 	React.useEffect(() => {
 		const observerOptions = {
