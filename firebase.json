@@ -10,7 +10,9 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "**/.next/cache/**",
+      "**/.git/**"
     ],
     "frameworksBackend": {
       "region": "us-central1"

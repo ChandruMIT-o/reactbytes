@@ -27,14 +27,26 @@ const textItems = [
 	{ id: "focal-blur", label: "Focal Blur" },
 	{ id: "magnetic-text", label: "Magnetic Repel" },
 	{ id: "shatter-text", label: "Cinematic Shatter" },
+	{ id: "gooey-morph", label: "Gooey Morph" },
+	{ id: "elastic-reveal", label: "Elastic Reveal" },
+	{ id: "scramble-reveal", label: "Scramble Reveal" },
+	{ id: "keyboard-text", label: "Keyboard Text" },
 ];
+
+
+
 
 const backgroundItems = [
 	{ id: "magnetic-dots", label: "Magnetic Dot Mesh" },
 	{ id: "bubble-gradient", label: "Bubble Gradient" },
 	{ id: "fractal-background", label: "Fractal Background" },
 	{ id: "cellular-automata", label: "Cellular Automata" },
+	{ id: "hive-mind", label: "Hive Mind" },
+	{ id: "perlin-smoke", label: "Perlin Smoke" },
+	{ id: "metallic-twirl", label: "Metallic Twirl" },
+	{ id: "liquid-noise", label: "Liquid Noise" },
 ];
+
 
 const pageSections: Record<string, { id: string; label: string }[]> = {
 	install: [
@@ -120,7 +132,59 @@ const pageSections: Record<string, { id: string; label: string }[]> = {
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },
 	],
+	"gooey-morph": [
+		{ id: "gooey-morph-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"elastic-reveal": [
+		{ id: "elastic-reveal-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"scramble-reveal": [
+		{ id: "scramble-reveal-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"keyboard-text": [
+		{ id: "keyboard-text-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"hive-mind": [
+		{ id: "hive-mind-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"perlin-smoke": [
+		{ id: "perlin-smoke-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"metallic-twirl": [
+		{ id: "metallic-twirl-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"liquid-noise": [
+		{ id: "liquid-noise-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
 };
+
+
+
+
 
 
 export default function AppShell({ children }: { children: React.ReactNode }) {

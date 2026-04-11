@@ -20,6 +20,18 @@ import { MagneticTextPage } from "../pages/MagneticTextPage/MagneticTextPage";
 import { ShatterTextPage } from "../pages/ShatterTextPage/ShatterTextPage";
 import { FractalBackgroundPage } from "../pages/FractalBackgroundPage/FractalBackgroundPage";
 import { CellularAutomataPage } from "../pages/CellularAutomataPage/CellularAutomataPage";
+import { GooeyMorphTextPage } from "../pages/MorphTextPage/GooeyMorphTextPage";
+import { ElasticRevealPage } from "../pages/ElasticRevealPage/ElasticRevealPage";
+import { ScrambleRevealPage } from "../pages/ScrambleRevealPage/ScrambleRevealPage";
+import { KeyboardTextPage } from "../pages/KeyboardTextPage/KeyboardTextPage";
+import { HiveMindPage } from "../pages/HiveMindPage/HiveMindPage";
+import { PerlinSmokePage } from "../pages/PerlinSmokePage/PerlinSmokePage";
+import { MetallicTwirlPage } from "../pages/MetallicTwirlPage/MetallicTwirlPage";
+import { LiquidNoisePage } from "../pages/LiquidNoisePage/LiquidNoisePage";
+
+
+
+
 
 
 export default function DynamicComponentPage() {
@@ -41,6 +53,18 @@ export default function DynamicComponentPage() {
 		if (id === "shatter-text") return <ShatterTextPage />;
 		if (id === "fractal-background") return <FractalBackgroundPage />;
 		if (id === "cellular-automata") return <CellularAutomataPage />;
+		if (id === "gooey-morph") return <GooeyMorphTextPage />;
+		if (id === "elastic-reveal") return <ElasticRevealPage />;
+		if (id === "scramble-reveal") return <ScrambleRevealPage />;
+		if (id === "keyboard-text") return <KeyboardTextPage />;
+		if (id === "hive-mind") return <HiveMindPage />;
+		if (id === "perlin-smoke") return <PerlinSmokePage />;
+		if (id === "metallic-twirl") return <MetallicTwirlPage />;
+		if (id === "liquid-noise") return <LiquidNoisePage />;
+
+
+
+
 
 
 		return (
