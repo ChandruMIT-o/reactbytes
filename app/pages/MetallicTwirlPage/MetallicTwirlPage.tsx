@@ -113,26 +113,26 @@ export const MetallicTwirlPage = () => {
 			<div id="preview">
 				<PreviewTab
 					previewContent={
-						<div 
+						<div
 							onClick={() => setKey(prev => prev + 1)}
 							className="w-full h-[600px] relative overflow-hidden flex items-center justify-center bg-black border border-white/5 rounded-xl cursor-pointer group active:scale-[0.99] transition-transform"
 						>
 							<MetallicTwirl
 								key={key}
 								speed={config.speed}
-                                zoom={config.zoom}
-                                symmetry={config.symmetry}
-                                amplitude={config.amplitude}
+								zoom={config.zoom}
+								symmetry={config.symmetry}
+								amplitude={config.amplitude}
 							>
-                                <div className="flex flex-col items-center gap-3 text-center px-6">
-                                    <div className="text-[clamp(1.5rem,5vw,3.5rem)] font-bold tracking-[0.2em] text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
-                                        {config.title}
-                                    </div>
-                                    <div className="max-w-lg text-white/80 text-xs md:text-sm tracking-widest uppercase bg-black/40 backdrop-blur-md px-8 py-2.5 rounded-full border border-white/20 shadow-lg">
-                                        Twisted Dimensions
-                                    </div>
-                                </div>
-                            </MetallicTwirl>
+								<div className="flex flex-col items-center gap-3 text-center px-6">
+									<div className="text-[clamp(1.5rem,5vw,3.5rem)] font-bold tracking-[0.2em] text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.7)]">
+										{config.title}
+									</div>
+									<div className="max-w-lg text-white/80 text-xs md:text-sm tracking-widest uppercase bg-black/40 backdrop-blur-md px-8 py-2.5 rounded-full border border-white/20 shadow-lg">
+										Twisted Dimensions
+									</div>
+								</div>
+							</MetallicTwirl>
 							<div className="absolute top-4 left-4 text-[10px] text-white/20 uppercase tracking-widest font-bold pointer-events-none group-hover:text-white/40 transition-colors z-20">
 								Click Render to Reset
 							</div>
@@ -150,13 +150,12 @@ export const MetallicTwirlPage = () => {
 								</h3>
 							</div>
 							<div className="flex items-center gap-3">
-								<div className="w-[180px]">
-									<DefaultComboBox
-										options={presets}
-										value={presets.find(p => p.config.symmetry === config.symmetry && p.config.zoom === config.zoom)?.id || ""}
-										onChange={applyPreset}
-									/>
-								</div>
+								<DefaultComboBox
+									options={presets}
+									value={presets.find(p => p.config.symmetry === config.symmetry && p.config.zoom === config.zoom)?.id || ""}
+									onChange={applyPreset}
+									dynamicWidth={true}
+								/>
 							</div>
 						</div>
 					}
@@ -201,7 +200,7 @@ export const MetallicTwirlPage = () => {
 						showTicks={false}
 					/>
 
-                    <DiscreteSlider
+					<DiscreteSlider
 						label="Amplitude"
 						min={0.1}
 						max={5.0}

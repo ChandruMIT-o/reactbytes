@@ -74,7 +74,7 @@ const presets = [
 			enableParallax: true,
 		},
 	},
-    {
+	{
 		id: "neon-cyber",
 		label: "Neon Cyber",
 		config: {
@@ -88,7 +88,7 @@ const presets = [
 			enableParallax: true,
 		},
 	},
-    {
+	{
 		id: "frozen-glace",
 		label: "Frozen Glace",
 		config: {
@@ -102,7 +102,7 @@ const presets = [
 			enableParallax: true,
 		},
 	},
-    {
+	{
 		id: "blood-moon",
 		label: "Blood Moon",
 		config: {
@@ -116,7 +116,7 @@ const presets = [
 			enableParallax: true,
 		},
 	},
-    {
+	{
 		id: "golden-artifact",
 		label: "Golden Artifact",
 		config: {
@@ -130,7 +130,7 @@ const presets = [
 			enableParallax: true,
 		},
 	},
-    {
+	{
 		id: "phantom-grey",
 		label: "Phantom Grey",
 		config: {
@@ -149,7 +149,7 @@ const presets = [
 export const FractalBackgroundPage = () => {
 	const defaultPreset = presets[0];
 
-    const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
+	const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
 	const [title, setTitle] = useState(defaultPreset.config.title);
 	const [colorStart, setColorStart] = useState(defaultPreset.config.colorStart);
 	const [colorEnd, setColorEnd] = useState(defaultPreset.config.colorEnd);
@@ -162,7 +162,7 @@ export const FractalBackgroundPage = () => {
 	const applyPreset = (presetId: string) => {
 		const preset = presets.find((p) => p.id === presetId);
 		if (!preset) return;
-        setCurrentPreset(presetId);
+		setCurrentPreset(presetId);
 		setTitle(preset.config.title);
 		setColorStart(preset.config.colorStart);
 		setColorEnd(preset.config.colorEnd);
@@ -228,22 +228,21 @@ export const FractalBackgroundPage = () => {
 						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
 							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">Props</h3>
 							<div className="flex items-center gap-3">
-                                <div className="w-[190px]">
-                                    <DefaultComboBox
-                                        options={presets}
-                                        value={currentPreset}
-                                        onChange={applyPreset}
-                                    />
-                                </div>
-								<button 
-                                    onClick={handleReset} 
-                                    className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
-                                    title="Reset to Defaults"
-                                >
-									<RotateCcw 
-                                        size={16} 
-                                        className="group-hover:rotate-[-90deg] transition-transform duration-500"
-                                    />
+								<DefaultComboBox
+									options={presets}
+									value={currentPreset}
+									onChange={applyPreset}
+									dynamicWidth={true}
+								/>
+								<button
+									onClick={handleReset}
+									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+									title="Reset to Defaults"
+								>
+									<RotateCcw
+										size={16}
+										className="group-hover:rotate-[-90deg] transition-transform duration-500"
+									/>
 								</button>
 							</div>
 						</div>

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import { InstallationPage } from "./pages/InstallationPage/InstallationPage";
+import { IntroductionPage } from "./pages/IntroductionPage/IntroductionPage";
 
 export default function Home() {
 	return (
@@ -10,7 +10,7 @@ export default function Home() {
 			animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
 			transition={{ duration: 0.4, ease: "easeOut" }}
 		>
-			<InstallationPage />
+			<IntroductionPage />
 		</motion.div>
 	);
 }

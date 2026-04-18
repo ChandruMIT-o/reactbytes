@@ -55,7 +55,7 @@ const presets = [
 			intensity: 1.1,
 		},
 	},
-    {
+	{
 		id: "ethereal-mist",
 		label: "Ethereal Mist",
 		config: {
@@ -71,10 +71,10 @@ const presets = [
 ];
 
 export const CellularAutomataPage = () => {
-    // Keep the component name as is but change the logic internally to avoid breaking routes
+	// Keep the component name as is but change the logic internally to avoid breaking routes
 	const defaultPreset = presets[0];
 
-    const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
+	const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
 	const [title, setTitle] = useState(defaultPreset.config.title);
 	const [colorA, setColorA] = useState(defaultPreset.config.colorA);
 	const [colorB, setColorB] = useState(defaultPreset.config.colorB);
@@ -89,7 +89,7 @@ export const CellularAutomataPage = () => {
 	const applyPreset = (presetId: string) => {
 		const preset = presets.find((p) => p.id === presetId);
 		if (!preset) return;
-        setCurrentPreset(presetId);
+		setCurrentPreset(presetId);
 		setTitle(preset.config.title);
 		setColorA(preset.config.colorA);
 		setColorB(preset.config.colorB);
@@ -97,9 +97,9 @@ export const CellularAutomataPage = () => {
 		setSpeed(preset.config.speed);
 		setScale(preset.config.scale);
 		setIntensity(preset.config.intensity);
-        setOpacity(1.0);
-        setVignetteIntensity(0.6);
-        setBlurAmount(0);
+		setOpacity(1.0);
+		setVignetteIntensity(0.6);
+		setBlurAmount(0);
 	};
 
 	const handleReset = () => applyPreset(defaultPreset.id);
@@ -139,9 +139,9 @@ export const CellularAutomataPage = () => {
 								speed={speed}
 								scale={scale}
 								intensity={intensity}
-                                opacity={opacity}
-                                vignetteIntensity={vignetteIntensity}
-                                blurAmount={blurAmount}
+								opacity={opacity}
+								vignetteIntensity={vignetteIntensity}
+								blurAmount={blurAmount}
 							>
 								<div className="flex flex-col items-center gap-3 text-center px-6">
 									<div className="text-[clamp(1.5rem,5vw,3.5rem)] font-bold tracking-[0.2em] text-white">
@@ -161,22 +161,21 @@ export const CellularAutomataPage = () => {
 						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
 							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase tracking-[0.1em]">Engine Parameters</h3>
 							<div className="flex items-center gap-3">
-                                <div className="w-[190px]">
-                                    <DefaultComboBox
-                                        options={presets}
-                                        value={currentPreset}
-                                        onChange={applyPreset}
-                                    />
-                                </div>
-								<button 
-                                    onClick={handleReset} 
-                                    className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
-                                    title="Reset to Defaults"
-                                >
-									<RotateCcw 
-                                        size={16} 
-                                        className="group-hover:rotate-[-90deg] transition-transform duration-500"
-                                    />
+								<DefaultComboBox
+									options={presets}
+									value={currentPreset}
+									onChange={applyPreset}
+									dynamicWidth={true}
+								/>
+								<button
+									onClick={handleReset}
+									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+									title="Reset to Defaults"
+								>
+									<RotateCcw
+										size={16}
+										className="group-hover:rotate-[-90deg] transition-transform duration-500"
+									/>
 								</button>
 							</div>
 						</div>
@@ -200,7 +199,7 @@ export const CellularAutomataPage = () => {
 						showTicks={false}
 					/>
 
-                    <DiscreteSlider
+					<DiscreteSlider
 						label="Noise Complexity (Scale)"
 						min={0.5}
 						max={3.0}

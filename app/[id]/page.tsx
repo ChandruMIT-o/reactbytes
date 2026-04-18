@@ -6,6 +6,7 @@ import HeaderText from "../components/textfields/HeaderText";
 import ParagraphText from "../components/textfields/ParagraphText";
 
 // Modularized Page Components
+import { IntroductionPage } from "../pages/IntroductionPage/IntroductionPage";
 import { InstallationPage } from "../pages/InstallationPage/InstallationPage";
 import { BlurTextPage } from "../pages/BlurTextPage/BlurTextPage";
 import { MagneticDotMeshPage } from "../pages/MagneticDotMeshPage/MagneticDotMeshPage";
@@ -39,6 +40,7 @@ export default function DynamicComponentPage() {
 	const id = params.id as string;
 
 	const renderContent = () => {
+		if (id === "intro") return <IntroductionPage />;
 		if (id === "install") return <InstallationPage />;
 		if (id === "blur-text") return <BlurTextPage />;
 		if (id === "magnetic-dots") return <MagneticDotMeshPage />;

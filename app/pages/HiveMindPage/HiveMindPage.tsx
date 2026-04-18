@@ -102,7 +102,7 @@ export const HiveMindPage = () => {
 			<div id="preview">
 				<PreviewTab
 					previewContent={
-						<div 
+						<div
 							onClick={() => setKey(prev => prev + 1)}
 							className="w-full h-[600px] relative overflow-hidden flex items-center justify-center bg-black border border-white/5 rounded-xl cursor-pointer group active:scale-[0.99] transition-transform"
 						>
@@ -128,13 +128,12 @@ export const HiveMindPage = () => {
 								</h3>
 							</div>
 							<div className="flex items-center gap-3">
-								<div className="w-[180px]">
-									<DefaultComboBox
-										options={presets}
-										value={presets.find(p => p.config.color1 === config.color1 && p.config.noiseScale === config.noiseScale)?.id || ""}
-										onChange={applyPreset}
-									/>
-								</div>
+								<DefaultComboBox
+									options={presets}
+									value={presets.find(p => p.config.color1 === config.color1 && p.config.noiseScale === config.noiseScale)?.id || ""}
+									onChange={applyPreset}
+									dynamicWidth={true}
+								/>
 							</div>
 						</div>
 					}

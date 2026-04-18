@@ -23,8 +23,8 @@ const presets = [
 			turbulence: 0.5,
 			milk: 0.4,
 			eco: true,
-            maxFPS: 50,
-            mouseInteraction: 0.5,
+			maxFPS: 50,
+			mouseInteraction: 0.5,
 		},
 	},
 	{
@@ -36,8 +36,8 @@ const presets = [
 			turbulence: 0.7,
 			milk: 0.5,
 			eco: false,
-            maxFPS: 60,
-            mouseInteraction: 0.8,
+			maxFPS: 60,
+			mouseInteraction: 0.8,
 		},
 	},
 	{
@@ -49,8 +49,8 @@ const presets = [
 			turbulence: 0.3,
 			milk: 0.2,
 			eco: true,
-            maxFPS: 45,
-            mouseInteraction: 0.3,
+			maxFPS: 45,
+			mouseInteraction: 0.3,
 		},
 	},
 ];
@@ -94,7 +94,7 @@ export const PerlinSmokePage = () => {
 			<div id="preview">
 				<PreviewTab
 					previewContent={
-						<div 
+						<div
 							onClick={() => setKey(prev => prev + 1)}
 							className="w-full h-[600px] relative overflow-hidden flex items-center justify-center bg-black border border-white/5 rounded-xl cursor-pointer group active:scale-[0.99] transition-transform"
 						>
@@ -120,13 +120,12 @@ export const PerlinSmokePage = () => {
 								</h3>
 							</div>
 							<div className="flex items-center gap-3">
-								<div className="w-[180px]">
-									<DefaultComboBox
-										options={presets}
-										value={presets.find(p => p.config.baseColor === config.baseColor && p.config.speed === config.speed)?.id || ""}
-										onChange={applyPreset}
-									/>
-								</div>
+								<DefaultComboBox
+									options={presets}
+									value={presets.find(p => p.config.baseColor === config.baseColor && p.config.speed === config.speed)?.id || ""}
+									onChange={applyPreset}
+									dynamicWidth={true}
+								/>
 							</div>
 						</div>
 					}
@@ -173,7 +172,7 @@ export const PerlinSmokePage = () => {
 						showTicks={false}
 					/>
 
-                    <DiscreteSlider
+					<DiscreteSlider
 						label="Mouse Interaction"
 						min={0}
 						max={2}
@@ -184,7 +183,7 @@ export const PerlinSmokePage = () => {
 						showTicks={false}
 					/>
 
-                    <DiscreteSlider
+					<DiscreteSlider
 						label="Max FPS"
 						min={30}
 						max={120}
@@ -194,16 +193,16 @@ export const PerlinSmokePage = () => {
 						maxDecimals={0}
 						showTicks={false}
 					/>
-                    
-                    <div className="flex items-center gap-3 mt-4 ml-4">
-                        <label className="text-sm text-rb-accent-1 font-medium">Eco Mode</label>
-                        <input 
-                            type="checkbox" 
-                            checked={config.eco} 
-                            onChange={(e) => updateConfig("eco", e.target.checked)} 
-                            className="accent-rb-accent-1 h-4 w-4"
-                        />
-                    </div>
+
+					<div className="flex items-center gap-3 mt-4 ml-4">
+						<label className="text-sm text-rb-accent-1 font-medium">Eco Mode</label>
+						<input
+							type="checkbox"
+							checked={config.eco}
+							onChange={(e) => updateConfig("eco", e.target.checked)}
+							className="accent-rb-accent-1 h-4 w-4"
+						/>
+					</div>
 				</PreviewTab>
 			</div>
 

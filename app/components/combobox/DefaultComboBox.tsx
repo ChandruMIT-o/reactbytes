@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ChevronDown, Check } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight, Check } from "lucide-react";
 
 export interface ComboBoxOption {
 	id: string;
@@ -28,7 +28,7 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 	onChange,
 	className = "",
 	label,
-	maxWidth = "400px",
+	maxWidth = "300px",
 	dynamicWidth = false,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -75,6 +75,25 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 		setSearchTerm("");
 		setIsOpen(false);
 		inputRef.current?.blur();
+	};
+
+	const handlePrev = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		if (!options.length) return;
+		const currentIndex = options.findIndex((opt) => opt.id === value);
+		const newIndex = currentIndex <= 0 ? options.length - 1 : currentIndex - 1;
+		onChange?.(options[newIndex].id);
+	};
+
+	const handleNext = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		if (!options.length) return;
+		const currentIndex = options.findIndex((opt) => opt.id === value);
+		const newIndex =
+			currentIndex === -1 || currentIndex >= options.length - 1
+				? 0
+				: currentIndex + 1;
+		onChange?.(options[newIndex].id);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -139,27 +158,24 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 			<div className="group relative">
 				<div
 					onClick={() => !isOpen && setIsOpen(true)}
-					className={`relative flex items-center gap-3 px-4 py-[9px] rounded-full transition-all duration-300 cursor-pointer border border-transparent overflow-hidden ${
-						isOpen
-							? "bg-rb-accent-3 text-rb-neutral-2 shadow-[0_0_20px_rgba(192,222,221,0.3)]"
-							: "bg-rb-neutral-3 text-rb-accent-2 hover:bg-rb-neutral-4 hover:border-rb-neutral-4/50"
-					}`}
+					className={`relative flex items-center gap-3 px-4 py-[9px] rounded-full transition-all duration-300 cursor-pointer border border-transparent overflow-hidden ${isOpen
+						? "bg-rb-accent-3 text-rb-neutral-2 shadow-[0_0_20px_rgba(192,222,221,0.3)]"
+						: "bg-rb-neutral-3 text-rb-accent-2 hover:bg-rb-neutral-4 hover:border-rb-neutral-4/50"
+						}`}
 				>
 					<Search
 						size={16}
-						className={`shrink-0 transition-colors duration-300 ${
-							isOpen ? "text-rb-neutral-2" : "text-rb-accent-1/30"
-						}`}
+						className={`shrink-0 transition-colors duration-300 ${isOpen ? "text-rb-neutral-2" : "text-rb-accent-1/30"
+							}`}
 					/>
 
 					<div className={`relative flex-1 min-w-0 ${dynamicWidth ? "grid" : ""}`}>
 						{dynamicWidth && (
 							<span
-								className={`col-start-1 row-start-1 invisible whitespace-pre text-[16px] font-medium font-sans tracking-tight px-0 ${
-									isOpen
-										? "text-rb-neutral-2"
-										: "text-rb-accent-2"
-								}`}
+								className={`col-start-1 row-start-1 invisible whitespace-pre text-[16px] font-medium font-sans tracking-tight px-0 ${isOpen
+									? "text-rb-neutral-2"
+									: "text-rb-accent-2"
+									}`}
 							>
 								{(isOpen ? searchTerm : selectedOption?.label) ||
 									placeholder}
@@ -178,25 +194,36 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 							onFocus={() => setIsOpen(true)}
 							onKeyDown={handleKeyDown}
 							placeholder={placeholder}
-							className={`${dynamicWidth ? "col-start-1 row-start-1 w-full" : "flex-1 min-w-0"} bg-transparent border-none outline-none text-[16px] font-medium font-sans tracking-tight placeholder:text-current/30 ${
-								isOpen ? "text-rb-neutral-2" : "text-rb-accent-2"
-							}`}
+							className={`${dynamicWidth ? "col-start-1 row-start-1 w-full" : "flex-1 min-w-0"} bg-transparent border-none outline-none text-[16px] font-medium font-sans tracking-tight placeholder:text-current/30 ${isOpen ? "text-rb-neutral-2" : "text-rb-accent-2"
+								}`}
 						/>
 					</div>
 
-					<div
-						className={`transition-transform duration-300 shrink-0 ${
-							isOpen ? "rotate-180" : ""
-						}`}
-					>
-						<ChevronDown
-							size={16}
-							className={
-								isOpen
-									? "text-rb-neutral-1"
-									: "text-rb-accent-1/40"
-							}
-						/>
+					<div className="flex items-center gap-1 shrink-0 scale-110">
+						<motion.button
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+							onClick={handlePrev}
+							className={`p-1.5 px-2 rounded-l-[14px] rounded-r-[4px] backdrop-blur-sm transition-all duration-300 ${isOpen
+								? "bg-white/10 border-white/20 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+								: "bg-rb-accent-1/5 border-rb-accent-1/10 text-rb-accent-1/60 hover:text-rb-accent-1 hover:bg-rb-accent-1/10"
+								}`}
+							aria-label="Previous option"
+						>
+							<ChevronLeft size={16} strokeWidth={2.5} />
+						</motion.button>
+						<motion.button
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+							onClick={handleNext}
+							className={`p-1.5 px-2 rounded-r-[14px] rounded-l-[4px] backdrop-blur-sm transition-all duration-300 ${isOpen
+								? "bg-white/10 border-white/20 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+								: "bg-rb-accent-1/5 border-rb-accent-1/10 text-rb-accent-1/60 hover:text-rb-accent-1 hover:bg-rb-accent-1/10"
+								}`}
+							aria-label="Next option"
+						>
+							<ChevronRight size={16} strokeWidth={2.5} />
+						</motion.button>
 					</div>
 				</div>
 
@@ -239,20 +266,18 @@ export const ComboBox: React.FC<ComboBoxProps> = ({
 													onMouseEnter={() =>
 														setActiveIndex(index)
 													}
-													className={`relative px-4 py-3 cursor-pointer transition-all duration-200 group/item ${
-														isActive
-															? "bg-rb-neutral-3"
-															: ""
-													}`}
+													className={`relative px-4 py-3 cursor-pointer transition-all duration-200 group/item ${isActive
+														? "bg-rb-neutral-3"
+														: ""
+														}`}
 												>
 													<div className="flex items-center justify-between gap-4">
 														<div className="flex flex-col gap-0.5">
 															<span
-																className={`text-[15px] font-medium tracking-tight ${
-																	isSelected
-																		? "text-rb-accent-1"
-																		: "text-rb-accent-1/80"
-																}`}
+																className={`text-[15px] font-medium tracking-tight ${isSelected
+																	? "text-rb-accent-1"
+																	: "text-rb-accent-1/80"
+																	}`}
 															>
 																{option.label}
 															</span>

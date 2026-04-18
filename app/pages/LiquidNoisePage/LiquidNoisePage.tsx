@@ -19,15 +19,15 @@ const presets = [
 		label: "Scheme 1 (Orange & Navy)",
 		config: {
 			title: "LIQUID GRADIENT",
-            colors: ["#f15a22", "#0a0e27", "#f15a22", "#0a0e27", "#f15a22", "#0a0e27"],
+			colors: ["#f15a22", "#0a0e27", "#f15a22", "#0a0e27", "#f15a22", "#0a0e27"],
 			speed: 1.5,
 			intensity: 1.8,
 			grainIntensity: 0.08,
-            gradientSize: 0.45,
-            gradientCount: 12.0,
-            color1Weight: 0.5,
-            color2Weight: 1.8,
-            darkNavy: "#0a0e27"
+			gradientSize: 0.45,
+			gradientCount: 12.0,
+			color1Weight: 0.5,
+			color2Weight: 1.8,
+			darkNavy: "#0a0e27"
 		},
 	},
 	{
@@ -39,11 +39,11 @@ const presets = [
 			speed: 1.2,
 			intensity: 1.8,
 			grainIntensity: 0.08,
-            gradientSize: 1.0,
-            gradientCount: 6.0,
-            color1Weight: 1.0,
-            color2Weight: 1.0,
-            darkNavy: "#0a0e27"
+			gradientSize: 1.0,
+			gradientCount: 6.0,
+			color1Weight: 1.0,
+			color2Weight: 1.0,
+			darkNavy: "#0a0e27"
 		},
 	},
 	{
@@ -55,11 +55,11 @@ const presets = [
 			speed: 1.2,
 			intensity: 1.8,
 			grainIntensity: 0.08,
-            gradientSize: 1.0,
-            gradientCount: 6.0,
-            color1Weight: 1.0,
-            color2Weight: 1.0,
-            darkNavy: "#0a0e27"
+			gradientSize: 1.0,
+			gradientCount: 6.0,
+			color1Weight: 1.0,
+			color2Weight: 1.0,
+			darkNavy: "#0a0e27"
 		},
 	},
 	{
@@ -71,11 +71,11 @@ const presets = [
 			speed: 1.2,
 			intensity: 1.8,
 			grainIntensity: 0.08,
-            gradientSize: 1.0,
-            gradientCount: 6.0,
-            color1Weight: 1.0,
-            color2Weight: 1.0,
-            darkNavy: "#ffffff"
+			gradientSize: 1.0,
+			gradientCount: 6.0,
+			color1Weight: 1.0,
+			color2Weight: 1.0,
+			darkNavy: "#ffffff"
 		},
 	},
 	{
@@ -87,11 +87,11 @@ const presets = [
 			speed: 1.5,
 			intensity: 1.8,
 			grainIntensity: 0.08,
-            gradientSize: 0.45,
-            gradientCount: 12.0,
-            color1Weight: 0.5,
-            color2Weight: 1.8,
-            darkNavy: "#0a0e27"
+			gradientSize: 0.45,
+			gradientCount: 12.0,
+			color1Weight: 0.5,
+			color2Weight: 1.8,
+			darkNavy: "#0a0e27"
 		},
 	},
 ];
@@ -143,28 +143,28 @@ export const LiquidNoisePage = () => {
 			<div id="preview">
 				<PreviewTab
 					previewContent={
-						<div 
+						<div
 							onClick={() => setKey(prev => prev + 1)}
 							className="w-full h-[600px] relative overflow-hidden flex items-center justify-center bg-black border border-white/5 rounded-xl cursor-pointer group active:scale-[0.99] transition-transform"
 						>
 							<LiquidNoise
 								key={key}
-                                colors={config.colors}
+								colors={config.colors}
 								speed={config.speed}
-                                intensity={config.intensity}
-                                grainIntensity={config.grainIntensity}
-                                gradientSize={config.gradientSize}
-                                gradientCount={config.gradientCount}
-                                color1Weight={config.color1Weight}
-                                color2Weight={config.color2Weight}
-                                darkNavy={config.darkNavy}
+								intensity={config.intensity}
+								grainIntensity={config.grainIntensity}
+								gradientSize={config.gradientSize}
+								gradientCount={config.gradientCount}
+								color1Weight={config.color1Weight}
+								color2Weight={config.color2Weight}
+								darkNavy={config.darkNavy}
 							>
-                                <div className="flex flex-col items-center gap-3 text-center px-6" style={{ pointerEvents: 'none' }}>
-                                    <div className="text-[clamp(2.5rem,7vw,5rem)] font-extrabold tracking-tighter text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)] mix-blend-overlay">
-                                        {config.title}
-                                    </div>
-                                </div>
-                            </LiquidNoise>
+								<div className="flex flex-col items-center gap-3 text-center px-6" style={{ pointerEvents: 'none' }}>
+									<div className="text-[clamp(2.5rem,7vw,5rem)] font-extrabold tracking-tighter text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)] mix-blend-overlay">
+										{config.title}
+									</div>
+								</div>
+							</LiquidNoise>
 							<div className="absolute top-4 left-4 text-[10px] text-white/50 uppercase tracking-widest font-bold pointer-events-none transition-colors z-20 mix-blend-overlay">
 								Hover & Interact!
 							</div>
@@ -182,13 +182,12 @@ export const LiquidNoisePage = () => {
 								</h3>
 							</div>
 							<div className="flex items-center gap-3">
-								<div className="w-[220px]">
-									<DefaultComboBox
-										options={presets}
-										value={presets.find(p => JSON.stringify(p.config.colors) === JSON.stringify(config.colors) && p.config.darkNavy === config.darkNavy)?.id || ""}
-										onChange={applyPreset}
-									/>
-								</div>
+								<DefaultComboBox
+									options={presets}
+									value={presets.find(p => JSON.stringify(p.config.colors) === JSON.stringify(config.colors) && p.config.darkNavy === config.darkNavy)?.id || ""}
+									onChange={applyPreset}
+									dynamicWidth={true}
+								/>
 							</div>
 						</div>
 					}

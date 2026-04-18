@@ -49,6 +49,11 @@ const backgroundItems = [
 
 
 const pageSections: Record<string, { id: string; label: string }[]> = {
+	intro: [
+		{ id: "welcome", label: "Welcome" },
+		{ id: "mission", label: "Our Mission" },
+		{ id: "principles", label: "Core Principles" },
+	],
 	install: [
 		{ id: "installation-title", label: "Installation" },
 		{ id: "api-reference", label: "API Reference" },
@@ -192,7 +197,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	const pathname = usePathname();
 
 	// Extract activeItem from pathname if it's not and-redirect
-	const activeItem = pathname === "/" ? "install" : pathname.slice(1);
+	const activeItem = pathname === "/" ? "intro" : pathname.slice(1);
 	
 	const [activeSection, setActiveSection] = React.useState<string>("");
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
