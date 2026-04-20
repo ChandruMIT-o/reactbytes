@@ -11,16 +11,23 @@ interface ButtonGroupProps {
 	items: TabItem[];
 	initialActive?: string;
 	groupId?: string;
+	onChange?: (id: string) => void;
 }
 
 export default function ButtonGroup({
 	items,
 	initialActive,
 	groupId = "default",
+	onChange,
 }: ButtonGroupProps) {
 	const [activeTab, setActiveTab] = useState<string>(
 		initialActive || items[0]?.id,
 	);
+
+	const handleTabClick = (id: string) => {
+		setActiveTab(id);
+		if (onChange) onChange(id);
+	};
 
 	return (
 		<div className="flex items-center gap-[6px] p-1 rounded-full">
@@ -30,7 +37,7 @@ export default function ButtonGroup({
 				return (
 					<motion.button
 						key={tab.id}
-						onClick={() => setActiveTab(tab.id)}
+						onClick={() => handleTabClick(tab.id)}
 						whileHover="hover"
 						className="relative px-3 py-[7px] rounded-full text-[16px] font-medium tracking-tight outline-none transition-colors duration-300 z-10"
 						style={{

@@ -36,7 +36,7 @@ export const IntroductionPage = () => {
 			{/* Hero Section */}
 			<section
 				id="welcome"
-				className="relative flex flex-col items-center justify-center text-center pt-6 pb-16 overflow-hidden mt-2"
+				className="relative flex flex-col items-center justify-center text-center pt-6 pb-2 overflow-hidden mt-2"
 			>
 				<motion.div
 					initial={{ opacity: 0, scale: 0.97 }}
@@ -86,19 +86,19 @@ export const IntroductionPage = () => {
 
 			<section
 				id="principles"
-				className="max-w-6xl mx-auto w-full px-4 pt-6"
+				className="max-w-6xl mx-auto w-full px-4"
 			>
 				<div className="mb-1">
-					<HeaderText text="Core Principles" option={4} />
+					<HeaderText text="Core Features" option={4} />
 				</div>
 
 				<CarousalCards />
 			</section>
 
-			<section id="credits" className="max-w-6xl mx-auto w-full px-4 pt-12 pb-10 border-t border-rb-neutral-4/50">
-				<Credits 
-					data={creditsData} 
-					mainTitle="Shoutout to ReactBits!" 
+			<section id="credits" className="max-w-6xl mx-auto w-full border-t border-rb-neutral-4/50">
+				<Credits
+					data={creditsData}
+					mainTitle="Shoutout to ReactBits!"
 					subtitle="Exploring the roots of creative React components."
 				/>
 			</section>

@@ -1,101 +1,124 @@
 import React from "react";
-import Image from "next/image";
+import { motion } from "framer-motion";
 import HeaderText from "../../components/textfields/HeaderText";
 import ParagraphText from "../../components/textfields/ParagraphText";
-import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
-import DiscreteSlider from "../../components/slider/DiscreteSlider";
 import { PropsTable } from "../../components/table/PropsTable";
 import { Credits } from "../../components/buttongroup/Credits";
-import Toggle from "../../components/buttongroup/Toggle";
 import { componentDocsData, creditsData } from "./InstallationData";
-import ColorPicker from "@/app/components/colorpicker/ColorPicker";
-import FractalBackground from "@/app/meta/background/fractal/FractalBackground";
+import AccordionStandard from "../../components/accordion/Accordion";
+
+const fadeUp = (delay: number = 0) => ({
+	initial: { opacity: 0, y: 20, filter: "blur(8px)" },
+	animate: { opacity: 1, y: 0, filter: "blur(0px)" },
+	transition: { duration: 0.6, delay, ease: [0.19, 1, 0.22, 1] as [number, number, number, number] },
+});
 
 export const InstallationPage = () => {
-	const [sliderValue, setSliderValue] = React.useState(30);
-	const [isToggled, setIsToggled] = React.useState(false);
-
 	return (
-		<div className="flex flex-col gap-5">
-			<div id="installation-title">
-				<HeaderText text="Installation" option={3} />
-			</div>
-			<ParagraphText
-				text="A premium collection of high-performance React components designed for modern web applications. Speed, style, and simplicity in every byte."
-				option={4}
-			/>
+		<div className="flex flex-col gap-16 pb-20 font-sans">
+			{/* Hero Section */}
+			<section
+				id="installation-hero"
+				className="relative flex flex-col items-center justify-center text-center pt-10 pb-2 overflow-hidden"
+			>
+				<motion.div
+					initial={{ opacity: 0, scale: 0.97 }}
+					animate={{ opacity: 1, scale: 1 }}
+					transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+					className="relative z-10 max-w-3xl px-6"
+				>
+					<motion.h1
+						{...fadeUp(0.1)}
+						className="text-5xl md:text-6xl font-bold tracking-tight text-rb-accent-1 mb-6 leading-[1.1]"
+					>
+						Get Started with{" "}
+						<span className="text-transparent bg-clip-text bg-gradient-to-r from-rb-accent-2 to-rb-accent-3">
+							React Bytes
+						</span>
+					</motion.h1>
 
-			<PreviewTab
-				previewContent={
-					// <div className="flex flex-col items-center gap-4">
-					// 	<Image src="/logo.svg" alt="Logo" width={40} height={60} />
-					// 	<div className="text-2xl text-rb-accent-2 font-bold">React Bytes</div>
-					// </div>
-					<section className="relative w-full h-screen overflow-hidden bg-black">
+					<motion.p
+						{...fadeUp(0.2)}
+						className="text-[16px] md:text-[17px] text-rb-accent-2/50 max-w-2xl mx-auto leading-relaxed font-light"
+					>
+						Fast, light, and beautiful. Install React Bytes in seconds and start building premium interfaces with meticulously crafted UI components.
+					</motion.p>
+				</motion.div>
+			</section>
 
-						<FractalBackground
-							// Optional: Customize the morphing speed
-							speed={0.15}
+			{/* Installation Section */}
+			<section id="installation" className="max-w-4xl mx-auto w-full px-4">
+				<motion.div {...fadeUp(0.3)} className="mb-6">
+					<HeaderText text="Installation" option={4} />
+					<div className="mt-2">
+						<ParagraphText
+							text="Choose your preferred package manager to install the core library."
+							option={4}
+						/>
+					</div>
+				</motion.div>
 
-							// Optional: Pass normalized RGB values (0.0 to 1.0)
-							// Let's use a premium dark violet/magenta theme
-							colorStart={[0.05, 0.02, 0.08]}
-							colorEnd={[0.3, 0.1, 0.4]}
+				<motion.div {...fadeUp(0.4)} id="installation-tabs">
+					<InstallationTabs />
+				</motion.div>
+			</section>
 
-							className="absolute inset-0"
-						>
-							{/* Anything placed inside here will automatically be centered 
-                  and layered securely on top of the WebGL canvas.
-                */}
-							<div className="flex flex-col items-center justify-center text-center px-4">
-								<h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-6 drop-shadow-lg">
-									The Future of Web Design
-								</h1>
-								<p className="text-lg md:text-xl text-gray-300 max-w-2xl mb-10 drop-shadow">
-									Experience mathematically perfect, GPU-accelerated backgrounds
-									that won't compromise your website's performance.
-								</p>
-								<button className="px-8 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-full backdrop-blur-md transition-all duration-300 font-medium">
-									Get Started
-								</button>
-							</div>
-						</FractalBackground>
+			{/* Configuration Section */}
+			<section id="peer-dependencies" className="max-w-4xl mx-auto w-full px-4">
+				<motion.div {...fadeUp(0.5)} className="mb-6">
+					<HeaderText text="Peer Dependencies" option={4} />
+					<div className="mt-2">
+						<ParagraphText
+							text="React Bytes relies on these essential libraries for its high-performance animations and styling."
+							option={4}
+						/>
+					</div>
+				</motion.div>
 
-					</section>
-				}
-				codeContent="npm install react-bytes"
-			/>
+				<motion.div {...fadeUp(0.6)} className="w-full">
+					<PropsTable categories={componentDocsData} />
+				</motion.div>
+			</section>
 
-			<div id="installation-tabs">
-				<InstallationTabs />
-			</div>
+			{/* Quick Start Section */}
+			<section id="quick-start" className="max-w-4xl mx-auto w-full px-4">
+				<motion.div {...fadeUp(0.7)} className="mb-6">
+					<HeaderText text="Quick Start" option={4} />
+					<div className="mt-2">
+						<ParagraphText
+							text="Import and use components directly in your React application."
+							option={4}
+						/>
+					</div>
+				</motion.div>
 
-			<div className="max-w-md w-full pt-10">
-				<DiscreteSlider
-					label="Experience Level"
-					min={0}
-					max={100}
-					step={20}
-					value={sliderValue}
-					onChange={setSliderValue}
-				/>
-			</div>
+				<motion.div {...fadeUp(0.8)} className="bg-rb-neutral-3 p-1.5 rounded-[24px] w-full border border-rb-neutral-4/50">
+					<div className="bg-rb-neutral-1 rounded-[18px] w-full p-6 text-rb-accent-2 font-mono text-sm overflow-x-auto whitespace-pre">
+						<span className="text-rb-accent-3">import</span> {"{"} <span className="text-rb-accent-2">DefaultButton</span> {"}"} <span className="text-rb-accent-3">from</span> <span className="text-emerald-400">"react-bytes"</span>;
 
-			<div id="api-reference" className="max-w-5xl mx-auto py-10 w-full">
-				<HeaderText text="API Reference" option={4} />
-				<PropsTable categories={componentDocsData} />
-			</div>
+						<span className="text-rb-accent-3">function</span> <span className="text-rb-accent-2">App</span>() {"{"}
+						<span className="text-rb-accent-3">return</span> (
+						<span className="text-gray-500">&lt;</span><span className="text-rb-accent-2">DefaultButton</span> <span className="text-rb-accent-3">onClick</span>={"{"}() <span className="text-rb-accent-3">=&gt;</span> console.<span className="text-rb-accent-2">log</span>(<span className="text-emerald-400">"Clicked!"</span>){"}"}<span className="text-gray-500">&gt;</span>
+						Get Started
+						<span className="text-gray-500">&lt;/</span><span className="text-rb-accent-2">DefaultButton</span><span className="text-gray-500">&gt;</span>
+						);
+						{"}"}
+					</div>
+				</motion.div>
+			</section>
 
-			<div id="credits" className="w-full max-w-5xl mx-auto py-10">
-				<Credits data={creditsData} />
-			</div>
-
-			<div className="flex items-center gap-4 py-5">
-				<span className="text-rb-accent-2 font-medium">Example Toggle:</span>
-				<Toggle checked={isToggled} onChange={setIsToggled} />
-			</div>
-			<ColorPicker />
+			{/* Credits Section */}
+			<section id="credits" className="max-w-4xl mx-auto w-full px-4 border-t border-rb-neutral-4/50 pt-10">
+				<motion.div {...fadeUp(0.9)}>
+					<Credits
+						data={creditsData}
+						mainTitle="Credits & Resources"
+						subtitle="Built with passion by the React Bytes team and amazing open-source contributors."
+					/>
+				</motion.div>
+			</section>
+			<AccordionStandard />
 		</div>
 	);
 };

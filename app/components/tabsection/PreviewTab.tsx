@@ -102,26 +102,26 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 					<AnimatePresence mode="wait">
 						<motion.div
 							key={activeTab}
-							initial={{ 
-								opacity: 0, 
-								y: 12, 
-								filter: "blur(12px)", 
-								scale: 0.99 
+							initial={{
+								opacity: 0,
+								y: 12,
+								filter: "blur(12px)",
+								scale: 0.99
 							}}
-							animate={{ 
-								opacity: 1, 
-								y: 0, 
-								filter: "blur(0px)", 
-								scale: 1 
+							animate={{
+								opacity: 1,
+								y: 0,
+								filter: "blur(0px)",
+								scale: 1
 							}}
-							exit={{ 
-								opacity: 0, 
-								y: -12, 
-								filter: "blur(12px)", 
-								scale: 0.99 
+							exit={{
+								opacity: 0,
+								y: -12,
+								filter: "blur(12px)",
+								scale: 0.99
 							}}
-							transition={{ 
-								duration: 0.35, 
+							transition={{
+								duration: 0.35,
 								ease: [0.19, 1, 0.22, 1] // Ease out expo
 							}}
 							className="w-full h-full min-h-[400px]"
@@ -150,11 +150,11 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 								<div className="p-5 overflow-auto max-h-[600px] edit-container">
 									<Editor
 										value={usageCode || ""}
-										onValueChange={() => {}}
+										onValueChange={() => { }}
 										highlight={(code) => Prism.highlight(code, Prism.languages.tsx, 'tsx')}
 										padding={0}
 										textareaClassName="focus:outline-none"
-										className="text-rb-accent-2/80 font-mono text-sm editor-styles"
+										className="text-rb-accent-2 font-mono text-md editor-styles"
 										style={{
 											fontFamily: 'inherit',
 											backgroundColor: 'transparent'
@@ -165,11 +165,11 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 								<div className="p-5 overflow-auto max-h-[600px] edit-container">
 									<Editor
 										value={codeContent || ""}
-										onValueChange={() => {}}
+										onValueChange={() => { }}
 										highlight={(code) => Prism.highlight(code, Prism.languages.tsx, 'tsx')}
 										padding={0}
 										textareaClassName="focus:outline-none"
-										className="text-rb-accent-2/80 font-mono text-sm editor-styles"
+										className="text-rb-accent-2 font-mono text-md editor-styles"
 										style={{
 											fontFamily: 'inherit',
 											backgroundColor: 'transparent'
@@ -179,7 +179,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 							)}
 						</motion.div>
 					</AnimatePresence>
-					
+
 					<style jsx global>{`
 						.editor-styles textarea {
 							outline: none !important;

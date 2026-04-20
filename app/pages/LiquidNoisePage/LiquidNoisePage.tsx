@@ -181,13 +181,14 @@ export const LiquidNoisePage = () => {
 									Props
 								</h3>
 							</div>
+							<DefaultComboBox
+								options={presets}
+								value={presets.find(p => JSON.stringify(p.config.colors) === JSON.stringify(config.colors) && p.config.darkNavy === config.darkNavy)?.id || ""}
+								onChange={applyPreset}
+								dynamicWidth={true}
+							/>
 							<div className="flex items-center gap-3">
-								<DefaultComboBox
-									options={presets}
-									value={presets.find(p => JSON.stringify(p.config.colors) === JSON.stringify(config.colors) && p.config.darkNavy === config.darkNavy)?.id || ""}
-									onChange={applyPreset}
-									dynamicWidth={true}
-								/>
+
 							</div>
 						</div>
 					}

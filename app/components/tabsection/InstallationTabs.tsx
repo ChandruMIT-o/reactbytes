@@ -10,8 +10,8 @@ export const InstallationTabs = () => {
 	const handleCopy = () => {
 		const text =
 			activeTab === "CLI"
-				? "npm install your-package-name"
-				: "Download latest release from GitHub";
+				? "npm install react-bytes"
+				: "Download from GitHub";
 		navigator.clipboard.writeText(text);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
@@ -84,16 +84,18 @@ export const InstallationTabs = () => {
 											$
 										</span>
 										<span className="text-rb-accent-1">
-											npm install your-package-name
+											npm install react-bytes
 										</span>
 									</div>
 								</div>
 							) : (
 								<div className="flex flex-col gap-2 font-sans">
 									<p className="text-rb-accent-1">
-										1. Download the latest release from
-										GitHub.
+										Clone the repository from GitHub:
 									</p>
+									<span className="text-rb-accent-1 font-mono text-sm">
+										git clone https://github.com/ChandruMIT-o/reactbytes.git
+									</span>
 								</div>
 							)}
 						</motion.div>

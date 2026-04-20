@@ -149,13 +149,14 @@ export const MetallicTwirlPage = () => {
 									Props
 								</h3>
 							</div>
+							<DefaultComboBox
+								options={presets}
+								value={presets.find(p => p.config.symmetry === config.symmetry && p.config.zoom === config.zoom)?.id || ""}
+								onChange={applyPreset}
+								dynamicWidth={true}
+							/>
 							<div className="flex items-center gap-3">
-								<DefaultComboBox
-									options={presets}
-									value={presets.find(p => p.config.symmetry === config.symmetry && p.config.zoom === config.zoom)?.id || ""}
-									onChange={applyPreset}
-									dynamicWidth={true}
-								/>
+
 							</div>
 						</div>
 					}

@@ -8,6 +8,7 @@ import ParagraphText from "../components/textfields/ParagraphText";
 // Modularized Page Components
 import { IntroductionPage } from "../pages/IntroductionPage/IntroductionPage";
 import { InstallationPage } from "../pages/InstallationPage/InstallationPage";
+import { ChangelogPage } from "../pages/ChangelogPage/ChangelogPage";
 import { BlurTextPage } from "../pages/BlurTextPage/BlurTextPage";
 import { MagneticDotMeshPage } from "../pages/MagneticDotMeshPage/MagneticDotMeshPage";
 import BubbleGradientPage from "../pages/BubbleGradientPage/BubbleGradientPage";
@@ -42,6 +43,7 @@ export default function DynamicComponentPage() {
 	const renderContent = () => {
 		if (id === "intro") return <IntroductionPage />;
 		if (id === "install") return <InstallationPage />;
+		if (id === "changelog") return <ChangelogPage />;
 		if (id === "blur-text") return <BlurTextPage />;
 		if (id === "magnetic-dots") return <MagneticDotMeshPage />;
 		if (id === "bubble-gradient") return <BubbleGradientPage />;

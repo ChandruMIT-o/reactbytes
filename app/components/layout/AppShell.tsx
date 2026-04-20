@@ -59,6 +59,11 @@ const pageSections: Record<string, { id: string; label: string }[]> = {
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },
 	],
+	changelog: [
+		{ id: "changelog-header", label: "Updates" },
+		{ id: "changelog-filters", label: "Filters" },
+		{ id: "changelog-timeline", label: "Timeline" },
+	],
 	"blur-text": [
 		{ id: "blur-text-title", label: "Preview" },
 		{ id: "installation-tabs", label: "Installation" },

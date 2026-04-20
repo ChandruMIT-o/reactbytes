@@ -20,7 +20,7 @@ export const MissionSimple = () => {
 	};
 
 	const textVariant = {
-		initial: { opacity: 0, y: 30, filter: "blur(12px)" },
+		initial: { opacity: 0, y: -30, filter: "blur(12px)" },
 		whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
 		viewport: { once: true, margin: "-100px" },
 	};

@@ -26,7 +26,7 @@ export const GooeyMorph: React.FC<GooeyMorphProps> = ({
 	morphSpeed = 1,
 	textColorClass = "text-rb-accent-1",
 	className = "",
-	textClassName = "text-6xl md:text-8xl font-bold font-sans tracking-tighter uppercase",
+	textClassName = "text-4xl md:text-6xl font-bold font-sans tracking-tighter uppercase",
 	yOffset = 20,
 }) => {
 	const [index, setIndex] = useState(0);
@@ -58,34 +58,34 @@ export const GooeyMorph: React.FC<GooeyMorphProps> = ({
 				</defs>
 			</svg>
 
-			<div 
+			<div
 				style={{ filter: `url(#${filterId})` }}
 				className="relative flex items-center justify-center overflow-visible"
 			>
 				<AnimatePresence initial={false}>
 					<motion.span
 						key={index}
-						initial={{ 
-							opacity: 0, 
-							scale: 0.8, 
+						initial={{
+							opacity: 0,
+							scale: 0.8,
 							filter: "blur(20px)",
 							y: yOffset,
 							letterSpacing: "-0.1em"
 						}}
-						animate={{ 
-							opacity: 1, 
-							scale: 1, 
+						animate={{
+							opacity: 1,
+							scale: 1,
 							filter: "blur(0px)",
 							y: 0,
 							letterSpacing: "0em"
 						}}
-						exit={{ 
-							opacity: 0, 
-							scale: 1.2, 
+						exit={{
+							opacity: 0,
+							scale: 1.2,
 							filter: "blur(20px)",
 							y: -yOffset,
 							letterSpacing: "0.1em",
-							position: "absolute" 
+							position: "absolute"
 						}}
 						transition={{
 							duration: morphSpeed,

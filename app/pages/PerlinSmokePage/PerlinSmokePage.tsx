@@ -119,13 +119,14 @@ export const PerlinSmokePage = () => {
 									Props
 								</h3>
 							</div>
+							<DefaultComboBox
+								options={presets}
+								value={presets.find(p => p.config.baseColor === config.baseColor && p.config.speed === config.speed)?.id || ""}
+								onChange={applyPreset}
+								dynamicWidth={true}
+							/>
 							<div className="flex items-center gap-3">
-								<DefaultComboBox
-									options={presets}
-									value={presets.find(p => p.config.baseColor === config.baseColor && p.config.speed === config.speed)?.id || ""}
-									onChange={applyPreset}
-									dynamicWidth={true}
-								/>
+
 							</div>
 						</div>
 					}

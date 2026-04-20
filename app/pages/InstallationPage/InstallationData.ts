@@ -1,37 +1,24 @@
 export const componentDocsData = [
 	{
-		title: "Primary Props",
+		title: "Peer Dependencies",
 		props: [
 			{
-				name: "variant",
-				type: "string",
-				defaultValue: "'default'",
-				description: "Defines the visual style of the component.",
+				name: "framer-motion",
+				type: "package",
+				defaultValue: "^12.0.0",
+				description: "Required for high-performance animations and transitions.",
 			},
 			{
-				name: "onAction",
-				type: "event",
-				required: true,
-				description:
-					"Callback fired when the user interacts with the primary element.",
-			},
-		],
-	},
-	{
-		title: "Secondary Props",
-		props: [
-			{
-				name: "isDisabled",
-				type: "boolean",
-				defaultValue: "false",
-				description:
-					"If true, prevents user interaction and applies muted styles.",
+				name: "lucide-react",
+				type: "package",
+				defaultValue: "^0.400.0",
+				description: "Used for the comprehensive icon system across components.",
 			},
 			{
-				name: "className",
-				type: "string",
-				description:
-					"Optional CSS classes to override default styling.",
+				name: "tailwind-merge",
+				type: "package",
+				defaultValue: "^2.0.0",
+				description: "Utility for efficiently merging Tailwind CSS classes.",
 			},
 		],
 	},
@@ -39,43 +26,33 @@ export const componentDocsData = [
 
 export const creditsData = [
 	{
-		title: "Core Team",
+		title: "Project Author",
 		items: [
 			{
-				name: "Jane Doe",
-				role: "Lead Engineer",
-				url: "https://github.com",
+				name: "ChandruMIT-o",
+				role: "Creator & Lead Designer",
+				url: "https://github.com/ChandruMIT-o",
 			},
-			{ name: "John Smith", role: "Product Designer" },
 		],
 	},
 	{
-		title: "Open Source Libraries",
+		title: "Core Stack",
 		items: [
 			{
-				name: "React",
-				role: "UI Framework",
-				url: "https://react.dev",
+				name: "Next.js 16",
+				role: "Framework",
+				url: "https://nextjs.org",
 			},
 			{
-				name: "Tailwind CSS",
-				role: "Styling",
+				name: "Tailwind CSS v4",
+				role: "Styling Engine",
 				url: "https://tailwindcss.com",
 			},
 			{
-				name: "Lucide",
-				role: "Iconography",
-				url: "https://lucide.dev",
-			},
-			{
 				name: "Framer Motion",
-				role: "Animations",
+				role: "Animation Library",
 				url: "https://framer.com/motion",
 			},
 		],
-	},
-	{
-		title: "Special Thanks",
-		items: [{ name: "Coffee", role: "Fueling late night commits" }],
 	},
 ];

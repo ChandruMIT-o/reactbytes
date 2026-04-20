@@ -119,14 +119,14 @@ export const WaveTextPage = () => {
 									Props
 								</h3>
 							</div>
+							<DefaultComboBox
+								options={presets}
+								value={currentPreset}
+								onChange={applyPreset}
+								dynamicWidth={true}
+							/>
 							<div className="flex items-center gap-3">
-								<div className="w-[180px]">
-									<DefaultComboBox
-										options={presets}
-										value={currentPreset}
-										onChange={applyPreset}
-									/>
-								</div>
+
 								<button
 									onClick={handleReset}
 									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
