@@ -82,8 +82,8 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 		}
 		if (isBeforeOpen && isLastBeforeOpen) return "0 0 1rem 1rem";
 		if (isAfterOpen && isFirstAfterOpen) return "1rem 1rem 0 0";
-		if (isFirst && isBeforeOpen) return "1rem 1rem 0 0";
-		if (isLast && isAfterOpen) return "0 0 1rem 1rem";
+		if (isFirst && isAfterOpen) return "1rem 1rem 0 0";
+		if (isLast && isBeforeOpen) return "0 0 1rem 1rem";
 		return "0";
 	};
 
@@ -94,7 +94,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 			animate={{
 				y: isBeforeOpen ? -24 : isAfterOpen ? 24 : 0,
 				opacity: isOpen ? 1 : isAnyOpen ? 0.5 : 1,
-				backgroundColor: isOpen ? "#131313" : "#0a0a0a",
+				backgroundColor: isOpen ? "#181A1E" : "#060010",
 				borderRadius: getBorderRadius(),
 				zIndex: isOpen ? 10 : 0,
 			}}
@@ -109,7 +109,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 				className="w-full flex items-center gap-4 p-4 text-left focus:outline-none relative overflow-hidden"
 			>
 				{/* Hover overlay effect from CSS */}
-				<div className="absolute inset-0 bg-[#111] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
+				<div className="absolute inset-0 bg-[#181A1E] opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none" />
 
 				<svg
 					className="w-5 h-5 flex-shrink-0 text-white opacity-70 relative z-10"
@@ -119,7 +119,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 					<path d={item.iconPath} />
 				</svg>
 
-				<span className="flex-1 text-white relative z-10 font-sans tracking-tight">
+				<span className="flex-1 text-rb-accent-1 relative z-10 font-sans tracking-tight">
 					{item.title}
 				</span>
 
@@ -150,7 +150,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 							transition={{ duration: 0.4, delay: 0.1 }}
 							className="px-4 pb-4 pl-13 pr-4"
 						>
-							<p className="text-[#999] leading-relaxed text-sm">
+							<p className="text-rb-accent-2 leading-relaxed text-sm">
 								{item.content}
 							</p>
 						</motion.div>
@@ -169,7 +169,7 @@ export default function AccordionStandard() {
 	};
 
 	return (
-		<div className="w-full max-w-[400px] mx-auto py-12 px-4 flex flex-col items-center">
+		<div className="w-full max-w-[600px] mx-auto py-12 px-4 flex flex-col items-center">
 			<div className="w-full relative">
 				{accordionData.map((item, index) => {
 					const isOpen = activeIndex === index;

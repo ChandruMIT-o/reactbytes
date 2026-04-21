@@ -47,6 +47,13 @@ const backgroundItems = [
 	{ id: "liquid-noise", label: "Liquid Noise" },
 ];
 
+const miscellaneousItems = [
+	{ id: "standard-accordion", label: "Standard Accordion" },
+	{ id: "glow-card", label: "Glowing Shadows" },
+	{ id: "shiny-button", label: "Shiny CTA" },
+	{ id: "docked-carousel", label: "Docked Carousel" },
+];
+
 
 const pageSections: Record<string, { id: string; label: string }[]> = {
 	intro: [
@@ -186,6 +193,30 @@ const pageSections: Record<string, { id: string; label: string }[]> = {
 	],
 	"liquid-noise": [
 		{ id: "liquid-noise-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"standard-accordion": [
+		{ id: "accordion-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"glow-card": [
+		{ id: "glow-card-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"shiny-button": [
+		{ id: "shiny-button-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"docked-carousel": [
+		{ id: "docked-carousel-title", label: "Preview" },
 		{ id: "installation-tabs", label: "Installation" },
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },
@@ -377,6 +408,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 							setActiveItem={handleSetActiveItem}
 							menuSubtitle="Background"
 							items={backgroundItems}
+						/>
+						<LeftSidebarMenu
+							activeItem={activeItem}
+							setActiveItem={handleSetActiveItem}
+							menuSubtitle="Miscellaneous"
+							items={miscellaneousItems}
 						/>
 					</div>
 				</aside>

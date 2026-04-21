@@ -45,7 +45,7 @@ export const ChangelogPage = () => {
 	return (
 		<div className="flex flex-col gap-10 pb-20 font-sans">
 			{/* Header Section */}
-			<section id="changelog-header" className="relative flex flex-col items-center justify-center text-center pt-10 pb-6">
+			<section id="changelog-header" className="relative flex flex-col items-center justify-center text-center">
 				<motion.div
 					initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
 					animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -79,7 +79,7 @@ export const ChangelogPage = () => {
 			</section>
 
 			{/* Timeline Section */}
-			<section id="changelog-timeline" className="max-w-4xl mx-auto w-full px-4 pt-10">
+			<section id="changelog-timeline" className="max-w-4xl mx-auto w-full px-4 pt-5">
 				<div className="relative border-l border-rb-neutral-4/50 ml-4 md:ml-8 gap-12 flex flex-col">
 					<AnimatePresence mode="popLayout">
 						{filteredData.map((entry, index) => (
@@ -93,7 +93,7 @@ export const ChangelogPage = () => {
 							>
 								{/* Timeline node */}
 								<div className="absolute left-[-5px] top-1.5 h-[9px] w-[9px] rounded-full bg-rb-accent-3 ring-4 ring-rb-neutral-4/30" />
-								
+
 								<div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 mb-3">
 									<h2 className="text-2xl font-bold tracking-tight text-rb-accent-1">
 										{entry.version}
@@ -140,7 +140,7 @@ export const ChangelogPage = () => {
 							</motion.div>
 						))}
 					</AnimatePresence>
-					
+
 					{filteredData.length === 0 && (
 						<motion.div
 							initial={{ opacity: 0 }}

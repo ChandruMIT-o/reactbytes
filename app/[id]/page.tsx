@@ -30,6 +30,10 @@ import { HiveMindPage } from "../pages/HiveMindPage/HiveMindPage";
 import { PerlinSmokePage } from "../pages/PerlinSmokePage/PerlinSmokePage";
 import { MetallicTwirlPage } from "../pages/MetallicTwirlPage/MetallicTwirlPage";
 import { LiquidNoisePage } from "../pages/LiquidNoisePage/LiquidNoisePage";
+import { StandardAccordionPage } from "../pages/StandardAccordionPage/StandardAccordionPage";
+import { GlowCardPage } from "../pages/GlowCardPage/GlowCardPage";
+import { ShinyButtonPage } from "../pages/ShinyButtonPage/ShinyButtonPage";
+import { DockedCarouselPage } from "../pages/DockedCarouselPage/DockedCarouselPage";
 
 
 
@@ -65,6 +69,10 @@ export default function DynamicComponentPage() {
 		if (id === "perlin-smoke") return <PerlinSmokePage />;
 		if (id === "metallic-twirl") return <MetallicTwirlPage />;
 		if (id === "liquid-noise") return <LiquidNoisePage />;
+		if (id === "standard-accordion") return <StandardAccordionPage />;
+		if (id === "glow-card") return <GlowCardPage />;
+		if (id === "shiny-button") return <ShinyButtonPage />;
+		if (id === "docked-carousel") return <DockedCarouselPage />;
 
 
 

@@ -7,6 +7,7 @@ import { PropsTable } from "../../components/table/PropsTable";
 import { Credits } from "../../components/buttongroup/Credits";
 import { componentDocsData, creditsData } from "./InstallationData";
 import AccordionStandard from "../../components/accordion/Accordion";
+import DockedCarousal from "@/app/meta/carousal/DockedCarousal/DockedCarousal";
 
 const fadeUp = (delay: number = 0) => ({
 	initial: { opacity: 0, y: 20, filter: "blur(8px)" },
@@ -119,6 +120,7 @@ export const InstallationPage = () => {
 				</motion.div>
 			</section>
 			<AccordionStandard />
+			<DockedCarousal />
 		</div>
 	);
 };

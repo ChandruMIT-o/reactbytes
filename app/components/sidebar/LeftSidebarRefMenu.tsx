@@ -47,7 +47,10 @@ export default function LeftSidebarRefMenu({
 		<div className="flex font-sans w-56">
 			<div className="relative w-56 flex flex-col">
 				{/* Continuous Vertical Connecting Line */}
-				<div className="absolute left-[29px] top-[14px] bottom-8 w-[2px] bg-rb-neutral-4 z-0 rounded-full" />
+				<div 
+					className="absolute left-[29px] top-[14px] w-[2px] bg-rb-neutral-4 z-0 rounded-full transition-all duration-300" 
+					style={{ height: items.length > 0 ? (items.length - 1) * 44 + 48 : 0 }}
+				/>
 
 				<div className="relative z-10 mb-2 ml-[18px] flex items-center gap-3">
 					<div className="w-[24px] h-[24px] bg-rb-accent-1 rounded-[6px] flex items-center justify-center shrink-0">
@@ -85,7 +88,7 @@ export default function LeftSidebarRefMenu({
 								initial={{ opacity: 0 }}
 								animate={{
 									opacity: 1,
-									top: hoverIndex * 46 + 8,
+									top: hoverIndex * 44 + 8,
 									width: hoverWidth,
 								}}
 								exit={{ opacity: 0 }}
@@ -94,7 +97,7 @@ export default function LeftSidebarRefMenu({
 							>
 								{/* Hover Pill (Left) */}
 								<motion.div
-									className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-accent-1/30 scale-y-75"
+									className="absolute left-[9px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-accent-1/30 scale-y-75"
 									transition={springConfig}
 								/>
 							</motion.div>
@@ -104,14 +107,14 @@ export default function LeftSidebarRefMenu({
 					{activeId && activeIndex !== -1 && (
 						<motion.div
 							animate={{
-								top: activeIndex * 46 + 8,
+								top: activeIndex * 44 + 8,
 								width: activeWidth,
 							}}
 							transition={springConfig}
 							className="absolute left-[18px] h-[44px] bg-rb-neutral-2 rounded-xl z-10 pointer-events-none"
 						>
 							{/* Active Pill (Left) */}
-							<div className="absolute left-[10px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-accent-1 scale-y-85" />
+							<div className="absolute left-[9px] top-[10px] w-[6px] h-[24px] rounded-full bg-rb-accent-1 scale-y-85" />
 							{/* Active Dot (Right) */}
 							<div className="absolute right-[5px] top-[19px] w-[6px] h-[6px] rounded-full bg-rb-accent-1" />
 						</motion.div>
@@ -128,7 +131,7 @@ export default function LeftSidebarRefMenu({
 								ref={(el) => handleRef(item.id, el)}
 								onMouseEnter={() => setHoveredItemId(item.id)}
 								onClick={() => onItemClick?.(item.id)}
-								className="group relative ml-[18px] flex h-[44px] w-fit items-center justify-between pl-[10px] pr-[35px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-rb-accent-1 active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
+								className="group relative ml-[18px] flex h-[44px] w-fit items-center justify-between pl-[9px] pr-[35px] rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-rb-accent-1 active:scale-[0.98] transition-all cursor-pointer duration-200 z-20"
 							>
 								<div className="flex items-center gap-5 z-10">
 									<div className="w-[6px] invisible" />

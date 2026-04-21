@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 export interface ElasticRevealProps {
 	/** The text to display */
@@ -44,14 +44,14 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 		hover: {},
 	};
 
-	const letterVariants = {
+	const letterVariants: Variants = {
 		initial: { y: 0 },
 		hover: (i: number) => ({
 			y: yOffset,
 			transition: {
 				duration,
 				delay: i * stagger,
-				ease: [0.215, 0.61, 0.355, 1], // Cubic-bezier from the reference logic but adapted
+				ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number],
 			},
 		}),
 	};
