@@ -24,6 +24,6 @@ jobs:
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
       - name: Deploy to Firebase
-        run: npx firebase deploy --only hosting
+        run: npx firebase-tools deploy --only hosting
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
