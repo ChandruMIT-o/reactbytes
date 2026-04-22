@@ -61,3 +61,10 @@ When asking an AI to do this, use the following prompt:
 > 4. Ensure the design matches the existing premium aesthetic of the project."
 
 ---
+
+
+gcloud iam service-accounts add-iam-policy-binding `
+"423299610967-compute@developer.gserviceaccount.com" `
+--member="user:chandrukavin0503@gmail.com" `
+--role="roles/iam.serviceAccountUser" `
+--project=react-bytes
