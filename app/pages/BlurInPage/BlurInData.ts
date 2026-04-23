@@ -28,6 +28,12 @@ export const loaderProps = [
 				defaultValue: "12",
 				description: "The initial blur intensity for the enter effect.",
 			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force the text to uppercase.",
+			},
 		],
 	},
 	{
@@ -79,6 +85,8 @@ export interface BlurInProps {
 	containerClassName?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const BlurIn: React.FC<BlurInProps> = ({
@@ -90,9 +98,13 @@ export const BlurIn: React.FC<BlurInProps> = ({
 	endOpacity = 1,
 	color = "#E8EAF0",
 	containerClassName = "",
-	textClassName = "font-mono",
+	textClassName = "font-sans",
+	uppercase = false,
 }) => {
-	const letters = useMemo(() => text.split(""), [text]);
+	const letters = useMemo(() => {
+		const finalRef = uppercase ? text.toUpperCase() : text;
+		return finalRef.split("");
+	}, [text, uppercase]);
 
 	return (
 		<div
@@ -114,8 +126,14 @@ export const BlurIn: React.FC<BlurInProps> = ({
 					<motion.span
 						key={\`\${index}-\${char}\`}
 						variants={{
-							hidden: { opacity: 0, filter: \`blur(\${initialBlur}px)\` },
-							visible: { opacity: endOpacity, filter: "blur(0px)" },
+							hidden: {
+								opacity: 0,
+								filter: \`blur(\${initialBlur}px)\`,
+							},
+							visible: {
+								opacity: endOpacity,
+								filter: "blur(0px)",
+							},
 						}}
 						transition={{
 							duration: duration,

@@ -74,10 +74,10 @@ const presets = [
 ];
 
 export const ShinyButtonPage = () => {
-    const defaultPreset = presets[0];
+	const defaultPreset = presets[0];
 
 	const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
-    const [text, setText] = useState("Join the waitlist");
+	const [text, setText] = useState("Join the waitlist");
 	const [highlightColor, setHighlightColor] = useState(defaultPreset.config.highlightColor);
 	const [highlightSubtleColor, setHighlightSubtleColor] = useState(defaultPreset.config.highlightSubtleColor);
 	const [duration, setDuration] = useState(defaultPreset.config.duration);
@@ -117,21 +117,21 @@ export const ShinyButtonPage = () => {
 				<PreviewTab
 					previewContent={
 						<div className="w-full min-h-[400px] flex items-center justify-center p-12 bg-black rounded-[32px] border border-white/5 relative overflow-hidden group">
-							<ShinyButton 
-                                text={text}
-                                highlightColor={highlightColor}
-                                highlightSubtleColor={highlightSubtleColor}
-                                duration={duration}
-                                baseColor={baseColor}
-                                textColor={textColor}
-                            />
+							<ShinyButton
+								text={text}
+								highlightColor={highlightColor}
+								highlightSubtleColor={highlightSubtleColor}
+								duration={duration}
+								baseColor={baseColor}
+								textColor={textColor}
+							/>
 						</div>
 					}
 					usageCode={usageCode}
 					codeContent={componentCode}
 					collapsible={true}
-                    header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+					header={
+						<div className="flex items-center justify-between ">
 							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase tracking-[0.1em]">Engine Parameters</h3>
 							<DefaultComboBox
 								options={presets}
@@ -154,63 +154,63 @@ export const ShinyButtonPage = () => {
 						</div>
 					}
 				>
-                    {/* Content Column */}
-                    <div className="space-y-6">
-                        <div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Labeling</div>
-                        <TextInput 
-                            label="Button Text"
-                            value={text}
-                            onChange={(e) => setText(e.target.value)}
-                        />
-                        <DiscreteSlider
-                            label="Rotation Duration"
-                            min={0.5}
-                            max={10.0}
-                            step={0.5}
-                            value={duration}
-                            onChange={setDuration}
-                            maxDecimals={1}
-                            showTicks={false}
-                        />
-                    </div>
+					{/* Content Column */}
+					<div className="space-y-6">
+						<div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Labeling</div>
+						<TextInput
+							label="Button Text"
+							value={text}
+							onChange={(e) => setText(e.target.value)}
+						/>
+						<DiscreteSlider
+							label="Rotation Duration"
+							min={0.5}
+							max={10.0}
+							step={0.5}
+							value={duration}
+							onChange={setDuration}
+							maxDecimals={1}
+							showTicks={false}
+						/>
+					</div>
 
-                    {/* Energy Column */}
-                    <div className="space-y-6">
-                        <div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Energy & Shine</div>
-                        <ColorPicker
-                            label="Highlight Energy"
-                            value={highlightColor}
-                            onChange={setHighlightColor}
-                            compact={true}
-                            presets={["rgb(0, 0, 255)", "rgb(0, 255, 100)", "rgb(255, 165, 0)", "#ffffff"]}
-                        />
-                        <ColorPicker
-                            label="Hover Shine"
-                            value={highlightSubtleColor}
-                            onChange={setHighlightSubtleColor}
-                            compact={true}
-                        />
-                    </div>
+					{/* Energy Column */}
+					<div className="space-y-6">
+						<div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Energy & Shine</div>
+						<ColorPicker
+							label="Highlight Energy"
+							value={highlightColor}
+							onChange={setHighlightColor}
+							compact={true}
+							presets={["rgb(0, 0, 255)", "rgb(0, 255, 100)", "rgb(255, 165, 0)", "#ffffff"]}
+						/>
+						<ColorPicker
+							label="Hover Shine"
+							value={highlightSubtleColor}
+							onChange={setHighlightSubtleColor}
+							compact={true}
+						/>
+					</div>
 
-                    {/* Foundation Column */}
-                    <div className="space-y-6">
-                        <div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Foundation</div>
-                        <ColorPicker
-                            label="Base Background"
-                            value={baseColor}
-                            onChange={setBaseColor}
-                            compact={true}
-                            presets={["#000000", "#09090b", "#1c0a00", "#022c22"]}
-                        />
-                        <ColorPicker
-                            label="Typography Color"
-                            value={textColor}
-                            onChange={setTextColor}
-                            compact={true}
-                            presets={["#ffffff", "#d4d4d8", "#818cf8"]}
-                        />
-                    </div>
-                </PreviewTab>
+					{/* Foundation Column */}
+					<div className="space-y-6">
+						<div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Foundation</div>
+						<ColorPicker
+							label="Base Background"
+							value={baseColor}
+							onChange={setBaseColor}
+							compact={true}
+							presets={["#000000", "#09090b", "#1c0a00", "#022c22"]}
+						/>
+						<ColorPicker
+							label="Typography Color"
+							value={textColor}
+							onChange={setTextColor}
+							compact={true}
+							presets={["#ffffff", "#d4d4d8", "#818cf8"]}
+						/>
+					</div>
+				</PreviewTab>
 			</div>
 
 			<div id="installation-tabs">

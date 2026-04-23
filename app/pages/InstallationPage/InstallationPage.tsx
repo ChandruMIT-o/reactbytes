@@ -7,7 +7,7 @@ import { PropsTable } from "../../components/table/PropsTable";
 import { Credits } from "../../components/buttongroup/Credits";
 import { componentDocsData, creditsData } from "./InstallationData";
 import AccordionStandard from "../../components/accordion/Accordion";
-import DockedCarousal from "@/app/meta/carousal/DockedCarousal/DockedCarousal";
+import DockedCarousel from "@/app/meta/carousel/DockedCarousel/DockedCarousel";
 import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
 import ColorPicker from "@/app/components/colorpicker/ColorPicker";
 import ComboBox from "@/app/components/combobox/ComboBox";

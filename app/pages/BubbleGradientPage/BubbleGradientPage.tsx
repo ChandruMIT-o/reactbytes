@@ -9,11 +9,11 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { BubbleGradient } from "../../meta/background/gradient/BubbleGradient";
 import { loaderProps, componentCode, creditsData } from "./BubbleGradientData";
-import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
-import { ComboBox } from "../../components/combobox/ComboBox";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
+import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
 
 const blendModeOptions = [
@@ -45,6 +45,7 @@ const presets = [
 		label: "Graphite Mist",
 		config: {
 			title: "NOIR BUBBLES",
+			uppercase: true,
 			backgroundStart: "#040507",
 			backgroundEnd: "#171B21",
 			bubbleColors: ["#F4F4F5", "#D5D9E0", "#9FA7B2", "#5D6670", "#242A31"],
@@ -130,6 +131,7 @@ export const BubbleGradientPage = () => {
 
 	const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
 	const [title, setTitle] = useState(defaultPreset.config.title);
+	const [uppercase, setUppercase] = useState(defaultPreset.config.uppercase ?? true);
 	const [backgroundStart, setBackgroundStart] = useState(
 		defaultPreset.config.backgroundStart,
 	);
@@ -179,6 +181,7 @@ export const BubbleGradientPage = () => {
 
 		setCurrentPreset(presetId);
 		setTitle(preset.config.title);
+		setUppercase(preset.config.uppercase ?? true);
 		setBackgroundStart(preset.config.backgroundStart);
 		setBackgroundEnd(preset.config.backgroundEnd);
 		setBubbleColors(preset.config.bubbleColors);
@@ -230,6 +233,7 @@ export const BubbleGradientPage = () => {
   saturation={${saturation}}
   noiseOpacity={${noiseOpacity.toFixed(2)}}
   vignetteOpacity={${vignetteOpacity.toFixed(2)}}
+  uppercase={${uppercase}}
 >
   <div className="text-center">
     <h2>${title}</h2>
@@ -275,7 +279,7 @@ export const BubbleGradientPage = () => {
 										Dark Theme Background
 									</div>
 									<div className="text-[clamp(2.8rem,8vw,5.5rem)] font-semibold tracking-[0.18em] text-white/90 drop-shadow-[0_8px_32px_rgba(0,0,0,0.45)]">
-										{title}
+										{uppercase ? title.toUpperCase() : title}
 									</div>
 									<div className="max-w-xl text-sm md:text-base text-white/60 tracking-[0.04em]">
 										Subtle greys. Soft motion. Enough control to push it colder,
@@ -289,7 +293,7 @@ export const BubbleGradientPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -317,154 +321,160 @@ export const BubbleGradientPage = () => {
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="Overlay Title"
 						value={title}
-						onChange={(event) => setTitle(event.target.value)}
+						onChange={(val) => setTitle(val)}
 						placeholder="Enter hero text..."
-						onClear={() => setTitle("")}
 					/>
 
-					<ComboBox
+					<ToggleComponent
+						label="Uppercase Title"
+						checked={uppercase}
+						onChange={(val) => setUppercase(val)}
+					/>
+
+					<DefaultComboBox
 						label="Blend Mode"
 						options={blendModeOptions}
 						value={blendMode}
-						onChange={setBlendMode}
+						onChange={(val) => setBlendMode(val)}
+						dynamicWidth={true}
 					/>
 
-					<DiscreteSlider
-						label="Bubble Size (%)"
+					<DiscreteSlider2
+						label="Bubble Size"
 						min={48}
 						max={110}
 						step={2}
 						value={circleSize}
-						onChange={setCircleSize}
-						showTicks={false}
+						onChange={(val) => setCircleSize(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Motion Speed"
 						min={0.5}
 						max={1.8}
 						step={0.05}
 						value={speedMultiplier}
-						onChange={setSpeedMultiplier}
+						onChange={(val) => setSpeedMultiplier(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Blur Strength"
 						min={10}
 						max={80}
 						step={2}
 						value={blurStrength}
-						onChange={setBlurStrength}
-						showTicks={false}
+						onChange={(val) => setBlurStrength(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Goo Blur"
 						min={4}
 						max={20}
 						step={1}
 						value={gooBlur}
-						onChange={setGooBlur}
-						showTicks={false}
+						onChange={(val) => setGooBlur(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Goo Strength"
 						min={8}
 						max={28}
 						step={1}
 						value={gooStrength}
-						onChange={setGooStrength}
-						showTicks={false}
+						onChange={(val) => setGooStrength(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Bubble Opacity"
 						min={0.3}
 						max={1}
 						step={0.05}
 						value={bubbleOpacity}
-						onChange={setBubbleOpacity}
+						onChange={(val) => setBubbleOpacity(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Cursor Glow"
 						min={0.1}
 						max={1}
 						step={0.05}
 						value={interactiveOpacity}
-						onChange={setInteractiveOpacity}
+						onChange={(val) => setInteractiveOpacity(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Interactive Radius"
 						min={120}
 						max={420}
 						step={10}
 						value={interactiveRadius}
-						onChange={setInteractiveRadius}
-						showTicks={false}
+						onChange={(val) => setInteractiveRadius(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Contrast"
 						min={80}
 						max={150}
 						step={2}
 						value={contrast}
-						onChange={setContrast}
-						showTicks={false}
+						onChange={(val) => setContrast(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Brightness"
 						min={70}
 						max={120}
 						step={2}
 						value={brightness}
-						onChange={setBrightness}
-						showTicks={false}
+						onChange={(val) => setBrightness(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Saturation"
 						min={0}
 						max={140}
 						step={5}
 						value={saturation}
-						onChange={setSaturation}
-						showTicks={false}
+						onChange={(val) => setSaturation(val)}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Texture"
 						min={0}
 						max={0.2}
 						step={0.01}
 						value={noiseOpacity}
-						onChange={setNoiseOpacity}
+						onChange={(val) => setNoiseOpacity(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Vignette"
 						min={0}
 						max={0.5}
 						step={0.01}
 						value={vignetteOpacity}
-						onChange={setVignetteOpacity}
+						onChange={(val) => setVignetteOpacity(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
 					<ColorPicker

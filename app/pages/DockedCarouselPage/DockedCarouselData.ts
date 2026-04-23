@@ -1,3 +1,118 @@
+import { creditsData as generalCredits } from "../InstallationPage/InstallationData";
+
+export const carouselProps = [
+    {
+        title: "Carousel Props",
+        props: [
+            {
+                name: "images",
+                type: "string[]",
+                defaultValue: "DEFAULT_IMAGES",
+                description: "Array of image URLs to display in the carousel."
+            },
+            {
+                name: "color",
+                type: "string",
+                defaultValue: "'#FFFFFF'",
+                description: "Color for navigation arrows and the timer progress border."
+            },
+            {
+                name: "equalSize",
+                type: "boolean",
+                defaultValue: "false",
+                description: "If true, all thumbnails will have the same width instead of the dynamic dock effect."
+            },
+            {
+                name: "shape",
+                type: "'square' | 'circle' | 'rectangle'",
+                defaultValue: "'circle'",
+                description: "The border-radius style of the thumbnails."
+            },
+            {
+                name: "animationType",
+                type: "'slide' | 'pop' | 'expand'",
+                defaultValue: "'expand'",
+                description: "The transition effect when changing images."
+            },
+            {
+                name: "autoSlide",
+                type: "boolean",
+                defaultValue: "true",
+                description: "Whether the carousel should automatically cycle through images."
+            },
+            {
+                name: "autoSlideInterval",
+                type: "number",
+                defaultValue: "5000",
+                description: "Time in milliseconds between auto-slides."
+            },
+            {
+                name: "transitionDuration",
+                type: "number",
+                defaultValue: "1.2",
+                description: "Duration of the slide animation in seconds."
+            },
+            {
+                name: "stiffness",
+                type: "number",
+                defaultValue: "200",
+                description: "Spring stiffness for pop and expand animations."
+            },
+            {
+                name: "damping",
+                type: "number",
+                defaultValue: "25",
+                description: "Spring damping for pop and expand animations."
+            },
+            {
+                name: "showArrows",
+                type: "boolean",
+                defaultValue: "true",
+                description: "Toggle visibility of navigation arrows."
+            },
+            {
+                name: "showTooltip",
+                type: "boolean",
+                defaultValue: "false",
+                description: "Show a tooltip with the item index on hover."
+            },
+            {
+                name: "showTimer",
+                type: "boolean",
+                defaultValue: "true",
+                description: "Show the progress border on the active thumbnail."
+            },
+            {
+                name: "height",
+                type: "string | number",
+                defaultValue: "'450px'",
+                description: "The height of the carousel container."
+            }
+        ]
+    }
+];
+
+export const creditsData = [
+    {
+        title: "Libraries",
+        items: [
+            {
+                name: "Framer Motion",
+                url: "https://www.framer.com/motion/",
+                role: "Animation Engine"
+            },
+            {
+                name: "Lucide React",
+                url: "https://lucide.dev/",
+                role: "Icon System"
+            }
+        ]
+    },
+    ...generalCredits
+];
+
+export const componentCode = `"use client";
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -94,7 +209,7 @@ const expandVariants = {
     enter: ({ originRect, shape, containerSize }: any) => {
         if (!originRect || !containerSize) {
             return {
-                clipPath: `inset(50% 50% 50% 50% round 32px)`,
+                clipPath: "inset(50% 50% 50% 50% round 32px)",
                 opacity: 0,
                 zIndex: 2
             };
@@ -109,25 +224,25 @@ const expandVariants = {
         const radius = shape === 'circle' ? '500px' : (shape === 'square' ? '0px' : '8px');
 
         return {
-            clipPath: `inset(${top}% ${right}% ${bottom}% ${left}% round ${radius})`,
+            clipPath: "inset(" + top + "% " + right + "% " + bottom + "% " + left + "% round " + radius + ")",
             opacity: 1,
             zIndex: 2,
         };
     },
     center: {
-        clipPath: `inset(0% 0% 0% 0% round 32px)`,
+        clipPath: "inset(0% 0% 0% 0% round 32px)",
         opacity: 1,
         zIndex: 2,
     },
     exit: {
-        clipPath: `inset(0% 0% 0% 0% round 32px)`,
+        clipPath: "inset(0% 0% 0% 0% round 32px)",
         opacity: 0.5,
         zIndex: 0,
     }
 };
 
 
-interface DockedCarousalProps {
+interface DockedCarouselProps {
     images?: string[];
     equalSize?: boolean;
     shape?: 'square' | 'circle' | 'rectangle';
@@ -143,9 +258,10 @@ interface DockedCarousalProps {
     damping?: number;
     autoSlidePauseOnHover?: boolean;
     height?: string | number;
+    color?: string;
 }
 
-export default function DockedCarousal({
+export default function DockedCarousel({
     images = DEFAULT_IMAGES,
     equalSize = false,
     shape = 'circle',
@@ -159,8 +275,9 @@ export default function DockedCarousal({
     stiffness = 200,
     damping = 25,
     autoSlidePauseOnHover = true,
-    height = '450px'
-}: DockedCarousalProps) {
+    height = '450px',
+    color = "#FFFFFF"
+}: DockedCarouselProps) {
     const [page, setPage] = useState(0);
     const [direction, setDirection] = useState(0);
     const [isAppLoading, setIsAppLoading] = useState(true);
@@ -270,13 +387,13 @@ export default function DockedCarousal({
 
     return (
         <div className="w-full flex justify-center py-10 px-4">
-            <style>{`
+            <style>{ \`
                 @font-face {
                     font-family: 'Haffer';
                     src: url('https://cdn.prod.website-files.com/69158db916f2854de7fae735/69158dbc16f2854de7fae7d9_HafferRegular.ttf') format('truetype');
                     font-weight: 400; font-style: normal; font-display: swap;
                 }
-            `}</style>
+            \` }</style>
 
             <main
                 ref={containerRef}
@@ -304,11 +421,11 @@ export default function DockedCarousal({
                                 ? { duration: transitionDuration, ease: wipeEase }
                                 : { type: "spring", damping: damping, stiffness: stiffness }
                             }
-                            className={`absolute inset-0 w-full h-full overflow-hidden origin-center ${isExpand ? 'bg-black' : ''}`}
+                            className={"absolute inset-0 w-full h-full overflow-hidden origin-center " + (isExpand ? 'bg-black' : '')}
                         >
                             <motion.img
                                 src={images[page]}
-                                alt={`Slide ${page + 1}`}
+                                alt={"Slide " + (page + 1)}
                                 custom={isSlide ? direction : undefined}
                                 variants={isSlide ? slideImageVariants : {}}
                                 initial={isSlide ? "enter" : {}}
@@ -328,7 +445,8 @@ export default function DockedCarousal({
                     <div className="absolute inset-0 z-20 flex items-center justify-between px-6 pointer-events-none">
                         <button
                             onClick={(e) => { e.stopPropagation(); paginate(page - 1); }}
-                            className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white pointer-events-auto hover:bg-white/20 transition-all active:scale-95 group"
+                            className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center pointer-events-auto hover:bg-white/20 transition-all active:scale-95 group"
+                            style={{ color }}
                         >
                             <svg className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -336,7 +454,8 @@ export default function DockedCarousal({
                         </button>
                         <button
                             onClick={(e) => { e.stopPropagation(); paginate(page + 1); }}
-                            className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white pointer-events-auto hover:bg-white/20 transition-all active:scale-95 group"
+                            className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center pointer-events-auto hover:bg-white/20 transition-all active:scale-95 group"
+                            style={{ color }}
                         >
                             <svg className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -386,25 +505,25 @@ export default function DockedCarousal({
                                                         width="calc(100% - 4px)" height="calc(100% - 4px)"
                                                         rx={getSvgRadius()}
                                                         fill="none"
-                                                        stroke="rgba(255, 255, 255, 0.9)"
+                                                        stroke={color}
                                                         strokeWidth="3.5"
                                                         initial={{ pathLength: 0 }}
                                                         animate={{ pathLength: 1 }}
                                                         transition={{ duration: autoSlideInterval / 1000, ease: "linear" }}
-                                                        key={`timer-${timerKey}`}
+                                                        key={"timer-" + timerKey}
                                                     />
                                                 </svg>
                                             )}
 
                                             <motion.img
                                                 src={src}
-                                                alt={`Slide ${index + 1}`}
+                                                alt={"Slide " + (index + 1)}
                                                 initial={false}
                                                 animate={{
                                                     opacity: isCurrent ? 1 : (hoveredIndex === index ? 1 : 0.6),
                                                     scale: hoveredIndex === index ? 1.05 : 1
                                                 }}
-                                                className={`w-full h-full object-cover rounded-inherit ${getShapeClass()} ${isCurrent ? 'shadow-xl ring-2 ring-white/30' : ''}`}
+                                                className={"w-full h-full object-cover rounded-inherit " + getShapeClass() + " " + (isCurrent ? 'shadow-xl ring-2 ring-white/30' : '')}
                                                 style={{ transition: 'none' }} // Remove CSS transitions to prevent conflict with Framer Motion
                                             />
                                         </div>
@@ -449,4 +568,4 @@ export default function DockedCarousal({
             </main>
         </div>
     );
-}
+"`;

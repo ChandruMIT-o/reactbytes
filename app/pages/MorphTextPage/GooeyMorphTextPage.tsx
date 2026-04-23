@@ -8,12 +8,13 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { GooeyMorph } from "../../meta/text/Morph/GooeyMorph";
 import { loaderProps, componentCode, creditsData } from "./GooeyMorphTextData";
-import { ComboBox } from "../../components/combobox/ComboBox";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 
 const DEFAULT_WORDS = "CREATE, DESIGN, DEVELOP";
 const DEFAULT_DURATION = 3;
@@ -29,8 +30,9 @@ const presets = [
 			words: "CREATE, DESIGN, DEVELOP",
 			duration: 3,
 			morphSpeed: 1,
-			color: "text-rb-accent-1",
+			color: "#34d399",
 			yOffset: 20,
+			uppercase: true,
 		},
 	},
 	{
@@ -40,8 +42,9 @@ const presets = [
 			words: "CODE, BUILD, SHIP",
 			duration: 2,
 			morphSpeed: 0.8,
-			color: "text-rb-accent-2",
+			color: "#60a5fa",
 			yOffset: 30,
+			uppercase: true,
 		},
 	},
 	{
@@ -51,17 +54,11 @@ const presets = [
 			words: "BREATHE, RELAX, CREATE",
 			duration: 5,
 			morphSpeed: 2,
-			color: "text-rb-accent-3",
+			color: "#c084fc",
 			yOffset: 10,
+			uppercase: true,
 		},
 	},
-];
-
-const colorOptions = [
-	{ id: "text-rb-accent-1", label: "Accent 1" },
-	{ id: "text-rb-accent-2", label: "Accent 2" },
-	{ id: "text-rb-accent-3", label: "Accent 3" },
-	{ id: "text-white", label: "White" },
 ];
 
 export const GooeyMorphTextPage = () => {
@@ -69,7 +66,8 @@ export const GooeyMorphTextPage = () => {
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [morphSpeed, setMorphSpeed] = useState(DEFAULT_MORPH_SPEED);
 	const [yOffset, setYOffset] = useState(DEFAULT_Y_OFFSET);
-	const [textColorClass, setTextColorClass] = useState(DEFAULT_COLOR);
+	const [color, setColor] = useState("#34d399");
+	const [uppercase, setUppercase] = useState(true);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -83,7 +81,8 @@ export const GooeyMorphTextPage = () => {
 			setDuration(preset.config.duration);
 			setMorphSpeed(preset.config.morphSpeed);
 			setYOffset(preset.config.yOffset);
-			setTextColorClass(preset.config.color);
+			setColor(preset.config.color || "#34d399");
+			setUppercase(preset.config.uppercase ?? true);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -97,7 +96,8 @@ export const GooeyMorphTextPage = () => {
   duration={${duration}}
   morphSpeed={${morphSpeed}}
   yOffset={${yOffset}}
-  textColorClass="${textColorClass}"
+  color="${color}"
+  uppercase={${uppercase}}
 />`;
 
 	return (
@@ -122,7 +122,8 @@ export const GooeyMorphTextPage = () => {
 								duration={duration}
 								morphSpeed={morphSpeed}
 								yOffset={yOffset}
-								textColorClass={textColorClass}
+								color={color}
+								uppercase={uppercase}
 							/>
 						</div>
 					}
@@ -131,7 +132,7 @@ export const GooeyMorphTextPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -141,6 +142,7 @@ export const GooeyMorphTextPage = () => {
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
+								label="Presets"
 								dynamicWidth={true}
 							/>
 							<div className="flex items-center gap-3">
@@ -159,54 +161,65 @@ export const GooeyMorphTextPage = () => {
 						</div>
 					}
 				>
-					<TextInput
-						label="Words (comma separated)"
+					<DefaultTextInput
+						label="Morphed Words"
 						value={wordsInput}
-						onChange={(e) => {
-							setWordsInput(e.target.value);
+						onChange={(val) => {
+							setWordsInput(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Word1, Word2, Word3..."
 					/>
 
-					<ComboBox
-						label="Text Color"
-						options={colorOptions}
-						value={textColorClass}
-						onChange={setTextColorClass}
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
 					/>
 
-					<DiscreteSlider
-						label="Duration (s)"
+					<DiscreteSlider2
+						label="Cycle Duration"
 						min={1}
 						max={10}
 						step={0.5}
 						value={duration}
 						onChange={setDuration}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Morph Speed (s)"
+					<DiscreteSlider2
+						label="Transition Speed"
 						min={0.1}
 						max={3}
 						step={0.1}
 						value={morphSpeed}
 						onChange={setMorphSpeed}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Y Offset (px)"
+					<DiscreteSlider2
+						label="Travel Offset"
 						min={0}
 						max={100}
 						step={1}
 						value={yOffset}
 						onChange={setYOffset}
 						maxDecimals={0}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Accent Color"
+						value={color}
+						onChange={(val) => {
+							setColor(val);
+							setKey((prev) => prev + 1);
+						}}
 					/>
 				</PreviewTab>
 			</div>

@@ -49,6 +49,12 @@ export const glowCardProps = [
 				defaultValue: "'hsl(260deg 100% 3%)'",
 				description: "Background color of the card body.",
 			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force content text to uppercase.",
+			},
 		],
 	},
 ];
@@ -58,35 +64,56 @@ export const componentCode = `"use client";
 import React from "react";
 import "./GlowCard.css";
 
-export const GlowCard = ({ 
-  children, 
-  animationSpeed = 4,
-  glowBlur = 6,
-  glowOpacity = 1,
-  glowScale = 1.5,
-  borderRadius = "2rem",
-  borderWidth = 3,
-  baseColor = "hsl(260deg 100% 3%)"
-}) => {
-  const style = {
-    "--animation-speed": \`\${animationSpeed}s\`,
-    "--glow-blur": glowBlur,
-    "--glow-opacity": glowOpacity,
-    "--glow-scale": glowScale,
-    "--card-radius": borderRadius,
-    "--border-width": \`\${borderWidth}px\`,
-    "--card-color": baseColor,
-  };
+interface GlowCardProps {
+    children?: React.ReactNode;
+    className?: string;
+    animationSpeed?: number;
+    glowBlur?: number;
+    glowOpacity?: number;
+    glowScale?: number;
+    borderRadius?: string;
+    borderWidth?: number;
+    baseColor?: string;
+    uppercase?: boolean;
+}
 
-  return (
-    <div className="glow-card-container" role="button" style={style}>
-      <span className="glow-card-glow" />
-      <div className="glow-card-content">
-        {children}
-      </div>
-    </div>
-  );
-};`;
+export const GlowCard: React.FC<GlowCardProps> = ({
+    children,
+    className = "",
+    animationSpeed = 4,
+    glowBlur = 6,
+    glowOpacity = 1,
+    glowScale = 1.5,
+    borderRadius = "2rem",
+    borderWidth = 3,
+    baseColor = "hsl(260deg 100% 3%)",
+    uppercase = false,
+}) => {
+    const style = {
+        "--animation-speed": \`\${animationSpeed}s\`,
+        "--glow-blur": glowBlur,
+        "--glow-opacity": glowOpacity,
+        "--glow-scale": glowScale,
+        "--card-radius": borderRadius,
+        "--border-width": \`\${borderWidth}px\`,
+        "--card-color": baseColor,
+    } as React.CSSProperties;
+
+    return (
+        <div 
+            className={\`glow-card-container \${className}\`} 
+            role="button"
+            style={style}
+        >
+            <span className="glow-card-glow" />
+            <div className={\`glow-card-content \${uppercase ? "uppercase" : ""}\`}>
+                {children}
+            </div>
+        </div>
+    );
+};
+
+export default GlowCard;";
 
 export const creditsData = [
 	{
@@ -99,4 +126,4 @@ export const creditsData = [
 			},
 		],
 	},
-];
+];`

@@ -8,12 +8,13 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { FocalBlurText } from "../../meta/text/Interactive/FocalBlurText";
 import { focalBlurTextProps, focalBlurTextComponentCode, creditsData } from "./FocalBlurTextData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
-import { ComboBox } from "../../components/combobox/ComboBox";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 
 const DEFAULT_TEXT = "PERSPECTIVE";
 const DEFAULT_MAX_DISTANCE = 250;
@@ -30,6 +31,8 @@ const presets = [
 			maxDistance: 250,
 			maxBlur: 12,
 			focusColor: "#60a5fa",
+			color: "#FFFFFF",
+			uppercase: true,
 			textClassName: "text-5xl font-black",
 		},
 	},
@@ -41,16 +44,11 @@ const presets = [
 			maxDistance: 150,
 			maxBlur: 24,
 			focusColor: "#f43f5e",
+			color: "#FFFFFF",
+			uppercase: true,
 			textClassName: "text-6xl tracking-widest font-black uppercase",
 		},
 	},
-];
-
-const colorOptions = [
-	{ id: "#60a5fa", label: "Blue (#60a5fa)" },
-	{ id: "#f43f5e", label: "Rose (#f43f5e)" },
-	{ id: "#34d399", label: "Emerald (#34d399)" },
-	{ id: "inherit", label: "None (Inherit)" },
 ];
 
 export const FocalBlurTextPage = () => {
@@ -58,6 +56,8 @@ export const FocalBlurTextPage = () => {
 	const [maxDistance, setMaxDistance] = useState(DEFAULT_MAX_DISTANCE);
 	const [maxBlur, setMaxBlur] = useState(DEFAULT_MAX_BLUR);
 	const [focusColor, setFocusColor] = useState(DEFAULT_FOCUS_COLOR);
+	const [color, setColor] = useState("#FFFFFF");
+	const [uppercase, setUppercase] = useState(true);
 	const [textClassName, setTextClassName] = useState(DEFAULT_CLASS);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
@@ -70,6 +70,8 @@ export const FocalBlurTextPage = () => {
 			setMaxDistance(preset.config.maxDistance);
 			setMaxBlur(preset.config.maxBlur);
 			setFocusColor(preset.config.focusColor);
+			setColor(preset.config.color || "#FFFFFF");
+			setUppercase(preset.config.uppercase ?? true);
 			setTextClassName(preset.config.textClassName);
 			setKey((prev) => prev + 1);
 		}
@@ -88,6 +90,8 @@ export const FocalBlurTextPage = () => {
   maxDistance={${maxDistance}}
   maxBlur={${maxBlur}}
   focusColor="${focusColor}"
+  color="${color}"
+  uppercase={${uppercase}}
   textClassName="${textClassName}"
 />`;
 
@@ -111,6 +115,8 @@ export const FocalBlurTextPage = () => {
 								maxDistance={maxDistance}
 								maxBlur={maxBlur}
 								focusColor={focusColor}
+								color={color}
+								uppercase={uppercase}
 								textClassName={textClassName}
 							/>
 						</div>
@@ -120,7 +126,7 @@ export const FocalBlurTextPage = () => {
 					codeContent={focalBlurTextComponentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -130,6 +136,7 @@ export const FocalBlurTextPage = () => {
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
+								label="Presets"
 								dynamicWidth={true}
 							/>
 							<div className="flex items-center gap-3">
@@ -148,28 +155,58 @@ export const FocalBlurTextPage = () => {
 						</div>
 					}
 				>
-					<TextInput
-						label="Text"
+					<DefaultTextInput
+						label="Display Text"
 						value={text}
-						onChange={(e) => {
-							setText(e.target.value);
+						onChange={(val) => {
+							setText(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
 					/>
-					<TextInput
-						label="Tailwind Classes"
-						value={textClassName}
-						onChange={(e) => {
-							setTextClassName(e.target.value);
+
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
 							setKey((prev) => prev + 1);
 						}}
-						placeholder="e.g. text-5xl font-black"
 					/>
 
-					<ComboBox
+					<DiscreteSlider2
+						label="Focus Radius"
+						min={50}
+						max={600}
+						step={10}
+						value={maxDistance}
+						onChange={setMaxDistance}
+						maxDecimals={0}
+						showTicks={true}
+					/>
+
+					<DiscreteSlider2
+						label="Depth Blur"
+						min={0}
+						max={36}
+						step={1}
+						value={maxBlur}
+						onChange={setMaxBlur}
+						maxDecimals={0}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Base Color"
+						value={color}
+						onChange={(val) => {
+							setColor(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<ColorPicker
 						label="Focus Color"
-						options={colorOptions}
 						value={focusColor}
 						onChange={(val) => {
 							setFocusColor(val);
@@ -177,26 +214,14 @@ export const FocalBlurTextPage = () => {
 						}}
 					/>
 
-					<DiscreteSlider
-						label="Max Distance (px)"
-						min={50}
-						max={600}
-						step={10}
-						value={maxDistance}
-						onChange={setMaxDistance}
-						maxDecimals={0}
-						showTicks={false}
-					/>
-
-					<DiscreteSlider
-						label="Max Blur (px)"
-						min={0}
-						max={36}
-						step={1}
-						value={maxBlur}
-						onChange={setMaxBlur}
-						maxDecimals={0}
-						showTicks={false}
+					<DefaultTextInput
+						label="Styling Classes"
+						value={textClassName}
+						onChange={(val) => {
+							setTextClassName(val);
+							setKey((prev) => prev + 1);
+						}}
+						placeholder="e.g. text-5xl font-black"
 					/>
 				</PreviewTab>
 			</div>

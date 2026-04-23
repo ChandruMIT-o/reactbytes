@@ -22,6 +22,8 @@ export interface RevealUnderProps {
 	containerClassName?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
+	/** Whether to force text to uppercase */
+	uppercase?: boolean;
 }
 
 export const RevealUnder: React.FC<RevealUnderProps> = ({
@@ -34,7 +36,10 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "font-sans font-bold text-5xl",
+	uppercase = false,
 }) => {
+	const finalFirst = uppercase ? firstWord.toUpperCase() : firstWord;
+	const finalSecond = uppercase ? secondWord.toUpperCase() : secondWord;
 	const isHorizontal = direction === "right" || direction === "left";
 
 	// Initial positions for the reveal logic
@@ -114,7 +119,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 			<motion.div
 				className={`flex ${
 					isHorizontal ? "flex-row" : "flex-col"
-				} items-center justify-center ${textClassName} uppercase tracking-wider`}
+				} items-center justify-center ${textClassName} tracking-wider`}
 				initial="hidden"
 				animate="visible"
 				variants={{
@@ -133,7 +138,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 							className="relative z-0 px-2 font-light"
 							style={{ color }}
 						>
-							{secondWord}
+							{finalSecond}
 						</motion.span>
 					</div>
 				)}
@@ -143,7 +148,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 					className="relative z-10 bg-background px-2"
 					style={{ color }}
 				>
-					{firstWord}
+					{finalFirst}
 				</motion.span>
 
 				{!showSecondFirst && (
@@ -153,7 +158,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 							className="relative z-0 px-2 font-light"
 							style={{ color }}
 						>
-							{secondWord}
+							{finalSecond}
 						</motion.span>
 					</div>
 				)}

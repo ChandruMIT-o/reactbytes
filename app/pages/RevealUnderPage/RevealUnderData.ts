@@ -26,6 +26,12 @@ export const loaderProps = [
 				defaultValue: "1.5",
 				description: "Total animation time in seconds.",
 			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force the text to uppercase.",
+			},
 		],
 	},
 	{
@@ -71,6 +77,8 @@ export interface RevealUnderProps {
 	containerClassName?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
+	/** Whether to force text to uppercase */
+	uppercase?: boolean;
 }
 
 export const RevealUnder: React.FC<RevealUnderProps> = ({
@@ -82,8 +90,11 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 	easing = [0.785, 0.135, 0.15, 0.86],
 	color = "#E8EAF0",
 	containerClassName = "",
-	textClassName = "font-mono font-bold text-5xl",
+	textClassName = "font-sans font-bold text-5xl",
+	uppercase = false,
 }) => {
+	const finalFirst = uppercase ? firstWord.toUpperCase() : firstWord;
+	const finalSecond = uppercase ? secondWord.toUpperCase() : secondWord;
 	const isHorizontal = direction === "right" || direction === "left";
 
 	const getFirstPos = () => {
@@ -153,7 +164,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 			<motion.div
 				className={\`flex \${
 					isHorizontal ? "flex-row" : "flex-col"
-				} items-center justify-center \${textClassName} uppercase tracking-wider\`}
+				} items-center justify-center \${textClassName} tracking-wider\`}
 				initial="hidden"
 				animate="visible"
 				variants={{
@@ -172,7 +183,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 							className="relative z-0 px-2 font-light"
 							style={{ color }}
 						>
-							{secondWord}
+							{finalSecond}
 						</motion.span>
 					</div>
 				)}
@@ -182,7 +193,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 					className="relative z-10 bg-background px-2"
 					style={{ color }}
 				>
-					{firstWord}
+					{finalFirst}
 				</motion.span>
 
 				{!showSecondFirst && (
@@ -192,7 +203,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 							className="relative z-0 px-2 font-light"
 							style={{ color }}
 						>
-							{secondWord}
+							{finalSecond}
 						</motion.span>
 					</div>
 				)}

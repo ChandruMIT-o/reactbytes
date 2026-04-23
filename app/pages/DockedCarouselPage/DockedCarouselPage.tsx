@@ -7,12 +7,13 @@ import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
-import DockedCarousal from "@/app/meta/carousal/DockedCarousal/DockedCarousal";
+import DockedCarousel from "@/app/meta/carousel/DockedCarousel/DockedCarousel";
 import { carouselProps, componentCode, creditsData } from "./DockedCarouselData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
 import { Credits } from "../../components/buttongroup/Credits";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
-import Toggle from "@/app/components/buttongroup/Toggle";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
 
 const presets = [
     {
@@ -28,6 +29,7 @@ const presets = [
             showArrows: true,
             showTimer: true,
             autoSlideInterval: 5000,
+            color: "#FFFFFF",
         },
     },
     {
@@ -44,6 +46,7 @@ const presets = [
             showArrows: true,
             showTimer: false,
             autoSlideInterval: 5000,
+            color: "#60a5fa",
         },
     },
     {
@@ -59,6 +62,7 @@ const presets = [
             equalSize: false,
             showArrows: true,
             showTimer: true,
+            color: "#f472b6",
         },
     },
     {
@@ -74,6 +78,7 @@ const presets = [
             stiffness: 200,
             damping: 25,
             autoSlideInterval: 5000,
+            color: "#fbbf24",
         },
     },
     {
@@ -89,6 +94,7 @@ const presets = [
             equalSize: false,
             showArrows: true,
             showTimer: true,
+            color: "#4ade80",
         },
     },
 ];
@@ -107,6 +113,7 @@ export const DockedCarouselPage = () => {
     const [showArrows, setShowArrows] = useState(defaultPreset.config.showArrows);
     const [showTimer, setShowTimer] = useState(defaultPreset.config.showTimer);
     const [transitionDuration, setTransitionDuration] = useState(1.2);
+    const [color, setColor] = useState(defaultPreset.config.color);
 
     const applyPreset = (presetId: string) => {
         const preset = presets.find((p) => p.id === presetId);
@@ -121,14 +128,16 @@ export const DockedCarouselPage = () => {
         setEqualSize(preset.config.equalSize);
         setShowArrows(preset.config.showArrows);
         setShowTimer(preset.config.showTimer);
+        setColor(preset.config.color);
         if (preset.config.transitionDuration) setTransitionDuration(preset.config.transitionDuration);
     };
 
     const handleReset = () => applyPreset(defaultPreset.id);
 
-    const usageCode = `<DockedCarousal
+    const usageCode = `<DockedCarousel
   animationType="${animationType}"
   shape="${shape}"
+  color="${color}"
   autoSlide={${autoSlide}}
   autoSlideInterval={${autoSlideInterval}}
   equalSize={${equalSize}}
@@ -152,8 +161,8 @@ export const DockedCarouselPage = () => {
             <div id="preview">
                 <PreviewTab
                     previewContent={
-                        <div className="w-full rounded-[28px] overflow-hidden border border-white/10 bg-black shadow-2xl relative min-h-[500px] flex items-center justify-center">
-                            <DockedCarousal
+                        <div className="w-full rounded-[32px] overflow-hidden border border-white/5 bg-black shadow-2xl relative min-h-[500px] flex items-center justify-center">
+                            <DockedCarousel
                                 animationType={animationType}
                                 shape={shape}
                                 autoSlide={autoSlide}
@@ -164,6 +173,7 @@ export const DockedCarouselPage = () => {
                                 stiffness={stiffness}
                                 damping={damping}
                                 transitionDuration={transitionDuration}
+                                color={color}
                             />
                         </div>
                     }
@@ -171,7 +181,7 @@ export const DockedCarouselPage = () => {
                     codeContent={componentCode}
                     collapsible={true}
                     header={
-                        <div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+                        <div className="flex items-center justify-between ">
                             <h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase tracking-[0.1em]">Carousel Config</h3>
                             <DefaultComboBox
                                 options={presets}
@@ -195,88 +205,98 @@ export const DockedCarouselPage = () => {
                     }
                 >
                     {/* Column 1: Core Configuration */}
-                    <div className="space-y-6">
+                    <div className="flex flex-col gap-6">
                         <DefaultComboBox
-                            label="Animation Type"
+                            label="Animation Style"
                             options={[
-                                { id: 'expand', label: 'Expand' },
-                                { id: 'slide', label: 'Slide' },
-                                { id: 'pop', label: 'Pop' }
+                                { id: 'expand', label: 'Expansion' },
+                                { id: 'slide', label: 'Cinematic Slide' },
+                                { id: 'pop', label: 'Elastic Pop' }
                             ]}
                             value={animationType}
                             onChange={(val) => setAnimationType(val as any)}
                         />
 
                         <DefaultComboBox
-                            label="Thumbnail Shape"
+                            label="Thumbnail Mask"
                             options={[
-                                { id: 'circle', label: 'Circle' },
-                                { id: 'square', label: 'Square' },
-                                { id: 'rectangle', label: 'Rectangle' }
+                                { id: 'circle', label: 'Circular' },
+                                { id: 'square', label: 'Sharp Square' },
+                                { id: 'rectangle', label: 'Rounded Rect' }
                             ]}
                             value={shape}
                             onChange={(val) => setShape(val as any)}
                         />
 
-                        <DiscreteSlider
-                            label="Auto Slide Interval (ms)"
+                        <DiscreteSlider2
+                            label="Slide Interval"
                             min={1000}
                             max={10000}
                             step={500}
                             value={autoSlideInterval}
                             onChange={setAutoSlideInterval}
+                            showTicks={true}
                         />
                     </div>
 
                     {/* Column 2: Toggles & Visuals */}
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-rb-neutral-3 border border-rb-neutral-4">
-                            <span className="text-sm font-medium text-rb-accent-1">Auto Slide</span>
-                            <Toggle checked={autoSlide} onChange={setAutoSlide} />
-                        </div>
-
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-rb-neutral-3 border border-rb-neutral-4">
-                            <span className="text-sm font-medium text-rb-accent-1">Equal Sized Dock</span>
-                            <Toggle checked={equalSize} onChange={setEqualSize} />
-                        </div>
-
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-rb-neutral-3 border border-rb-neutral-4">
-                            <span className="text-sm font-medium text-rb-accent-1">Show Arrows</span>
-                            <Toggle checked={showArrows} onChange={setShowArrows} />
-                        </div>
-
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-rb-neutral-3 border border-rb-neutral-4">
-                            <span className="text-sm font-medium text-rb-accent-1">Show Timer</span>
-                            <Toggle checked={showTimer} onChange={setShowTimer} />
-                        </div>
+                    <div className="flex flex-col gap-3">
+                        <ToggleComponent 
+                            label="Auto-Rotation" 
+                            checked={autoSlide} 
+                            onChange={setAutoSlide} 
+                        />
+                        <ToggleComponent 
+                            label="Uniform Dock" 
+                            checked={equalSize} 
+                            onChange={setEqualSize} 
+                        />
+                        <ToggleComponent 
+                            label="Navigation Arrows" 
+                            checked={showArrows} 
+                            onChange={setShowArrows} 
+                        />
+                        <ToggleComponent 
+                            label="Progress Timer" 
+                            checked={showTimer} 
+                            onChange={setShowTimer} 
+                        />
+                        <ColorPicker
+                            label="Accent Color"
+                            value={color}
+                            onChange={setColor}
+                        />
                     </div>
 
                     {/* Column 3: Physics & Timing */}
-                    <div className="space-y-6">
-                        <DiscreteSlider
-                            label="Spring Stiffness"
+                    <div className="flex flex-col gap-6">
+                        <DiscreteSlider2
+                            label="Motion Stiffness"
                             min={50}
                             max={1000}
                             step={10}
                             value={stiffness}
                             onChange={setStiffness}
+                            showTicks={true}
                         />
-                        <DiscreteSlider
-                            label="Spring Damping"
+                        <DiscreteSlider2
+                            label="Motion Damping"
                             min={10}
                             max={100}
                             step={1}
                             value={damping}
                             onChange={setDamping}
+                            showTicks={true}
                         />
                         {animationType === 'slide' && (
-                            <DiscreteSlider
-                                label="Slide Duration (sec)"
+                            <DiscreteSlider2
+                                label="Slide Duration"
                                 min={0.5}
                                 max={3.0}
                                 step={0.1}
                                 value={transitionDuration}
                                 onChange={setTransitionDuration}
+                                showTicks={true}
                             />
                         )}
                     </div>

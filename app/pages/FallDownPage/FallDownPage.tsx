@@ -80,6 +80,7 @@ export const FallDownPage = () => {
 	const [initialY, setInitialY] = useState(DEFAULT_INITIAL_Y);
 	const [color, setColor] = useState(DEFAULT_COLOR);
 	const [loop, setLoop] = useState(false);
+	const [uppercase, setUppercase] = useState(false);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -93,6 +94,7 @@ export const FallDownPage = () => {
 			setInitialY(preset.config.initialY);
 			setColor(preset.config.color);
 			setLoop(preset.config.loop);
+			setUppercase(preset.config.uppercase ?? false);
 			setKey((prev) => prev + 1); // Trigger replay on preset change
 		}
 	};
@@ -112,6 +114,7 @@ export const FallDownPage = () => {
   initialY={${initialY}}
   color="${color}"
   loop={${loop}}
+  uppercase={${uppercase}}
 />`;
 
 	return (
@@ -136,6 +139,7 @@ export const FallDownPage = () => {
 								initialY={initialY}
 								color={color}
 								loop={loop}
+								uppercase={uppercase}
 								textClassName="text-6xl font-bold tracking-tight font-mono"
 							/>
 						</div>
@@ -145,7 +149,7 @@ export const FallDownPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -174,7 +178,7 @@ export const FallDownPage = () => {
 					}
 				>
 					<DefaultTextInput
-						label="Text Content"
+						label="Display Text"
 						value={text}
 						onChange={(val) => {
 							setText(val);
@@ -183,14 +187,23 @@ export const FallDownPage = () => {
 						placeholder="Enter text..."
 					/>
 
-					<ColorPicker
-						label="Text Color"
-						value={color}
-						onChange={setColor}
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<ToggleComponent
+						label="Loop Animation"
+						checked={loop}
+						onChange={setLoop}
 					/>
 
 					<DiscreteSlider2
-						label="Duration (s)"
+						label="Drop Duration"
 						min={0.1}
 						max={3}
 						step={0.1}
@@ -201,7 +214,7 @@ export const FallDownPage = () => {
 					/>
 
 					<DiscreteSlider2
-						label="Stagger (s)"
+						label="Stagger Delay"
 						min={0}
 						max={0.5}
 						step={0.005}
@@ -212,7 +225,7 @@ export const FallDownPage = () => {
 					/>
 
 					<DiscreteSlider2
-						label="Initial Y Offset"
+						label="Vertical Offset"
 						min={-400}
 						max={0}
 						step={10}
@@ -221,10 +234,10 @@ export const FallDownPage = () => {
 						showTicks={true}
 					/>
 
-					<ToggleComponent
-						label="Loop Animation"
-						checked={loop}
-						onChange={setLoop}
+					<ColorPicker
+						label="Accent Color"
+						value={color}
+						onChange={setColor}
 					/>
 				</PreviewTab>
 			</div>

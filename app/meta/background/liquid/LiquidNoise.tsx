@@ -311,6 +311,8 @@ export interface LiquidNoiseProps {
     color1Weight?: number;
     color2Weight?: number;
     darkNavy?: string;
+    /** Whether to force overlay text to uppercase */
+    uppercase?: boolean;
     className?: string;
     children?: React.ReactNode;
 }
@@ -325,6 +327,7 @@ export const LiquidNoise: React.FC<LiquidNoiseProps> = ({
     color1Weight = 1.0,
     color2Weight = 1.0,
     darkNavy = "#0a0e27",
+    uppercase = false,
     className = "",
     children,
 }) => {
@@ -493,7 +496,7 @@ export const LiquidNoise: React.FC<LiquidNoiseProps> = ({
     return (
         <div className={`relative overflow-hidden w-full h-full ${className}`}>
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block touch-none" />
-            <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none">
+            <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none ${uppercase ? "uppercase" : ""}`}>
                 {children}
             </div>
         </div>

@@ -10,7 +10,8 @@ import { PropsTable } from "../../components/table/PropsTable";
 import StandardAccordion from "../../meta/misc/StandardAccordion/StandardAccordion";
 import { accordionProps, componentCode, creditsData } from "./StandardAccordionData";
 import { Credits } from "../../components/buttongroup/Credits";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 import ColorPicker from "../../components/colorpicker/ColorPicker";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 
@@ -93,7 +94,7 @@ const presets = [
 ];
 
 export const StandardAccordionPage = () => {
-    const defaultPreset = presets[0];
+	const defaultPreset = presets[0];
 
 	const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
 	const [backgroundColorOpen, setBackgroundColorOpen] = useState(defaultPreset.config.backgroundColorOpen);
@@ -105,7 +106,8 @@ export const StandardAccordionPage = () => {
 	const [hoverScale, setHoverScale] = useState(defaultPreset.config.hoverScale);
 	const [titleColor, setTitleColor] = useState(defaultPreset.config.titleColor);
 	const [contentColor, setContentColor] = useState(defaultPreset.config.contentColor);
-    const [allowMultiple, setAllowMultiple] = useState(false);
+	const [allowMultiple, setAllowMultiple] = useState(false);
+	const [uppercase, setUppercase] = useState(false);
 
 	const applyPreset = (presetId: string) => {
 		const preset = presets.find((p) => p.id === presetId);
@@ -131,6 +133,7 @@ export const StandardAccordionPage = () => {
   floatOffset={${floatOffset}}
   hoverScale={${hoverScale}}
   allowMultiple={${allowMultiple}}
+  uppercase={${uppercase}}
   backgroundColorOpen="${backgroundColorOpen}"
   backgroundColorClosed="${backgroundColorClosed}"
 />`;
@@ -148,37 +151,38 @@ export const StandardAccordionPage = () => {
 			<div id="preview">
 				<PreviewTab
 					previewContent={
-						<div 
-                            className="w-full min-h-[550px] flex items-center justify-center p-8 rounded-[32px] border border-white/5 shadow-2xl relative overflow-hidden transition-colors duration-700 ease-in-out"
-                            style={{ backgroundColor: backgroundColorClosed }}
-                        >
-							<div 
-                                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] blur-[140px] pointer-events-none transition-colors duration-700" 
-                                style={{ backgroundColor: `${backgroundColorOpen}30` }}
-                            />
-							
+						<div
+							className="w-full min-h-[550px] flex items-center justify-center p-8 rounded-[32px] border border-white/5 shadow-2xl relative overflow-hidden transition-colors duration-700 ease-in-out"
+							style={{ backgroundColor: backgroundColorClosed }}
+						>
+							<div
+								className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] blur-[140px] pointer-events-none transition-colors duration-700"
+								style={{ backgroundColor: `${backgroundColorOpen}30` }}
+							/>
+
 							<div className="w-full max-w-[600px] relative z-10 transition-transform duration-500">
-								<StandardAccordion 
-                                    backgroundColorOpen={backgroundColorOpen}
-                                    backgroundColorClosed={backgroundColorClosed}
-                                    floatOffset={floatOffset}
-                                    stiffness={stiffness}
-                                    damping={damping}
-                                    mass={mass}
-                                    titleColor={titleColor}
-                                    contentColor={contentColor}
-                                    hoverScale={hoverScale}
-                                    allowMultiple={allowMultiple}
-                                />
+								<StandardAccordion
+									backgroundColorOpen={backgroundColorOpen}
+									backgroundColorClosed={backgroundColorClosed}
+									floatOffset={floatOffset}
+									stiffness={stiffness}
+									damping={damping}
+									mass={mass}
+									titleColor={titleColor}
+									contentColor={contentColor}
+									hoverScale={hoverScale}
+									allowMultiple={allowMultiple}
+									uppercase={uppercase}
+								/>
 							</div>
 						</div>
 					}
 					usageCode={usageCode}
 					codeContent={componentCode}
 					collapsible={true}
-                    header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
-							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase tracking-[0.1em]">Engine Behavior</h3>
+					header={
+						<div className="flex items-center justify-between ">
+							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase tracking-[0.1em]">Presets</h3>
 							<DefaultComboBox
 								options={presets}
 								value={currentPreset}
@@ -200,104 +204,89 @@ export const StandardAccordionPage = () => {
 						</div>
 					}
 				>
-                        {/* Column 1: Dynamics */}
-                        <div className="space-y-6">
-                            <div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Physics Engine</div>
-                            <DiscreteSlider
-                                label="Spring Stiffness"
-                                min={50}
-                                max={800}
-                                step={10}
-                                value={stiffness}
-                                onChange={setStiffness}
-                                maxDecimals={0}
-                                showTicks={false}
-                            />
-                            <DiscreteSlider
-                                label="Spring Damping"
-                                min={5}
-                                max={100}
-                                step={1}
-                                value={damping}
-                                onChange={setDamping}
-                                maxDecimals={0}
-                                showTicks={false}
-                            />
-                            <DiscreteSlider
-                                label="Inertial Mass"
-                                min={0.1}
-                                max={3.0}
-                                step={0.1}
-                                value={mass}
-                                onChange={setMass}
-                                maxDecimals={1}
-                                showTicks={false}
-                            />
-                        </div>
+					{/* Column 1: Dynamics */}
+					<DiscreteSlider2
+						label="Spring Stiffness"
+						min={50}
+						max={800}
+						step={10}
+						value={stiffness}
+						onChange={setStiffness}
+						showTicks={true}
+					/>
+					<DiscreteSlider2
+						label="Spring Damping"
+						min={5}
+						max={100}
+						step={1}
+						value={damping}
+						onChange={setDamping}
+						showTicks={true}
+					/>
+					<DiscreteSlider2
+						label="Inertial Mass"
+						min={0.1}
+						max={3.0}
+						step={0.1}
+						value={mass}
+						onChange={setMass}
+						showTicks={true}
+					/>
 
-                        {/* Column 2: Interaction */}
-                        <div className="space-y-6">
-                            <div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Tactile Feel</div>
-                            <DiscreteSlider
-                                label="Motion Offset (Float)"
-                                min={0}
-                                max={80}
-                                step={1}
-                                value={floatOffset}
-                                onChange={setFloatOffset}
-                                maxDecimals={0}
-                                showTicks={false}
-                            />
-                            <DiscreteSlider
-                                label="Hover Intensity"
-                                min={1.0}
-                                max={1.1}
-                                step={0.005}
-                                value={hoverScale}
-                                onChange={setHoverScale}
-                                maxDecimals={3}
-                                showTicks={false}
-                            />
-                            <div className="flex flex-col gap-2">
-                                <label className="text-[13px] text-rb-accent-1/80 font-medium tracking-tight">Allow Multi-Open</label>
-                                <button 
-                                    onClick={() => setAllowMultiple(!allowMultiple)}
-                                    className={`w-full py-2 px-4 rounded-lg border text-xs font-bold transition-all duration-300 ${allowMultiple ? 'bg-rb-accent-1 text-rb-neutral-1 border-rb-accent-1' : 'bg-transparent text-rb-accent-1/40 border-white/10 hover:border-rb-accent-1/20'}`}
-                                >
-                                    {allowMultiple ? "ENABLED" : "DISABLED"}
-                                </button>
-                            </div>
-                        </div>
+					{/* Column 2: Interaction */}
+					<DiscreteSlider2
+						label="Motion Offset"
+						min={0}
+						max={80}
+						step={1}
+						value={floatOffset}
+						onChange={setFloatOffset}
+						showTicks={true}
+					/>
+					<DiscreteSlider2
+						label="Hover Intensity"
+						min={1.0}
+						max={1.1}
+						step={0.005}
+						value={hoverScale}
+						onChange={setHoverScale}
+						showTicks={true}
+					/>
+					<div className="flex flex-col gap-3">
+						<ToggleComponent
+							label="Allow Multi-Open"
+							checked={allowMultiple}
+							onChange={setAllowMultiple}
+						/>
+						<ToggleComponent
+							label="Uppercase Titles"
+							checked={uppercase}
+							onChange={setUppercase}
+						/>
+					</div>
 
-                        {/* Column 3: Aesthetics */}
-                        <div className="space-y-6">
-                            <div className="text-[10px] uppercase tracking-widest text-rb-accent-1 opacity-50 font-bold border-b border-white/5 pb-2">Appearance</div>
-                            <ColorPicker
-                                label="Open State"
-                                value={backgroundColorOpen}
-                                onChange={setBackgroundColorOpen}
-                                compact={true}
-                            />
-                            <ColorPicker
-                                label="Idle State"
-                                value={backgroundColorClosed}
-                                onChange={setBackgroundColorClosed}
-                                compact={true}
-                            />
-                            <ColorPicker
-                                label="Title Accent"
-                                value={titleColor}
-                                onChange={setTitleColor}
-                                compact={true}
-                            />
-                            <ColorPicker
-                                label="Content Tone"
-                                value={contentColor}
-                                onChange={setContentColor}
-                                compact={true}
-                            />
-                        </div>
-                </PreviewTab>
+					{/* Column 3: Aesthetics */}
+					<ColorPicker
+						label="Open State"
+						value={backgroundColorOpen}
+						onChange={setBackgroundColorOpen}
+					/>
+					<ColorPicker
+						label="Idle State"
+						value={backgroundColorClosed}
+						onChange={setBackgroundColorClosed}
+					/>
+					<ColorPicker
+						label="Title Accent"
+						value={titleColor}
+						onChange={setTitleColor}
+					/>
+					<ColorPicker
+						label="Content Tone"
+						value={contentColor}
+						onChange={setContentColor}
+					/>
+				</PreviewTab>
 			</div>
 
 			<div id="installation-tabs">

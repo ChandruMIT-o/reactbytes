@@ -7,11 +7,12 @@ import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { MetallicTwirl } from "../../meta/background/metallic/MetallicTwirl";
-import { loaderProps, creditsData } from "./MetallicTwirlData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { loaderProps, creditsData, componentCode } from "./MetallicTwirlData";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
+import { RotateCcw } from "lucide-react";
 
 const presets = [
 	{
@@ -140,10 +141,10 @@ export const MetallicTwirlPage = () => {
 					}
 					onReplay={() => setKey((prev) => prev + 1)}
 					usageCode={usageCode}
-					codeContent={""}
+					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -153,63 +154,73 @@ export const MetallicTwirlPage = () => {
 								options={presets}
 								value={presets.find(p => p.config.symmetry === config.symmetry && p.config.zoom === config.zoom)?.id || ""}
 								onChange={applyPreset}
+								label="Presets"
 								dynamicWidth={true}
 							/>
 							<div className="flex items-center gap-3">
-
+								<button
+									onClick={() => applyPreset("classic")}
+									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+									title="Reset to Defaults"
+								>
+									<RotateCcw
+										size={16}
+										className="group-hover:rotate-[-90deg] transition-transform duration-500"
+									/>
+								</button>
 							</div>
 						</div>
 					}
 				>
-					<TextInput
-						label="Center Text"
+					<DefaultTextInput
+						label="Overlay Title"
 						value={config.title}
-						onChange={(e) => updateConfig("title", e.target.value)}
+						onChange={(val) => updateConfig("title", val)}
 						placeholder="Enter text..."
 					/>
 
-					<DiscreteSlider
-						label="Speed"
+					<DiscreteSlider2
+						label="Rotation Speed"
 						min={0.01}
 						max={2.0}
 						step={0.01}
 						value={config.speed}
 						onChange={(val) => updateConfig("speed", val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Zoom Scale"
+					<DiscreteSlider2
+						label="Zoom Factor"
 						min={1.0}
 						max={40.0}
 						step={1.0}
 						value={config.zoom}
 						onChange={(val) => updateConfig("zoom", val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Symmetry"
+					<DiscreteSlider2
+						label="Symmetry Points"
 						min={2.0}
 						max={50.0}
 						step={1.0}
 						value={config.symmetry}
 						onChange={(val) => updateConfig("symmetry", val)}
 						maxDecimals={0}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Amplitude"
+					<DiscreteSlider2
+						label="Color Intensity"
 						min={0.1}
 						max={5.0}
 						step={0.1}
 						value={config.amplitude}
 						onChange={(val) => updateConfig("amplitude", val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 				</PreviewTab>
 			</div>

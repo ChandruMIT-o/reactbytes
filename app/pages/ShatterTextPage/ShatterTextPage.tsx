@@ -8,11 +8,13 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { ShatterText } from "../../meta/text/Interactive/ShatterText";
 import { shatterTextProps, shatterTextComponentCode, creditsData } from "./ShatterTextData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 
 const DEFAULT_TEXT = "FRAGMENTED";
 const DEFAULT_SCATTER_FACTOR = 400;
@@ -25,7 +27,9 @@ const presets = [
 		config: {
 			text: "FRAGMENTED",
 			scatterFactor: 400,
-			textClassName: "text-5xl font-black text-rb-accent-1",
+			color: "#FFFFFF",
+			uppercase: true,
+			textClassName: "text-5xl font-black",
 		},
 	},
 	{
@@ -34,7 +38,9 @@ const presets = [
 		config: {
 			text: "SUPERNOVA",
 			scatterFactor: 800,
-			textClassName: "text-6xl tracking-widest font-black uppercase text-rose-500",
+			color: "#f43f5e",
+			uppercase: true,
+			textClassName: "text-6xl tracking-widest font-black uppercase",
 		},
 	},
 ];
@@ -42,6 +48,8 @@ const presets = [
 export const ShatterTextPage = () => {
 	const [text, setText] = useState(DEFAULT_TEXT);
 	const [scatterFactor, setScatterFactor] = useState(DEFAULT_SCATTER_FACTOR);
+	const [color, setColor] = useState("#FFFFFF");
+	const [uppercase, setUppercase] = useState(true);
 	const [textClassName, setTextClassName] = useState(DEFAULT_CLASS);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
@@ -52,6 +60,8 @@ export const ShatterTextPage = () => {
 			setCurrentPreset(presetId);
 			setText(preset.config.text);
 			setScatterFactor(preset.config.scatterFactor);
+			setColor(preset.config.color || "#FFFFFF");
+			setUppercase(preset.config.uppercase ?? true);
 			setTextClassName(preset.config.textClassName);
 			setKey((prev) => prev + 1);
 		}
@@ -68,6 +78,8 @@ export const ShatterTextPage = () => {
 	const usageCode = `<ShatterText
   text="${text}"
   scatterFactor={${scatterFactor}}
+  color="${color}"
+  uppercase={${uppercase}}
   textClassName="${textClassName}"
 />`;
 
@@ -89,6 +101,8 @@ export const ShatterTextPage = () => {
 								key={key}
 								text={text}
 								scatterFactor={scatterFactor}
+								color={color}
+								uppercase={uppercase}
 								textClassName={textClassName}
 							/>
 						</div>
@@ -98,7 +112,7 @@ export const ShatterTextPage = () => {
 					codeContent={shatterTextComponentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -108,6 +122,7 @@ export const ShatterTextPage = () => {
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
+								label="Presets"
 								dynamicWidth={true}
 							/>
 							<div className="flex items-center gap-3">
@@ -126,27 +141,27 @@ export const ShatterTextPage = () => {
 						</div>
 					}
 				>
-					<TextInput
-						label="Text"
+					<DefaultTextInput
+						label="Display Text"
 						value={text}
-						onChange={(e) => {
-							setText(e.target.value);
+						onChange={(val) => {
+							setText(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
 					/>
-					<TextInput
-						label="Tailwind Classes"
-						value={textClassName}
-						onChange={(e) => {
-							setTextClassName(e.target.value);
+
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
 							setKey((prev) => prev + 1);
 						}}
-						placeholder="e.g. text-5xl font-black text-rose-500"
 					/>
 
-					<DiscreteSlider
-						label="Scatter Factor"
+					<DiscreteSlider2
+						label="Fracture Intensity"
 						min={100}
 						max={1500}
 						step={50}
@@ -156,7 +171,26 @@ export const ShatterTextPage = () => {
 							setKey((prev) => prev + 1);
 						}}
 						maxDecimals={0}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Accent Color"
+						value={color}
+						onChange={(val) => {
+							setColor(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<DefaultTextInput
+						label="Tailwind Classes"
+						value={textClassName}
+						onChange={(val) => {
+							setTextClassName(val);
+							setKey((prev) => prev + 1);
+						}}
+						placeholder="e.g. text-5xl font-black"
 					/>
 				</PreviewTab>
 			</div>

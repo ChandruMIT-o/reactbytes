@@ -34,6 +34,12 @@ export const loaderProps = [
 				defaultValue: "false",
 				description: "Whether the animation should loop continuously.",
 			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force the text to uppercase.",
+			},
 		],
 	},
 	{
@@ -95,6 +101,8 @@ export interface FallDownProps {
 	containerClassName?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const FallDown: React.FC<FallDownProps> = ({
@@ -109,8 +117,12 @@ export const FallDown: React.FC<FallDownProps> = ({
 	loop = false,
 	containerClassName = "",
 	textClassName = "font-sans",
+	uppercase = false,
 }) => {
-	const letters = useMemo(() => text.split(""), [text]);
+	const letters = useMemo(() => {
+		const finalRef = uppercase ? text.toUpperCase() : text;
+		return finalRef.split("");
+	}, [text, uppercase]);
 
 	return (
 		<div

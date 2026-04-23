@@ -6,10 +6,11 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { BlurText } from "../../meta/text/BlurText/BlurText";
 import { loaderProps, componentCode, creditsData } from "./BlurTextData";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 import { ComboBox } from "../../components/combobox/ComboBox";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
-import { RotateCcw, Play } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
 
@@ -37,6 +38,7 @@ const presets = [
 			delay: 0,
 			loop: false,
 			blurAmount: 8,
+			uppercase: true,
 		},
 	},
 	{
@@ -151,6 +153,7 @@ export const BlurTextPage = () => {
 	const [delay, setDelay] = useState(DEFAULT_DELAY);
 	const [loop, setLoop] = useState(DEFAULT_LOOP);
 	const [blurAmount, setBlurAmount] = useState(DEFAULT_BLUR_AMOUNT);
+	const [uppercase, setUppercase] = useState(true);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -167,6 +170,7 @@ export const BlurTextPage = () => {
 			setDelay(preset.config.delay);
 			setLoop(preset.config.loop || false);
 			setBlurAmount(preset.config.blurAmount);
+			setUppercase(preset.config.uppercase ?? true);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -188,6 +192,7 @@ export const BlurTextPage = () => {
   delay={${delay}}
   loop={${loop}}
   blurAmount={${blurAmount}}
+  uppercase={${uppercase}}
   className="text-3xl sm:text-5xl font-bold ${textColorClass}"
 />`;
 
@@ -215,6 +220,7 @@ export const BlurTextPage = () => {
 								delay={delay}
 								loop={loop}
 								blurAmount={blurAmount}
+								uppercase={uppercase}
 								className={`text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] ${textColorClass}`}
 							/>
 						</div>
@@ -253,109 +259,97 @@ export const BlurTextPage = () => {
 						</div>
 					}
 				>
-					<TextInput
-						label="Text Content"
+					<DefaultTextInput
+						label="Display Text"
 						value={text}
-						onChange={(e) => setText(e.target.value)}
+						onChange={(val) => {
+							setText(val);
+							setKey((prev) => prev + 1);
+						}}
 						placeholder="Enter text..."
-						onClear={() => setText("")}
 					/>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<ComboBox
-							label="Text Color"
-							options={colorOptions}
-							value={textColorClass}
-							onChange={setTextColorClass}
-						/>
-						<div className="flex flex-col gap-2">
-							<span className="text-xs font-bold text-rb-accent-1 uppercase">
-								Animation Loop
-							</span>
-							<button
-								onClick={() => setLoop(!loop)}
-								className={`
-                  flex items-center justify-between px-4 py-2.5 rounded-full border transition-all duration-300
-                  ${
-										loop
-											? "bg-rb-accent-1/10 border-rb-accent-1 text-rb-accent-1"
-											: "bg-rb-neutral-3 border-rb-neutral-4 text-rb-accent-1/40 hover:border-rb-accent-1/20"
-									}
-                `}
-							>
-								<span className="text-sm font-medium">
-									{loop ? "Enabled" : "Disabled"}
-								</span>
-								<div
-									className={`w-2 h-2 rounded-full transition-all duration-500 ${
-										loop
-											? "bg-rb-accent-1 shadow-[0_0_8px_rgba(var(--rb-accent-1-rgb),0.5)]"
-											: "bg-rb-neutral-4"
-									}`}
-								/>
-							</button>
-						</div>
-					</div>
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<ComboBox
-							label="Animate By"
-							options={animateByOptions}
-							value={animateBy}
-							onChange={(val: any) => setAnimateBy(val)}
-						/>
-						<ComboBox
-							label="Direction"
-							options={directionOptions}
-							value={direction}
-							onChange={(val: any) => setDirection(val)}
-						/>
-					</div>
+					<ToggleComponent
+						label="Continuous Loop"
+						checked={loop}
+						onChange={(val) => {
+							setLoop(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
 
-					<DiscreteSlider
-						label="Blur Amount (px)"
+					<DiscreteSlider2
+						label="Blur Intensity"
 						min={0}
 						max={100}
 						step={1}
 						value={blurAmount}
 						onChange={setBlurAmount}
 						maxDecimals={0}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-						<DiscreteSlider
-							label="Duration (s)"
-							min={0.1}
-							max={3}
-							step={0.1}
-							value={duration}
-							onChange={setDuration}
-							maxDecimals={1}
-							showTicks={false}
-						/>
+					<DiscreteSlider2
+						label="Entrance Duration"
+						min={0.1}
+						max={3}
+						step={0.1}
+						value={duration}
+						onChange={setDuration}
+						maxDecimals={1}
+						showTicks={true}
+					/>
 
-						<DiscreteSlider
-							label="Stagger (s)"
-							min={0}
-							max={1}
-							step={0.01}
-							value={stagger}
-							onChange={setStagger}
-							maxDecimals={2}
-							showTicks={false}
-						/>
-					</div>
+					<DiscreteSlider2
+						label="Stagger Delay"
+						min={0}
+						max={1}
+						step={0.01}
+						value={stagger}
+						onChange={setStagger}
+						maxDecimals={2}
+						showTicks={true}
+					/>
 
-					<DiscreteSlider
-						label="Initial Delay (s)"
+					<DiscreteSlider2
+						label="Starting Delay"
 						min={0}
 						max={2}
 						step={0.1}
 						value={delay}
 						onChange={setDelay}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<ComboBox
+						label="Text Color"
+						options={colorOptions}
+						value={textColorClass}
+						onChange={setTextColorClass}
+					/>
+
+					<ComboBox
+						label="Animate By"
+						options={animateByOptions}
+						value={animateBy}
+						onChange={(val: any) => setAnimateBy(val)}
+					/>
+
+					<ComboBox
+						label="Slide Direction"
+						options={directionOptions}
+						value={direction}
+						onChange={(val: any) => setDirection(val)}
 					/>
 				</PreviewTab>
 			</div>

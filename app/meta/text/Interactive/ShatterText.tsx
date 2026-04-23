@@ -9,23 +9,31 @@ export interface ShatterTextProps {
 	textClassName?: string;
 	/** Force multiplier for initial scatter spread */
 	scatterFactor?: number;
+	/** Base color for the text */
+	color?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const ShatterText: React.FC<ShatterTextProps> = ({
 	text,
 	textClassName = "text-4xl md:text-5xl font-black",
 	scatterFactor = 400,
+	color = "#FFFFFF",
+	uppercase = false,
 }) => {
 	const [trigger, setTrigger] = useState(0);
 
+	const displayText = uppercase ? text.toUpperCase() : text;
+
 	// Pre-calculate random entry points for each character
 	const charConfigs = useMemo(() => {
-		return text.split("").map(() => ({
+		return displayText.split("").map(() => ({
 			x: (Math.random() - 0.5) * scatterFactor,
 			y: (Math.random() - 0.5) * scatterFactor,
 			rot: (Math.random() - 0.5) * 270,
 		}));
-	}, [text, trigger, scatterFactor]);
+	}, [displayText, trigger, scatterFactor]);
 
 	return (
 		<>
@@ -44,15 +52,16 @@ export const ShatterText: React.FC<ShatterTextProps> = ({
 					}
 				}
 				.animate-shatter {
-					animation: shatter-in 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+					animation: shatter-in 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 					opacity: 0; 
 				}
 			`}} />
 			<div
 				className={`flex flex-wrap cursor-pointer overflow-visible ${textClassName}`}
 				onClick={() => setTrigger((t) => t + 1)}
+				style={{ color }}
 			>
-				{text.split("").map((char, i) => (
+				{displayText.split("").map((char, i) => (
 					<span
 						key={`${trigger}-${i}`}
 						className="inline-block animate-shatter"
@@ -61,6 +70,7 @@ export const ShatterText: React.FC<ShatterTextProps> = ({
 							"--startY": `${charConfigs[i].y}px`,
 							"--startRot": `${charConfigs[i].rot}deg`,
 							animationDelay: `${i * 0.04}s`,
+							color: color,
 						} as React.CSSProperties}
 					>
 						{char === " " ? "\u00A0" : char}

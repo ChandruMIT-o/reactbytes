@@ -9,11 +9,11 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import FractalBackground from "../../meta/background/fractal/FractalBackground";
 import { fractalProps, componentCode, creditsData } from "./FractalBackgroundData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import ColorPicker from "../../components/colorpicker/ColorPicker";
 import { Credits } from "../../components/buttongroup/Credits";
-import Toggle from "../../components/buttongroup/Toggle";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 
 
@@ -23,6 +23,7 @@ const presets = [
 		label: "Deep Sea",
 		config: {
 			title: "OCEANIC DEPTH",
+			uppercase: true,
 			colorStart: "#050815",
 			colorEnd: "#204080",
 			speed: 0.15,
@@ -151,6 +152,7 @@ export const FractalBackgroundPage = () => {
 
 	const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
 	const [title, setTitle] = useState(defaultPreset.config.title);
+	const [uppercase, setUppercase] = useState(defaultPreset.config.uppercase ?? true);
 	const [colorStart, setColorStart] = useState(defaultPreset.config.colorStart);
 	const [colorEnd, setColorEnd] = useState(defaultPreset.config.colorEnd);
 	const [speed, setSpeed] = useState(defaultPreset.config.speed);
@@ -164,6 +166,7 @@ export const FractalBackgroundPage = () => {
 		if (!preset) return;
 		setCurrentPreset(presetId);
 		setTitle(preset.config.title);
+		setUppercase(preset.config.uppercase ?? true);
 		setColorStart(preset.config.colorStart);
 		setColorEnd(preset.config.colorEnd);
 		setSpeed(preset.config.speed);
@@ -183,6 +186,7 @@ export const FractalBackgroundPage = () => {
   intensity={${intensity}}
   morphRange={${morphRange}}
   enableParallax={${enableParallax}}
+  uppercase={${uppercase}}
 >
   <h1 className="text-white font-bold">{title}</h1>
 </FractalBackground>`;
@@ -209,6 +213,7 @@ export const FractalBackgroundPage = () => {
 								intensity={intensity}
 								morphRange={morphRange}
 								enableParallax={enableParallax}
+								uppercase={uppercase}
 							>
 								<div className="flex flex-col items-center gap-3 text-center px-6">
 									<div className="text-[clamp(2rem,6vw,4rem)] font-bold tracking-tight text-white">
@@ -225,7 +230,7 @@ export const FractalBackgroundPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">Props</h3>
 							<DefaultComboBox
 								options={presets}
@@ -249,61 +254,68 @@ export const FractalBackgroundPage = () => {
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="Hero Text"
 						value={title}
-						onChange={(e) => setTitle(e.target.value)}
+						onChange={(val) => setTitle(val)}
 						placeholder="Enter text..."
 					/>
 
-					<DiscreteSlider
+					<ToggleComponent
+						label="Uppercase Text"
+						checked={uppercase}
+						onChange={(val) => setUppercase(val)}
+					/>
+
+					<ToggleComponent
+						label="Enable Parallax"
+						checked={enableParallax}
+						onChange={(val) => setEnableParallax(val)}
+					/>
+
+					<DiscreteSlider2
 						label="Zoom"
 						min={1.0}
 						max={5.0}
 						step={0.1}
 						value={zoom}
-						onChange={setZoom}
+						onChange={(val) => setZoom(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Animation Speed"
 						min={0}
 						max={1.0}
 						step={0.01}
 						value={speed}
-						onChange={setSpeed}
+						onChange={(val) => setSpeed(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Morph Intensity"
 						min={0}
 						max={0.5}
 						step={0.01}
 						value={morphRange}
-						onChange={setMorphRange}
+						onChange={(val) => setMorphRange(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Brightness"
 						min={0.5}
 						max={2.0}
 						step={0.1}
 						value={intensity}
-						onChange={setIntensity}
+						onChange={(val) => setIntensity(val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
-
-					<div className="flex items-center justify-between py-2 border-b border-rb-neutral-4/30">
-						<span className="text-rb-accent-1/70 text-sm font-medium">Enable Parallax</span>
-						<Toggle checked={enableParallax} onChange={setEnableParallax} />
-					</div>
 
 					<ColorPicker
 						label="Base Color"

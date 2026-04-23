@@ -18,7 +18,7 @@ If the component being showcased (e.g., `FallDown.tsx`) only supports Tailwind c
 
 ## 3. Data File Updates (e.g., `ComponentNameData.ts`)
 - Update `loaderProps` to include the new props (`color`, `loop`, etc.).
-- Update `componentCode` (the stringified version of the component) to match the new implementation.
+- Update `componentCode` (the stringified version of the component) to match the new implementation. **Ensure the template literal is properly closed with a backtick.**
 - Update `presets` to include the new configuration values.
 
 ## 4. Page Implementation (e.g., `ComponentNamePage.tsx`)
@@ -41,5 +41,9 @@ If the component being showcased (e.g., `FallDown.tsx`) only supports Tailwind c
 ## 5. Visual Consistency
 - Ensure `PreviewTab` has a `max-w-6xl` class in its implementation to allow the three-column layout to expand properly.
 - Ensure the `header` of `PreviewTab` uses `DefaultComboBox` for preset selection with `label="Presets"` and `dynamicWidth={true}`.
+
+## 6. Common Pitfalls
+- **Template Literals**: When updating `componentCode`, ensure you use backticks (`` ` ``) to open and close the string. Mixing quotes will break the file's exports.
+- **PreviewTab Props**: Do NOT pass `className="max-w-6xl"` to `PreviewTab` in the page file; it is already handled internally.
 
 ---

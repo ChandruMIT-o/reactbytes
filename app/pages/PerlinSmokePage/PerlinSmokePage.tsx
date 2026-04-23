@@ -7,9 +7,11 @@ import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { PerlinSmoke } from "../../meta/background/gradient/PerlinSmoke";
-import { loaderProps, creditsData } from "./PerlinSmokeData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
+import { loaderProps, componentCode, creditsData } from "./PerlinSmokeData";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
 
@@ -18,6 +20,8 @@ const presets = [
 		id: "balanced",
 		label: "Balanced",
 		config: {
+			title: "DREAM SCAPE",
+			uppercase: true,
 			baseColor: "#1e1e1e",
 			speed: 0.08,
 			turbulence: 0.5,
@@ -79,7 +83,12 @@ export const PerlinSmokePage = () => {
   eco={${config.eco}}
   maxFPS={${config.maxFPS}}
   mouseInteraction={${config.mouseInteraction}}
-/>`;
+  uppercase={${config.uppercase}}
+>
+  <h1 className="text-white text-6xl font-bold tracking-tighter mix-blend-difference">
+    ${config.title}
+  </h1>
+</PerlinSmoke>`;
 
 	return (
 		<div className="flex flex-col gap-5">
@@ -102,7 +111,11 @@ export const PerlinSmokePage = () => {
 								key={key}
 								{...config}
 								className="absolute inset-0"
-							/>
+							>
+								<div className="text-[clamp(2.5rem,8vw,5.5rem)] font-bold tracking-tighter text-white/90 drop-shadow-2xl mix-blend-difference">
+									{config.title}
+								</div>
+							</PerlinSmoke>
 							<div className="absolute top-4 left-4 text-[10px] text-white/20 uppercase tracking-widest font-bold pointer-events-none group-hover:text-white/40 transition-colors">
 								Click Background to Reset
 							</div>
@@ -110,10 +123,10 @@ export const PerlinSmokePage = () => {
 					}
 					onReplay={() => setKey((prev) => prev + 1)}
 					usageCode={usageCode}
-					codeContent={"" /* To be populated with raw component string if needed */}
+					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -131,16 +144,26 @@ export const PerlinSmokePage = () => {
 						</div>
 					}
 				>
-					<div className="flex flex-wrap gap-4 mb-4">
-						<ColorPicker
-							label="Base Color"
-							value={config.baseColor}
-							onChange={(val) => updateConfig("baseColor", val)}
-							compact={true}
-						/>
-					</div>
+					<DefaultTextInput
+						label="Hero Text"
+						value={config.title}
+						onChange={(val) => updateConfig("title", val)}
+						placeholder="Enter title..."
+					/>
 
-					<DiscreteSlider
+					<ToggleComponent
+						label="Uppercase Text"
+						checked={config.uppercase}
+						onChange={(val) => updateConfig("uppercase", val)}
+					/>
+
+					<ToggleComponent
+						label="Eco Mode"
+						checked={config.eco}
+						onChange={(val) => updateConfig("eco", val)}
+					/>
+
+					<DiscreteSlider2
 						label="Speed"
 						min={0}
 						max={0.2}
@@ -148,10 +171,10 @@ export const PerlinSmokePage = () => {
 						value={config.speed}
 						onChange={(val) => updateConfig("speed", val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Turbulence"
 						min={0}
 						max={1}
@@ -159,10 +182,10 @@ export const PerlinSmokePage = () => {
 						value={config.turbulence}
 						onChange={(val) => updateConfig("turbulence", val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Milkiness"
 						min={0}
 						max={1}
@@ -170,10 +193,10 @@ export const PerlinSmokePage = () => {
 						value={config.milk}
 						onChange={(val) => updateConfig("milk", val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Mouse Interaction"
 						min={0}
 						max={2}
@@ -181,10 +204,10 @@ export const PerlinSmokePage = () => {
 						value={config.mouseInteraction}
 						onChange={(val) => updateConfig("mouseInteraction", val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Max FPS"
 						min={30}
 						max={120}
@@ -192,18 +215,15 @@ export const PerlinSmokePage = () => {
 						value={config.maxFPS}
 						onChange={(val) => updateConfig("maxFPS", val)}
 						maxDecimals={0}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<div className="flex items-center gap-3 mt-4 ml-4">
-						<label className="text-sm text-rb-accent-1 font-medium">Eco Mode</label>
-						<input
-							type="checkbox"
-							checked={config.eco}
-							onChange={(e) => updateConfig("eco", e.target.checked)}
-							className="accent-rb-accent-1 h-4 w-4"
-						/>
-					</div>
+					<ColorPicker
+						label="Base Color"
+						value={config.baseColor}
+						onChange={(val) => updateConfig("baseColor", val)}
+						compact={true}
+					/>
 				</PreviewTab>
 			</div>
 

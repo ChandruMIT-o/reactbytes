@@ -7,20 +7,83 @@ import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { KeyboardText } from "../../meta/text/keyboard/KeyboardText";
-import { loaderProps, creditsData } from "./KeyboardTextData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { componentCode, loaderProps, creditsData } from "./KeyboardTextData";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { Credits } from "../../components/buttongroup/Credits";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
+import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
+import { RotateCcw } from "lucide-react";
+
+const presets = [
+	{
+		id: "default",
+		label: "Classic Keyboard",
+		config: {
+			text: "KEYBOARD",
+			yBounce: 10,
+			color: "#FFFFFF",
+			uppercase: true,
+			className: "text-[2.5rem] sm:text-[3rem] md:text-[5rem] lg:text-[7rem] tracking-tighter mix-blend-difference z-10 font-[Poppins]",
+		},
+	},
+	{
+		id: "deep-press",
+		label: "Deep Press",
+		config: {
+			text: "TYPEWRITER",
+			yBounce: 25,
+			color: "#fca5a5",
+			uppercase: true,
+			className: "text-[2.5rem] sm:text-[3rem] md:text-[5rem] lg:text-[7rem] tracking-tighter mix-blend-difference z-10 font-[Poppins]",
+		},
+	},
+	{
+		id: "subtle",
+		label: "Subtle Taps",
+		config: {
+			text: "GHOSTLY",
+			yBounce: 4,
+			color: "#94a3b8",
+			uppercase: true,
+			className: "text-[2.5rem] sm:text-[3rem] md:text-[5rem] lg:text-[7rem] tracking-tighter mix-blend-difference z-10 font-[Poppins]",
+		},
+	},
+];
 
 export const KeyboardTextPage = () => {
 	const [text, setText] = useState("KEYBOARD");
 	const [yBounce, setYBounce] = useState(10);
+	const [color, setColor] = useState("#FFFFFF");
+	const [uppercase, setUppercase] = useState(true);
+	const [className, setClassName] = useState("text-[2.5rem] sm:text-[3rem] md:text-[5rem] lg:text-[7rem] tracking-tighter mix-blend-difference z-10 font-[Poppins]");
+	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
+
+	const applyPreset = (presetId: string) => {
+		const preset = presets.find((p) => p.id === presetId);
+		if (preset) {
+			setCurrentPreset(presetId);
+			setText(preset.config.text);
+			setYBounce(preset.config.yBounce);
+			setColor(preset.config.color || "#FFFFFF");
+			setUppercase(preset.config.uppercase ?? true);
+			setClassName(preset.config.className);
+			setKey((prev) => prev + 1);
+		}
+	};
+
+	const handleReset = () => {
+		applyPreset("default");
+	};
 
 	const usageCode = `<KeyboardText
   text="${text}"
   yBounce={${yBounce}}
-  className="text-white text-5xl md:text-8xl tracking-tight"
+  color="${color}"
+  uppercase={${uppercase}}
+  className="${className}"
 />`;
 
 	return (
@@ -44,7 +107,9 @@ export const KeyboardTextPage = () => {
 								key={key}
 								text={text}
 								yBounce={yBounce}
-								className="text-white text-[3rem] sm:text-[4rem] md:text-[6rem] lg:text-[10rem] tracking-tighter mix-blend-difference z-10 font-[Poppins]"
+								color={color}
+								uppercase={uppercase}
+								className={className}
 							/>
 							{/* Soft subtle radial background behind the text */}
 							<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.05)_0%,transparent_60%)] pointer-events-none" />
@@ -58,31 +123,74 @@ export const KeyboardTextPage = () => {
 					codeContent=""
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
 								</h3>
 							</div>
+							<DefaultComboBox
+								options={presets}
+								value={currentPreset}
+								onChange={applyPreset}
+								label="Presets"
+								dynamicWidth={true}
+							/>
+							<div className="flex items-center gap-3">
+								<button
+									onClick={handleReset}
+									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+									title="Reset to Defaults"
+								>
+									<RotateCcw
+										size={16}
+										className="group-hover:rotate-[-90deg] transition-transform duration-500"
+									/>
+								</button>
+							</div>
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="Rendered Text"
 						value={text}
-						onChange={(e) => setText(e.target.value)}
+						onChange={(val) => {
+							setText(val);
+							setKey((prev) => prev + 1);
+						}}
 						placeholder="Type anything..."
 					/>
 
-					<DiscreteSlider
-						label="Bounce Depth (px)"
+					<ColorPicker
+						label="Text Color"
+						value={color}
+						onChange={(val) => {
+							setColor(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<DiscreteSlider2
+						label="Bounce Depth"
 						min={0}
 						max={35}
 						step={1}
 						value={yBounce}
-						onChange={setYBounce}
+						onChange={(val) => {
+							setYBounce(val);
+							setKey((prev) => prev + 1);
+						}}
 						maxDecimals={0}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<ToggleComponent
+						label="Uppercase"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
 					/>
 				</PreviewTab>
 			</div>

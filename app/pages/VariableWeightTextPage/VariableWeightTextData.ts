@@ -32,6 +32,12 @@ export const loaderProps = [
 				defaultValue: "0.1",
 				description: "Delay multiplication between characters (seconds).",
 			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force the text to uppercase.",
+			},
 		],
 	},
 	{
@@ -59,16 +65,28 @@ import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 
 export interface VariableWeightTextProps {
+	/** The text to display and animate */
 	text?: string;
+	/** Starting font weight (100-900) */
 	initialWeight?: number;
+	/** Target font weight (100-900) */
 	targetWeight?: number;
+	/** Duration of the weight transition in seconds */
 	duration?: number;
+	/** Delay multiplier between each letter's animation start */
 	stagger?: number;
+	/** Ease function for the weight transition */
 	easing?: any;
+	/** Whether the weight should pulse (infinite loop) */
 	pulse?: boolean;
+	/** Hex color for text */
 	color?: string;
+	/** Additional wrapper CSS classes */
 	containerClassName?: string;
+	/** Additional text container CSS classes */
 	textClassName?: string;
+	/** Whether to force text to uppercase */
+	uppercase?: boolean;
 }
 
 export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
@@ -82,11 +100,18 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "",
+	uppercase = false,
 }) => {
-	const letters = useMemo(() => text.split(""), [text]);
+	const letters = useMemo(() => {
+		const finalRef = uppercase ? text.toUpperCase() : text;
+		return finalRef.split("");
+	}, [text, uppercase]);
 
 	const variants = {
-		initial: { fontWeight: initialWeight, opacity: 0 },
+		initial: {
+			fontWeight: initialWeight,
+			opacity: 0,
+		},
 		animate: (i: number) => ({
 			fontWeight: targetWeight,
 			opacity: 1,
@@ -101,8 +126,12 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 	};
 
 	return (
-		<div className={\`relative w-full flex items-center justify-center \${containerClassName}\`}>
-			<div className={\`flex flex-wrap justify-center \${textClassName}\`}>
+		<div
+			className={\`relative w-full flex items-center justify-center \${containerClassName}\`}
+		>
+			<div
+				className={\`flex flex-wrap justify-center overflow-hidden \${textClassName}\`}
+			>
 				{letters.map((char, index) => (
 					<motion.span
 						key={\`\${index}-\${char}\`}
@@ -111,15 +140,20 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 						initial="initial"
 						animate="animate"
 						className="inline-block"
-						style={{ fontFamily: 'var(--font-outfit)', color }}
+						style={{
+							fontFamily: "var(--font-outfit)",
+							color,
+						}}
 					>
-						{char === ' ' ? '\\u00A0' : char}
+						{char === " " ? "\\u00A0" : char}
 					</motion.span>
 				))}
 			</div>
 		</div>
 	);
-};`;
+};
+
+export default VariableWeightText;`;
 
 export const creditsData = [
 	{

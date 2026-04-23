@@ -28,6 +28,8 @@ export interface BlurTextProps {
 	loop?: boolean;
 	/** Peak blur amount in pixels */
 	blurAmount?: number;
+	/** Whether to force text to uppercase */
+	uppercase?: boolean;
 }
 
 export const BlurText: React.FC<BlurTextProps> = ({
@@ -44,8 +46,10 @@ export const BlurText: React.FC<BlurTextProps> = ({
 	easing = "easeOut",
 	loop = false,
 	blurAmount = 10,
+	uppercase = false,
 }) => {
-	const elements = animateBy === "words" ? text.split(" ") : text.split("");
+	const displayText = uppercase ? text.toUpperCase() : text;
+	const elements = animateBy === "words" ? displayText.split(" ") : displayText.split("");
 	const [inView, setInView] = useState(false);
 	const ref = useRef<HTMLParagraphElement>(null);
 	const animatedCount = useRef(0);

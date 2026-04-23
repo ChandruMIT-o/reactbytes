@@ -8,12 +8,13 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { WaveText } from "../../meta/text/Interactive/WaveText";
 import { waveTextProps, waveTextComponentCode, creditsData } from "./WaveTextData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
-import { ComboBox } from "../../components/combobox/ComboBox";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 
 const DEFAULT_TEXT = "RESONANCE";
 const DEFAULT_MAX_DISTANCE = 120;
@@ -28,6 +29,8 @@ const presets = [
 			text: "RESONANCE",
 			maxDistance: 120,
 			hoverColor: "#34d399",
+			color: "#FFFFFF",
+			uppercase: true,
 			textClassName: "text-5xl font-bold",
 		},
 	},
@@ -38,22 +41,19 @@ const presets = [
 			text: "AMPLITUDE",
 			maxDistance: 200,
 			hoverColor: "#fbbf24",
+			color: "#FFFFFF",
+			uppercase: true,
 			textClassName: "text-5xl tracking-widest font-black",
 		},
 	},
-];
-
-const colorOptions = [
-	{ id: "#34d399", label: "Emerald (#34d399)" },
-	{ id: "#fbbf24", label: "Amber (#fbbf24)" },
-	{ id: "#60a5fa", label: "Blue (#60a5fa)" },
-	{ id: "#c084fc", label: "Purple (#c084fc)" },
 ];
 
 export const WaveTextPage = () => {
 	const [text, setText] = useState(DEFAULT_TEXT);
 	const [maxDistance, setMaxDistance] = useState(DEFAULT_MAX_DISTANCE);
 	const [hoverColor, setHoverColor] = useState(DEFAULT_HOVER_COLOR);
+	const [color, setColor] = useState("#FFFFFF");
+	const [uppercase, setUppercase] = useState(true);
 	const [textClassName, setTextClassName] = useState(DEFAULT_CLASS);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
@@ -65,6 +65,8 @@ export const WaveTextPage = () => {
 			setText(preset.config.text);
 			setMaxDistance(preset.config.maxDistance);
 			setHoverColor(preset.config.hoverColor);
+			setColor(preset.config.color || "#FFFFFF");
+			setUppercase(preset.config.uppercase ?? true);
 			setTextClassName(preset.config.textClassName);
 			setKey((prev) => prev + 1);
 		}
@@ -82,6 +84,8 @@ export const WaveTextPage = () => {
   text="${text}"
   maxDistance={${maxDistance}}
   hoverColor="${hoverColor}"
+  color="${color}"
+  uppercase={${uppercase}}
   textClassName="${textClassName}"
 />`;
 
@@ -104,6 +108,8 @@ export const WaveTextPage = () => {
 								text={text}
 								maxDistance={maxDistance}
 								hoverColor={hoverColor}
+								color={color}
+								uppercase={uppercase}
 								textClassName={textClassName}
 							/>
 						</div>
@@ -113,7 +119,7 @@ export const WaveTextPage = () => {
 					codeContent={waveTextComponentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -123,6 +129,7 @@ export const WaveTextPage = () => {
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
+								label="Presets"
 								dynamicWidth={true}
 							/>
 							<div className="flex items-center gap-3">
@@ -141,28 +148,47 @@ export const WaveTextPage = () => {
 						</div>
 					}
 				>
-					<TextInput
-						label="Text"
+					<DefaultTextInput
+						label="Display Text"
 						value={text}
-						onChange={(e) => {
-							setText(e.target.value);
+						onChange={(val) => {
+							setText(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
 					/>
-					<TextInput
-						label="Tailwind Classes"
-						value={textClassName}
-						onChange={(e) => {
-							setTextClassName(e.target.value);
+
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
 							setKey((prev) => prev + 1);
 						}}
-						placeholder="e.text-5xl font-bold"
 					/>
 
-					<ComboBox
-						label="Hover Color"
-						options={colorOptions}
+					<DiscreteSlider2
+						label="Interaction Radius"
+						min={0}
+						max={400}
+						step={10}
+						value={maxDistance}
+						onChange={setMaxDistance}
+						maxDecimals={0}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Base Color"
+						value={color}
+						onChange={(val) => {
+							setColor(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<ColorPicker
+						label="Active Color"
 						value={hoverColor}
 						onChange={(val) => {
 							setHoverColor(val);
@@ -170,15 +196,14 @@ export const WaveTextPage = () => {
 						}}
 					/>
 
-					<DiscreteSlider
-						label="Max Distance (px)"
-						min={0}
-						max={400}
-						step={10}
-						value={maxDistance}
-						onChange={setMaxDistance}
-						maxDecimals={0}
-						showTicks={false}
+					<DefaultTextInput
+						label="Tailwind Classes"
+						value={textClassName}
+						onChange={(val) => {
+							setTextClassName(val);
+							setKey((prev) => prev + 1);
+						}}
+						placeholder="e.g. text-5xl font-bold"
 					/>
 				</PreviewTab>
 			</div>

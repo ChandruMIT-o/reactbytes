@@ -39,6 +39,7 @@ const presets = [
 			direction: "right",
 			duration: 1.5,
 			color: "#E8EAF0",
+			uppercase: true,
 		},
 	},
 	{
@@ -71,6 +72,7 @@ export const RevealUnderPage = () => {
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [direction, setDirection] = useState<any>(DEFAULT_DIRECTION);
 	const [color, setColor] = useState(DEFAULT_COLOR);
+	const [uppercase, setUppercase] = useState(true);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -83,6 +85,7 @@ export const RevealUnderPage = () => {
 			setDirection(preset.config.direction);
 			setDuration(preset.config.duration);
 			setColor(preset.config.color);
+			setUppercase(preset.config.uppercase ?? true);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -101,6 +104,7 @@ export const RevealUnderPage = () => {
   direction="${direction}"
   duration={${duration}}
   color="${color}"
+  uppercase={${uppercase}}
 />`;
 
 	return (
@@ -124,6 +128,7 @@ export const RevealUnderPage = () => {
 								direction={direction}
 								duration={duration}
 								color={color}
+								uppercase={uppercase}
 								textClassName="text-6xl font-bold tracking-tight font-mono"
 							/>
 						</div>
@@ -133,7 +138,7 @@ export const RevealUnderPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -171,6 +176,7 @@ export const RevealUnderPage = () => {
 						}}
 						placeholder="Enter word..."
 					/>
+
 					<DefaultTextInput
 						label="Second Word"
 						value={secondWord}
@@ -181,6 +187,26 @@ export const RevealUnderPage = () => {
 						placeholder="Enter word..."
 					/>
 
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<DiscreteSlider2
+						label="Reveal Duration"
+						min={0.1}
+						max={3}
+						step={0.1}
+						value={duration}
+						onChange={setDuration}
+						maxDecimals={1}
+						showTicks={true}
+					/>
+
 					<DefaultComboBox
 						label="Reveal Direction"
 						options={directionOptions}
@@ -189,23 +215,13 @@ export const RevealUnderPage = () => {
 							setDirection(val);
 							setKey((prev) => prev + 1);
 						}}
+						dynamicWidth={true}
 					/>
 
 					<ColorPicker
-						label="Text Color"
+						label="Accent Color"
 						value={color}
 						onChange={setColor}
-					/>
-
-					<DiscreteSlider2
-						label="Duration (s)"
-						min={0.1}
-						max={3}
-						step={0.1}
-						value={duration}
-						onChange={setDuration}
-						maxDecimals={1}
-						showTicks={true}
 					/>
 				</PreviewTab>
 			</div>

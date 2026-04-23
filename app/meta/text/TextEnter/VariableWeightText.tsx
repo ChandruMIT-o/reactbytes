@@ -24,6 +24,8 @@ export interface VariableWeightTextProps {
 	containerClassName?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
+	/** Whether to force text to uppercase */
+	uppercase?: boolean;
 }
 
 export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
@@ -37,8 +39,12 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "",
+	uppercase = false,
 }) => {
-	const letters = useMemo(() => text.split(""), [text]);
+	const letters = useMemo(() => {
+		const finalRef = uppercase ? text.toUpperCase() : text;
+		return finalRef.split("");
+	}, [text, uppercase]);
 
 	const variants = {
 		initial: {

@@ -26,27 +26,33 @@ export const loaderProps = [
 				defaultValue: "'up'",
 				description: "The direction letters roll towards.",
 			},
+			{
+				name: "baseColor",
+				type: "string",
+				defaultValue: "'#60a5fa'",
+				description: "The initial color of the text.",
+			},
+			{
+				name: "hoverColor",
+				type: "string",
+				defaultValue: "'#FFFFFF'",
+				description: "The color of the text when revealed on hover.",
+			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force the text to uppercase.",
+			},
 		],
 	},
 	{
 		title: "Styling Props",
 		props: [
 			{
-				name: "baseColorClass",
-				type: "string",
-				defaultValue: "'text-rb-accent-2'",
-				description: "Tailwind class for the initial text color.",
-			},
-			{
-				name: "hoverColorClass",
-				type: "string",
-				defaultValue: "'text-rb-accent-1'",
-				description: "Tailwind class for the revealed text color.",
-			},
-			{
 				name: "textClassName",
 				type: "string",
-				defaultValue: "'text-5xl md:text-7xl font-bold font-sans uppercase tracking-tighter'",
+				defaultValue: "'text-5xl md:text-7xl font-bold font-sans tracking-tighter'",
 				description: "Extra classes for font style and size.",
 			},
 		],
@@ -56,7 +62,7 @@ export const loaderProps = [
 export const componentCode = `"use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 export interface ElasticRevealProps {
 	/** The text to display */
@@ -67,16 +73,18 @@ export interface ElasticRevealProps {
 	stagger?: number;
 	/** Direction of the reveal: 'up' or 'down' */
 	direction?: "up" | "down";
-	/** Tailwind class for the hover/reveal color */
-	hoverColorClass?: string;
-	/** Tailwind class for the base text color */
-	baseColorClass?: string;
+	/** Base color for the text (hex) */
+	baseColor?: string;
+	/** Hover color for the text (hex) */
+	hoverColor?: string;
 	/** Additional wrapper CSS classes */
 	className?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
 	/** Link URL if the component should act as a link */
 	href?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const ElasticReveal: React.FC<ElasticRevealProps> = ({
@@ -84,13 +92,15 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 	duration = 0.6,
 	stagger = 0.02,
 	direction = "up",
-	hoverColorClass = "text-rb-accent-1",
-	baseColorClass = "text-rb-accent-2",
+	baseColor = "#60a5fa",
+	hoverColor = "#FFFFFF",
 	className = "",
-	textClassName = "text-5xl md:text-7xl font-bold font-sans uppercase tracking-tighter",
+	textClassName = "text-5xl md:text-7xl font-bold font-sans tracking-tighter",
 	href,
+	uppercase = false,
 }) => {
-	const letters = text.split("");
+	const displayText = uppercase ? text.toUpperCase() : text;
+	const letters = displayText.split("");
 	const yOffset = direction === "up" ? "-100%" : "100%";
 
 	const containerVariants = {
@@ -98,14 +108,14 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 		hover: {},
 	};
 
-	const letterVariants = {
+	const letterVariants: Variants = {
 		initial: { y: 0 },
 		hover: (i: number) => ({
 			y: yOffset,
 			transition: {
 				duration,
 				delay: i * stagger,
-				ease: [0.215, 0.61, 0.355, 1],
+				ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number],
 			},
 		}),
 	};
@@ -117,19 +127,22 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 			variants={containerVariants}
 			className={\`relative inline-flex overflow-hidden cursor-pointer select-none leading-[0.8] \${className}\`}
 		>
-			<span className="sr-only">{text}</span>
+			<span className="sr-only">{displayText}</span>
 			<div className={\`flex \${textClassName}\`} aria-hidden="true">
 				{letters.map((char, i) => (
 					<motion.span
 						key={i}
 						custom={i}
 						variants={letterVariants}
-						className={\`relative inline-block whitespace-pre \${baseColorClass}\`}
+						className="relative inline-block whitespace-pre"
 					>
-						{char}
-						<span 
-							className={\`absolute top-0 left-0 \${hoverColorClass}\`}
-							style={{ transform: \`translateY(\${direction === "up" ? "100%" : "-100%"})\` }}
+						<span style={{ color: baseColor }}>{char}</span>
+						<span
+							className="absolute top-0 left-0"
+							style={{
+								color: hoverColor,
+								transform: \`translateY(\${direction === "up" ? "100%" : "-100%"})\`
+							}}
 						>
 							{char}
 						</span>

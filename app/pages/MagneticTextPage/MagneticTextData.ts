@@ -26,6 +26,18 @@ export const magneticTextProps = [
 				defaultValue: "'#c084fc'",
 				description: "Color to apply when the character is deflected.",
 			},
+			{
+				name: "color",
+				type: "string",
+				defaultValue: "'#FFFFFF'",
+				description: "The base color of the text letters.",
+			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force the text to uppercase.",
+			},
 		],
 	},
 	{
@@ -56,6 +68,10 @@ export interface MagneticTextProps {
 	repelForce?: number;
 	/** Hover text color */
 	hoverColor?: string;
+	/** Base color for the text */
+	color?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const MagneticText: React.FC<MagneticTextProps> = ({
@@ -64,9 +80,13 @@ export const MagneticText: React.FC<MagneticTextProps> = ({
 	maxDistance = 140,
 	repelForce = 30,
 	hoverColor = "#c084fc",
+	color = "#FFFFFF",
+	uppercase = false,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
+
+	const displayText = uppercase ? text.toUpperCase() : text;
 
 	const handleMove = (clientX: number, clientY: number) => {
 		if (!containerRef.current) return;
@@ -104,7 +124,7 @@ export const MagneticText: React.FC<MagneticTextProps> = ({
 
 	const resetLetter = (letter: HTMLSpanElement) => {
 		letter.style.transform = \`translate(0px, 0px) rotate(0deg) scale(1)\`;
-		letter.style.color = "inherit";
+		letter.style.color = color;
 		letter.style.zIndex = "1";
 	};
 
@@ -127,14 +147,16 @@ export const MagneticText: React.FC<MagneticTextProps> = ({
 			}
 			onMouseLeave={handleMouseLeave}
 			onTouchEnd={handleMouseLeave}
+			style={{ color }}
 			className={\`flex flex-wrap cursor-default touch-none \${textClassName}\`}
 		>
-			{text.split("").map((char, i) => (
+			{displayText.split("").map((char, i) => (
 				<span
 					key={i}
 					ref={(el) => {
 						lettersRef.current[i] = el;
 					}}
+					style={{ color }}
 					className="inline-block transition-all duration-300 ease-out origin-center"
 				>
 					{char === " " ? "\\u00A0" : char}

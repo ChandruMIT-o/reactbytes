@@ -1,3 +1,89 @@
+export const accordionProps = [
+	{
+		title: "Physics Dynamics",
+		props: [
+			{
+				name: "stiffness",
+				type: "number",
+				defaultValue: "250",
+				description: "Stiffness of the spring. Higher values make the movement snappier.",
+			},
+			{
+				name: "damping",
+				type: "number",
+				defaultValue: "30",
+				description: "Strength of opposing force. Lower values create more 'bounce'.",
+			},
+			{
+				name: "mass",
+				type: "number",
+				defaultValue: "1.0",
+				description: "The weight of the moving object. Higher mass feels heavier and slower.",
+			},
+		],
+	},
+	{
+		title: "Interactivity",
+		props: [
+			{
+				name: "floatOffset",
+				type: "number",
+				defaultValue: "24",
+				description: "The vertical distance items float away when an adjacent item expands.",
+			},
+			{
+				name: "hoverScale",
+				type: "number",
+				defaultValue: "1.01",
+				description: "The scale multiplier applied to items on hover.",
+			},
+			{
+				name: "allowMultiple",
+				type: "boolean",
+				defaultValue: "false",
+				description: "If true, multiple accordion items can be open simultaneously.",
+			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "If true, transforms item titles to uppercase.",
+			},
+		],
+	},
+	{
+		title: "Aesthetics",
+		props: [
+			{
+				name: "backgroundColorOpen",
+				type: "string",
+				defaultValue: "'#181A1E'",
+				description: "Background color of the accordion item when it is open.",
+			},
+			{
+				name: "backgroundColorClosed",
+				type: "string",
+				defaultValue: "'#060010'",
+				description: "Background color of the accordion item when it is closed.",
+			},
+			{
+				name: "titleColor",
+				type: "string",
+				defaultValue: "'#FFFFFF'",
+				description: "Color of the title and icon.",
+			},
+			{
+				name: "contentColor",
+				type: "string",
+				defaultValue: "'#A1A1AA'",
+				description: "Color of the expanded content text.",
+			},
+		],
+	},
+];
+
+export const componentCode = `"use client";
+
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -147,7 +233,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
             >
                 <div 
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                    style={{ backgroundColor: `${backgroundColorOpen}20` }} 
+                    style={{ backgroundColor: backgroundColorOpen + "20" }} 
                 />
 
                 <svg
@@ -201,79 +287,27 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         </motion.div>
     );
 };
+`;
 
-export default function StandardAccordion({
-    data = defaultAccordionData,
-    backgroundColorOpen = "#181A1E",
-    backgroundColorClosed = "#060010",
-    floatOffset = 24,
-    stiffness = 250,
-    damping = 30,
-    mass = 1,
-    titleColor = "#FFFFFF",
-    contentColor = "#A1A1AA",
-    hoverScale = 1.01,
-    allowMultiple = false,
-    uppercase = false,
-}: StandardAccordionProps) {
-    const [activeIndices, setActiveIndices] = useState<number[]>([]);
-
-    const handleToggle = (index: number) => {
-        if (allowMultiple) {
-            setActiveIndices(prev => 
-                prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
-            );
-        } else {
-            setActiveIndices(prev => prev.includes(index) ? [] : [index]);
-        }
-    };
-
-    return (
-        <div className="w-full max-w-[600px] mx-auto py-12 px-4 flex flex-col items-center">
-            <div className="w-full relative">
-                {data.map((item, index) => {
-                    const isOpen = activeIndices.includes(index);
-                    const isAnyOpen = activeIndices.length > 0;
-                    
-                    // Logic for floating nearby items (only works well for single open)
-                    const closestOpenIndex = activeIndices.length > 0 
-                        ? activeIndices.reduce((prev, curr) => 
-                            Math.abs(curr - index) < Math.abs(prev - index) ? curr : prev
-                          )
-                        : -1;
-                    
-                    const isBeforeOpen = closestOpenIndex !== -1 && index < closestOpenIndex;
-                    const isAfterOpen = closestOpenIndex !== -1 && index > closestOpenIndex;
-                    const isLastBeforeOpen = closestOpenIndex !== -1 && index === closestOpenIndex - 1;
-                    const isFirstAfterOpen = closestOpenIndex !== -1 && index === closestOpenIndex + 1;
-
-                    return (
-                        <AccordionItem
-                            key={item.id}
-                            item={item}
-                            isOpen={isOpen}
-                            isAnyOpen={isAnyOpen}
-                            isBeforeOpen={isBeforeOpen}
-                            isAfterOpen={isAfterOpen}
-                            isLastBeforeOpen={isLastBeforeOpen}
-                            isFirstAfterOpen={isFirstAfterOpen}
-                            isFirst={index === 0}
-                            isLast={index === data.length - 1}
-                            onClick={() => handleToggle(index)}
-                            backgroundColorOpen={backgroundColorOpen}
-                            backgroundColorClosed={backgroundColorClosed}
-                            floatOffset={floatOffset}
-                            stiffness={stiffness}
-                            damping={damping}
-                            mass={mass}
-                            titleColor={titleColor}
-                            contentColor={contentColor}
-                            hoverScale={hoverScale}
-                            uppercase={uppercase}
-                        />
-                    );
-                })}
-            </div>
-        </div>
-    );
-}
+export const creditsData = [
+	{
+		title: "Inspiration",
+		items: [
+			{
+				name: "Build Your Own Craft",
+				role: "Design Concept",
+				url: "https://buildyourowncraft.com",
+			},
+		],
+	},
+	{
+		title: "Project",
+		items: [
+			{
+				name: "React Bytes",
+				role: "Component Collection",
+				url: "https://reactbytes.dev",
+			},
+		],
+	},
+];

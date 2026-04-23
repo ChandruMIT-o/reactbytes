@@ -32,6 +32,7 @@ const presets = [
 			stagger: 0.04,
 			initialBlur: 12,
 			color: "#E8EAF0",
+			uppercase: false,
 		},
 	},
 	{
@@ -75,6 +76,7 @@ export const BlurInPage = () => {
 	const [stagger, setStagger] = useState(DEFAULT_STAGGER);
 	const [initialBlur, setInitialBlur] = useState(DEFAULT_BLUR);
 	const [color, setColor] = useState(DEFAULT_COLOR);
+	const [uppercase, setUppercase] = useState(false);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -87,6 +89,7 @@ export const BlurInPage = () => {
 			setStagger(preset.config.stagger);
 			setInitialBlur(preset.config.initialBlur);
 			setColor(preset.config.color);
+			setUppercase(preset.config.uppercase ?? false);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -105,6 +108,7 @@ export const BlurInPage = () => {
   stagger={${stagger}}
   initialBlur={${initialBlur}}
   color="${color}"
+  uppercase={${uppercase}}
 />`;
 
 	return (
@@ -128,6 +132,7 @@ export const BlurInPage = () => {
 								stagger={stagger}
 								initialBlur={initialBlur}
 								color={color}
+								uppercase={uppercase}
 								textClassName="text-6xl font-bold tracking-tight font-mono"
 							/>
 						</div>
@@ -137,7 +142,7 @@ export const BlurInPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -167,7 +172,7 @@ export const BlurInPage = () => {
 					}
 				>
 					<DefaultTextInput
-						label="Text Content"
+						label="Display Text"
 						value={text}
 						onChange={(val) => {
 							setText(val);
@@ -176,14 +181,17 @@ export const BlurInPage = () => {
 						placeholder="Enter text..."
 					/>
 
-					<ColorPicker
-						label="Text Color"
-						value={color}
-						onChange={setColor}
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
 					/>
 
 					<DiscreteSlider2
-						label="Duration (s)"
+						label="Transition Duration"
 						min={0.1}
 						max={3}
 						step={0.1}
@@ -194,7 +202,7 @@ export const BlurInPage = () => {
 					/>
 
 					<DiscreteSlider2
-						label="Stagger (s)"
+						label="Stagger Delay"
 						min={0}
 						max={0.5}
 						step={0.005}
@@ -205,13 +213,19 @@ export const BlurInPage = () => {
 					/>
 
 					<DiscreteSlider2
-						label="Initial Blur (px)"
+						label="Blur Intensity"
 						min={0}
 						max={100}
 						step={2}
 						value={initialBlur}
 						onChange={setInitialBlur}
 						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Accent Color"
+						value={color}
+						onChange={setColor}
 					/>
 				</PreviewTab>
 			</div>

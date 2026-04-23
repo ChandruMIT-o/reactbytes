@@ -14,14 +14,16 @@ export interface ScrambleRevealProps {
 	scrambleStagger?: number;
 	/** Delay increment for the second phase (actual reveal) */
 	revealStagger?: number;
-	/** Tailwind class for the text color */
-	textColorClass?: string;
+	/** Hex color for the text color */
+	color?: string;
 	/** Additional wrapper CSS classes */
 	className?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
 	/** Manual letter spacing adjustment */
 	letterSpacing?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 /**
@@ -35,12 +37,14 @@ export const ScrambleReveal: React.FC<ScrambleRevealProps> = ({
 	duration = 0.8,
 	scrambleStagger = 0.05,
 	revealStagger = 0.1,
-	textColorClass = "text-rb-accent-1",
+	color = "#E8EAF0",
 	className = "",
-	textClassName = "text-6xl md:text-9xl font-bold font-mono uppercase leading-[0.75]",
+	textClassName = "text-4xl md:text-4xl font-bold font-mono leading-[0.75]",
 	letterSpacing = "0em",
+	uppercase = false,
 }) => {
-	const letters = text.split("");
+	const displayText = uppercase ? text.toUpperCase() : text;
+	const letters = displayText.split("");
 	const containerRef = useRef<HTMLDivElement>(null);
 	const isInView = useInView(containerRef, { once: true, margin: "-100px" });
 	const controls = useAnimation();
@@ -48,13 +52,11 @@ export const ScrambleReveal: React.FC<ScrambleRevealProps> = ({
 	// Generate a stable random scramble character for each position
 	const randomScrambleChars = useMemo(() => {
 		return letters.map(() => scrambleChars[Math.floor(Math.random() * scrambleChars.length)]);
-	}, [text, scrambleChars]);
+	}, [displayText, scrambleChars]);
 
 	useEffect(() => {
 		if (isInView) {
 			const runSequence = async () => {
-				// Initial state: Everything hidden above (-100%)
-				
 				// Phase 1: Reveal the "Scramble" character (Slide to 0%)
 				await controls.start((i) => ({
 					y: "0%",
@@ -66,7 +68,6 @@ export const ScrambleReveal: React.FC<ScrambleRevealProps> = ({
 				}));
 
 				// Phase 2: Reveal the "Target" character (Slide to 100%)
-				// This pushes the scramble char down and brings the target char from above.
 				await controls.start((i) => ({
 					y: "100%",
 					transition: {
@@ -85,15 +86,15 @@ export const ScrambleReveal: React.FC<ScrambleRevealProps> = ({
 			ref={containerRef}
 			className={`relative flex items-center justify-center overflow-hidden select-none px-4 ${className}`}
 		>
-			<span className="sr-only">{text}</span>
-			<div 
-				className={`flex items-baseline ${textClassName}`} 
-				aria-hidden="true" 
-				style={{ letterSpacing }}
+			<span className="sr-only">{displayText}</span>
+			<div
+				className={`flex items-baseline ${textClassName}`}
+				aria-hidden="true"
+				style={{ letterSpacing, color }}
 			>
 				{letters.map((char, i) => (
-					<div 
-						key={`${char}-${i}`} 
+					<div
+						key={`${char}-${i}`}
 						className="relative overflow-hidden inline-block"
 					>
 						<motion.div
@@ -102,20 +103,17 @@ export const ScrambleReveal: React.FC<ScrambleRevealProps> = ({
 							animate={controls}
 							className="relative flex flex-col items-center"
 						>
-							{/* 
-								Layout is stacked vertically:
-								[Target Character]  (Visible when y=100%)
-								[Scramble Character] (Visible when y=0%)
-								
-								The target character sits ABOVE the scramble character.
-							*/}
-							<span 
-								className={`absolute bottom-full left-0 w-full text-center ${textColorClass}`}
+							<span
+								className="absolute bottom-full left-0 w-full text-center"
+								style={{ color }}
 							>
 								{char === " " ? "\u00A0" : char}
 							</span>
-							
-							<span className={`relative block ${textColorClass} opacity-60`}>
+
+							<span
+								className="relative block opacity-60"
+								style={{ color }}
+							>
 								{char === " " ? "\u00A0" : randomScrambleChars[i]}
 							</span>
 						</motion.div>

@@ -128,6 +128,10 @@ export interface PerlinSmokeProps {
     className?: string;
     /** Mouse interaction strength */
     mouseInteraction?: number;
+    /** Whether to force overlay text to uppercase */
+    uppercase?: boolean;
+    /** Overlay content */
+    children?: React.ReactNode;
 }
 
 export const PerlinSmoke: React.FC<PerlinSmokeProps> = ({
@@ -140,7 +144,9 @@ export const PerlinSmoke: React.FC<PerlinSmokeProps> = ({
     scale = 0.9,
     maxFPS = 50,
     mouseInteraction = 0.5,
+    uppercase = false,
     className = "",
+    children,
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationFrameRef = useRef<number>(0);
@@ -307,10 +313,17 @@ export const PerlinSmoke: React.FC<PerlinSmokeProps> = ({
     }, [baseColor, speed, turbulence, milk, eco, dprCeil, scale, maxFPS, mouseInteraction]);
 
     return (
-        <canvas
-            ref={canvasRef}
-            className={`w-full h-full block ${className}`}
-        />
+        <div className={`relative isolate w-full h-full overflow-hidden ${className}`}>
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full block"
+            />
+            {children && (
+                <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none ${uppercase ? "uppercase" : ""}`}>
+                    {children}
+                </div>
+            )}
+        </div>
     );
 };
 

@@ -69,9 +69,15 @@ export const loaderProps = [
 			},
 			{
 				name: "color1",
-				type: "[number, number, number]",
-				defaultValue: "[124, 92, 255]",
-				description: "Primary color (RGB array) for resting dots.",
+				type: "string",
+				defaultValue: "'#7c5cff'",
+				description: "Primary color (hex) for resting dots.",
+			},
+			{
+				name: "color2",
+				type: "string",
+				defaultValue: "'#2ee6a6'",
+				description: "Secondary color (hex) for displaced dots.",
 			},
 		],
 	},
@@ -79,23 +85,46 @@ export const loaderProps = [
 
 export const componentCode = `"use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import useMeasure from "react-use-measure";
 
 export interface MagneticDotMeshProps {
+	/** Grid spacing between dots */
 	gap?: number;
+	/** Resting radius of the dots */
 	dotRadius?: number;
+	/** Radius of mouse repulsion influence */
 	repelRadius?: number;
+	/** Strength of the mouse repulsion push */
 	repelForce?: number;
+	/** Stiffness of the spring pulling dots back to home positions */
 	springStiffness?: number;
+	/** Velocity decay factor */
 	damping?: number;
+	/** Max distance for connecting dots with mesh lines */
 	lineDist?: number;
+	/** Reach of the shockwave after a click */
 	shockwaveDist?: number;
+	/** Strength of the shockwave push */
 	shockwaveForce?: number;
-	color1?: [number, number, number];
-	color2?: [number, number, number];
+	/** Primary color in hex */
+	color1?: string;
+	/** Secondary color in hex */
+	color2?: string;
+	/** Additional CSS classes for the container */
 	className?: string;
 }
+
+const hexToRgb = (hex: string): [number, number, number] => {
+	const result = /^#?([a-f\\d]{2})([a-f\\d]{2})([a-f\\d]{2})$/i.exec(hex);
+	return result
+		? [
+			parseInt(result[1], 16),
+			parseInt(result[2], 16),
+			parseInt(result[3], 16),
+		]
+		: [255, 255, 255];
+};
 
 export const MagneticDotMesh: React.FC<MagneticDotMeshProps> = ({
 	gap = 48,
@@ -107,8 +136,8 @@ export const MagneticDotMesh: React.FC<MagneticDotMeshProps> = ({
 	lineDist = 70,
 	shockwaveDist = 220,
 	shockwaveForce = 22,
-	color1 = [124, 92, 255],
-	color2 = [46, 230, 166],
+	color1 = "#7c5cff",
+	color2 = "#2ee6a6",
 	className = "",
 }) => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -116,6 +145,17 @@ export const MagneticDotMesh: React.FC<MagneticDotMeshProps> = ({
 	const dotsRef = useRef<any[]>([]);
 	const clicksRef = useRef<any[]>([]);
 	const mouseRef = useRef({ x: -9999, y: -9999 });
+
+	const rgb1 = useMemo(() => hexToRgb(color1), [color1]);
+	const rgb2 = useMemo(() => hexToRgb(color2), [color2]);
+
+	const lerpColor = (a: number[], b: number[], t: number) => {
+		return [
+			Math.round(a[0] + (b[0] - a[0]) * t),
+			Math.round(a[1] + (b[1] - a[1]) * t),
+			Math.round(a[2] + (b[2] - a[2]) * t),
+		];
+	};
 
 	useEffect(() => {
 		if (bounds.width === 0 || bounds.height === 0) return;
@@ -175,26 +215,39 @@ export const MagneticDotMesh: React.FC<MagneticDotMeshProps> = ({
 				const a = dots[i];
 				for (let j = i + 1; j < dots.length; j++) {
 					const b = dots[j];
-					const d = Math.hypot(a.x - b.x, a.y - b.y);
+					const dx = a.x - b.x, dy = a.y - b.y;
+					const d = Math.sqrt(dx * dx + dy * dy);
 					if (d > lineDist) continue;
-					const alpha = (1 - d / lineDist) * 0.15;
+
+					const dispA = Math.hypot(a.x - a.ox, a.y - a.oy);
+					const dispB = Math.hypot(b.x - b.ox, b.y - b.oy);
+					const t = Math.min((dispA + dispB) / 2 / (repelRadius * 0.6), 1);
+					const alpha = (1 - d / lineDist) * (0.06 + t * 0.25);
+					const [r, g, bColor] = lerpColor(rgb1, rgb2, t);
+
 					ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-					ctx.strokeStyle = \`rgba(124, 92, 255, \${alpha})\`;
+					ctx.strokeStyle = \\\`rgba(\${r},\${g},\${bColor},\${alpha})\\\`;
 					ctx.lineWidth = 0.8; ctx.stroke();
 				}
 			}
 			for (const d of dots) {
-				ctx.beginPath(); ctx.arc(d.x, d.y, dotRadius, 0, Math.PI * 2);
-				ctx.fillStyle = \`rgba(124, 92, 255, 0.4)\`; ctx.fill();
+				const disp = Math.hypot(d.x - d.ox, d.y - d.oy);
+				const t = Math.min(disp / (repelRadius * 0.5), 1);
+				const [r, g, bColor] = lerpColor(rgb1, rgb2, t);
+				const alpha = 0.2 + t * 0.8;
+				const radius = dotRadius + t * 2.5;
+
+				ctx.beginPath(); ctx.arc(d.x, d.y, radius, 0, Math.PI * 2);
+				ctx.fillStyle = \\\`rgba(\${r},\${g},\${bColor},\${alpha})\\\`; ctx.fill();
 			}
 			animationFrameId = requestAnimationFrame(tick);
 		};
 		tick();
 		return () => cancelAnimationFrame(animationFrameId);
-	}, [bounds.width, bounds.height, repelRadius, repelForce, shockwaveDist, shockwaveForce, springStiffness, damping, lineDist, dotRadius]);
+	}, [bounds.width, bounds.height, repelRadius, repelForce, shockwaveDist, shockwaveForce, springStiffness, damping, lineDist, dotRadius, rgb1, rgb2]);
 
 	return (
-		<div ref={containerRef} className={\`w-full h-full bg-background \${className}\`}>
+		<div ref={containerRef} className=\\\`w-full h-full min-h-[300px] bg-background overflow-hidden \\\${className}\\\`>
 			<canvas
 				ref={canvasRef}
 				width={bounds.width}
@@ -203,10 +256,12 @@ export const MagneticDotMesh: React.FC<MagneticDotMeshProps> = ({
 					const r = canvasRef.current.getBoundingClientRect();
 					mouseRef.current = { x: e.clientX - r.left, y: e.clientY - r.top };
 				}}
+				onMouseLeave={() => { mouseRef.current = { x: -9999, y: -9999 }; }}
 				onClick={(e) => {
 					const r = canvasRef.current.getBoundingClientRect();
 					clicksRef.current.push({ x: e.clientX - r.left, y: e.clientY - r.top, t: 0 });
 				}}
+				className="block cursor-crosshair"
 			/>
 		</div>
 	);

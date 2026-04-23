@@ -9,10 +9,11 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import CellularAutomataBackground from "../../meta/background/cellular/CellularAutomataBackground";
 import { fluxProps, componentCode, creditsData } from "./CellularAutomataData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import ColorPicker from "../../components/colorpicker/ColorPicker";
 import { Credits } from "../../components/buttongroup/Credits";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 
 const presets = [
@@ -21,6 +22,7 @@ const presets = [
 		label: "Electric Silk",
 		config: {
 			title: "FLUX ENERGY",
+			uppercase: true,
 			colorA: "#050812",
 			colorB: "#1e1b4b",
 			colorC: "#818cf8",
@@ -76,6 +78,7 @@ export const CellularAutomataPage = () => {
 
 	const [currentPreset, setCurrentPreset] = useState(defaultPreset.id);
 	const [title, setTitle] = useState(defaultPreset.config.title);
+	const [uppercase, setUppercase] = useState(defaultPreset.config.uppercase ?? true);
 	const [colorA, setColorA] = useState(defaultPreset.config.colorA);
 	const [colorB, setColorB] = useState(defaultPreset.config.colorB);
 	const [colorC, setColorC] = useState(defaultPreset.config.colorC);
@@ -91,6 +94,7 @@ export const CellularAutomataPage = () => {
 		if (!preset) return;
 		setCurrentPreset(presetId);
 		setTitle(preset.config.title);
+		setUppercase(preset.config.uppercase ?? true);
 		setColorA(preset.config.colorA);
 		setColorB(preset.config.colorB);
 		setColorC(preset.config.colorC);
@@ -114,6 +118,7 @@ export const CellularAutomataPage = () => {
   opacity={${opacity}}
   vignetteIntensity={${vignetteIntensity}}
   blurAmount={${blurAmount}}
+  uppercase={${uppercase}}
 >
   <h1 className="text-white font-bold">{title}</h1>
 </FluxBackground>`;
@@ -142,6 +147,7 @@ export const CellularAutomataPage = () => {
 								opacity={opacity}
 								vignetteIntensity={vignetteIntensity}
 								blurAmount={blurAmount}
+								uppercase={uppercase}
 							>
 								<div className="flex flex-col items-center gap-3 text-center px-6">
 									<div className="text-[clamp(1.5rem,5vw,3.5rem)] font-bold tracking-[0.2em] text-white">
@@ -158,7 +164,7 @@ export const CellularAutomataPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase tracking-[0.1em]">Engine Parameters</h3>
 							<DefaultComboBox
 								options={presets}
@@ -182,104 +188,108 @@ export const CellularAutomataPage = () => {
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="Hero Text"
 						value={title}
-						onChange={(e) => setTitle(e.target.value)}
+						onChange={(val) => setTitle(val)}
 						placeholder="Enter text..."
 					/>
 
-					<DiscreteSlider
+					<ToggleComponent
+						label="Uppercase Text"
+						checked={uppercase}
+						onChange={(val) => setUppercase(val)}
+					/>
+
+					<DiscreteSlider2
 						label="Flow Velocity"
 						min={0.1}
 						max={2.0}
 						step={0.1}
 						value={speed}
-						onChange={setSpeed}
+						onChange={(val) => setSpeed(val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Noise Complexity (Scale)"
+					<DiscreteSlider2
+						label="Noise Complexity"
 						min={0.5}
 						max={3.0}
 						step={0.1}
 						value={scale}
-						onChange={setScale}
+						onChange={(val) => setScale(val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Energy Intensity"
 						min={0.5}
 						max={2.0}
 						step={0.1}
 						value={intensity}
-						onChange={setIntensity}
+						onChange={(val) => setIntensity(val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Display Opacity"
 						min={0.0}
 						max={1.0}
 						step={0.1}
 						value={opacity}
-						onChange={setOpacity}
+						onChange={(val) => setOpacity(val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Vignette Strength"
 						min={0.0}
 						max={1.0}
 						step={0.1}
 						value={vignetteIntensity}
-						onChange={setVignetteIntensity}
+						onChange={(val) => setVignetteIntensity(val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Atmospheric Blur"
 						min={0}
 						max={20}
 						step={1}
 						value={blurAmount}
-						onChange={setBlurAmount}
+						onChange={(val) => setBlurAmount(val)}
 						maxDecimals={0}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<div className="space-y-4 pt-4 border-t border-rb-neutral-4/30">
-						<ColorPicker
-							label="Void Phase"
-							value={colorA}
-							onChange={setColorA}
-							compact={true}
-							presets={["#050812", "#0a0a0a", "#020808", "#0c0202"]}
-						/>
+					<ColorPicker
+						label="Void Phase"
+						value={colorA}
+						onChange={setColorA}
+						compact={true}
+						presets={["#050812", "#0a0a0a", "#020808", "#0c0202"]}
+					/>
 
-						<ColorPicker
-							label="Flow Phase"
-							value={colorB}
-							onChange={setColorB}
-							compact={true}
-							presets={["#1e1b4b", "#1a1a1a", "#0e7490", "#78350f"]}
-						/>
+					<ColorPicker
+						label="Flow Phase"
+						value={colorB}
+						onChange={setColorB}
+						compact={true}
+						presets={["#1e1b4b", "#1a1a1a", "#0e7490", "#78350f"]}
+					/>
 
-						<ColorPicker
-							label="Strand Phase"
-							value={colorC}
-							onChange={setColorC}
-							compact={true}
-							presets={["#818cf8", "#ffffff", "#2dd4bf", "#fbbf24"]}
-						/>
-					</div>
+					<ColorPicker
+						label="Strand Phase"
+						value={colorC}
+						onChange={setColorC}
+						compact={true}
+						presets={["#818cf8", "#ffffff", "#2dd4bf", "#fbbf24"]}
+					/>
 				</PreviewTab>
 			</div>
 

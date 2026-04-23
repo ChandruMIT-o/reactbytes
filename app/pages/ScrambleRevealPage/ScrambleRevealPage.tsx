@@ -8,11 +8,13 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { ScrambleReveal } from "../../meta/text/TextEnter/ScrambleReveal";
 import { loaderProps, componentCode, creditsData } from "./ScrambleRevealData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 
 const DEFAULT_TEXT = "CREATIVE";
 const DEFAULT_SCRAMBLE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*";
@@ -30,6 +32,8 @@ const presets = [
 			duration: 0.8,
 			scrambleStagger: 0.05,
 			revealStagger: 0.1,
+			color: "#34d399",
+			uppercase: true,
 		},
 	},
 	{
@@ -41,6 +45,8 @@ const presets = [
 			duration: 0.4,
 			scrambleStagger: 0.02,
 			revealStagger: 0.05,
+			color: "#10b981",
+			uppercase: true,
 		},
 	},
 	{
@@ -52,6 +58,8 @@ const presets = [
 			duration: 1.2,
 			scrambleStagger: 0.08,
 			revealStagger: 0.15,
+			color: "#60a5fa",
+			uppercase: true,
 		},
 	},
 ];
@@ -62,6 +70,8 @@ export const ScrambleRevealPage = () => {
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [scrambleStagger, setScrambleStagger] = useState(DEFAULT_SCRAMBLE_STAGGER);
 	const [revealStagger, setRevealStagger] = useState(DEFAULT_REVEAL_STAGGER);
+	const [color, setColor] = useState("#34d399");
+	const [uppercase, setUppercase] = useState(true);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -74,6 +84,8 @@ export const ScrambleRevealPage = () => {
 			setDuration(preset.config.duration);
 			setScrambleStagger(preset.config.scrambleStagger);
 			setRevealStagger(preset.config.revealStagger);
+			setColor(preset.config.color || "#34d399");
+			setUppercase(preset.config.uppercase ?? true);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -88,6 +100,8 @@ export const ScrambleRevealPage = () => {
   duration={${duration}}
   scrambleStagger={${scrambleStagger}}
   revealStagger={${revealStagger}}
+  color="${color}"
+  uppercase={${uppercase}}
 />`;
 
 	return (
@@ -111,6 +125,8 @@ export const ScrambleRevealPage = () => {
 								duration={duration}
 								scrambleStagger={scrambleStagger}
 								revealStagger={revealStagger}
+								color={color}
+								uppercase={uppercase}
 							/>
 						</div>
 					}
@@ -119,7 +135,7 @@ export const ScrambleRevealPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Configuration
@@ -130,6 +146,7 @@ export const ScrambleRevealPage = () => {
 									options={presets}
 									value={currentPreset}
 									onChange={applyPreset}
+									label="Presets"
 									dynamicWidth={true}
 								/>
 								<button
@@ -146,62 +163,85 @@ export const ScrambleRevealPage = () => {
 						</div>
 					}
 				>
-					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-						<TextInput
-							label="Target Text"
-							value={text}
-							onChange={(e) => {
-								setText(e.target.value);
-								setKey((prev) => prev + 1);
-							}}
-							placeholder="Enter text..."
-						/>
+					<DefaultTextInput
+						label="Target Text"
+						value={text}
+						onChange={(val) => {
+							setText(val);
+							setKey((prev) => prev + 1);
+						}}
+						placeholder="Enter text..."
+					/>
 
-						<TextInput
-							label="Scramble Characters"
-							value={scrambleChars}
-							onChange={(e) => {
-								setScrambleChars(e.target.value);
-								setKey((prev) => prev + 1);
-							}}
-							placeholder="e.g. !@#$%"
-						/>
-					</div>
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
 
-					<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
-						<DiscreteSlider
-							label="Phase Duration (s)"
-							min={0.1}
-							max={3}
-							step={0.1}
-							value={duration}
-							onChange={setDuration}
-							maxDecimals={1}
-							showTicks={false}
-						/>
+					<DiscreteSlider2
+						label="Animation Speed"
+						min={0.1}
+						max={3}
+						step={0.1}
+						value={duration}
+						onChange={(val) => {
+							setDuration(val);
+							setKey((prev) => prev + 1);
+						}}
+						maxDecimals={1}
+						showTicks={true}
+					/>
 
-						<DiscreteSlider
-							label="Scramble Stagger (s)"
-							min={0}
-							max={0.5}
-							step={0.01}
-							value={scrambleStagger}
-							onChange={setScrambleStagger}
-							maxDecimals={2}
-							showTicks={false}
-						/>
+					<DiscreteSlider2
+						label="Scramble Stagger"
+						min={0}
+						max={0.5}
+						step={0.01}
+						value={scrambleStagger}
+						onChange={(val) => {
+							setScrambleStagger(val);
+							setKey((prev) => prev + 1);
+						}}
+						maxDecimals={2}
+						showTicks={true}
+					/>
 
-						<DiscreteSlider
-							label="Reveal Stagger (s)"
-							min={0}
-							max={0.5}
-							step={0.01}
-							value={revealStagger}
-							onChange={setRevealStagger}
-							maxDecimals={2}
-							showTicks={false}
-						/>
-					</div>
+					<DiscreteSlider2
+						label="Reveal Stagger"
+						min={0}
+						max={0.5}
+						step={0.01}
+						value={revealStagger}
+						onChange={(val) => {
+							setRevealStagger(val);
+							setKey((prev) => prev + 1);
+						}}
+						maxDecimals={2}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Accent Color"
+						value={color}
+						onChange={(val) => {
+							setColor(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<DefaultTextInput
+						label="Scramble Set"
+						value={scrambleChars}
+						onChange={(val) => {
+							setScrambleChars(val);
+							setKey((prev) => prev + 1);
+						}}
+						placeholder="e.g. !@#$%"
+					/>
 				</PreviewTab>
 			</div>
 

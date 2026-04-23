@@ -10,33 +10,40 @@ export interface GooeyMorphProps {
 	duration?: number;
 	/** Morph speed in seconds */
 	morphSpeed?: number;
-	/** Tailwind class for text color */
-	textColorClass?: string;
+	/** Hex color for text color */
+	color?: string;
 	/** Additional wrapper CSS classes */
 	className?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
 	/** Vertical offset for the morph animation */
 	yOffset?: number;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const GooeyMorph: React.FC<GooeyMorphProps> = ({
 	words = ["CREATE", "DESIGN", "DEVELOP"],
 	duration = 3,
 	morphSpeed = 1,
-	textColorClass = "text-rb-accent-1",
+	color = "#E8EAF0",
 	className = "",
-	textClassName = "text-4xl md:text-6xl font-bold font-sans tracking-tighter uppercase",
+	textClassName = "text-4xl md:text-6xl font-bold font-sans tracking-tighter",
 	yOffset = 20,
+	uppercase = false,
 }) => {
 	const [index, setIndex] = useState(0);
 
+	const processedWords = useMemo(() => {
+		return words.map((word) => (uppercase ? word.toUpperCase() : word));
+	}, [words, uppercase]);
+
 	useEffect(() => {
 		const interval = setInterval(() => {
-			setIndex((prev) => (prev + 1) % words.length);
+			setIndex((prev) => (prev + 1) % processedWords.length);
 		}, duration * 1000);
 		return () => clearInterval(interval);
-	}, [words.length, duration]);
+	}, [processedWords.length, duration]);
 
 	// Unique ID for the filter to avoid conflicts
 	const filterId = useMemo(() => `gooey-morph-${Math.random().toString(36).substr(2, 9)}`, []);
@@ -91,9 +98,10 @@ export const GooeyMorph: React.FC<GooeyMorphProps> = ({
 							duration: morphSpeed,
 							ease: [0.34, 1.56, 0.64, 1], // Custom bouncy ease for organic feel
 						}}
-						className={`inline-block whitespace-nowrap ${textColorClass} ${textClassName}`}
+						style={{ color }}
+						className={`inline-block whitespace-nowrap ${textClassName}`}
 					>
-						{words[index]}
+						{processedWords[index]}
 					</motion.span>
 				</AnimatePresence>
 			</div>

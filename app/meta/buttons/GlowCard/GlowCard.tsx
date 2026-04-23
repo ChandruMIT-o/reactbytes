@@ -17,6 +17,8 @@ interface GlowCardProps {
     borderWidth?: number; // px
     // Colors
     baseColor?: string;
+    /** Whether to force content text to uppercase */
+    uppercase?: boolean;
 }
 
 export const GlowCard: React.FC<GlowCardProps> = ({
@@ -29,6 +31,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
     borderRadius = "2rem",
     borderWidth = 3,
     baseColor = "hsl(260deg 100% 3%)",
+    uppercase = false,
 }) => {
     const style = {
         "--animation-speed": `${animationSpeed}s`,
@@ -47,7 +50,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
             style={style}
         >
             <span className="glow-card-glow" />
-            <div className="glow-card-content">
+            <div className={`glow-card-content ${uppercase ? "uppercase" : ""}`}>
                 {children}
             </div>
         </div>

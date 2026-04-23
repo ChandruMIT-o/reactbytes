@@ -95,8 +95,12 @@ export interface HiveMindProps {
     backgroundColor?: string;
     /** Whether to use a higher resolution (devicePixelRatio) */
     highRes?: boolean;
+    /** Whether to force overlay text to uppercase */
+    uppercase?: boolean;
     /** Additional CSS classes */
     className?: string;
+    /** Overlay content */
+    children?: React.ReactNode;
 }
 
 export const HiveMind: React.FC<HiveMindProps> = ({
@@ -110,7 +114,9 @@ export const HiveMind: React.FC<HiveMindProps> = ({
     color2 = "#e94b3c",
     backgroundColor = "#000000",
     highRes = true,
+    uppercase = false,
     className = "",
+    children,
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const particlesRef = useRef<any[]>([]);
@@ -218,11 +224,18 @@ export const HiveMind: React.FC<HiveMindProps> = ({
     }, [count, noiseScale, noiseSpeed, velocity, opacity, radius, color1, color2, backgroundColor, dpr]);
 
     return (
-        <canvas
-            ref={canvasRef}
-            className={`w-full h-full block ${className}`}
-            style={{ backgroundColor }}
-        />
+        <div className={`relative isolate w-full h-full overflow-hidden ${className}`}>
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full block"
+                style={{ backgroundColor }}
+            />
+            {children && (
+                <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none ${uppercase ? "uppercase" : ""}`}>
+                    {children}
+                </div>
+            )}
+        </div>
     );
 };
 

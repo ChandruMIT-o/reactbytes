@@ -126,6 +126,8 @@ export interface BubbleGradientProps {
 	saturation?: number;
 	noiseOpacity?: number;
 	vignetteOpacity?: number;
+	/** Whether to force overlay text to uppercase */
+	uppercase?: boolean;
 	className?: string;
 	children?: React.ReactNode;
 }
@@ -152,6 +154,7 @@ export const BubbleGradient: React.FC<BubbleGradientProps> = ({
 	saturation = 72,
 	noiseOpacity = 0.08,
 	vignetteOpacity = 0.26,
+	uppercase = false,
 	className = "",
 	children,
 }) => {

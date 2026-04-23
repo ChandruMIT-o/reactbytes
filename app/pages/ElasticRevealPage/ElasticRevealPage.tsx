@@ -8,12 +8,13 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { ElasticReveal } from "../../meta/text/Hover/ElasticReveal";
 import { loaderProps, componentCode, creditsData } from "./ElasticRevealData";
-import { ComboBox } from "../../components/combobox/ComboBox";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 
 const DEFAULT_TEXT = "REACTBYTES";
 const DEFAULT_DURATION = 0.6;
@@ -29,8 +30,9 @@ const presets = [
 			duration: 0.6,
 			stagger: 0.02,
 			direction: "up",
-			base: "text-rb-accent-2",
-			hover: "text-rb-accent-1",
+			baseColor: "#60a5fa",
+			hoverColor: "#FFFFFF",
+			uppercase: true,
 		},
 	},
 	{
@@ -41,8 +43,9 @@ const presets = [
 			duration: 0.8,
 			stagger: 0.04,
 			direction: "down",
-			base: "text-rb-accent-3",
-			hover: "text-white",
+			baseColor: "#c084fc",
+			hoverColor: "#FFFFFF",
+			uppercase: true,
 		},
 	},
 	{
@@ -53,27 +56,21 @@ const presets = [
 			duration: 0.3,
 			stagger: 0.01,
 			direction: "up",
-			base: "text-white/40",
-			hover: "text-rb-accent-1",
+			baseColor: "#9ca3af",
+			hoverColor: "#34d399",
+			uppercase: true,
 		},
 	},
-];
-
-const colorOptions = [
-	{ id: "text-rb-accent-1", label: "Accent 1" },
-	{ id: "text-rb-accent-2", label: "Accent 2" },
-	{ id: "text-rb-accent-3", label: "Accent 3" },
-	{ id: "text-white", label: "White" },
-	{ id: "text-white/40", label: "Muted White" },
 ];
 
 export const ElasticRevealPage = () => {
 	const [text, setText] = useState(DEFAULT_TEXT);
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [stagger, setStagger] = useState(DEFAULT_STAGGER);
-	const [direction, setDirection] = useState<any>(DEFAULT_DIRECTION);
-	const [baseColorClass, setBaseColorClass] = useState("text-rb-accent-2");
-	const [hoverColorClass, setHoverColorClass] = useState("text-rb-accent-1");
+	const [direction, setDirection] = useState<"up" | "down">(DEFAULT_DIRECTION as any);
+	const [baseColor, setBaseColor] = useState("#60a5fa");
+	const [hoverColor, setHoverColor] = useState("#FFFFFF");
+	const [uppercase, setUppercase] = useState(true);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -84,9 +81,10 @@ export const ElasticRevealPage = () => {
 			setText(preset.config.text);
 			setDuration(preset.config.duration);
 			setStagger(preset.config.stagger);
-			setDirection(preset.config.direction);
-			setBaseColorClass(preset.config.base);
-			setHoverColorClass(preset.config.hover);
+			setDirection(preset.config.direction as any);
+			setBaseColor(preset.config.baseColor);
+			setHoverColor(preset.config.hoverColor);
+			setUppercase(preset.config.uppercase ?? true);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -100,8 +98,9 @@ export const ElasticRevealPage = () => {
   duration={${duration}}
   stagger={${stagger}}
   direction="${direction}"
-  baseColorClass="${baseColorClass}"
-  hoverColorClass="${hoverColorClass}"
+  baseColor="${baseColor}"
+  hoverColor="${hoverColor}"
+  uppercase={${uppercase}}
 />`;
 
 	return (
@@ -124,8 +123,9 @@ export const ElasticRevealPage = () => {
 								duration={duration}
 								stagger={stagger}
 								direction={direction}
-								baseColorClass={baseColorClass}
-								hoverColorClass={hoverColorClass}
+								baseColor={baseColor}
+								hoverColor={hoverColor}
+								uppercase={uppercase}
 							/>
 
 						</div>
@@ -135,7 +135,7 @@ export const ElasticRevealPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -145,6 +145,7 @@ export const ElasticRevealPage = () => {
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
+								label="Presets"
 								dynamicWidth={true}
 							/>
 							<div className="flex items-center gap-3">
@@ -163,61 +164,74 @@ export const ElasticRevealPage = () => {
 						</div>
 					}
 				>
-					<TextInput
-						label="Text"
+					<DefaultTextInput
+						label="Display Text"
 						value={text}
-						onChange={(e) => {
-							setText(e.target.value);
+						onChange={(val: string) => {
+							setText(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
 					/>
 
-					<div className="grid grid-cols-2 gap-4">
-						<ComboBox
-							label="Base Color"
-							options={colorOptions}
-							value={baseColorClass}
-							onChange={setBaseColorClass}
-						/>
-						<ComboBox
-							label="Hover Color"
-							options={colorOptions}
-							value={hoverColorClass}
-							onChange={setHoverColorClass}
-						/>
-					</div>
-
-					<ComboBox
-						label="Direction"
-						options={[
-							{ id: "up", label: "Roll Up" },
-							{ id: "down", label: "Roll Down" },
-						]}
-						value={direction}
-						onChange={setDirection}
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
 					/>
 
-					<DiscreteSlider
-						label="Duration (s)"
+					<DiscreteSlider2
+						label="Entrance Duration"
 						min={0.1}
 						max={2}
 						step={0.1}
 						value={duration}
 						onChange={setDuration}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Stagger (s)"
+					<DiscreteSlider2
+						label="Stagger Delay"
 						min={0}
 						max={0.2}
 						step={0.01}
 						value={stagger}
 						onChange={setStagger}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<DefaultComboBox
+						label="Reveal Direction"
+						options={[
+							{ id: "up", label: "Roll Up" },
+							{ id: "down", label: "Roll Down" },
+						]}
+						value={direction}
+						onChange={(val: string) => setDirection(val as "up" | "down")}
+						dynamicWidth={true}
+					/>
+
+					<ColorPicker
+						label="Base Color"
+						value={baseColor}
+						onChange={(val: string) => {
+							setBaseColor(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<ColorPicker
+						label="Active Color"
+						value={hoverColor}
+						onChange={(val: string) => {
+							setHoverColor(val);
+							setKey((prev) => prev + 1);
+						}}
 					/>
 				</PreviewTab>
 			</div>

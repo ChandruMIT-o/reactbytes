@@ -1,73 +1,79 @@
 export const loaderProps = [
-	{
-		title: "Core Props",
-		props: [
-			{
-				name: "count",
-				type: "number",
-				defaultValue: "3000",
-				description: "The total number of particles on screen.",
-			},
-			{
-				name: "noiseScale",
-				type: "number",
-				defaultValue: "650",
-				description: "Zoom level of the noise field. Lower is more chaotic.",
-			},
-			{
-				name: "noiseSpeed",
-				type: "number",
-				defaultValue: "0.005",
-				description: "Speed at which the flow field evolves over time.",
-			},
-			{
-				name: "velocity",
-				type: "number",
-				defaultValue: "5",
-				description: "Movement speed of the particles.",
-			},
-		],
-	},
-	{
-		title: "Visual Props",
-		props: [
-			{
-				name: "color1",
-				type: "string",
-				defaultValue: "'#4b97a2'",
-				description: "Primary particle color (hex/rgb).",
-			},
-			{
-				name: "color2",
-				type: "string",
-				defaultValue: "'#e94b3c'",
-				description: "Secondary particle color (hex/rgb).",
-			},
-			{
-				name: "backgroundColor",
-				type: "string",
-				defaultValue: "'#000000'",
-				description: "Canvas background color.",
-			},
-			{
-				name: "opacity",
-				type: "number",
-				defaultValue: "0.05",
-				description: "Trailing effect intensity. Lower is longer trails.",
-			},
-			{
-				name: "radius",
-				type: "number",
-				defaultValue: "2",
-				description: "Base size multiplier for the particles.",
-			},
-		],
-	},
+    {
+        title: "Core Props",
+        props: [
+            {
+                name: "count",
+                type: "number",
+                defaultValue: "3000",
+                description: "The total number of particles on screen.",
+            },
+            {
+                name: "noiseScale",
+                type: "number",
+                defaultValue: "650",
+                description: "Zoom level of the noise field. Lower is more chaotic.",
+            },
+            {
+                name: "noiseSpeed",
+                type: "number",
+                defaultValue: "0.005",
+                description: "Speed at which the flow field evolves over time.",
+            },
+            {
+                name: "velocity",
+                type: "number",
+                defaultValue: "5",
+                description: "Movement speed of the particles.",
+            },
+        ],
+    },
+    {
+        title: "Visual Props",
+        props: [
+            {
+                name: "color1",
+                type: "string",
+                defaultValue: "'#4b97a2'",
+                description: "Primary particle color (hex/rgb).",
+            },
+            {
+                name: "color2",
+                type: "string",
+                defaultValue: "'#e94b3c'",
+                description: "Secondary particle color (hex/rgb).",
+            },
+            {
+                name: "backgroundColor",
+                type: "string",
+                defaultValue: "'#000000'",
+                description: "Canvas background color.",
+            },
+            {
+                name: "opacity",
+                type: "number",
+                defaultValue: "0.05",
+                description: "Trailing effect intensity. Lower is longer trails.",
+            },
+            {
+                name: "radius",
+                type: "number",
+                defaultValue: "2",
+                description: "Base size multiplier for the particles.",
+            },
+            {
+                name: "uppercase",
+                type: "boolean",
+                defaultValue: "false",
+                description: "Whether to force overlay text to uppercase.",
+            },
+        ],
+    },
 ];
 
 export const componentCode = `"use client";
 
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 
 // Simple Simplex Noise implementation for portability
 const createNoise2D = () => {
@@ -152,7 +158,9 @@ export interface HiveMindProps {
     color2?: string;
     backgroundColor?: string;
     highRes?: boolean;
+    uppercase?: boolean;
     className?: string;
+    children?: React.ReactNode;
 }
 
 export const HiveMind: React.FC<HiveMindProps> = ({
@@ -166,7 +174,9 @@ export const HiveMind: React.FC<HiveMindProps> = ({
     color2 = "#e94b3c",
     backgroundColor = "#000000",
     highRes = true,
+    uppercase = false,
     className = "",
+    children,
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const particlesRef = useRef<any[]>([]);
@@ -177,106 +187,72 @@ export const HiveMind: React.FC<HiveMindProps> = ({
     const dpr = highRes ? (typeof window !== "undefined" ? window.devicePixelRatio : 1) : 1;
 
     class Particle {
-        x: number;
-        y: number;
-        size: number;
-        isColor1: boolean;
-        w: number;
-        h: number;
-
+        x: number; y: number; size: number; isColor1: boolean; w: number; h: number;
         constructor(w: number, h: number) {
-            this.w = w;
-            this.h = h;
+            this.w = w; this.h = h;
             const spawnRange = Math.max(w, h);
             this.x = w / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
             this.y = h / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
-            
             const random = Math.random();
             this.size = random > 0.8 ? Math.random() * 2 : (random > 0.2 ? Math.random() * 1 : Math.random() * 3);
             this.isColor1 = Math.random() > 0.5;
         }
-
         move(noise: any, noiseTime: number, vel: number, nScale: number) {
             this.x += noise(this.y / nScale, noiseTime) * vel;
             this.y += noise(this.x / nScale, noiseTime) * vel;
-
             if (this.x < 0 || this.x > this.w || this.y < 0 || this.y > this.h) {
                 const spawnRange = Math.max(this.w, this.h);
                 this.x = this.w / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
                 this.y = this.h / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
-                return;
             }
         }
-
         render(ctx: CanvasRenderingContext2D, rMult: number, c1: string, c2: string) {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size * rMult, 0, 2 * Math.PI);
-            ctx.fillStyle = this.isColor1 ? c1 : c2;
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(this.x, this.y, this.size * rMult, 0, 2 * Math.PI);
+            ctx.fillStyle = this.isColor1 ? c1 : c2; ctx.fill();
         }
     }
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-
+        const canvas = canvasRef.current; if (!canvas) return;
+        const ctx = canvas.getContext("2d"); if (!ctx) return;
         noiseRef.current = createNoise2D();
-
         const resize = () => {
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
-            canvas.width = width * dpr;
-            canvas.height = height * dpr;
+            const width = canvas.clientWidth; const height = canvas.clientHeight;
+            canvas.width = width * dpr; canvas.height = height * dpr;
             ctx.scale(dpr, dpr);
             particlesRef.current = Array.from({ length: count }, () => new Particle(width, height));
-            ctx.fillStyle = backgroundColor;
-            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = backgroundColor; ctx.fillRect(0, 0, width, height);
         };
-
-        resize();
-        window.addEventListener("resize", resize);
-
+        resize(); window.addEventListener("resize", resize);
         const update = () => {
             noiseTimeRef.current += noiseSpeed;
-            const w = canvas.width / dpr;
-            const h = canvas.height / dpr;
-
-            ctx.globalAlpha = opacity;
-            ctx.fillStyle = backgroundColor;
-            ctx.fillRect(0, 0, w, h);
-            ctx.globalAlpha = 1;
-
-            ctx.globalCompositeOperation = "lighter";
+            const w = canvas.width / dpr; const h = canvas.height / dpr;
+            ctx.globalAlpha = opacity; ctx.fillStyle = backgroundColor; ctx.fillRect(0, 0, w, h);
+            ctx.globalAlpha = 1; ctx.globalCompositeOperation = "lighter";
             particlesRef.current.forEach(p => {
                 p.move(noiseRef.current, noiseTimeRef.current, velocity, noiseScale);
                 p.render(ctx, radius, color1, color2);
             });
             ctx.globalCompositeOperation = "source-over";
-
             animationFrameRef.current = requestAnimationFrame(update);
         };
-
         update();
-
-        return () => {
-            window.removeEventListener("resize", resize);
-            cancelAnimationFrame(animationFrameRef.current);
-        };
+        return () => { window.removeEventListener("resize", resize); cancelAnimationFrame(animationFrameRef.current); };
     }, [count, noiseScale, noiseSpeed, velocity, opacity, radius, color1, color2, backgroundColor, dpr]);
 
     return (
-        <canvas
-            ref={canvasRef}
-            className={\`w-full h-full block \${className}\`}
-            style={{ backgroundColor }}
-        />
+        <div className={\`relative isolate w-full h-full overflow-hidden \${className}\`}>
+            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" style={{ backgroundColor }} />
+            {children && (
+                <div className={\`absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none \${uppercase ? "uppercase" : ""}\`}>
+                    {children}
+                </div>
+            )}
+        </div>
     );
 };
 
-export default HiveMind;`;
+export default HiveMind;";
 
 export const creditsData = [
 	{
@@ -309,4 +285,4 @@ export const creditsData = [
 			},
 		],
 	},
-];
+];`

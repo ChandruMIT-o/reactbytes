@@ -12,6 +12,8 @@ export interface EnergyFlowBackgroundProps {
     opacity?: number;
     vignetteIntensity?: number;
     blurAmount?: number;
+    /** Whether to force overlay text to uppercase */
+    uppercase?: boolean;
     className?: string;
     children?: React.ReactNode;
 }
@@ -38,6 +40,7 @@ export const CellularAutomataBackground: React.FC<EnergyFlowBackgroundProps> = (
     opacity = 1.0,
     vignetteIntensity = 0.6,
     blurAmount = 0,
+    uppercase = false,
     className = "",
     children,
 }) => {
@@ -252,7 +255,11 @@ export const CellularAutomataBackground: React.FC<EnergyFlowBackgroundProps> = (
             {/* High-end Vignette Overlay */}
             <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
             
-            {children && <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none">{children}</div>}
+            {children && (
+                <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none ${uppercase ? "uppercase" : ""}`}>
+                    {children}
+                </div>
+            )}
         </div>
     );
 };

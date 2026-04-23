@@ -20,6 +20,18 @@ export const waveTextProps = [
 				defaultValue: "'#34d399'",
 				description: "The hex color to apply during cursor proximity.",
 			},
+			{
+				name: "color",
+				type: "string",
+				defaultValue: "'#FFFFFF'",
+				description: "The base color of the text letters.",
+			},
+			{
+				name: "uppercase",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether to force the text to uppercase.",
+			},
 		],
 	},
 	{
@@ -48,6 +60,10 @@ export interface WaveTextProps {
 	maxDistance?: number;
 	/** Hex color for the letter when hovered */
 	hoverColor?: string;
+	/** Base color for the text */
+	color?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const WaveText: React.FC<WaveTextProps> = ({
@@ -55,9 +71,13 @@ export const WaveText: React.FC<WaveTextProps> = ({
 	textClassName = "text-4xl md:text-5xl font-bold",
 	maxDistance = 120,
 	hoverColor = "#34d399",
+	color = "#FFFFFF",
+	uppercase = false,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
+
+	const displayText = uppercase ? text.toUpperCase() : text;
 
 	const handleMove = (clientX: number) => {
 		if (!containerRef.current) return;
@@ -91,7 +111,7 @@ export const WaveText: React.FC<WaveTextProps> = ({
 
 	const resetLetter = (letter: HTMLSpanElement) => {
 		letter.style.transform = \`translateY(0) scale(1) rotate(0deg)\`;
-		letter.style.color = "inherit";
+		letter.style.color = color;
 		letter.style.zIndex = "1";
 	};
 
@@ -116,14 +136,16 @@ export const WaveText: React.FC<WaveTextProps> = ({
 			onTouchMove={(e) => handleMove(e.touches[0].clientX)}
 			onMouseLeave={handleMouseLeave}
 			onTouchEnd={handleMouseLeave}
+			style={{ color }}
 			className={\`flex flex-wrap cursor-default touch-none \${textClassName}\`}
 		>
-			{text.split("").map((char, i) => (
+			{displayText.split("").map((char, i) => (
 				<span
 					key={i}
 					ref={(el) => {
 						lettersRef.current[i] = el;
 					}}
+					style={{ color }}
 					className="inline-block transition-all duration-200 ease-out origin-bottom"
 				>
 					{char === " " ? "\\u00A0" : char}

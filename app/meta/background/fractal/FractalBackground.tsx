@@ -11,6 +11,8 @@ export interface FractalBackgroundProps {
     morphRange?: number;
     enableParallax?: boolean;
     intensity?: number;
+    /** Whether to force overlay text to uppercase */
+    uppercase?: boolean;
     className?: string;
     children?: React.ReactNode;
 }
@@ -39,6 +41,7 @@ export const FractalBackground: React.FC<FractalBackgroundProps> = ({
     morphRange = 0.1,
     enableParallax = true,
     intensity = 1.0,
+    uppercase = false,
     className = "",
     children,
 }) => {
@@ -221,7 +224,11 @@ export const FractalBackground: React.FC<FractalBackgroundProps> = ({
         <div className={`relative isolate w-full h-full overflow-hidden bg-[#020408] ${className}`}>
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
             <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-black/20" />
-            {children && <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none">{children}</div>}
+            {children && (
+                <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none ${uppercase ? "uppercase" : ""}`}>
+                    {children}
+                </div>
+            )}
         </div>
     );
 };

@@ -39,6 +39,7 @@ const presets = [
 			stagger: 0.1,
 			pulse: false,
 			color: "#E8EAF0",
+			uppercase: true,
 		},
 	},
 	{
@@ -77,6 +78,7 @@ export const VariableWeightTextPage = () => {
 	const [stagger, setStagger] = useState(DEFAULT_STAGGER);
 	const [pulse, setPulse] = useState(false);
 	const [color, setColor] = useState(DEFAULT_COLOR);
+	const [uppercase, setUppercase] = useState(true);
 	const [key, setKey] = useState(0);
 	const [currentPreset, setCurrentPreset] = useState("default");
 
@@ -91,6 +93,7 @@ export const VariableWeightTextPage = () => {
 			setStagger(preset.config.stagger);
 			setPulse(preset.config.pulse);
 			setColor(preset.config.color || DEFAULT_COLOR);
+			setUppercase(preset.config.uppercase ?? true);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -111,6 +114,7 @@ export const VariableWeightTextPage = () => {
   stagger={${stagger}}
   pulse={${pulse}}
   color="${color}"
+  uppercase={${uppercase}}
 />`;
 
 	return (
@@ -136,6 +140,7 @@ export const VariableWeightTextPage = () => {
 								stagger={stagger}
 								pulse={pulse}
 								color={color}
+								uppercase={uppercase}
 								textClassName="text-7xl tracking-tighter"
 							/>
 						</div>
@@ -145,7 +150,7 @@ export const VariableWeightTextPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -175,7 +180,7 @@ export const VariableWeightTextPage = () => {
 					}
 				>
 					<DefaultTextInput
-						label="Text Content"
+						label="Display Text"
 						value={text}
 						onChange={(val) => {
 							setText(val);
@@ -184,33 +189,23 @@ export const VariableWeightTextPage = () => {
 						placeholder="Enter text..."
 					/>
 
-					<ColorPicker
-						label="Text Color"
-						value={color}
-						onChange={setColor}
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={uppercase}
+						onChange={(val) => {
+							setUppercase(val);
+							setKey((prev) => prev + 1);
+						}}
+					/>
+
+					<ToggleComponent
+						label="Breathing Loop"
+						checked={pulse}
+						onChange={setPulse}
 					/>
 
 					<DiscreteSlider2
-						label="Initial Weight"
-						min={100}
-						max={900}
-						step={100}
-						value={initialWeight}
-						onChange={setInitialWeight}
-						showTicks={true}
-					/>
-					<DiscreteSlider2
-						label="Target Weight"
-						min={100}
-						max={900}
-						step={100}
-						value={targetWeight}
-						onChange={setTargetWeight}
-						showTicks={true}
-					/>
-
-					<DiscreteSlider2
-						label="Duration (s)"
+						label="Transition Duration"
 						min={0.1}
 						max={3}
 						step={0.1}
@@ -220,14 +215,8 @@ export const VariableWeightTextPage = () => {
 						showTicks={true}
 					/>
 
-					<ToggleComponent
-						label="Pulse Mode"
-						checked={pulse}
-						onChange={setPulse}
-					/>
-
 					<DiscreteSlider2
-						label="Stagger (s)"
+						label="Stagger Delay"
 						min={0}
 						max={0.5}
 						step={0.01}
@@ -235,6 +224,32 @@ export const VariableWeightTextPage = () => {
 						onChange={setStagger}
 						maxDecimals={2}
 						showTicks={true}
+					/>
+
+					<DiscreteSlider2
+						label="Start Weight"
+						min={100}
+						max={900}
+						step={100}
+						value={initialWeight}
+						onChange={setInitialWeight}
+						showTicks={true}
+					/>
+
+					<DiscreteSlider2
+						label="End Weight"
+						min={100}
+						max={900}
+						step={100}
+						value={targetWeight}
+						onChange={setTargetWeight}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Accent Color"
+						value={color}
+						onChange={setColor}
 					/>
 				</PreviewTab>
 			</div>

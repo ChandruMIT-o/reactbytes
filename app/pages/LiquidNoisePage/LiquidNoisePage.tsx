@@ -7,9 +7,11 @@ import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { LiquidNoise } from "../../meta/background/liquid/LiquidNoise";
-import { loaderProps, creditsData } from "./LiquidNoiseData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
+import { loaderProps, componentCode, creditsData } from "./LiquidNoiseData";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
+import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
 
@@ -19,6 +21,7 @@ const presets = [
 		label: "Scheme 1 (Orange & Navy)",
 		config: {
 			title: "LIQUID GRADIENT",
+			uppercase: true,
 			colors: ["#f15a22", "#0a0e27", "#f15a22", "#0a0e27", "#f15a22", "#0a0e27"],
 			speed: 1.5,
 			intensity: 1.8,
@@ -122,6 +125,7 @@ export const LiquidNoisePage = () => {
   color1Weight={${config.color1Weight}}
   color2Weight={${config.color2Weight}}
   darkNavy="${config.darkNavy}"
+  uppercase={${config.uppercase}}
 >
   <div className="flex flex-col items-center gap-3 text-center px-6">
     <div className="text-[clamp(1.5rem,5vw,3.5rem)] font-bold tracking-[0.2em] text-white">
@@ -158,6 +162,7 @@ export const LiquidNoisePage = () => {
 								color1Weight={config.color1Weight}
 								color2Weight={config.color2Weight}
 								darkNavy={config.darkNavy}
+								uppercase={config.uppercase}
 							>
 								<div className="flex flex-col items-center gap-3 text-center px-6" style={{ pointerEvents: 'none' }}>
 									<div className="text-[clamp(2.5rem,7vw,5rem)] font-extrabold tracking-tighter text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.5)] mix-blend-overlay">
@@ -172,10 +177,10 @@ export const LiquidNoisePage = () => {
 					}
 					onReplay={() => setKey((prev) => prev + 1)}
 					usageCode={usageCode}
-					codeContent={""}
+					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -193,44 +198,79 @@ export const LiquidNoisePage = () => {
 						</div>
 					}
 				>
-					<TextInput
-						label="Center Text"
+					<DefaultTextInput
+						label="Hero Text"
 						value={config.title}
-						onChange={(e) => updateConfig("title", e.target.value)}
+						onChange={(val) => updateConfig("title", val)}
 						placeholder="Enter text..."
 					/>
 
-					<DiscreteSlider
-						label="Speed"
+					<ToggleComponent
+						label="Uppercase Mode"
+						checked={config.uppercase}
+						onChange={(val) => updateConfig("uppercase", val)}
+					/>
+
+					<DiscreteSlider2
+						label="Flow Speed"
 						min={0.1}
 						max={3.0}
 						step={0.1}
 						value={config.speed}
 						onChange={(val) => updateConfig("speed", val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Intensity"
+					<DiscreteSlider2
+						label="Energy Intensity"
 						min={0.5}
 						max={4.0}
 						step={0.1}
 						value={config.intensity}
 						onChange={(val) => updateConfig("intensity", val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
-						label="Grain Amount"
+					<DiscreteSlider2
+						label="Film Grain"
 						min={0.0}
 						max={0.3}
 						step={0.01}
 						value={config.grainIntensity}
 						onChange={(val) => updateConfig("grainIntensity", val)}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<DiscreteSlider2
+						label="Liquid Size"
+						min={0.1}
+						max={2.0}
+						step={0.1}
+						value={config.gradientSize}
+						onChange={(val) => updateConfig("gradientSize", val)}
+						maxDecimals={1}
+						showTicks={true}
+					/>
+
+					<DiscreteSlider2
+						label="Liquid Count"
+						min={1}
+						max={12}
+						step={1}
+						value={config.gradientCount}
+						onChange={(val) => updateConfig("gradientCount", val)}
+						maxDecimals={0}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Void Color"
+						value={config.darkNavy}
+						onChange={(val) => updateConfig("darkNavy", val)}
+						compact={true}
 					/>
 				</PreviewTab>
 			</div>

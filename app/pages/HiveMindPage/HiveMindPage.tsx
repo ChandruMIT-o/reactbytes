@@ -7,9 +7,11 @@ import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { HiveMind } from "../../meta/background/flowfield/HiveMind";
-import { loaderProps, componentCode, creditsData } from "./HiveMindData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
+import { loaderProps, componentCode } from "./HiveMindData";
+import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
+import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import ColorPicker from "../../components/colorpicker/ColorPicker";
+import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
 
@@ -18,6 +20,8 @@ const presets = [
 		id: "default",
 		label: "Classic Hive",
 		config: {
+			title: "NEURAL NETWORK",
+			uppercase: true,
 			count: 3000,
 			noiseScale: 650,
 			noiseSpeed: 0.005,
@@ -87,7 +91,12 @@ export const HiveMindPage = () => {
   color1="${config.color1}"
   color2="${config.color2}"
   backgroundColor="${config.backgroundColor}"
-/>`;
+  uppercase={${config.uppercase}}
+>
+  <h1 className="text-white text-6xl font-bold tracking-tighter mix-blend-difference">
+    ${config.title}
+  </h1>
+</HiveMind>`;
 
 	return (
 		<div className="flex flex-col gap-5">
@@ -110,7 +119,11 @@ export const HiveMindPage = () => {
 								key={key}
 								{...config}
 								className="absolute inset-0"
-							/>
+							>
+								<div className="text-[clamp(1.5rem,6vw,4.5rem)] font-bold tracking-tighter text-white/90 drop-shadow-2xl mix-blend-difference">
+									{config.title}
+								</div>
+							</HiveMind>
 							<div className="absolute top-4 left-4 text-[10px] text-white/20 uppercase tracking-widest font-bold pointer-events-none group-hover:text-white/40 transition-colors">
 								Click Background to Reset
 							</div>
@@ -121,7 +134,7 @@ export const HiveMindPage = () => {
 					codeContent={componentCode}
 					collapsible={true}
 					header={
-						<div className="flex items-center justify-between border-b border-rb-neutral-4/50">
+						<div className="flex items-center justify-between ">
 							<div className="flex flex-col gap-1">
 								<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
 									Props
@@ -139,62 +152,51 @@ export const HiveMindPage = () => {
 						</div>
 					}
 				>
-					<div className="flex flex-wrap gap-4 mb-8">
-						<ColorPicker
-							label="Color 1"
-							value={config.color1}
-							onChange={(val) => updateConfig("color1", val)}
-							compact={true}
-						/>
-						<ColorPicker
-							label="Color 2"
-							value={config.color2}
-							onChange={(val) => updateConfig("color2", val)}
-							compact={true}
-						/>
-						<ColorPicker
-							label="Background"
-							value={config.backgroundColor}
-							onChange={(val) => updateConfig("backgroundColor", val)}
-							compact={true}
-						/>
-					</div>
+					<DefaultTextInput
+						label="Hero Text"
+						value={config.title}
+						onChange={(val) => updateConfig("title", val)}
+						placeholder="Enter title..."
+					/>
 
+					<ToggleComponent
+						label="Uppercase Text"
+						checked={config.uppercase}
+						onChange={(val) => updateConfig("uppercase", val)}
+					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Particle Count"
 						min={100}
 						max={15000}
 						step={100}
 						value={config.count}
 						onChange={(val) => updateConfig("count", val)}
-						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Noise Scale"
 						min={10}
 						max={3000}
 						step={10}
 						value={config.noiseScale}
 						onChange={(val) => updateConfig("noiseScale", val)}
-						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Noise Speed"
 						min={0}
 						max={0.1}
 						step={0.001}
 						value={config.noiseSpeed}
 						onChange={(val) => updateConfig("noiseSpeed", val)}
-						maxDecimals={1}
-						showTicks={false}
+						maxDecimals={3}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Velocity"
 						min={0.1}
 						max={30}
@@ -202,21 +204,21 @@ export const HiveMindPage = () => {
 						value={config.velocity}
 						onChange={(val) => updateConfig("velocity", val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Tail Intensity"
 						min={0.001}
 						max={0.5}
 						step={0.001}
 						value={config.opacity}
 						onChange={(val) => updateConfig("opacity", val)}
-						maxDecimals={1}
-						showTicks={false}
+						maxDecimals={3}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Particle Radius"
 						min={0.1}
 						max={15}
@@ -224,7 +226,26 @@ export const HiveMindPage = () => {
 						value={config.radius}
 						onChange={(val) => updateConfig("radius", val)}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<ColorPicker
+						label="Primary"
+						value={config.color1}
+						onChange={(val) => updateConfig("color1", val)}
+						compact={true}
+					/>
+					<ColorPicker
+						label="Secondary"
+						value={config.color2}
+						onChange={(val) => updateConfig("color2", val)}
+						compact={true}
+					/>
+					<ColorPicker
+						label="Background"
+						value={config.backgroundColor}
+						onChange={(val) => updateConfig("backgroundColor", val)}
+						compact={true}
 					/>
 				</PreviewTab>
 			</div>
@@ -239,7 +260,7 @@ export const HiveMindPage = () => {
 			</div>
 
 			<div id="credits" className="w-full max-w-5xl mx-auto py-10">
-				<Credits data={creditsData} />
+				{/* <Credits data={creditsData} /> */}
 			</div>
 		</div>
 	);

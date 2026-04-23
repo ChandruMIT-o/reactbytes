@@ -12,16 +12,18 @@ export interface ElasticRevealProps {
 	stagger?: number;
 	/** Direction of the reveal: 'up' or 'down' */
 	direction?: "up" | "down";
-	/** Tailwind class for the hover/reveal color */
-	hoverColorClass?: string;
-	/** Tailwind class for the base text color */
-	baseColorClass?: string;
+	/** Base color for the text (hex) */
+	baseColor?: string;
+	/** Hover color for the text (hex) */
+	hoverColor?: string;
 	/** Additional wrapper CSS classes */
 	className?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
 	/** Link URL if the component should act as a link */
 	href?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const ElasticReveal: React.FC<ElasticRevealProps> = ({
@@ -29,15 +31,16 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 	duration = 0.6,
 	stagger = 0.02,
 	direction = "up",
-	hoverColorClass = "text-rb-accent-1",
-	baseColorClass = "text-rb-accent-2",
+	baseColor = "#60a5fa",
+	hoverColor = "#FFFFFF",
 	className = "",
-	textClassName = "text-5xl md:text-7xl font-bold font-sans uppercase tracking-tighter",
+	textClassName = "text-5xl md:text-7xl font-bold font-sans tracking-tighter",
 	href,
+	uppercase = false,
 }) => {
-	const letters = text.split("");
+	const displayText = uppercase ? text.toUpperCase() : text;
+	const letters = displayText.split("");
 	const yOffset = direction === "up" ? "-100%" : "100%";
-	const shadowOffset = direction === "up" ? "100%" : "-100%";
 
 	const containerVariants = {
 		initial: {},
@@ -63,7 +66,7 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 			variants={containerVariants}
 			className={`relative inline-flex overflow-hidden cursor-pointer select-none leading-[0.8] ${className}`}
 		>
-			<span className="sr-only">{text}</span>
+			<span className="sr-only">{displayText}</span>
 			<div className={`flex ${textClassName}`} aria-hidden="true">
 				{letters.map((char, i) => (
 					<motion.span
@@ -71,14 +74,14 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 						custom={i}
 						variants={letterVariants}
 						className="relative inline-block whitespace-pre"
-						style={{
-							textShadow: `0 ${shadowOffset} 0 currentColor`,
-						}}
 					>
-						<span className={baseColorClass}>{char}</span>
-						<span 
-							className={`absolute top-0 left-0 ${hoverColorClass}`}
-							style={{ transform: `translateY(${direction === "up" ? "100%" : "-100%"})` }}
+						<span style={{ color: baseColor }}>{char}</span>
+						<span
+							className="absolute top-0 left-0"
+							style={{
+								color: hoverColor,
+								transform: `translateY(${direction === "up" ? "100%" : "-100%"})`
+							}}
 						>
 							{char}
 						</span>

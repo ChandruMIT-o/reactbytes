@@ -22,6 +22,8 @@ export interface BlurInProps {
 	containerClassName?: string;
 	/** Additional text container CSS classes */
 	textClassName?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const BlurIn: React.FC<BlurInProps> = ({
@@ -34,8 +36,12 @@ export const BlurIn: React.FC<BlurInProps> = ({
 	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "font-sans",
+	uppercase = false,
 }) => {
-	const letters = useMemo(() => text.split(""), [text]);
+	const letters = useMemo(() => {
+		const finalRef = uppercase ? text.toUpperCase() : text;
+		return finalRef.split("");
+	}, [text, uppercase]);
 
 	return (
 		<div

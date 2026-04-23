@@ -13,6 +13,10 @@ export interface FocalBlurTextProps {
 	focusColor?: string;
 	/** Max blur radius in pixels */
 	maxBlur?: number;
+	/** Base color for the text */
+	color?: string;
+	/** Whether to force uppercase text */
+	uppercase?: boolean;
 }
 
 export const FocalBlurText: React.FC<FocalBlurTextProps> = ({
@@ -21,9 +25,13 @@ export const FocalBlurText: React.FC<FocalBlurTextProps> = ({
 	maxDistance = 250,
 	focusColor = "#60a5fa",
 	maxBlur = 12,
+	color = "#FFFFFF",
+	uppercase = false,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
+
+	const displayText = uppercase ? text.toUpperCase() : text;
 
 	const handleMove = (clientX: number, clientY: number) => {
 		if (!containerRef.current) return;
@@ -57,7 +65,7 @@ export const FocalBlurText: React.FC<FocalBlurTextProps> = ({
 			letter.style.transform = `scale(${scale})`;
 			if (focusColor !== "inherit") {
 				letter.style.color =
-					distance < 60 ? focusColor : "inherit";
+					distance < 60 ? focusColor : color;
 			}
 		});
 	};
@@ -68,9 +76,7 @@ export const FocalBlurText: React.FC<FocalBlurTextProps> = ({
 			letter.style.filter = "blur(0px)";
 			letter.style.opacity = "1";
 			letter.style.transform = "scale(1)";
-			if (focusColor !== "inherit") {
-				letter.style.color = "inherit";
-			}
+			letter.style.color = color;
 		});
 	};
 
@@ -87,14 +93,16 @@ export const FocalBlurText: React.FC<FocalBlurTextProps> = ({
 			}
 			onMouseLeave={handleMouseLeave}
 			onTouchEnd={handleMouseLeave}
+			style={{ color }}
 			className={`flex flex-wrap cursor-crosshair touch-none ${textClassName}`}
 		>
-			{text.split("").map((char, i) => (
+			{displayText.split("").map((char, i) => (
 				<span
 					key={i}
 					ref={(el) => {
 						lettersRef.current[i] = el;
 					}}
+					style={{ color }}
 					className="inline-block transition-all duration-300 ease-out will-change-[filter,transform,opacity]"
 				>
 					{char === " " ? "\u00A0" : char}
