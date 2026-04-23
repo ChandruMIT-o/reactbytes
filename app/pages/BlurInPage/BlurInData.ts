@@ -34,10 +34,10 @@ export const loaderProps = [
 		title: "Styling Props",
 		props: [
 			{
-				name: "textColorClass",
+				name: "color",
 				type: "string",
-				defaultValue: "'text-rb-accent-1'",
-				description: "Tailwind class for the text color.",
+				defaultValue: "'#E8EAF0'",
+				description: "Hex color for the text.",
 			},
 			{
 				name: "containerClassName",
@@ -73,8 +73,8 @@ export interface BlurInProps {
 	initialBlur?: number;
 	/** Final opacity of the text */
 	endOpacity?: number;
-	/** Tailwind class for text color */
-	textColorClass?: string;
+	/** Hex color for text */
+	color?: string;
 	/** Additional wrapper CSS classes */
 	containerClassName?: string;
 	/** Additional text container CSS classes */
@@ -88,7 +88,7 @@ export const BlurIn: React.FC<BlurInProps> = ({
 	easing = "easeOut",
 	initialBlur = 12,
 	endOpacity = 1,
-	textColorClass = "text-rb-accent-1",
+	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "font-mono",
 }) => {
@@ -121,8 +121,8 @@ export const BlurIn: React.FC<BlurInProps> = ({
 							duration: duration,
 							ease: easing,
 						}}
-						className={\`inline-block \${textColorClass}\`}
-						style={{ whiteSpace: "pre" }}
+						className="inline-block"
+						style={{ whiteSpace: "pre", color }}
 					>
 						{char === " " ? "\\u00A0" : char}
 					</motion.span>

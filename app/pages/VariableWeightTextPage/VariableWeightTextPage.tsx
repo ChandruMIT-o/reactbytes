@@ -12,19 +12,20 @@ import {
 	componentCode,
 	creditsData,
 } from "./VariableWeightTextData";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
-import { RotateCcw, Play } from "lucide-react";
+import DefaultTextInput from "@/app/components/textinput/DefaultTextInput";
+import ColorPicker from "@/app/components/colorpicker/ColorPicker";
+import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
+import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
+import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
-import ToggleSwitch from "../../components/buttongroup/ToggleSwitch";
 import { Credits } from "../../components/buttongroup/Credits";
-import ComboBox from "@/app/components/combobox/ComboBox";
 
 const DEFAULT_TEXT = "VARIABLE OUTFIT";
 const DEFAULT_INITIAL_WEIGHT = 100;
 const DEFAULT_TARGET_WEIGHT = 900;
 const DEFAULT_DURATION = 0.8;
 const DEFAULT_STAGGER = 0.1;
+const DEFAULT_COLOR = "#E8EAF0";
 
 const presets = [
 	{
@@ -37,6 +38,7 @@ const presets = [
 			duration: 0.8,
 			stagger: 0.1,
 			pulse: false,
+			color: "#E8EAF0",
 		},
 	},
 	{
@@ -49,6 +51,7 @@ const presets = [
 			duration: 2.0,
 			stagger: 0.2,
 			pulse: true,
+			color: "#A78BFA",
 		},
 	},
 	{
@@ -61,6 +64,7 @@ const presets = [
 			duration: 0.4,
 			stagger: 0.05,
 			pulse: false,
+			color: "#2DD4BF",
 		},
 	},
 ];
@@ -72,6 +76,7 @@ export const VariableWeightTextPage = () => {
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [stagger, setStagger] = useState(DEFAULT_STAGGER);
 	const [pulse, setPulse] = useState(false);
+	const [color, setColor] = useState(DEFAULT_COLOR);
 	const [key, setKey] = useState(0);
 	const [currentPreset, setCurrentPreset] = useState("default");
 
@@ -85,6 +90,7 @@ export const VariableWeightTextPage = () => {
 			setDuration(preset.config.duration);
 			setStagger(preset.config.stagger);
 			setPulse(preset.config.pulse);
+			setColor(preset.config.color || DEFAULT_COLOR);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -104,6 +110,7 @@ export const VariableWeightTextPage = () => {
   duration={${duration}}
   stagger={${stagger}}
   pulse={${pulse}}
+  color="${color}"
 />`;
 
 	return (
@@ -128,6 +135,7 @@ export const VariableWeightTextPage = () => {
 								duration={duration}
 								stagger={stagger}
 								pulse={pulse}
+								color={color}
 								textClassName="text-7xl tracking-tighter"
 							/>
 						</div>
@@ -144,6 +152,7 @@ export const VariableWeightTextPage = () => {
 								</h3>
 							</div>
 							<DefaultComboBox
+								label="Presets"
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
@@ -165,36 +174,42 @@ export const VariableWeightTextPage = () => {
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="Text Content"
 						value={text}
-						onChange={(e) => {
-							setText(e.target.value);
+						onChange={(val) => {
+							setText(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
 					/>
 
-					<DiscreteSlider
+					<ColorPicker
+						label="Text Color"
+						value={color}
+						onChange={setColor}
+					/>
+
+					<DiscreteSlider2
 						label="Initial Weight"
 						min={100}
 						max={900}
 						step={100}
 						value={initialWeight}
 						onChange={setInitialWeight}
-						showTicks={false}
+						showTicks={true}
 					/>
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Target Weight"
 						min={100}
 						max={900}
 						step={100}
 						value={targetWeight}
 						onChange={setTargetWeight}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Duration (s)"
 						min={0.1}
 						max={3}
@@ -202,20 +217,16 @@ export const VariableWeightTextPage = () => {
 						value={duration}
 						onChange={setDuration}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<ComboBox
+					<ToggleComponent
 						label="Pulse Mode"
-						options={[
-							{ id: "true", label: "Enabled" },
-							{ id: "false", label: "Disabled" },
-						]}
-						value={pulse.toString()}
-						onChange={(val: string) => setPulse(val === "true")}
+						checked={pulse}
+						onChange={setPulse}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Stagger (s)"
 						min={0}
 						max={0.5}
@@ -223,7 +234,7 @@ export const VariableWeightTextPage = () => {
 						value={stagger}
 						onChange={setStagger}
 						maxDecimals={2}
-						showTicks={false}
+						showTicks={true}
 					/>
 				</PreviewTab>
 			</div>

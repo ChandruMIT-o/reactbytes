@@ -32,9 +32,8 @@ const Toggle: React.FC<ToggleProps> = ({
 
 	return (
 		<label
-			className={`group relative inline-flex items-center w-[3.5em] h-[2em] transition-opacity duration-300 ${
-				disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-			} ${className}`}
+			className={`group relative inline-flex items-center w-[3.5em] h-[2em] transition-opacity duration-300 ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+				} ${className}`}
 		>
 			<input
 				id={id}
@@ -47,7 +46,7 @@ const Toggle: React.FC<ToggleProps> = ({
 			/>
 
 			{/* Background Slider */}
-			<div className="absolute inset-0 bg-rb-neutral-4 peer-checked:bg-rb-accent-2 rounded-full transition-colors duration-300 ease-in-out"></div>
+			<div className="absolute inset-0 bg-rb-neutral-2 peer-checked:bg-rb-accent-2 rounded-full transition-colors duration-300 ease-in-out"></div>
 
 			{/* Toggle Knob */}
 			<div

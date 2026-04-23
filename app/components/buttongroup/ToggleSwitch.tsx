@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useId } from "react";
 import { flushSync } from "react-dom";
 
 
@@ -6,6 +6,9 @@ import { flushSync } from "react-dom";
 const ToggleSwitch = () => {
 	const [isLight, setIsLight] = useState(false);
 	const buttonRef = useRef<HTMLLabelElement>(null);
+	const id = useId();
+	const inputId = `theme-toggle-${id}`;
+	const maskId = `moon-mask-${id}`;
 
 
 	useEffect(() => {
@@ -109,7 +112,7 @@ const ToggleSwitch = () => {
 		<div className="flex items-center justify-center">
 			<label
 				ref={buttonRef}
-				htmlFor="themeToggle"
+				htmlFor={inputId}
 				className="relative w-[38px] h-[38px] flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 bg-rb-neutral-3 text-rb-accent-2 hover:bg-rb-neutral-4 active:scale-95 group overflow-hidden"
 				onKeyDown={(e) => {
 					if (e.key === "Enter" || e.key === " ") {
@@ -124,7 +127,7 @@ const ToggleSwitch = () => {
 				
 				<input
 					type="checkbox"
-					id="themeToggle"
+					id={inputId}
 					className="absolute opacity-0 w-0 h-0"
 					checked={isLight}
 					readOnly
@@ -141,7 +144,7 @@ const ToggleSwitch = () => {
 					stroke="none"
 					className="w-5 h-5 relative z-10 transition-all duration-500 transform rotate-[40deg] group-has-[:checked]:rotate-[90deg] group-has-[:checked]:text-rb-neutral-2 pointer-events-none"
 				>
-					<mask id="moon-mask">
+					<mask id={maskId}>
 						<rect x={0} y={0} width={20} height={20} fill="white" />
 						<circle
 							cx={11}
@@ -156,7 +159,7 @@ const ToggleSwitch = () => {
 						cx={10}
 						cy={10}
 						r={8}
-						mask="url(#moon-mask)"
+						mask={`url(#${maskId})`}
 					/>
 					<g>
 						<circle

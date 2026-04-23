@@ -16,8 +16,8 @@ export interface RevealUnderProps {
 	delay?: number;
 	/** Ease function for the animation */
 	easing?: any;
-	/** Tailwind class for text color */
-	textColorClass?: string;
+	/** Hex color for text */
+	color?: string;
 	/** Additional wrapper CSS classes */
 	containerClassName?: string;
 	/** Additional text container CSS classes */
@@ -31,7 +31,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 	duration = 1.5,
 	delay = 0,
 	easing = [0.785, 0.135, 0.15, 0.86],
-	textColorClass = "text-rb-accent-1",
+	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "font-sans font-bold text-5xl",
 }) => {
@@ -130,7 +130,8 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 					<div className="inline-flex overflow-hidden">
 						<motion.span
 							variants={secondVariants}
-							className={`relative z-0 px-2 ${textColorClass} font-light`}
+							className="relative z-0 px-2 font-light"
+							style={{ color }}
 						>
 							{secondWord}
 						</motion.span>
@@ -139,7 +140,8 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 
 				<motion.span
 					variants={firstVariants}
-					className={`relative z-10 bg-background px-2 ${textColorClass}`}
+					className="relative z-10 bg-background px-2"
+					style={{ color }}
 				>
 					{firstWord}
 				</motion.span>
@@ -148,7 +150,8 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 					<div className="inline-flex overflow-hidden">
 						<motion.span
 							variants={secondVariants}
-							className={`relative z-0 px-2 ${textColorClass} font-light`}
+							className="relative z-0 px-2 font-light"
+							style={{ color }}
 						>
 							{secondWord}
 						</motion.span>

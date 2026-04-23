@@ -8,10 +8,11 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { BlurIn } from "../../meta/text/TextEnter/BlurIn";
 import { loaderProps, componentCode, creditsData } from "./BlurInData";
-import { ComboBox } from "../../components/combobox/ComboBox";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
-import { RotateCcw, Play } from "lucide-react";
+import DefaultTextInput from "@/app/components/textinput/DefaultTextInput";
+import ColorPicker from "@/app/components/colorpicker/ColorPicker";
+import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
+import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
+import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
 
@@ -19,7 +20,7 @@ const DEFAULT_TEXT = "All Hail Rameez";
 const DEFAULT_DURATION = 0.6;
 const DEFAULT_STAGGER = 0.04;
 const DEFAULT_BLUR = 12;
-const DEFAULT_COLOR = "text-rb-accent-1";
+const DEFAULT_COLOR = "#E8EAF0";
 
 const presets = [
 	{
@@ -30,7 +31,7 @@ const presets = [
 			duration: 0.6,
 			stagger: 0.04,
 			initialBlur: 12,
-			color: "text-rb-accent-1",
+			color: "#E8EAF0",
 		},
 	},
 	{
@@ -41,7 +42,7 @@ const presets = [
 			duration: 1.5,
 			stagger: 0.1,
 			initialBlur: 32,
-			color: "text-rb-accent-2",
+			color: "#A78BFA",
 		},
 	},
 	{
@@ -52,7 +53,7 @@ const presets = [
 			duration: 0.3,
 			stagger: 0.02,
 			initialBlur: 8,
-			color: "text-rb-accent-3",
+			color: "#2DD4BF",
 		},
 	},
 	{
@@ -63,19 +64,9 @@ const presets = [
 			duration: 2.0,
 			stagger: 0.05,
 			initialBlur: 24,
-			color: "text-rose-400",
+			color: "#FB7185",
 		},
 	},
-];
-
-const colorOptions = [
-	{ id: "text-rb-accent-1", label: "Accent 1" },
-	{ id: "text-rb-accent-2", label: "Accent 2" },
-	{ id: "text-rb-accent-3", label: "Accent 3" },
-	{ id: "text-white", label: "White" },
-	{ id: "text-emerald-400", label: "Emerald" },
-	{ id: "text-rose-400", label: "Rose" },
-	{ id: "text-amber-400", label: "Amber" },
 ];
 
 export const BlurInPage = () => {
@@ -83,7 +74,7 @@ export const BlurInPage = () => {
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [stagger, setStagger] = useState(DEFAULT_STAGGER);
 	const [initialBlur, setInitialBlur] = useState(DEFAULT_BLUR);
-	const [textColorClass, setTextColorClass] = useState(DEFAULT_COLOR);
+	const [color, setColor] = useState(DEFAULT_COLOR);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -95,7 +86,7 @@ export const BlurInPage = () => {
 			setDuration(preset.config.duration);
 			setStagger(preset.config.stagger);
 			setInitialBlur(preset.config.initialBlur);
-			setTextColorClass(preset.config.color);
+			setColor(preset.config.color);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -113,7 +104,7 @@ export const BlurInPage = () => {
   duration={${duration}}
   stagger={${stagger}}
   initialBlur={${initialBlur}}
-  textColorClass="${textColorClass}"
+  color="${color}"
 />`;
 
 	return (
@@ -136,7 +127,7 @@ export const BlurInPage = () => {
 								duration={duration}
 								stagger={stagger}
 								initialBlur={initialBlur}
-								textColorClass={textColorClass}
+								color={color}
 								textClassName="text-6xl font-bold tracking-tight font-mono"
 							/>
 						</div>
@@ -153,6 +144,7 @@ export const BlurInPage = () => {
 								</h3>
 							</div>
 							<DefaultComboBox
+								label="Presets"
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
@@ -174,25 +166,23 @@ export const BlurInPage = () => {
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="Text Content"
 						value={text}
-						onChange={(e) => {
-							setText(e.target.value);
+						onChange={(val) => {
+							setText(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
-						onClear={() => setText("")}
 					/>
 
-					<ComboBox
+					<ColorPicker
 						label="Text Color"
-						options={colorOptions}
-						value={textColorClass}
-						onChange={setTextColorClass}
+						value={color}
+						onChange={setColor}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Duration (s)"
 						min={0.1}
 						max={3}
@@ -200,10 +190,10 @@ export const BlurInPage = () => {
 						value={duration}
 						onChange={setDuration}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Stagger (s)"
 						min={0}
 						max={0.5}
@@ -211,17 +201,17 @@ export const BlurInPage = () => {
 						value={stagger}
 						onChange={setStagger}
 						maxDecimals={3}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Initial Blur (px)"
 						min={0}
 						max={100}
 						step={2}
 						value={initialBlur}
 						onChange={setInitialBlur}
-						showTicks={false}
+						showTicks={true}
 					/>
 				</PreviewTab>
 			</div>

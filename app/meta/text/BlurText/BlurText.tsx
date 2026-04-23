@@ -1,72 +1,152 @@
-import React, { useMemo } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { useInView, motion, Variant, Transition } from "framer-motion";
 
 export interface BlurTextProps {
 	/** The text to display and animate */
 	text?: string;
-	/** Duration of a single animation cycle in seconds */
-	animationDuration?: number;
-	/** Delay multiplier between each letter's animation start in seconds */
-	staggerDelay?: number;
-	/** Maximum blur amount (e.g., '4px', '8px', '0.5rem') */
-	maxBlur?: string;
-	/** Tailwind class for text color */
-	textColorClass?: string;
+	/** Delay before starting the animation in seconds */
+	delay?: number;
+	/** Stagger delay between each element in seconds */
+	stagger?: number;
 	/** Additional wrapper CSS classes */
-	containerClassName?: string;
-	/** Additional text container CSS classes (useful for font families) */
-	textClassName?: string;
+	className?: string;
+	/** Whether to animate by words or letters */
+	animateBy?: "words" | "letters";
+	/** Direction from which the text appears */
+	direction?: "top" | "bottom" | "none";
+	/** Duration of the animation per element */
+	duration?: number;
+	/** Threshold for intersection observer (0 to 1) */
+	threshold?: number;
+	/** Root margin for intersection observer */
+	rootMargin?: string;
+	/** Callback when animation is complete */
+	onAnimationComplete?: () => void;
+	/** Easing function for the animation */
+	easing?: string | number[];
+	/** Whether the animation should loop continuously */
+	loop?: boolean;
+	/** Peak blur amount in pixels */
+	blurAmount?: number;
 }
 
 export const BlurText: React.FC<BlurTextProps> = ({
-	text = "LOADING",
-	animationDuration = 1.5,
-	staggerDelay = 0.2,
-	maxBlur = "4px",
-	textColorClass = "text-white",
-	containerClassName = "",
-	textClassName = "",
+	text = "",
+	delay = 0,
+	stagger = 0.05,
+	className = "",
+	animateBy = "letters",
+	direction = "top",
+	duration = 0.5,
+	threshold = 0.1,
+	rootMargin = "0px",
+	onAnimationComplete,
+	easing = "easeOut",
+	loop = false,
+	blurAmount = 10,
 }) => {
-	// Memoize the array to prevent unnecessary recalculations on re-renders
-	const letters = useMemo(() => text.split(""), [text]);
+	const elements = animateBy === "words" ? text.split(" ") : text.split("");
+	const [inView, setInView] = useState(false);
+	const ref = useRef<HTMLParagraphElement>(null);
+	const animatedCount = useRef(0);
 
-	// Sanitize the blur value to create a valid, unique animation name
-	const animationName = `blur-text-${maxBlur.replace(/[^a-zA-Z0-9]/g, "")}`;
+	// Use intersection observer to trigger animation
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setInView(true);
+					observer.unobserve(ref.current!);
+				}
+			},
+			{ threshold, rootMargin }
+		);
+
+		if (ref.current) {
+			observer.observe(ref.current);
+		}
+
+		return () => observer.disconnect();
+	}, [threshold, rootMargin]);
+
+	const getVariants = () => {
+		const yOffset = direction === "top" ? -40 : direction === "bottom" ? 40 : 0;
+
+		return {
+			hidden: {
+				filter: `blur(${blurAmount}px)`,
+				opacity: 0,
+				y: yOffset,
+			},
+			visible: {
+				filter: "blur(0px)",
+				opacity: 1,
+				y: 0,
+			},
+		};
+	};
+
+	const variants = getVariants();
 
 	return (
-		<>
-			<style>{`
-        @keyframes ${animationName} {
-          0% { filter: blur(0px); }
-          100% { filter: blur(${maxBlur}); }
-        }
-      `}</style>
+		<p
+			ref={ref}
+			className={`flex flex-wrap items-center justify-center ${className}`}
+		>
+			{elements.map((el, i) => (
+				<motion.span
+					key={i}
+					initial="hidden"
+					animate={
+						inView
+							? loop
+								? {
+										filter: ["blur(0px)", `blur(${blurAmount}px)`, "blur(0px)"],
+										opacity: [1, 0.5, 1],
+										y: 0,
+								  }
+								: "visible"
+							: "hidden"
+					}
+					variants={variants}
 
-			<div className={`relative w-full h-full ${containerClassName}`}>
-				<div
-					className={`
-            absolute inset-0 m-auto flex items-center justify-center
-            w-full h-24
-            ${textClassName}
-          `}
+					transition={
+						loop
+							? {
+									duration: duration * 2,
+									repeat: Infinity,
+									delay: delay + i * stagger,
+									ease: "easeInOut",
+							  }
+							: {
+									delay: delay + i * stagger,
+									duration: duration,
+									ease: easing,
+									type: "spring",
+									damping: 12,
+									stiffness: 100,
+							  }
+					}
+					onAnimationComplete={() => {
+						if (!loop) {
+							animatedCount.current += 1;
+							if (animatedCount.current === elements.length && onAnimationComplete) {
+								onAnimationComplete();
+							}
+						}
+					}}
+					className="inline-block"
+					style={{ whiteSpace: "pre" }}
 				>
-					{letters.map((char, index) => (
-						<span
-							key={`${index}-${char}`}
-							className={`inline-block mx-1 sm:mx-1.5 ${textColorClass}`}
-							style={{
-								animation: `${animationName} ${animationDuration}s ${
-									index * staggerDelay
-								}s infinite linear alternate`,
-							}}
-						>
-							{/* Preserve spaces in the text prop */}
-							{char === " " ? "\u00A0" : char}
-						</span>
-					))}
-				</div>
-			</div>
-		</>
+					{el === " " ? "\u00A0" : el}
+					{animateBy === "words" && i < elements.length - 1 && "\u00A0"}
+				</motion.span>
+			))}
+		</p>
 	);
 };
 
+
+
 export default BlurText;
+

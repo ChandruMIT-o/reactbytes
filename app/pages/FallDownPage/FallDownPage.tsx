@@ -8,18 +8,19 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { FallDown } from "../../meta/text/TextEnter/FallDown";
 import { loaderProps, componentCode, creditsData } from "./FallDownData";
-import { ComboBox } from "../../components/combobox/ComboBox";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
-import { RotateCcw, Play } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
+import DefaultTextInput from "@/app/components/textinput/DefaultTextInput";
+import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
+import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
+import ColorPicker from "@/app/components/colorpicker/ColorPicker";
 import { Credits } from "../../components/buttongroup/Credits";
 
 const DEFAULT_TEXT = "All Hail Rameez";
 const DEFAULT_DURATION = 0.5;
 const DEFAULT_STAGGER = 0.045;
 const DEFAULT_INITIAL_Y = -60;
-const DEFAULT_COLOR = "text-rb-accent-1";
+const DEFAULT_COLOR = "#E8EAF0";
 
 const presets = [
 	{
@@ -30,7 +31,8 @@ const presets = [
 			duration: 0.5,
 			stagger: 0.045,
 			initialY: -60,
-			color: "text-[#E8EAF0]",
+			color: "#E8EAF0",
+			loop: false,
 		},
 	},
 	{
@@ -41,7 +43,8 @@ const presets = [
 			duration: 0.8,
 			stagger: 0.08,
 			initialY: -200,
-			color: "text-rb-accent-2",
+			color: "#FF4D4D",
+			loop: true,
 		},
 	},
 	{
@@ -52,7 +55,8 @@ const presets = [
 			duration: 1.2,
 			stagger: 0.03,
 			initialY: -40,
-			color: "text-rb-accent-1",
+			color: "#4DFFB8",
+			loop: false,
 		},
 	},
 	{
@@ -63,20 +67,10 @@ const presets = [
 			duration: 0.3,
 			stagger: 0.02,
 			initialY: -100,
-			color: "text-rb-accent-3",
+			color: "#4D96FF",
+			loop: false,
 		},
 	},
-];
-
-const colorOptions = [
-	{ id: "text-[#E8EAF0]", label: "Default Off-White" },
-	{ id: "text-rb-accent-1", label: "Accent 1" },
-	{ id: "text-rb-accent-2", label: "Accent 2" },
-	{ id: "text-rb-accent-3", label: "Accent 3" },
-	{ id: "text-white", label: "Pure White" },
-	{ id: "text-emerald-400", label: "Emerald" },
-	{ id: "text-rose-400", label: "Rose" },
-	{ id: "text-amber-400", label: "Amber" },
 ];
 
 export const FallDownPage = () => {
@@ -84,7 +78,8 @@ export const FallDownPage = () => {
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [stagger, setStagger] = useState(DEFAULT_STAGGER);
 	const [initialY, setInitialY] = useState(DEFAULT_INITIAL_Y);
-	const [textColorClass, setTextColorClass] = useState(DEFAULT_COLOR);
+	const [color, setColor] = useState(DEFAULT_COLOR);
+	const [loop, setLoop] = useState(false);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -96,7 +91,8 @@ export const FallDownPage = () => {
 			setDuration(preset.config.duration);
 			setStagger(preset.config.stagger);
 			setInitialY(preset.config.initialY);
-			setTextColorClass(preset.config.color);
+			setColor(preset.config.color);
+			setLoop(preset.config.loop);
 			setKey((prev) => prev + 1); // Trigger replay on preset change
 		}
 	};
@@ -114,7 +110,8 @@ export const FallDownPage = () => {
   duration={${duration}}
   stagger={${stagger}}
   initialY={${initialY}}
-  textColorClass="${textColorClass}"
+  color="${color}"
+  loop={${loop}}
 />`;
 
 	return (
@@ -137,7 +134,8 @@ export const FallDownPage = () => {
 								duration={duration}
 								stagger={stagger}
 								initialY={initialY}
-								textColorClass={textColorClass}
+								color={color}
+								loop={loop}
 								textClassName="text-6xl font-bold tracking-tight font-mono"
 							/>
 						</div>
@@ -158,9 +156,9 @@ export const FallDownPage = () => {
 								value={currentPreset}
 								onChange={applyPreset}
 								dynamicWidth={true}
+								label="Presets"
 							/>
 							<div className="flex items-center gap-3">
-
 								<button
 									onClick={handleReset}
 									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
@@ -175,25 +173,23 @@ export const FallDownPage = () => {
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="Text Content"
 						value={text}
-						onChange={(e) => {
-							setText(e.target.value);
-							setKey((prev) => prev + 1); // Auto-replay on text change
+						onChange={(val) => {
+							setText(val);
+							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter text..."
-						onClear={() => setText("")}
 					/>
 
-					<ComboBox
+					<ColorPicker
 						label="Text Color"
-						options={colorOptions}
-						value={textColorClass}
-						onChange={setTextColorClass}
+						value={color}
+						onChange={setColor}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Duration (s)"
 						min={0.1}
 						max={3}
@@ -201,10 +197,10 @@ export const FallDownPage = () => {
 						value={duration}
 						onChange={setDuration}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Stagger (s)"
 						min={0}
 						max={0.5}
@@ -212,17 +208,23 @@ export const FallDownPage = () => {
 						value={stagger}
 						onChange={setStagger}
 						maxDecimals={3}
-						showTicks={false}
+						showTicks={true}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Initial Y Offset"
 						min={-400}
 						max={0}
 						step={10}
 						value={initialY}
 						onChange={setInitialY}
-						showTicks={false}
+						showTicks={true}
+					/>
+
+					<ToggleComponent
+						label="Loop Animation"
+						checked={loop}
+						onChange={setLoop}
 					/>
 				</PreviewTab>
 			</div>

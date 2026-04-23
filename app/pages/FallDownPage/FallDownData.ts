@@ -28,16 +28,28 @@ export const loaderProps = [
 				defaultValue: "-60",
 				description: "The initial vertical offset for the fall effect.",
 			},
+			{
+				name: "loop",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether the animation should loop continuously.",
+			},
 		],
 	},
 	{
 		title: "Styling Props",
 		props: [
 			{
+				name: "color",
+				type: "string",
+				defaultValue: "undefined",
+				description: "Hex color or any valid CSS color for the text. Overrides textColorClass.",
+			},
+			{
 				name: "textColorClass",
 				type: "string",
-				defaultValue: "'text-[#E8EAF0]'",
-				description: "Tailwind class for the text color.",
+				defaultValue: "'text-rb-accent-1'",
+				description: "Tailwind class for the text color (used if color is not provided).",
 			},
 			{
 				name: "containerClassName",
@@ -68,13 +80,17 @@ export interface FallDownProps {
 	/** Delay between each character's animation in seconds */
 	stagger?: number;
 	/** Ease function for the animation */
-	easing?: number[] | string;
+	easing?: any;
 	/** Final opacity of the text */
 	endOpacity?: number;
 	/** Initial Y offset */
 	initialY?: number;
 	/** Tailwind class for text color */
 	textColorClass?: string;
+	/** Hex color or any valid CSS color */
+	color?: string;
+	/** Whether the animation should loop */
+	loop?: boolean;
 	/** Additional wrapper CSS classes */
 	containerClassName?: string;
 	/** Additional text container CSS classes */
@@ -85,12 +101,14 @@ export const FallDown: React.FC<FallDownProps> = ({
 	text = "All Hail Rameez",
 	duration = 0.5,
 	stagger = 0.045,
-	easing = [0.34, 1.56, 0.64, 1],
+	easing = [0.34, 1.56, 0.64, 1], // Custom bounce bezier
 	endOpacity = 1,
 	initialY = -60,
-	textColorClass = "text-[#E8EAF0]",
+	textColorClass = "text-rb-accent-1",
+	color,
+	loop = false,
 	containerClassName = "",
-	textClassName = "",
+	textClassName = "font-sans",
 }) => {
 	const letters = useMemo(() => text.split(""), [text]);
 
@@ -115,14 +133,26 @@ export const FallDown: React.FC<FallDownProps> = ({
 						key={\`\${index}-\${char}\`}
 						variants={{
 							hidden: { opacity: 0, y: initialY },
-							visible: { opacity: endOpacity, y: 0 },
+							visible: {
+								opacity: endOpacity,
+								y: 0,
+								transition: loop ? {
+									duration: duration,
+									ease: easing,
+									repeat: Infinity,
+									repeatType: "reverse",
+									repeatDelay: stagger * letters.length
+								} : {
+									duration: duration,
+									ease: easing,
+								}
+							},
 						}}
-						transition={{
-							duration: duration,
-							ease: easing,
+						className={\`inline-block \${!color ? textColorClass : ""}\`}
+						style={{
+							whiteSpace: "pre",
+							color: color
 						}}
-						className={\`inline-block \${textColorClass}\`}
-						style={{ whiteSpace: "pre" }}
 					>
 						{char === " " ? "\\u00A0" : char}
 					</motion.span>

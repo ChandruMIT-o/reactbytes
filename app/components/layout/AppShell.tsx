@@ -234,7 +234,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
 	// Extract activeItem from pathname if it's not and-redirect
 	const activeItem = pathname === "/" ? "intro" : pathname.slice(1);
-	
+
 	const [activeSection, setActiveSection] = React.useState<string>("");
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
@@ -293,17 +293,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="flex flex-col h-[100dvh] overflow-hidden font-sans bg-background text-foreground transition-colors duration-500">
 			{/* Fixed Header */}
-			<header className="flex items-center justify-between w-full px-5 md:px-8 py-4 border-b border-white/5 bg-background/80 backdrop-blur-md z-50 flex-shrink-0">
-				<div className="flex items-center gap-2 md:gap-4">
+			<header className="flex items-center justify-between w-full px-4 md:px-8 py-3 md:py-4 border-b border-white/5 bg-background/80 backdrop-blur-md z-50 flex-shrink-0">
+				<div className="flex items-center gap-1 sm:gap-2 md:gap-4">
 					<button
 						type="button"
-						className="md:hidden p-3 -ml-2 text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-white/5 rounded-md transition-colors relative z-[60]"
+						className="md:hidden p-2 -ml-2 text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-white/5 rounded-md transition-colors relative z-[60]"
 						onClick={(e) => {
 							e.stopPropagation();
 							setIsMobileMenuOpen(!isMobileMenuOpen);
 						}}
 					>
-						<Menu size={24} />
+						<Menu size={20} />
 					</button>
 					<div className="flex items-center gap-2 group cursor-pointer" onClick={() => router.push("/")}>
 						<div className="relative">
@@ -311,8 +311,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 							<Image
 								src="/logo.svg"
 								alt="Logo"
-								width={19}
-								height={30}
+								width={17}
+								height={28}
 								className="relative z-10"
 							/>
 						</div>
@@ -331,10 +331,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 						/>
 					</div>
 				</div>
-				<div className="flex items-center gap-2 flex-1 md:flex-none justify-end md:justify-start">
-					<div className="w-full max-w-[160px] md:max-w-none">
-						<SearchInput />
-					</div>
+				<div className="flex items-center gap-2 flex-shrink-0">
+					<SearchInput />
 					<div className="hidden md:flex items-center gap-2">
 						<ToggleSwitch />
 						<GitHubStarButton starCount={134} username="ChandruMIT-o" />
@@ -357,64 +355,75 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 					)}
 				</AnimatePresence>
 
-				{/* Left Sidebar - Scrollable */}
-				<aside 
-					className={`fixed inset-y-0 left-0 z-[70] w-[280px] max-w-[85vw] bg-rb-neutral-2 border-r border-white/5 md:bg-transparent md:border-none md:relative md:w-auto h-full overflow-y-auto flex flex-col pt-4 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent transform transition-transform duration-300 ease-in-out ${
-						isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-					}`}
+				{/* Left Sidebar */}
+				<aside
+					className={`fixed inset-y-0 left-0 z-[70] w-[280px] max-w-[85vw] bg-rb-neutral-2 border-r border-white/5 md:bg-transparent md:border-none md:relative md:w-auto h-full flex flex-col transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+						}`}
 				>
-					<div className="flex flex-col gap-1 pb-20 px-4 md:px-0 mt-4 md:mt-0">
-						<div className="flex md:hidden items-center justify-between mb-6 pb-4 border-b border-white/5">
-							<span className="text-rb-accent-2 font-medium text-lg">Menu</span>
-							<button 
-								type="button"
-								onClick={() => setIsMobileMenuOpen(false)}
-								className="p-1.5 text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-white/5 rounded-md transition-colors"
-							>
-								<X size={20} />
-							</button>
+					{/* Fixed Mobile Header */}
+					<div className="flex md:hidden items-center justify-between pt-6 px-[18px] border-b border-white/5 bg-rb-neutral-2 flex-shrink-0">
+						<div className="flex items-center gap-3">
+							<div className="w-[6px] h-6 bg-rb-accent-1 rounded-full shrink-0" />
+							<span className="text-rb-accent-2 font-semibold text-lg tracking-tight ml-2">Navigation</span>
 						</div>
+						<button
+							type="button"
+							onClick={() => setIsMobileMenuOpen(false)}
+							className="p-1.5 text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-white/5 rounded-md transition-colors"
+						>
+							<X size={20} />
+						</button>
+					</div>
 
-						{/* Mobile Header Actions */}
-						<div className="flex flex-col md:hidden gap-4 mb-6 pb-4 border-b border-white/5">
-							<ButtonGroup
-								groupId="mobile-main-nav"
-								items={[
-									{ id: "components", label: "Components" },
-									{ id: "docs", label: "Docs" },
-									{ id: "icons", label: "Icons" },
-								]}
-							/>
-							<div className="flex items-center gap-3">
-								<ToggleSwitch />
-								<GitHubStarButton starCount={134} username="ChandruMIT-o" />
+					{/* Scrollable Content Wrapper */}
+					<div className="flex-1 overflow-y-auto scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent">
+						<div className="flex flex-col gap-1 pb-5 px-0 md:px-0">
+							{/* Mobile Top Actions (ButtonGroup) */}
+							<div className="flex md:hidden px-[18px] py-6 border-b border-white/5 bg-rb-neutral-2/50">
+								<ButtonGroup
+									groupId="mobile-main-nav"
+									items={[
+										{ id: "components", label: "Components" },
+										{ id: "docs", label: "Docs" },
+										{ id: "icons", label: "Icons" },
+									]}
+								/>
 							</div>
-						</div>
 
-						<LeftSidebarMenu
-							activeItem={activeItem}
-							setActiveItem={handleSetActiveItem}
-							menuSubtitle="General"
-							items={generalItems}
-						/>
-						<LeftSidebarMenu
-							activeItem={activeItem}
-							setActiveItem={handleSetActiveItem}
-							menuSubtitle="Text"
-							items={textItems}
-						/>
-						<LeftSidebarMenu
-							activeItem={activeItem}
-							setActiveItem={handleSetActiveItem}
-							menuSubtitle="Background"
-							items={backgroundItems}
-						/>
-						<LeftSidebarMenu
-							activeItem={activeItem}
-							setActiveItem={handleSetActiveItem}
-							menuSubtitle="Miscellaneous"
-							items={miscellaneousItems}
-						/>
+							<LeftSidebarMenu
+								activeItem={activeItem}
+								setActiveItem={handleSetActiveItem}
+								menuSubtitle="General"
+								items={generalItems}
+							/>
+							<LeftSidebarMenu
+								activeItem={activeItem}
+								setActiveItem={handleSetActiveItem}
+								menuSubtitle="Text"
+								items={textItems}
+							/>
+							<LeftSidebarMenu
+								activeItem={activeItem}
+								setActiveItem={handleSetActiveItem}
+								menuSubtitle="Background"
+								items={backgroundItems}
+							/>
+							<LeftSidebarMenu
+								activeItem={activeItem}
+								setActiveItem={handleSetActiveItem}
+								menuSubtitle="Miscellaneous"
+								items={miscellaneousItems}
+							/>
+						</div>
+					</div>
+
+					{/* Fixed Mobile Footer */}
+					<div className="md:hidden flex items-center justify-between px-[18px] py-4 border-t border-white/5 bg-rb-neutral-2 flex-shrink-0">
+						<GitHubStarButton starCount={134} username="ChandruMIT-o" />
+						<div className="flex items-center gap-2">
+							<div className="w-px h-4 bg-white/10" />
+							<ToggleSwitch />
+						</div>
 					</div>
 				</aside>
 

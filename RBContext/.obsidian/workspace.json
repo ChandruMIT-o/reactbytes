@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Introduction.md",
+                "file": "Color Palette.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Introduction"
+              "title": "Color Palette"
             }
           }
         ],
@@ -200,8 +200,9 @@
   },
   "active": "28898080ca36a123",
   "lastOpenFiles": [
-    "Color Palette.md",
+    "Task_1.md",
     "Introduction.md",
+    "Color Palette.md",
     "About ReactBytes.md"
   ]
 }

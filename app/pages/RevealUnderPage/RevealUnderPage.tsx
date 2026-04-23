@@ -8,10 +8,11 @@ import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
 import { RevealUnder } from "../../meta/text/TextEnter/RevealUnder";
 import { loaderProps, componentCode, creditsData } from "./RevealUnderData";
-import { ComboBox } from "../../components/combobox/ComboBox";
-import { DiscreteSlider } from "../../components/slider/DiscreteSlider";
-import { TextInput } from "../../components/textinput/TextInput";
-import { RotateCcw, Play } from "lucide-react";
+import DefaultTextInput from "@/app/components/textinput/DefaultTextInput";
+import ColorPicker from "@/app/components/colorpicker/ColorPicker";
+import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
+import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
+import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
 
@@ -19,7 +20,7 @@ const DEFAULT_FIRST = "Hello";
 const DEFAULT_SECOND = "World";
 const DEFAULT_DURATION = 1.5;
 const DEFAULT_DIRECTION = "right";
-const DEFAULT_COLOR = "text-rb-accent-1";
+const DEFAULT_COLOR = "#E8EAF0";
 
 const directionOptions = [
 	{ id: "right", label: "Right" },
@@ -37,7 +38,7 @@ const presets = [
 			second: "World",
 			direction: "right",
 			duration: 1.5,
-			color: "text-rb-accent-1",
+			color: "#E8EAF0",
 		},
 	},
 	{
@@ -48,7 +49,7 @@ const presets = [
 			second: "Under",
 			direction: "top",
 			duration: 1.5,
-			color: "text-rb-accent-2",
+			color: "#A78BFA",
 		},
 	},
 	{
@@ -59,16 +60,9 @@ const presets = [
 			second: "OUT",
 			direction: "left",
 			duration: 0.6,
-			color: "text-rb-accent-3",
+			color: "#2DD4BF",
 		},
 	},
-];
-
-const colorOptions = [
-	{ id: "text-rb-accent-1", label: "Accent 1" },
-	{ id: "text-rb-accent-2", label: "Accent 2" },
-	{ id: "text-rb-accent-3", label: "Accent 3" },
-	{ id: "text-white", label: "White" },
 ];
 
 export const RevealUnderPage = () => {
@@ -76,7 +70,7 @@ export const RevealUnderPage = () => {
 	const [secondWord, setSecondWord] = useState(DEFAULT_SECOND);
 	const [duration, setDuration] = useState(DEFAULT_DURATION);
 	const [direction, setDirection] = useState<any>(DEFAULT_DIRECTION);
-	const [textColorClass, setTextColorClass] = useState(DEFAULT_COLOR);
+	const [color, setColor] = useState(DEFAULT_COLOR);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -88,7 +82,7 @@ export const RevealUnderPage = () => {
 			setSecondWord(preset.config.second);
 			setDirection(preset.config.direction);
 			setDuration(preset.config.duration);
-			setTextColorClass(preset.config.color);
+			setColor(preset.config.color);
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -106,7 +100,7 @@ export const RevealUnderPage = () => {
   secondWord="${secondWord}"
   direction="${direction}"
   duration={${duration}}
-  textColorClass="${textColorClass}"
+  color="${color}"
 />`;
 
 	return (
@@ -129,7 +123,7 @@ export const RevealUnderPage = () => {
 								secondWord={secondWord}
 								direction={direction}
 								duration={duration}
-								textColorClass={textColorClass}
+								color={color}
 								textClassName="text-6xl font-bold tracking-tight font-mono"
 							/>
 						</div>
@@ -146,6 +140,7 @@ export const RevealUnderPage = () => {
 								</h3>
 							</div>
 							<DefaultComboBox
+								label="Presets"
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}
@@ -167,26 +162,26 @@ export const RevealUnderPage = () => {
 						</div>
 					}
 				>
-					<TextInput
+					<DefaultTextInput
 						label="First Word"
 						value={firstWord}
-						onChange={(e) => {
-							setFirstWord(e.target.value);
+						onChange={(val) => {
+							setFirstWord(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter word..."
 					/>
-					<TextInput
+					<DefaultTextInput
 						label="Second Word"
 						value={secondWord}
-						onChange={(e) => {
-							setSecondWord(e.target.value);
+						onChange={(val) => {
+							setSecondWord(val);
 							setKey((prev) => prev + 1);
 						}}
 						placeholder="Enter word..."
 					/>
 
-					<ComboBox
+					<DefaultComboBox
 						label="Reveal Direction"
 						options={directionOptions}
 						value={direction}
@@ -196,14 +191,13 @@ export const RevealUnderPage = () => {
 						}}
 					/>
 
-					<ComboBox
+					<ColorPicker
 						label="Text Color"
-						options={colorOptions}
-						value={textColorClass}
-						onChange={setTextColorClass}
+						value={color}
+						onChange={setColor}
 					/>
 
-					<DiscreteSlider
+					<DiscreteSlider2
 						label="Duration (s)"
 						min={0.1}
 						max={3}
@@ -211,7 +205,7 @@ export const RevealUnderPage = () => {
 						value={duration}
 						onChange={setDuration}
 						maxDecimals={1}
-						showTicks={false}
+						showTicks={true}
 					/>
 				</PreviewTab>
 			</div>

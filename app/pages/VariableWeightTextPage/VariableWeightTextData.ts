@@ -44,10 +44,10 @@ export const loaderProps = [
 				description: "Whether the weight shift should loop indefinitely.",
 			},
 			{
-				name: "textColorClass",
+				name: "color",
 				type: "string",
-				defaultValue: "'text-rb-accent-1'",
-				description: "Tailwind class for the text color.",
+				defaultValue: "'#E8EAF0'",
+				description: "Hex color for the text.",
 			},
 		],
 	},
@@ -66,7 +66,7 @@ export interface VariableWeightTextProps {
 	stagger?: number;
 	easing?: any;
 	pulse?: boolean;
-	textColorClass?: string;
+	color?: string;
 	containerClassName?: string;
 	textClassName?: string;
 }
@@ -79,7 +79,7 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 	stagger = 0.1,
 	easing = "easeInOut",
 	pulse = false,
-	textColorClass = "text-rb-accent-1",
+	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "",
 }) => {
@@ -101,7 +101,7 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 	};
 
 	return (
-		<div className={\`relative w-full \${containerClassName}\`}>
+		<div className={\`relative w-full flex items-center justify-center \${containerClassName}\`}>
 			<div className={\`flex flex-wrap justify-center \${textClassName}\`}>
 				{letters.map((char, index) => (
 					<motion.span
@@ -110,8 +110,8 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 						variants={variants}
 						initial="initial"
 						animate="animate"
-						className={\`inline-block \${textColorClass}\`}
-						style={{ fontFamily: 'var(--font-outfit)' }}
+						className="inline-block"
+						style={{ fontFamily: 'var(--font-outfit)', color }}
 					>
 						{char === ' ' ? '\\u00A0' : char}
 					</motion.span>

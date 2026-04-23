@@ -18,8 +18,8 @@ export interface VariableWeightTextProps {
 	easing?: any;
 	/** Whether the weight should pulse (infinite loop) */
 	pulse?: boolean;
-	/** Tailwind class for text color */
-	textColorClass?: string;
+	/** Hex color for text */
+	color?: string;
 	/** Additional wrapper CSS classes */
 	containerClassName?: string;
 	/** Additional text container CSS classes */
@@ -34,7 +34,7 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 	stagger = 0.1,
 	easing = "easeInOut",
 	pulse = false,
-	textColorClass = "text-rb-accent-1",
+	color = "#E8EAF0",
 	containerClassName = "",
 	textClassName = "",
 }) => {
@@ -70,9 +70,10 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 						variants={variants}
 						initial="initial"
 						animate="animate"
-						className={`inline-block ${textColorClass}`}
+						className="inline-block"
 						style={{
 							fontFamily: "var(--font-outfit)",
+							color,
 						}}
 					>
 						{char === " " ? "\u00A0" : char}

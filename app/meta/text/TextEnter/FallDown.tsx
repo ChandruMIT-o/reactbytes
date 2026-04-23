@@ -18,6 +18,10 @@ export interface FallDownProps {
 	initialY?: number;
 	/** Tailwind class for text color */
 	textColorClass?: string;
+	/** Hex color or any valid CSS color */
+	color?: string;
+	/** Whether the animation should loop */
+	loop?: boolean;
 	/** Additional wrapper CSS classes */
 	containerClassName?: string;
 	/** Additional text container CSS classes */
@@ -32,6 +36,8 @@ export const FallDown: React.FC<FallDownProps> = ({
 	endOpacity = 1,
 	initialY = -60,
 	textColorClass = "text-rb-accent-1",
+	color,
+	loop = false,
 	containerClassName = "",
 	textClassName = "font-sans",
 }) => {
@@ -58,14 +64,26 @@ export const FallDown: React.FC<FallDownProps> = ({
 						key={`${index}-${char}`}
 						variants={{
 							hidden: { opacity: 0, y: initialY },
-							visible: { opacity: endOpacity, y: 0 },
+							visible: {
+								opacity: endOpacity,
+								y: 0,
+								transition: loop ? {
+									duration: duration,
+									ease: easing,
+									repeat: Infinity,
+									repeatType: "reverse",
+									repeatDelay: stagger * letters.length
+								} : {
+									duration: duration,
+									ease: easing,
+								}
+							},
 						}}
-						transition={{
-							duration: duration,
-							ease: easing,
+						className={`inline-block ${!color ? textColorClass : ""}`}
+						style={{
+							whiteSpace: "pre",
+							color: color
 						}}
-						className={`inline-block ${textColorClass}`}
-						style={{ whiteSpace: "pre" }}
 					>
 						{char === " " ? "\u00A0" : char}
 					</motion.span>

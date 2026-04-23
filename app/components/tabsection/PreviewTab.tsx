@@ -59,7 +59,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 	] as const;
 
 	return (
-		<div className="w-full max-w-4xl font-sans">
+		<div className="w-full max-w-6xl font-sans">
 			{/* Tabs Row Wrapper */}
 			<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max max-w-full overflow-x-auto scrollbar-none">
 				{tabs.map((tab) => (
@@ -208,7 +208,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 				</button>
 
 				{children && (
-					<div className="mt-1.5 px-3 py-3 bg-rb-neutral-1 rounded-[18px] border border-rb-neutral-4 flex flex-col gap-6">
+					<div className="mt-1.5 px-3 py-3 bg-rb-neutral-1 rounded-[18px] border border-rb-neutral-4 flex flex-col gap-3">
 						<div className="flex items-center justify-between gap-2 relative z-50">
 							<div className="flex-1">{header}</div>
 							{collapsible && (
@@ -246,7 +246,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 									}}
 									className="overflow-hidden relative px-2 z-10"
 								>
-									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-3 pb-3">
 										{children}
 									</div>
 								</motion.div>

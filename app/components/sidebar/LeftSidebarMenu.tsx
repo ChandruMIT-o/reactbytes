@@ -114,7 +114,7 @@ export default function LeftSidebarMenu({
 	};
 
 	return (
-		<div className="flex flex-col font-sans mb-2 w-[224px]">
+		<div className="flex flex-col font-sans mb-2 w-full md:w-[224px]">
 			<div className="relative w-full flex flex-col">
 				{/* Continuous Vertical Connecting Line */}
 				<div className="absolute left-[29px] top-[14px] bottom-0 w-[2px] bg-rb-neutral-4 z-0 rounded-full" />

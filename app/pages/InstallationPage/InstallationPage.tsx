@@ -8,16 +8,30 @@ import { Credits } from "../../components/buttongroup/Credits";
 import { componentDocsData, creditsData } from "./InstallationData";
 import AccordionStandard from "../../components/accordion/Accordion";
 import DockedCarousal from "@/app/meta/carousal/DockedCarousal/DockedCarousal";
+import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
+import ColorPicker from "@/app/components/colorpicker/ColorPicker";
+import ComboBox from "@/app/components/combobox/ComboBox";
+import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
+import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
+import DefaultTextInput from "@/app/components/textinput/DefaultTextInput";
 
 const fadeUp = (delay: number = 0) => ({
 	initial: { opacity: 0, y: 20, filter: "blur(8px)" },
-	animate: { opacity: 1, y: 0, filter: "blur(0px)" },
-	transition: { duration: 0.6, delay, ease: [0.19, 1, 0.22, 1] as [number, number, number, number] },
+	whileInView: { opacity: 1, y: 0, filter: "blur(0px)" },
+	viewport: { once: true },
+	transition: {
+		duration: 0.8,
+		delay,
+		ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+	},
 });
 
-export const InstallationPage = () => {
+export const InstallationPage: React.FC = () => {
+	const [toggleValue, setToggleValue] = React.useState(true);
+	const [textValue, setTextValue] = React.useState("");
+
 	return (
-		<div className="flex flex-col gap-16 pb-20 font-sans">
+		<div className="min-h-screen bg-rb-neutral-1 text-rb-accent-1 selection:bg-rb-accent-1/20 py-20 pb-40 space-y-32">
 			{/* Hero Section */}
 			<section
 				id="installation-hero"
@@ -26,7 +40,7 @@ export const InstallationPage = () => {
 				<motion.div
 					initial={{ opacity: 0, scale: 0.97 }}
 					animate={{ opacity: 1, scale: 1 }}
-					transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
+					transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] as [number, number, number, number] }}
 					className="relative z-10 max-w-3xl px-6"
 				>
 					<motion.h1
@@ -119,10 +133,32 @@ export const InstallationPage = () => {
 					/>
 				</motion.div>
 			</section>
-			<AccordionStandard />
-			<DockedCarousal />
+			<section className="flex flex-col items-center justify-center pb-32">
+				<div className="flex flex-col gap-4 w-[320px]">
+					<DiscreteSlider2 label="Intensity" />
+					<ColorPicker label="Theme Color" />
+					<DefaultComboBox 
+						label="Language" 
+						options={[
+							{ id: "en", label: "English" },
+							{ id: "es", label: "Spanish" },
+							{ id: "fr", label: "French" },
+						]} 
+					/>
+					<ToggleComponent 
+						label="Auto-updates" 
+						checked={toggleValue} 
+						onChange={setToggleValue} 
+					/>
+					<DefaultTextInput 
+						label="Project Name" 
+						placeholder="My Awesome App"
+						value={textValue}
+						onChange={setTextValue}
+					/>
+				</div>
+			</section>
 		</div>
 	);
 };
 
-export default InstallationPage;

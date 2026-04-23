@@ -13,7 +13,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 }) => {
 	return (
 		<div
-			className={`flex items-center w-fit px-3 py-[7px] rounded-full bg-rb-neutral-3 transition-all focus-within:ring-2 focus-within:ring-transparent ${containerClassName}`}
+			className={`flex items-center w-fit px-2.5 py-2.5 md:px-3 md:py-[7px] rounded-full bg-rb-neutral-3 transition-all duration-300 focus-within:ring-2 focus-within:ring-rb-accent-1/20 focus-within:w-full md:focus-within:w-auto ${containerClassName}`}
 		>
 			{/* Magnifying Glass Icon */}
 			<Search
@@ -21,17 +21,17 @@ export const SearchInput: React.FC<SearchInputProps> = ({
 				strokeWidth={2.5}
 			/>
 
-			{/* Actual Input Field */}
+			{/* Actual Input Field - Hidden on mobile unless focused (handled by container expansion) */}
 			<input
 				type="text"
 				placeholder="Search"
-				className={`flex-1 w-28 bg-transparent border-none outline-none text-rb-accent-2 placeholder:text-rb-accent-2/40 ml-2 text-[16px] font-medium tracking-tight ${className}`}
+				className={`hidden md:block w-28 bg-transparent border-none outline-none text-rb-accent-2 placeholder:text-rb-accent-2/40 ml-2 text-[16px] font-medium tracking-tight ${className}`}
 				{...props}
 			/>
 
-			{/* Command Palette Shortcut (⌘ K) */}
+			{/* Command Palette Shortcut (⌘ K) - Hidden on mobile */}
 			<div
-				className="flex items-center gap-1 text-rb-accent-2/20 shrink-0 font-medium text-[13px] ml-2"
+				className="hidden md:flex items-center gap-1 text-rb-accent-2/20 shrink-0 font-medium text-[13px] ml-2"
 				aria-hidden="true"
 			>
 				<kbd className="font-sans">⌘</kbd>

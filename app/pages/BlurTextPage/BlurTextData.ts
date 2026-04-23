@@ -5,118 +5,222 @@ export const loaderProps = [
 			{
 				name: "text",
 				type: "string",
-				defaultValue: "'LOADING'",
+				defaultValue: "''",
 				description:
 					"The text to be broken down and animated. Handles spaces automatically.",
 			},
 			{
-				name: "animationDuration",
-				type: "number",
-				defaultValue: "1.5",
-				description:
-					"How long the blur takes to go from 0px to maxBlur (in seconds).",
+				name: "animateBy",
+				type: "'words' | 'letters'",
+				defaultValue: "'letters'",
+				description: "Whether to animate each word or each letter individually.",
 			},
 			{
-				name: "staggerDelay",
-				type: "number",
-				defaultValue: "0.2",
-				description:
-					"The delay multiplier between each letter's animation start.",
+				name: "direction",
+				type: "'top' | 'bottom' | 'none'",
+				defaultValue: "'top'",
+				description: "The direction from which the text elements appear.",
 			},
 			{
-				name: "maxBlur",
-				type: "string",
-				defaultValue: "'4px'",
-				description: "The peak blur intensity applied to the text.",
+				name: "duration",
+				type: "number",
+				defaultValue: "0.5",
+				description: "The duration of the animation for each individual element.",
+			},
+			{
+				name: "delay",
+				type: "number",
+				defaultValue: "0",
+				description: "Base delay before the animation sequence starts.",
+			},
+			{
+				name: "loop",
+				type: "boolean",
+				defaultValue: "false",
+				description: "Whether the animation should loop continuously (pulsing effect).",
+			},
+			{
+				name: "blurAmount",
+				type: "number",
+				defaultValue: "10",
+				description: "The peak blur intensity in pixels.",
 			},
 		],
 	},
 	{
-		title: "Styling Props",
+		title: "Advanced Props",
 		props: [
 			{
-				name: "textColorClass",
-				type: "string",
-				defaultValue: "'text-white'",
-				description: "Tailwind class for the text color.",
+				name: "easing",
+				type: "string | number[]",
+				defaultValue: "'easeOut'",
+				description: "Custom easing function or cubic-bezier array.",
 			},
 			{
-				name: "containerClassName",
-				type: "string",
-				defaultValue: "''",
-				description: "Extra utility classes for the outermost wrapper.",
+				name: "threshold",
+				type: "number",
+				defaultValue: "0.1",
+				description: "Intersection observer threshold to trigger animation.",
 			},
 			{
-				name: "textClassName",
+				name: "rootMargin",
+				type: "string",
+				defaultValue: "'0px'",
+				description: "Intersection observer root margin.",
+			},
+			{
+				name: "onAnimationComplete",
+				type: "() => void",
+				defaultValue: "undefined",
+				description: "Callback function triggered when all elements finish animating.",
+			},
+			{
+				name: "className",
 				type: "string",
 				defaultValue: "''",
-				description: "Extra utility classes for the text container.",
+				description: "Additional CSS classes for the text container.",
 			},
 		],
 	},
 ];
 
-export const componentCode = `import React, { useMemo } from 'react';
+export const componentCode = `import React, { useRef, useEffect, useState } from "react";
+import { motion, Variant } from "framer-motion";
 
 export interface BlurTextProps {
   text?: string;
-  animationDuration?: number;
-  staggerDelay?: number;
-  maxBlur?: string;
-  textColorClass?: string;
-  containerClassName?: string;
-  textClassName?: string;
+  delay?: number;
+  stagger?: number;
+  className?: string;
+  animateBy?: "words" | "letters";
+  direction?: "top" | "bottom" | "none";
+  duration?: number;
+  threshold?: number;
+  rootMargin?: string;
+  onAnimationComplete?: () => void;
+  easing?: string | number[];
+  loop?: boolean;
+  blurAmount?: number;
 }
 
 export const BlurText: React.FC<BlurTextProps> = ({
-  text = 'LOADING',
-  animationDuration = 1.5,
-  staggerDelay = 0.2,
-  maxBlur = '4px',
-  textColorClass = 'text-white',
-  containerClassName = '',
-  textClassName = '',
+  text = "",
+  delay = 0,
+  stagger = 0.05,
+  className = "",
+  animateBy = "letters",
+  direction = "top",
+  duration = 0.5,
+  threshold = 0.1,
+  rootMargin = "0px",
+  onAnimationComplete,
+  easing = "easeOut",
+  loop = false,
+  blurAmount = 10,
 }) => {
-  const letters = useMemo(() => text.split(''), [text]);
-  const animationName = \`blur-text-\${maxBlur.replace(/[^a-zA-Z0-9]/g, '')}\`;
+  const elements = animateBy === "words" ? text.split(" ") : text.split("");
+  const [inView, setInView] = useState(false);
+  const ref = useRef<HTMLParagraphElement>(null);
+  const animatedCount = useRef(0);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.unobserve(ref.current!);
+        }
+      },
+      { threshold, rootMargin }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [threshold, rootMargin]);
+
+  const getVariants = () => {
+    const yOffset = direction === "top" ? -40 : direction === "bottom" ? 40 : 0;
+
+    return {
+      hidden: {
+        filter: \`blur(\${blurAmount}px)\`,
+        opacity: 0,
+        y: yOffset,
+      },
+      visible: {
+        filter: "blur(0px)",
+        opacity: 1,
+        y: 0,
+      },
+    };
+  };
+
+  const variants = getVariants();
 
   return (
-    <>
-      <style>{\`
-        @keyframes \${animationName} {
-          0% { filter: blur(0px); }
-          100% { filter: blur(\${maxBlur}); }
-        }
-      \`}</style>
-      
-      <div className={\`relative w-full h-full \${containerClassName}\`}>
-        <div
-          className={\`
-            absolute inset-0 m-auto flex items-center justify-center
-            w-full h-24
-            \${textClassName}
-          \`}
+    <p
+      ref={ref}
+      className={\`flex flex-wrap items-center justify-center \${className}\`}
+    >
+      {elements.map((el, i) => (
+        <motion.span
+          key={i}
+          initial="hidden"
+          animate={
+            inView
+              ? loop
+                ? {
+                    filter: ["blur(0px)", \`blur(\${blurAmount}px)\`, "blur(0px)"],
+                    opacity: [1, 0.5, 1],
+                    y: 0,
+                  }
+                : "visible"
+              : "hidden"
+          }
+          variants={variants}
+          transition={
+            loop
+              ? {
+                  duration: duration * 2,
+                  repeat: Infinity,
+                  delay: delay + i * stagger,
+                  ease: "easeInOut",
+                }
+              : {
+                  delay: delay + i * stagger,
+                  duration: duration,
+                  ease: easing,
+                  type: "spring",
+                  damping: 12,
+                  stiffness: 100,
+                }
+          }
+          onAnimationComplete={() => {
+            if (!loop) {
+              animatedCount.current += 1;
+              if (animatedCount.current === elements.length && onAnimationComplete) {
+                onAnimationComplete();
+              }
+            }
+          }}
+          className="inline-block"
+          style={{ whiteSpace: "pre" }}
         >
-          {letters.map((char, index) => (
-            <span
-              key={\`\${index}-\${char}\`}
-              className={\`inline-block mx-1 sm:mx-1.5 \${textColorClass}\`}
-              style={{
-                animation: \`\${animationName} \${animationDuration}s \${
-                  index * staggerDelay
-                }s infinite linear alternate\`,
-              }}
-            >
-              {char === ' ' ? '\\u00A0' : char}
-            </span>
-          ))}
-        </div>
-      </div>
-    </>
+          {el === " " ? "\\u00A0" : el}
+          {animateBy === "words" && i < elements.length - 1 && "\\u00A0"}
+        </motion.span>
+      ))}
+    </p>
   );
 };
 
 export default BlurText;`;
+
+
+
 
 export const creditsData = [
 	{
@@ -138,9 +242,9 @@ export const creditsData = [
 				url: "https://react.dev",
 			},
 			{
-				name: "Tailwind CSS",
-				role: "Styling",
-				url: "https://tailwindcss.com",
+				name: "Framer Motion",
+				role: "Animation",
+				url: "https://framer.com/motion",
 			},
 			{
 				name: "Lucide",
@@ -150,3 +254,4 @@ export const creditsData = [
 		],
 	},
 ];
+
