@@ -40,7 +40,7 @@ export const InstallationTabs = () => {
 						}}
 						whileHover="hover"
 					>
-						<span className="relative z-10">{tab}</span>
+						<span className="relative z-[1]">{tab}</span>
 
 						{activeTab === tab && (
 							<motion.div

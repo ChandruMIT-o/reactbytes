@@ -34,6 +34,8 @@ import { StandardAccordionPage } from "../pages/StandardAccordionPage/StandardAc
 import { GlowCardPage } from "../pages/GlowCardPage/GlowCardPage";
 import { ShinyButtonPage } from "../pages/ShinyButtonPage/ShinyButtonPage";
 import { DockedCarouselPage } from "../pages/DockedCarouselPage/DockedCarouselPage";
+import VerticalMenuPage from "../pages/VerticalMenuPage/VerticalMenuPage";
+import HoloCardPage from "../pages/HoloCardPage/HoloCardPage";
 
 
 
@@ -73,6 +75,8 @@ export default function DynamicComponentPage() {
 		if (id === "glow-card") return <GlowCardPage />;
 		if (id === "shiny-button") return <ShinyButtonPage />;
 		if (id === "docked-carousel") return <DockedCarouselPage />;
+		if (id === "vertical-menu") return <VerticalMenuPage />;
+		if (id === "holo-card") return <HoloCardPage />;
 
 
 

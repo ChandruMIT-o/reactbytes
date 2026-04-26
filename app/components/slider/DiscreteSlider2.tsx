@@ -165,8 +165,8 @@ export const DiscreteSlider2: React.FC<DiscreteSliderProps> = ({
 				</div>
 
 				{/* Label & Value */}
-				<div className="flex flex-col min-w-[65px] shrink-0 cursor-default">
-					<span className="text-[8px] font-bold uppercase tracking-[0.15em] text-rb-accent-2/40 leading-none">
+				<div className="flex flex-col min-w-[80px] max-w-[70px] shrink-0 cursor-default" title={label}>
+					<span className="text-[8px] font-bold uppercase tracking-[0.15em] text-rb-accent-2/40 leading-none truncate">
 						{label}
 					</span>
 					<div className="h-5 overflow-hidden">

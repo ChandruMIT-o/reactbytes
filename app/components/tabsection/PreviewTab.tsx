@@ -72,7 +72,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 						}}
 						whileHover="hover"
 					>
-						<span className="relative z-10">{tab.label}</span>
+						<span className="relative z-[1]">{tab.label}</span>
 
 						{activeTab === tab.id && (
 							<motion.div
@@ -244,7 +244,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 										duration: 0.3,
 										ease: "easeInOut",
 									}}
-									className="overflow-hidden relative px-2 z-10"
+									className="overflow-hidden relative px-2 z-[1]"
 								>
 									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-3 pb-3">
 										{children}

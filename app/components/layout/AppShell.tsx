@@ -52,6 +52,8 @@ const miscellaneousItems = [
 	{ id: "glow-card", label: "Glowing Shadows" },
 	{ id: "shiny-button", label: "Shiny CTA" },
 	{ id: "docked-carousel", label: "Docked Carousel" },
+	{ id: "vertical-menu", label: "Vertical Menu" },
+	{ id: "holo-card", label: "Holographic Card" },
 ];
 
 
@@ -217,6 +219,18 @@ const pageSections: Record<string, { id: string; label: string }[]> = {
 	],
 	"docked-carousel": [
 		{ id: "docked-carousel-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"vertical-menu": [
+		{ id: "vertical-menu-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"holo-card": [
+		{ id: "holo-card-title", label: "Preview" },
 		{ id: "installation-tabs", label: "Installation" },
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },

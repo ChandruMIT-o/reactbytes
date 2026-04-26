@@ -21,6 +21,8 @@ const navItems: NavItem[] = [
 	{ id: "a11y", label: "Accessibility" },
 	{ id: "mcp", label: "MCP" },
 	{ id: "troubleshoot", label: "Troubleshooting" },
+	{ id: "vertical-menu", label: "Vertical Menu" },
+	{ id: "holo-card", label: "Holo Card" },
 	{ id: "changelog", label: "Changelog" },
 ];
 

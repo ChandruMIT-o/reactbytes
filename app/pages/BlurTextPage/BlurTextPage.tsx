@@ -9,7 +9,6 @@ import { loaderProps, componentCode, creditsData } from "./BlurTextData";
 import { DiscreteSlider2 } from "../../components/slider/DiscreteSlider2";
 import { DefaultTextInput } from "../../components/textinput/DefaultTextInput";
 import { ToggleComponent } from "../../components/buttongroup/ToggleComponent";
-import { ComboBox } from "../../components/combobox/ComboBox";
 import { RotateCcw } from "lucide-react";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { Credits } from "../../components/buttongroup/Credits";
@@ -236,15 +235,13 @@ export const BlurTextPage = () => {
 									Props
 								</h3>
 							</div>
+							<DefaultComboBox
+								options={presets}
+								value={currentPreset}
+								onChange={applyPreset}
+								dynamicWidth={true}
+							/>
 							<div className="flex items-center gap-3 flex-1 sm:flex-none justify-start sm:justify-end">
-								<div className="flex-1 sm:flex-none">
-									<DefaultComboBox
-										options={presets}
-										value={currentPreset}
-										onChange={applyPreset}
-										dynamicWidth={true}
-									/>
-								</div>
 								<button
 									onClick={handleReset}
 									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300 shrink-0"
@@ -331,21 +328,21 @@ export const BlurTextPage = () => {
 						showTicks={true}
 					/>
 
-					<ComboBox
+					<DefaultComboBox
 						label="Text Color"
 						options={colorOptions}
 						value={textColorClass}
 						onChange={setTextColorClass}
 					/>
 
-					<ComboBox
+					<DefaultComboBox
 						label="Animate By"
 						options={animateByOptions}
 						value={animateBy}
 						onChange={(val: any) => setAnimateBy(val)}
 					/>
 
-					<ComboBox
+					<DefaultComboBox
 						label="Slide Direction"
 						options={directionOptions}
 						value={direction}

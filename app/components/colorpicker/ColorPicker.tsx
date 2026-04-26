@@ -98,7 +98,7 @@ export default function ColorPicker({
 	};
 
 	return (
-		<div className={`w-full font-sans relative ${className}`} ref={dropdownRef}>
+		<div className={`w-full font-sans relative ${className} ${openType ? "z-[9999]" : ""}`} ref={dropdownRef}>
 			<div className="flex items-center gap-3 p-1.5 w-full bg-rb-neutral-3 rounded-full shadow-lg shadow-black/20 border border-rb-neutral-4/50 backdrop-blur-sm group">
 				{/* Swatch - Triggers Custom Picker */}
 				<div className="relative flex items-center shrink-0">
@@ -194,7 +194,7 @@ export default function ColorPicker({
 						animate={{ opacity: 1, y: 5, scale: 1 }}
 						exit={{ opacity: 0, y: 10, scale: 0.98 }}
 						transition={{ type: "spring", stiffness: 300, damping: 25 }}
-						className="absolute top-full left-0 right-0 mt-2 p-5 bg-rb-neutral-3 border border-rb-neutral-4/50 backdrop-blur-md rounded-3xl shadow-2xl z-[100] flex flex-col gap-3"
+						className="absolute top-full left-0 right-0 mt-2 p-5 bg-rb-neutral-3 border border-rb-neutral-4/50 backdrop-blur-md rounded-3xl shadow-2xl z-[1000] flex flex-col gap-3"
 					>
 						<span className="text-[10px] font-bold uppercase tracking-widest text-rb-accent-1/30">Custom Picker</span>
 						<CustomColorPicker color={selectedColor} onChange={handleSelectColor} />
@@ -208,7 +208,7 @@ export default function ColorPicker({
 						animate={{ opacity: 1, y: 5, scale: 1 }}
 						exit={{ opacity: 0, y: 10, scale: 0.98 }}
 						transition={{ type: "spring", stiffness: 300, damping: 25 }}
-						className="absolute top-full left-0 right-0 mt-2 p-5 bg-rb-neutral-3 border border-rb-neutral-4/50 backdrop-blur-md rounded-3xl shadow-2xl z-[100] flex flex-col gap-3"
+						className="absolute top-full left-0 right-0 mt-2 p-5 bg-rb-neutral-3 border border-rb-neutral-4/50 backdrop-blur-md rounded-3xl shadow-2xl z-[1000] flex flex-col gap-3"
 					>
 						<span className="text-[10px] font-bold uppercase tracking-widest text-rb-accent-1/30">Presets</span>
 						<div className="flex flex-wrap gap-2.5 justify-center">

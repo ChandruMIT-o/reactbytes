@@ -88,7 +88,7 @@ export default function CustomColorPicker({
 		const rect = saturationValueRef.current.getBoundingClientRect();
 		const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX;
 		const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY;
-		
+
 		const s = Math.min(100, Math.max(0, ((clientX - rect.left) / rect.width) * 100));
 		const v = Math.min(100, Math.max(0, 100 - ((clientY - rect.top) / rect.height) * 100));
 		updateColor({ ...hsv, s, v });
@@ -121,11 +121,11 @@ export default function CustomColorPicker({
 	};
 
 	return (
-		<div className="flex flex-col gap-4 w-full">
+		<div className="flex flex-col gap-4 w-full relative z-50">
 			{/* Saturation & Value Area */}
 			<div
 				ref={saturationValueRef}
-				className="relative w-full aspect-square rounded-xl cursor-crosshair overflow-hidden border border-white/10"
+				className="relative w-full aspect-square rounded-xl cursor-crosshair overflow-hidden border border-rb-neutral-1"
 				style={{
 					backgroundColor: `hsl(${hsv.h}, 100%, 50%)`,
 					backgroundImage: `
@@ -175,7 +175,7 @@ export default function CustomColorPicker({
 							left: `${(hsv.h / 360) * 100}%`,
 						}}
 						style={{ backgroundColor: `hsl(${hsv.h}, 100%, 50%)` }}
-						transition={{ type: "spring", stiffness: 500, damping: 30 }}
+						transition={{ type: "keyframes", stiffness: 500, damping: 30 }}
 					/>
 				</div>
 			</div>

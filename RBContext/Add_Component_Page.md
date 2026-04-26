@@ -12,9 +12,18 @@ Read the source code of the component (e.g., `app/meta/.../MyComponent.tsx`).
 
 ## 2. Create the Data File
 Create `app/pages/[ComponentName]Page/[ComponentName]Data.tsx`.
-- **`componentCode`**: A stringified version of the component's source code. Ensure template literals (backticks) are escaped (`\\\``).
-- **`[ComponentName]Props`**: An array of prop definitions for the `PropsTable`.
-- **`creditsData`**: An array of credits, including any external libraries used.
+- **`componentCode`**: A stringified version of the component's source code. 
+    - **Crucial**: Escape backticks (`\``) as `\\\`` *except* for the very last backtick that closes the string. A `\`;` at the end will cause an "Unterminated template literal" error. Use `;` or similar after the final backtick.
+- **`[ComponentName]Props`**: An array of `PropDefinition` objects.
+- **`creditsData`**: An array of `CreditSection` objects. Structure:
+    ```tsx
+    export const creditsData = [
+      {
+        title: "Section Title",
+        items: [{ name: "Name", role: "Role", url: "https://..." }]
+      }
+    ];
+    ```
 
 ## 3. Create the Main Page File
 Create `app/pages/[ComponentName]Page/[ComponentName]Page.tsx`.
@@ -38,8 +47,18 @@ Create `app/pages/[ComponentName]Page/[ComponentName]Page.tsx`.
 - **Presets**: Define at least 5 distinct presets that showcase different capabilities of the component.
 - **State Management**: Create state for every interactive prop.
 - **Preview Content**: Wrap the component in a styled container inside `PreviewTab`.
-- **Control Panel**: Use `DiscreteSlider` for numbers, `DefaultComboBox` for enums/types, and `Toggle` for booleans.
-- **Critical Layout Note**: The `PreviewTab` component already wraps its `children` in a responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`). **Do NOT wrap your columns in an extra `grid` div**, as this will cause the columns to be squeezed into a single grid cell. Instead, pass the column `div`s directly as children.
+- **Control Panel**: Use the following premium components located in `app/components/` (pay close attention to their unique prop names):
+    - `textinput/DefaultTextInput.tsx`: `label`, `value`, `onChange`.
+    - `combobox/DefaultComboBox.tsx`: `label`, `options` (id/label pairs), `value`, `onChange`.
+    - `slider/DiscreteSlider2.tsx`: `label`, `min`, `max`, `step`, `value`, `onChange`, `showTicks={true}`.
+    - `buttongroup/ToggleComponent.tsx`: `label`, `checked`, `onChange`.
+    - `colorpicker/ColorPicker.tsx`: `label`, `value`, `onChange`. (Do NOT use `CustomColorPicker` directly).
+- **PropsTable**: Use the `categories` prop. Example: `<PropsTable categories={[{ title: "Props", props: myProps }]} />`.
+- **Credits**: Use the `data` prop. Example: `<Credits data={creditsData} />`.
+- **Critical Layout Note**: The `PreviewTab` component already wraps its `children` in a responsive grid (`grid-cols-1 md:grid-cols-2 lg:grid-cols-3`). 
+    - **Do NOT wrap your columns in an extra `grid` or `div` wrapper**.
+    - Pass each control component (or a group of related controls) as a **direct child** of `PreviewTab`.
+    - If you need a full-width row for a description, use a `div` with `lg:col-span-3`.
 
 ## 4. Register the Component
 1. **`app/components/layout/AppShell.tsx`**:
@@ -61,10 +80,3 @@ When asking an AI to do this, use the following prompt:
 > 4. Ensure the design matches the existing premium aesthetic of the project."
 
 ---
-
-
-gcloud iam service-accounts add-iam-policy-binding `
-"423299610967-compute@developer.gserviceaccount.com" `
---member="user:chandrukavin0503@gmail.com" `
---role="roles/iam.serviceAccountUser" `
---project=react-bytes
