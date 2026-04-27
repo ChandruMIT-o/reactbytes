@@ -22,7 +22,21 @@ const DEFAULT_STAGGER = 0.045;
 const DEFAULT_INITIAL_Y = -60;
 const DEFAULT_COLOR = "#E8EAF0";
 
-const presets = [
+interface Preset {
+	id: string;
+	label: string;
+	config: {
+		text: string;
+		duration: number;
+		stagger: number;
+		initialY: number;
+		color: string;
+		loop: boolean;
+		uppercase: boolean;
+	};
+}
+
+const presets: Preset[] = [
 	{
 		id: "default",
 		label: "Default Style",
@@ -33,6 +47,7 @@ const presets = [
 			initialY: -60,
 			color: "#E8EAF0",
 			loop: false,
+			uppercase: false,
 		},
 	},
 	{
@@ -45,6 +60,7 @@ const presets = [
 			initialY: -200,
 			color: "#FF4D4D",
 			loop: true,
+			uppercase: true,
 		},
 	},
 	{
@@ -57,6 +73,7 @@ const presets = [
 			initialY: -40,
 			color: "#4DFFB8",
 			loop: false,
+			uppercase: true,
 		},
 	},
 	{
@@ -69,6 +86,7 @@ const presets = [
 			initialY: -100,
 			color: "#4D96FF",
 			loop: false,
+			uppercase: true,
 		},
 	},
 ];
@@ -94,7 +112,7 @@ export const FallDownPage = () => {
 			setInitialY(preset.config.initialY);
 			setColor(preset.config.color);
 			setLoop(preset.config.loop);
-			setUppercase(preset.config.uppercase ?? false);
+			setUppercase(preset.config.uppercase);
 			setKey((prev) => prev + 1); // Trigger replay on preset change
 		}
 	};
