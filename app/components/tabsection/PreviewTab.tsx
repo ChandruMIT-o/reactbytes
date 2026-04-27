@@ -1,7 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import { Copy, Check, ChevronDown, ChevronUp, Play, RotateCcw } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Copy, Check, ChevronDown, ChevronUp, Play, Maximize2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { usePreview } from "../context/PreviewContext";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import "prismjs/components/prism-javascript";
@@ -34,8 +36,45 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 	const [activeTab, setActiveTab] = useState<"preview" | "code" | "usage">(
 		"preview",
 	);
+	const searchParams = useSearchParams();
+	const router = useRouter();
+	const pathname = usePathname();
+
+	const { setIsOpen, setData, isOpen: isGlobalOpen } = usePreview();
+
 	const [copied, setCopied] = useState(false);
 	const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+	const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(searchParams.get("preview") === "true");
+
+	// Update global data whenever it changes
+	useEffect(() => {
+		setData({
+			previewContent,
+			children,
+			header,
+			onReplay
+		});
+	}, [previewContent, children, header, onReplay, setData]);
+
+	// Keep state in sync with URL
+	useEffect(() => {
+		const isPreview = searchParams.get("preview") === "true";
+		setIsFullPreviewOpen(isPreview);
+	}, [searchParams]);
+
+	const handleOpenFullPreview = () => {
+		setIsOpen(true);
+		const params = new URLSearchParams(searchParams.toString());
+		params.set("preview", "true");
+		router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+	};
+
+	const handleCloseFullPreview = () => {
+		setIsOpen(false);
+		const params = new URLSearchParams(searchParams.toString());
+		params.delete("preview");
+		router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+	};
 
 	const handleCopy = () => {
 		const textToCopy = activeTab === "usage" ? usageCode : codeContent;
@@ -124,7 +163,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 								duration: 0.35,
 								ease: [0.19, 1, 0.22, 1] // Ease out expo
 							}}
-							className="w-full h-full min-h-[400px]"
+							className={`w-full h-full min-h-[400px] transition-all duration-500 ${isFullPreviewOpen ? 'blur-xl' : 'blur-0'}`}
 						>
 							{activeTab === "preview" ? (
 								<>
@@ -191,26 +230,39 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 					`}</style>
 				</div>
 
-				{/* Copy Button */}
-				<button
-					onClick={handleCopy}
-					className="absolute top-4 right-4 p-2.5 items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
-					title="Copy to clipboard"
-				>
-					{copied ? (
-						<Check size={14} className="text-emerald-500" />
-					) : (
-						<Copy
+				<div className="absolute top-4 right-4 flex gap-2">
+					<button
+						onClick={handleOpenFullPreview}
+						className="p-2.5 items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
+						title="Expand Preview"
+					>
+						<Maximize2
 							size={14}
 							className="group-hover:scale-110 transition-transform"
 						/>
-					)}
-				</button>
+					</button>
+					<button
+						onClick={handleCopy}
+						className="p-2.5 items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
+						title="Copy to clipboard"
+					>
+						{copied ? (
+							<Check size={14} className="text-emerald-500" />
+						) : (
+							<Copy
+								size={14}
+								className="group-hover:scale-110 transition-transform"
+							/>
+						)}
+					</button>
+				</div>
 
 				{children && (
 					<div className="mt-1.5 px-3 py-3 bg-rb-neutral-1 rounded-[18px] border border-rb-neutral-4 flex flex-col gap-3">
 						<div className="flex items-center justify-between gap-2 relative z-50">
-							<div className="flex-1">{header}</div>
+							<div className="flex-1 preview-tab-header">
+								{header}
+							</div>
 							{collapsible && (
 								<button
 									onClick={() => setIsExpanded(!isExpanded)}

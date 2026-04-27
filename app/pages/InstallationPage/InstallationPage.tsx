@@ -14,6 +14,7 @@ import ComboBox from "@/app/components/combobox/ComboBox";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
 import DefaultTextInput from "@/app/components/textinput/DefaultTextInput";
+import Psychedelics from "@/app/meta/background/gradient/Psychedelics";
 
 const fadeUp = (delay: number = 0) => ({
 	initial: { opacity: 0, y: 20, filter: "blur(8px)" },
@@ -137,27 +138,28 @@ export const InstallationPage: React.FC = () => {
 				<div className="flex flex-col gap-4 w-[320px]">
 					<DiscreteSlider2 label="Intensity" />
 					<ColorPicker label="Theme Color" />
-					<DefaultComboBox 
-						label="Language" 
+					<DefaultComboBox
+						label="Language"
 						options={[
 							{ id: "en", label: "English" },
 							{ id: "es", label: "Spanish" },
 							{ id: "fr", label: "French" },
-						]} 
+						]}
 					/>
-					<ToggleComponent 
-						label="Auto-updates" 
-						checked={toggleValue} 
-						onChange={setToggleValue} 
+					<ToggleComponent
+						label="Auto-updates"
+						checked={toggleValue}
+						onChange={setToggleValue}
 					/>
-					<DefaultTextInput 
-						label="Project Name" 
+					<DefaultTextInput
+						label="Project Name"
 						placeholder="My Awesome App"
 						value={textValue}
 						onChange={setTextValue}
 					/>
 				</div>
 			</section>
+			<Psychedelics />
 		</div>
 	);
 };

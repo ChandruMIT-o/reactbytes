@@ -21,6 +21,8 @@ export const metadata: Metadata = {
 };
 
 import AppShell from "./components/layout/AppShell";
+import { PreviewProvider } from "./components/context/PreviewContext";
+import { Suspense } from "react";
 
 export default function RootLayout({
 	children,
@@ -34,7 +36,11 @@ export default function RootLayout({
 			suppressHydrationWarning
 		>
 			<body className="min-h-full flex flex-col">
-				<AppShell>{children}</AppShell>
+				<Suspense fallback={null}>
+					<PreviewProvider>
+						<AppShell>{children}</AppShell>
+					</PreviewProvider>
+				</Suspense>
 			</body>
 		</html>
 	);

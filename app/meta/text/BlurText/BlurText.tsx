@@ -23,7 +23,7 @@ export interface BlurTextProps {
 	/** Callback when animation is complete */
 	onAnimationComplete?: () => void;
 	/** Easing function for the animation */
-	easing?: string | number[];
+	easing?: any;
 	/** Whether the animation should loop continuously */
 	loop?: boolean;
 	/** Peak blur amount in pixels */
@@ -115,7 +115,7 @@ export const BlurText: React.FC<BlurTextProps> = ({
 					variants={variants}
 
 					transition={
-						loop
+						(loop
 							? {
 									duration: duration * 2,
 									repeat: Infinity,
@@ -129,7 +129,7 @@ export const BlurText: React.FC<BlurTextProps> = ({
 									type: "spring",
 									damping: 12,
 									stiffness: 100,
-							  }
+							  }) as any
 					}
 					onAnimationComplete={() => {
 						if (!loop) {

@@ -116,7 +116,7 @@ export const ElasticRevealPage = () => {
 			<div id="preview">
 				<PreviewTab
 					previewContent={
-						<div className="w-full h-[400px] relative overflow-hidden flex flex-col items-center justify-center p-10 bg-rb-neutral-2 border border-white/5 rounded-xl gap-8">
+						<div className="w-full h-[400px] relative overflow-hidden flex flex-col items-center justify-center p-10 bg-rb-neutral-1 rounded-xl gap-8">
 							<ElasticReveal
 								key={key}
 								text={text}

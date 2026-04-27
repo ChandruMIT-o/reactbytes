@@ -95,13 +95,21 @@ export const ScrambleReveal: React.FC<ScrambleRevealProps> = ({
 				{letters.map((char, i) => (
 					<div
 						key={`${char}-${i}`}
-						className="relative overflow-hidden inline-block"
+						className="inline-grid grid-cols-1 grid-rows-1 overflow-hidden"
 					>
+						{/* Invisible placeholders to reserve the maximum width needed */}
+						<span className="invisible col-start-1 row-start-1" aria-hidden="true">
+							{char === " " ? "\u00A0" : char}
+						</span>
+						<span className="invisible col-start-1 row-start-1" aria-hidden="true">
+							{char === " " ? "\u00A0" : randomScrambleChars[i]}
+						</span>
+
 						<motion.div
 							custom={i}
 							initial={{ y: "-100%" }}
 							animate={controls}
-							className="relative flex flex-col items-center"
+							className="col-start-1 row-start-1 relative flex flex-col items-center"
 						>
 							<span
 								className="absolute bottom-full left-0 w-full text-center"

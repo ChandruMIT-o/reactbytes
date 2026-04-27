@@ -70,51 +70,6 @@ const presets = [
 			blurAmount: 40,
 		},
 	},
-	{
-		id: "sharp-reveal",
-		label: "Sharp Reveal",
-		config: {
-			text: "CLEAN & SHARP",
-			duration: 0.3,
-			stagger: 0.02,
-			color: "text-emerald-400",
-			animateBy: "letters",
-			direction: "top",
-			delay: 0,
-			loop: false,
-			blurAmount: 4,
-		},
-	},
-	{
-		id: "slow-dissolve",
-		label: "Slow Dissolve",
-		config: {
-			text: "DISSOLVING",
-			duration: 2.5,
-			stagger: 0.15,
-			color: "text-rb-accent-3",
-			animateBy: "words",
-			direction: "none",
-			delay: 0,
-			loop: false,
-			blurAmount: 32,
-		},
-	},
-	{
-		id: "pulse-flicker",
-		label: "Rapid Flicker",
-		config: {
-			text: "FLICKERING",
-			duration: 0.2,
-			stagger: 0.03,
-			color: "text-rose-400",
-			animateBy: "letters",
-			direction: "none",
-			delay: 0,
-			loop: true,
-			blurAmount: 12,
-		},
-	},
 ];
 
 const colorOptions = [

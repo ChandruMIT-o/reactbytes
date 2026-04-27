@@ -179,3 +179,15 @@ body {
 	scrollbar-width: thin;
 	scrollbar-color: var(--rb-neutral-4) transparent;
 }
+/* Hide Props label on mobile and in full preview */
+.preview-tab-header h3,
+.in-full-preview h3,
+.in-full-preview [class*="Props"] {
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.preview-tab-header h3 {
+		display: block;
+	}
+}
