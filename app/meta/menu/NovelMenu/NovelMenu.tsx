@@ -24,6 +24,18 @@ const useAnimeJS = () => {
   return isLoaded;
 };
 
+// --- INTERFACES ---
+interface NavLink {
+  title: string;
+  href: string;
+}
+
+interface NovelMenuProps {
+  brandName?: string;
+  accentColor?: string;
+  navLinks?: NavLink[];
+}
+
 // --- NAVIGATION DATA ---
 const NAV_LINKS = [
   { title: 'HOME', href: '#home' },
@@ -34,7 +46,11 @@ const NAV_LINKS = [
 ];
 
 // --- NOVEL MENU COMPONENT ---
-export default function NovelMenu() {
+export default function NovelMenu({ 
+  brandName = "NOVEL", 
+  accentColor = "#C0DEDD",
+  navLinks = NAV_LINKS 
+}: NovelMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const animeLoaded = useAnimeJS();
 
@@ -44,15 +60,25 @@ export default function NovelMenu() {
   };
 
   return (
-    <div className="bg-[#1D1C21] text-[#F2EEE9] font-sans overflow-hidden selection:bg-[#C0DEDD] selection:text-[#000000]">
+    <div 
+      className="bg-[#1D1C21] text-[#F2EEE9] font-sans overflow-hidden"
+      style={{ '--accent-color': accentColor } as React.CSSProperties}
+    >
+      <style jsx global>{`
+        .novel-selection::selection {
+          background-color: ${accentColor};
+          color: #000000;
+        }
+      `}</style>
+      
       {/* HEADER */}
-      <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6 mix-blend-difference">
-        <div className="text-2xl font-bold tracking-widest text-[#F2EEE9] relative z-50 cursor-pointer hover:text-[#C0DEDD] transition-colors duration-300">
-          NOVEL<span className="text-[#C0DEDD]">.</span>
+      <header className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6 mix-blend-difference novel-selection">
+        <div className="text-2xl font-bold tracking-widest text-[#F2EEE9] relative z-50 cursor-pointer hover:text-[var(--accent-color)] transition-colors duration-300 uppercase">
+          {brandName}<span className="text-[var(--accent-color)]">.</span>
         </div>
         <button
           onClick={toggleMenu}
-          className="relative z-50 w-12 h-12 rounded-full bg-[#181A1E] border border-[#799996]/30 flex items-center justify-center hover:bg-[#C0DEDD] hover:text-[#060010] hover:border-transparent transition-all duration-300 text-[#F2EEE9]"
+          className="relative z-50 w-12 h-12 rounded-full bg-[#181A1E] border border-white/10 flex items-center justify-center hover:bg-[var(--accent-color)] hover:text-[#060010] hover:border-transparent transition-all duration-300 text-[#F2EEE9]"
           aria-label="Toggle Menu"
         >
           {isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -60,7 +86,13 @@ export default function NovelMenu() {
       </header>
 
       {/* FULL SCREEN OVERLAY MENU */}
-      <NavigationPanel isOpen={isOpen} animeLoaded={animeLoaded} onClose={() => setIsOpen(false)} />
+      <NavigationPanel 
+        isOpen={isOpen} 
+        animeLoaded={animeLoaded} 
+        onClose={() => setIsOpen(false)} 
+        accentColor={accentColor}
+        navLinks={navLinks}
+      />
     </div>
   );
 }
@@ -70,9 +102,11 @@ interface NavigationPanelProps {
   isOpen: boolean;
   animeLoaded: boolean;
   onClose: () => void;
+  accentColor: string;
+  navLinks: NavLink[];
 }
 
-const NavigationPanel: React.FC<NavigationPanelProps> = ({ isOpen, animeLoaded, onClose }) => {
+const NavigationPanel: React.FC<NavigationPanelProps> = ({ isOpen, animeLoaded, onClose, accentColor, navLinks }) => {
   const overlayRef = useRef<HTMLDivElement>(null);
   const columnsRef = useRef<(HTMLDivElement | null)[]>([]);
   const linksRef = useRef<(HTMLAnchorElement | null)[]>([]);
@@ -148,7 +182,7 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ isOpen, animeLoaded, 
     anime({
       targets: e.currentTarget,
       translateX: isEnter ? 24 : 0,
-      color: isEnter ? '#E6DFF1' : '#F2EEE9',
+      color: isEnter ? accentColor : '#F2EEE9',
       duration: 500,
       easing: 'easeOutElastic(1, .6)',
     });
@@ -177,7 +211,7 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ isOpen, animeLoaded, 
           
           {/* Main Navigation Links */}
           <nav className="flex flex-col justify-center items-center gap-2 lg:gap-6 flex-grow mb-12 lg:mb-0">
-            {NAV_LINKS.map((link, i) => (
+            {navLinks.map((link, i) => (
               <div key={link.title} className="py-1 lg:py-2">
                 <a
                   href={link.href}
@@ -185,7 +219,7 @@ const NavigationPanel: React.FC<NavigationPanelProps> = ({ isOpen, animeLoaded, 
                   onClick={onClose}
                   onMouseEnter={(e) => handleLinkHover(e, true)}
                   onMouseLeave={(e) => handleLinkHover(e, false)}
-                  className="inline-block text-5xl md:text-7xl lg:text-8xl font-bold leading-normal text-center text-[#F2EEE9] opacity-0 transform translate-y-10 origin-center"
+                  className="inline-block text-5xl md:text-7xl lg:text-8xl font-bold leading-normal text-center text-[#F2EEE9] opacity-0 transform translate-y-10 origin-center novel-selection"
                 >
                   {link.title}
                 </a>
