@@ -167,6 +167,7 @@ export const CellularAutomataPage = () => {
 						<div className="flex items-center justify-between ">
 							<h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase tracking-[0.1em]">Engine Parameters</h3>
 							<DefaultComboBox
+								label="PRESETS"
 								options={presets}
 								value={currentPreset}
 								onChange={applyPreset}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { motion, Variants } from "framer-motion";
 
 export interface ElasticRevealProps {
@@ -24,6 +24,8 @@ export interface ElasticRevealProps {
 	href?: string;
 	/** Whether to force uppercase text */
 	uppercase?: boolean;
+	/** Dictates which letter starts the animation: 'left', 'right', 'center', or 'hover' */
+	animateFrom?: "left" | "right" | "center" | "hover";
 }
 
 export const ElasticReveal: React.FC<ElasticRevealProps> = ({
@@ -37,7 +39,11 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 	textClassName = "text-5xl md:text-7xl font-bold font-sans tracking-tighter",
 	href,
 	uppercase = false,
+	animateFrom = "left",
 }) => {
+	const [isHovered, setIsHovered] = useState(false);
+	const [originIndex, setOriginIndex] = useState<number | null>(null);
+
 	const displayText = uppercase ? text.toUpperCase() : text;
 	const letters = displayText.split("");
 	const yOffset = direction === "up" ? "-100%" : "100%";
@@ -49,20 +55,45 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 
 	const letterVariants: Variants = {
 		initial: { y: 0 },
-		hover: (i: number) => ({
-			y: yOffset,
-			transition: {
-				duration,
-				delay: i * stagger,
-				ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number],
-			},
-		}),
+		hover: (i: number) => {
+			let delay = i * stagger;
+			if (animateFrom === "right") {
+				delay = (letters.length - 1 - i) * stagger;
+			} else if (animateFrom === "center") {
+				delay = Math.abs(i - (letters.length - 1) / 2) * stagger;
+			} else if (animateFrom === "hover" && originIndex !== null) {
+				delay = Math.abs(i - originIndex) * stagger;
+			}
+
+			return {
+				y: yOffset,
+				transition: {
+					duration,
+					delay,
+					ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number],
+				},
+			};
+		},
+	};
+
+	const handleMouseEnter = (index: number) => {
+		if (animateFrom === "hover" && originIndex === null) {
+			setOriginIndex(index);
+		}
+		setIsHovered(true);
+	};
+
+	const handleMouseLeave = () => {
+		setIsHovered(false);
+		setOriginIndex(null);
 	};
 
 	const Content = (
 		<motion.div
 			initial="initial"
-			whileHover="hover"
+			animate={isHovered ? "hover" : "initial"}
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={handleMouseLeave}
 			variants={containerVariants}
 			className={`relative inline-flex overflow-hidden cursor-pointer select-none leading-[0.8] ${className}`}
 		>
@@ -73,6 +104,7 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 						key={i}
 						custom={i}
 						variants={letterVariants}
+						onMouseEnter={() => handleMouseEnter(i)}
 						className="relative inline-block whitespace-pre"
 					>
 						<span style={{ color: baseColor }}>{char}</span>

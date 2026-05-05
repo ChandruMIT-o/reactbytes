@@ -18,9 +18,11 @@ import {
 	generalItems,
 	textItems,
 	backgroundItems,
+	carouselItems,
 	miscellaneousItems,
 	pageSections,
-	mainNavItems
+	mainNavItems,
+	cursorItems
 } from "./AppShellData";
 
 
@@ -37,6 +39,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	const { isOpen, setIsOpen, data } = usePreview();
 
 	const [activeSection, setActiveSection] = React.useState<string>("");
+	const [activeMainNav, setActiveMainNav] = React.useState<string>("components");
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 	const [isHeaderHovered, setIsHeaderHovered] = React.useState(false);
 	const [isHeaderPressed, setIsHeaderPressed] = React.useState(false);
@@ -138,6 +141,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 							<ButtonGroup
 								groupId="main-nav"
 								items={mainNavItems}
+								initialActive={activeMainNav}
+								onChange={setActiveMainNav}
 							/>
 						</div>
 					</div>
@@ -194,6 +199,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 								<ButtonGroup
 									groupId="mobile-main-nav"
 									items={mainNavItems}
+									initialActive={activeMainNav}
+									onChange={setActiveMainNav}
 								/>
 							</div>
 
@@ -203,24 +210,42 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 								menuSubtitle="General"
 								items={generalItems}
 							/>
-							<LeftSidebarMenu
-								activeItem={activeItem}
-								setActiveItem={handleSetActiveItem}
-								menuSubtitle="Text"
-								items={textItems}
-							/>
-							<LeftSidebarMenu
-								activeItem={activeItem}
-								setActiveItem={handleSetActiveItem}
-								menuSubtitle="Background"
-								items={backgroundItems}
-							/>
-							<LeftSidebarMenu
-								activeItem={activeItem}
-								setActiveItem={handleSetActiveItem}
-								menuSubtitle="Miscellaneous"
-								items={miscellaneousItems}
-							/>
+							{activeMainNav === "components" && (
+								<>
+									<LeftSidebarMenu
+										activeItem={activeItem}
+										setActiveItem={handleSetActiveItem}
+										menuSubtitle="Text"
+										items={textItems}
+									/>
+									<LeftSidebarMenu
+										activeItem={activeItem}
+										setActiveItem={handleSetActiveItem}
+										menuSubtitle="Background"
+										items={backgroundItems}
+									/>
+									<LeftSidebarMenu
+										activeItem={activeItem}
+										setActiveItem={handleSetActiveItem}
+										menuSubtitle="Carousels"
+										items={carouselItems}
+									/>
+									<LeftSidebarMenu
+										activeItem={activeItem}
+										setActiveItem={handleSetActiveItem}
+										menuSubtitle="Miscellaneous"
+										items={miscellaneousItems}
+									/>
+								</>
+							)}
+							{activeMainNav === "cursors" && (
+								<LeftSidebarMenu
+									activeItem={activeItem}
+									setActiveItem={handleSetActiveItem}
+									menuSubtitle="Cursors"
+									items={cursorItems}
+								/>
+							)}
 						</div>
 					</div>
 

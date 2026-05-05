@@ -15,6 +15,7 @@ import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
 import DefaultTextInput from "@/app/components/textinput/DefaultTextInput";
 import Psychedelics from "@/app/meta/background/gradient/Psychedelics";
+import SplitCarousel from "@/app/meta/carousel/SplitCarousel/SplitCarousel";
 
 const fadeUp = (delay: number = 0) => ({
 	initial: { opacity: 0, y: 20, filter: "blur(8px)" },
@@ -160,6 +161,7 @@ export const InstallationPage: React.FC = () => {
 				</div>
 			</section>
 			<Psychedelics />
+			<SplitCarousel />
 		</div>
 	);
 };

@@ -31,13 +31,27 @@ export const backgroundItems = [
 	{ id: "liquid-noise", label: "Liquid Noise" },
 ];
 
+export const carouselItems = [
+	{ id: "docked-carousel", label: "Docked Carousel" },
+	{ id: "stacked-carousel", label: "Stacked Carousel" },
+	{ id: "stacked-card-carousel", label: "Stacked Card Carousel" },
+	{ id: "void-carousel", label: "Void Carousel" },
+	{ id: "morph-carousel", label: "Morph Carousel" },
+	{ id: "split-carousel", label: "Split Carousel" },
+];
+
 export const miscellaneousItems = [
 	{ id: "standard-accordion", label: "Standard Accordion" },
 	{ id: "glow-card", label: "Glowing Shadows" },
 	{ id: "shiny-button", label: "Shiny CTA" },
-	{ id: "docked-carousel", label: "Docked Carousel" },
 	{ id: "vertical-menu", label: "Vertical Menu" },
+	{ id: "novel-menu", label: "Novel Menu" },
 	{ id: "holo-card", label: "Holographic Card" },
+	{ id: "stacked-cards", label: "Stacked Cards" },
+];
+
+export const cursorItems = [
+	{ id: "follow-cursor", label: "Follow Cursor" },
 ];
 
 export const pageSections: Record<string, { id: string; label: string }[]> = {
@@ -218,10 +232,58 @@ export const pageSections: Record<string, { id: string; label: string }[]> = {
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },
 	],
+	"follow-cursor": [
+		{ id: "follow-cursor-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"stacked-carousel": [
+		{ id: "stacked-carousel-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"void-carousel": [
+		{ id: "void-carousel-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"morph-carousel": [
+		{ id: "morph-carousel-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"stacked-card-carousel": [
+		{ id: "stacked-card-carousel-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"novel-menu": [
+		{ id: "novel-menu-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"split-carousel": [
+		{ id: "split-carousel-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"stacked-cards": [
+		{ id: "stacked-cards-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
 };
 
 export const mainNavItems = [
 	{ id: "components", label: "Components" },
 	{ id: "docs", label: "Docs" },
-	{ id: "icons", label: "Icons" },
+	{ id: "cursors", label: "Cursors" },
 ];

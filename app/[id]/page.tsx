@@ -36,11 +36,14 @@ import { ShinyButtonPage } from "../pages/ShinyButtonPage/ShinyButtonPage";
 import { DockedCarouselPage } from "../pages/DockedCarouselPage/DockedCarouselPage";
 import VerticalMenuPage from "../pages/VerticalMenuPage/VerticalMenuPage";
 import HoloCardPage from "../pages/HoloCardPage/HoloCardPage";
-
-
-
-
-
+import { FollowCursorPage } from "../pages/FollowCursorPage/FollowCursorPage";
+import StackedCarouselPage from "../pages/StackedCarouselPage/StackedCarouselPage";
+import { VoidCarouselPage } from "../pages/VoidCarouselPage/VoidCarouselPage";
+import { MorphCarouselPage } from "../pages/MorphCarouselPage/MorphCarouselPage";
+import StackedCardCarouselPage from "../pages/StackedCardCarouselPage/StackedCardCarouselPage";
+import NovelMenuPage from "../pages/NovelMenuPage/NovelMenuPage";
+import { SplitCarouselPage } from "../pages/SplitCarouselPage/SplitCarouselPage";
+import StackedCardsPage from "../pages/StackedCardsPage/StackedCardsPage";
 
 export default function DynamicComponentPage() {
 	const params = useParams();
@@ -77,11 +80,14 @@ export default function DynamicComponentPage() {
 		if (id === "docked-carousel") return <DockedCarouselPage />;
 		if (id === "vertical-menu") return <VerticalMenuPage />;
 		if (id === "holo-card") return <HoloCardPage />;
-
-
-
-
-
+		if (id === "follow-cursor") return <FollowCursorPage />;
+		if (id === "stacked-carousel") return <StackedCarouselPage />;
+		if (id === "void-carousel") return <VoidCarouselPage />;
+		if (id === "morph-carousel") return <MorphCarouselPage />;
+		if (id === "stacked-card-carousel") return <StackedCardCarouselPage />;
+		if (id === "novel-menu") return <NovelMenuPage />;
+		if (id === "split-carousel") return <SplitCarouselPage />;
+		if (id === "stacked-cards") return <StackedCardsPage />;
 
 		return (
 			<div className="flex flex-col gap-5">

@@ -20,6 +20,7 @@ const DEFAULT_TEXT = "REACTBYTES";
 const DEFAULT_DURATION = 0.6;
 const DEFAULT_STAGGER = 0.02;
 const DEFAULT_DIRECTION = "up";
+const DEFAULT_ANIMATE_FROM = "left";
 
 const presets = [
 	{
@@ -33,6 +34,7 @@ const presets = [
 			baseColor: "#60a5fa",
 			hoverColor: "#FFFFFF",
 			uppercase: true,
+			animateFrom: "left",
 		},
 	},
 	{
@@ -46,6 +48,7 @@ const presets = [
 			baseColor: "#c084fc",
 			hoverColor: "#FFFFFF",
 			uppercase: true,
+			animateFrom: "center",
 		},
 	},
 	{
@@ -59,6 +62,7 @@ const presets = [
 			baseColor: "#9ca3af",
 			hoverColor: "#34d399",
 			uppercase: true,
+			animateFrom: "hover",
 		},
 	},
 ];
@@ -71,6 +75,7 @@ export const ElasticRevealPage = () => {
 	const [baseColor, setBaseColor] = useState("#60a5fa");
 	const [hoverColor, setHoverColor] = useState("#FFFFFF");
 	const [uppercase, setUppercase] = useState(true);
+	const [animateFrom, setAnimateFrom] = useState<"left" | "right" | "center" | "hover">(DEFAULT_ANIMATE_FROM as any);
 	const [currentPreset, setCurrentPreset] = useState("default");
 	const [key, setKey] = useState(0);
 
@@ -85,6 +90,7 @@ export const ElasticRevealPage = () => {
 			setBaseColor(preset.config.baseColor);
 			setHoverColor(preset.config.hoverColor);
 			setUppercase(preset.config.uppercase ?? true);
+			setAnimateFrom(preset.config.animateFrom as any ?? "left");
 			setKey((prev) => prev + 1);
 		}
 	};
@@ -101,6 +107,7 @@ export const ElasticRevealPage = () => {
   baseColor="${baseColor}"
   hoverColor="${hoverColor}"
   uppercase={${uppercase}}
+  animateFrom="${animateFrom}"
 />`;
 
 	return (
@@ -126,6 +133,7 @@ export const ElasticRevealPage = () => {
 								baseColor={baseColor}
 								hoverColor={hoverColor}
 								uppercase={uppercase}
+								animateFrom={animateFrom}
 							/>
 
 						</div>
@@ -213,6 +221,19 @@ export const ElasticRevealPage = () => {
 						]}
 						value={direction}
 						onChange={(val: string) => setDirection(val as "up" | "down")}
+						dynamicWidth={true}
+					/>
+
+					<DefaultComboBox
+						label="Animate From"
+						options={[
+							{ id: "left", label: "Left to Right" },
+							{ id: "right", label: "Right to Left" },
+							{ id: "center", label: "Center Out" },
+							{ id: "hover", label: "Hover Point (Wave)" },
+						]}
+						value={animateFrom}
+						onChange={(val: string) => setAnimateFrom(val as any)}
 						dynamicWidth={true}
 					/>
 
