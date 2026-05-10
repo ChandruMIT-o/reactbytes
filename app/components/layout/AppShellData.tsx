@@ -21,6 +21,7 @@ export const textItems = [
 ];
 
 export const backgroundItems = [
+	{ id: "ascii-wave", label: "ASCII Wave" },
 	{ id: "magnetic-dots", label: "Magnetic Dot Mesh" },
 	{ id: "bubble-gradient", label: "Bubble Gradient" },
 	{ id: "fractal-background", label: "Fractal Background" },
@@ -29,6 +30,9 @@ export const backgroundItems = [
 	{ id: "perlin-smoke", label: "Perlin Smoke" },
 	{ id: "metallic-twirl", label: "Metallic Twirl" },
 	{ id: "liquid-noise", label: "Liquid Noise" },
+	{ id: "iridescent-gradient", label: "Iridescent Gradient" },
+	{ id: "kaleidoscopic", label: "Kaleidoscopic" },
+	{ id: "dotted-vortex", label: "Dotted Vortex" },
 ];
 
 export const carouselItems = [
@@ -38,6 +42,7 @@ export const carouselItems = [
 	{ id: "void-carousel", label: "Void Carousel" },
 	{ id: "morph-carousel", label: "Morph Carousel" },
 	{ id: "split-carousel", label: "Split Carousel" },
+	{ id: "interlocking-marquee", label: "Interlocking Marquee" },
 ];
 
 export const miscellaneousItems = [
@@ -48,6 +53,8 @@ export const miscellaneousItems = [
 	{ id: "novel-menu", label: "Novel Menu" },
 	{ id: "holo-card", label: "Holographic Card" },
 	{ id: "stacked-cards", label: "Stacked Cards" },
+	{ id: "tabbed-section", label: "Tabbed Section" },
+	{ id: "pill-tabbed-section", label: "Pill Tabbed Section" },
 ];
 
 export const cursorItems = [
@@ -276,6 +283,48 @@ export const pageSections: Record<string, { id: string; label: string }[]> = {
 	],
 	"stacked-cards": [
 		{ id: "stacked-cards-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"tabbed-section": [
+		{ id: "tabbed-section-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"pill-tabbed-section": [
+		{ id: "pill-tabbed-section-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"ascii-wave": [
+		{ id: "ascii-wave-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"interlocking-marquee": [
+		{ id: "interlocking-marquee-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"iridescent-gradient": [
+		{ id: "iridescent-gradient-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	kaleidoscopic: [
+		{ id: "kaleidoscopic-title", label: "Preview" },
+		{ id: "installation-tabs", label: "Installation" },
+		{ id: "api-reference", label: "API Reference" },
+		{ id: "credits", label: "Credits" },
+	],
+	"dotted-vortex": [
+		{ id: "dotted-vortex-title", label: "Preview" },
 		{ id: "installation-tabs", label: "Installation" },
 		{ id: "api-reference", label: "API Reference" },
 		{ id: "credits", label: "Credits" },

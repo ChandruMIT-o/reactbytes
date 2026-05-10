@@ -14,6 +14,20 @@ export interface ChangelogEntry {
 
 export const changelogData: ChangelogEntry[] = [
 	{
+		version: "v1.2.0",
+		date: "May 10, 2026",
+		description: "Expanded the library with premium background effects and interactive UI components.",
+		changes: [
+			{ type: "feature", description: "Added DottedVortex background with interactive particle physics." },
+			{ type: "feature", description: "Introduced Kaleidoscopic fractal background for immersive visuals." },
+			{ type: "feature", description: "Implemented IridescentGradient with customizable aurora-like effects." },
+			{ type: "feature", description: "Added AsciiWave background for a unique retro-modern aesthetic." },
+			{ type: "feature", description: "Launched InterlockingMarquee with jigsaw-pattern card layouts." },
+			{ type: "feature", description: "Added PillTabbedSection and TabbedSection for advanced navigation UI." },
+			{ type: "chore", description: "Integrated new components into the main AppShell showcase system." },
+		],
+	},
+	{
 		version: "v1.1.0",
 		date: "April 18, 2026",
 		description: "A major update introducing premium components and interactive layouts.",

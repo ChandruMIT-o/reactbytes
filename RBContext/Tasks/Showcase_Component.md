@@ -5,6 +5,7 @@ Follow these instructions to create a showcase page for a this new component.
 ## 0. Reference Code to go through.
 
 - **Example 1 (Text Component):**
+STRICTLY SEARCH AND FIND OUT THESE FILES AND READ THEM BEFORE PERFORMING THESE TASKS.
   - Component: `app/meta/text/TextEnter/RevealUnder.tsx`
   - Showcase Page: `app/pages/RevealUnderPage/RevealUnderPage.tsx`
   - Showcase Data: `app/pages/RevealUnderPage/RevealUnderData.ts`

@@ -44,6 +44,14 @@ import StackedCardCarouselPage from "../pages/StackedCardCarouselPage/StackedCar
 import NovelMenuPage from "../pages/NovelMenuPage/NovelMenuPage";
 import { SplitCarouselPage } from "../pages/SplitCarouselPage/SplitCarouselPage";
 import StackedCardsPage from "../pages/StackedCardsPage/StackedCardsPage";
+import { TabbedSectionPage } from "../pages/TabbedSectionPage/TabbedSectionPage";
+import { PillTabbedSectionPage } from "../pages/PillTabbedSectionPage/PillTabbedSectionPage";
+import { AsciiWavePage } from "../pages/AsciiWavePage/AsciiWavePage";
+import { InterlockingMarqueePage } from "../pages/InterlockingMarqueePage/InterlockingMarqueePage";
+import { IridescentGradientPage } from "../pages/IridescentGradientPage/IridescentGradientPage";
+import { KaleidoscopicPage } from "../pages/KaleidoscopicPage/KaleidoscopicPage";
+import { DottedVortexPage } from "../pages/DottedVortexPage/DottedVortexPage";
+
 
 export default function DynamicComponentPage() {
 	const params = useParams();
@@ -88,6 +96,14 @@ export default function DynamicComponentPage() {
 		if (id === "novel-menu") return <NovelMenuPage />;
 		if (id === "split-carousel") return <SplitCarouselPage />;
 		if (id === "stacked-cards") return <StackedCardsPage />;
+		if (id === "tabbed-section") return <TabbedSectionPage />;
+		if (id === "pill-tabbed-section") return <PillTabbedSectionPage />;
+		if (id === "ascii-wave") return <AsciiWavePage />;
+		if (id === "interlocking-marquee") return <InterlockingMarqueePage />;
+		if (id === "iridescent-gradient") return <IridescentGradientPage />;
+		if (id === "kaleidoscopic") return <KaleidoscopicPage />;
+		if (id === "dotted-vortex") return <DottedVortexPage />;
+
 
 		return (
 			<div className="flex flex-col gap-5">
