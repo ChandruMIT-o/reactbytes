@@ -82,34 +82,34 @@ Use these components inside `PreviewTab` for the control panel:
 
 ## 5. Registration
 
-Finally, register the new page to make it accessible:
+Finally, register the new page in the centralized registry to make it accessible:
 
-### 1. Route Registration (`app/[id]/page.tsx`)
-1.  Import `[ComponentName]Page`.
-2.  Add a conditional check in `renderContent()`:
+### Registry Registration (`app/components/layout/ComponentRegistry.tsx`)
+1. Open [ComponentRegistry.tsx](file:///d:/DEV/Personal/reactbytes/app/components/layout/ComponentRegistry.tsx).
+2. Add a new entry to the `ComponentRegistry` dictionary under the appropriate category (`general`, `text`, `background`, `carousel`, `miscellaneous`, or `cursor`).
+3. Define the dynamic import using `dynamic()` to lazy-load the page component:
     ```tsx
-    if (id === "your-component-slug") return <[ComponentName]Page />;
+    "your-component-slug": {
+      id: "your-component-slug",
+      label: "Display Label",
+      category: "text", // "general" | "text" | "background" | "carousel" | "miscellaneous" | "cursor"
+      sections: standardSections("your-component-slug"), // Or custom sections array
+      component: dynamic(() => import("../../pages/YourComponentPage/YourComponentPage").then(mod => mod.YourComponentPage)),
+    },
     ```
+    *(Note: If the component is a default export, import it directly: `dynamic(() => import("../../pages/YourComponentPage/YourComponentPage"))`)*
 
-### 2. Sidebar Registration (`app/components/layout/AppShellData.tsx`)
-1.  Add the item to the appropriate category list (e.g., `textItems`, `backgroundItems`, `carouselItems`, etc.).
-2.  Add the page sections to `pageSections`:
-    ```tsx
-    "your-component-slug": [
-        { id: "component-title-id", label: "Preview" },
-        { id: "installation-tabs", label: "Installation" },
-        { id: "api-reference", label: "API Reference" },
-        { id: "credits", label: "Credits" },
-    ],
-    ```
-    *Note: The first section `id` should match the `id` of the title div in your Page.tsx.*
+*No other files (like `AppShellData.tsx` or `app/[id]/page.tsx`) need to be touched! The routing, sidebar menu list, and right-hand scroll sections are dynamically generated from this registry entry.*
 
-### 3. Layout Registration (`app/components/layout/AppShell.tsx`)
-*   If you added the component to an **existing** category (Text, Background, etc.), no changes are needed here.
-*   If you created a **new** category list in `AppShellData.tsx`:
-    1.  Export the new list from `AppShellData.tsx`.
-    2.  Import it in `AppShell.tsx`.
-    3.  Add a new `LeftSidebarMenu` component under the appropriate `activeMainNav` condition.
+---
+
+## 6. Common Pitfalls & Rules for LLMs (CRITICAL)
+
+To prevent recurrent errors, adhere strictly to these rules:
+
+1. **String Escaping in Data Files**: Be extremely careful when exporting the `componentCode` string. Use standard backticks to enclose the template literal, and ensure you correctly escape *internal* backticks (e.g., \\\`) without erroneously adding backslashes to standard code.
+2. **Presets Implementation**: Always implement a full `presets` array in the `[ComponentName]Page.tsx` file. Map this array to a `DefaultComboBox` within the `header` prop of `PreviewTab`. The `applyPreset` function must update *all* configurable state values simultaneously.
+3. **Background Component Boundaries**: When showcasing a Background component, **DO NOT** place it as an absolute sibling next to foreground content—this breaks interaction bounds and pointer events on hover. The Background Component MUST be the root element of `previewContent` (e.g., `<BackgroundComponent className="w-full h-[500px]">`), wrapping the foreground UI via its `children` prop.
 
 ---
 
@@ -118,6 +118,7 @@ Finally, register the new page to make it accessible:
 - [ ] Are all imports relative and correct?
 - [ ] Does `usageCode` update dynamically with state?
 - [ ] Are `loaderProps` and `creditsData` correctly formatted in the Data file?
-- [ ] Is the page registered in `app/[id]/page.tsx`?
-- [ ] Is the item added to the correct list in `AppShellData.tsx`?
-- [ ] Are the `pageSections` added in `AppShellData.tsx`?
+- [ ] Is the page registered in `app/components/layout/ComponentRegistry.tsx`?
+- [ ] Are `presets` fully implemented in the Page header?
+- [ ] Are background components wrapping their foreground content correctly?
+- [ ] Is the `componentCode` cleanly escaped without syntax errors?

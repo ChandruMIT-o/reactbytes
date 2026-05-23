@@ -131,6 +131,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 									width={17}
 									height={28}
 									className="relative z-10"
+									style={{ height: "auto" }}
 								/>
 							</div>
 							<div className="hidden md:block text-[16px] text-rb-accent-2 font-medium tracking-tight">

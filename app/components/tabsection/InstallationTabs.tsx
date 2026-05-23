@@ -3,15 +3,23 @@ import React, { useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const InstallationTabs = () => {
+export interface InstallationTabsProps {
+	cliCommand?: string;
+	manualCommand?: string;
+}
+
+export const InstallationTabs: React.FC<InstallationTabsProps> = ({
+	cliCommand,
+	manualCommand,
+}) => {
 	const [activeTab, setActiveTab] = useState<"CLI" | "Manual">("CLI");
 	const [copied, setCopied] = useState(false);
 
 	const handleCopy = () => {
 		const text =
 			activeTab === "CLI"
-				? "npm install react-bytes"
-				: "Download from GitHub";
+				? (cliCommand || "npm install react-bytes")
+				: (manualCommand || "Download from GitHub");
 		navigator.clipboard.writeText(text);
 		setCopied(true);
 		setTimeout(() => setCopied(false), 2000);
@@ -84,18 +92,26 @@ export const InstallationTabs = () => {
 											$
 										</span>
 										<span className="text-rb-accent-1">
-											npm install react-bytes
+											{cliCommand || "npm install react-bytes"}
 										</span>
 									</div>
 								</div>
 							) : (
 								<div className="flex flex-col gap-2 font-sans">
-									<p className="text-rb-accent-1">
-										Clone the repository from GitHub:
-									</p>
-									<span className="text-rb-accent-1 font-mono text-sm">
-										git clone https://github.com/ChandruMIT-o/reactbytes.git
-									</span>
+									{manualCommand ? (
+										<span className="text-rb-accent-1 font-mono text-sm whitespace-pre-wrap">
+											{manualCommand}
+										</span>
+									) : (
+										<>
+											<p className="text-rb-accent-1">
+												Clone the repository from GitHub:
+											</p>
+											<span className="text-rb-accent-1 font-mono text-sm">
+												git clone https://github.com/ChandruMIT-o/reactbytes.git
+											</span>
+										</>
+									)}
 								</div>
 							)}
 						</motion.div>

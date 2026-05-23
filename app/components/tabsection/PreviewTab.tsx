@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Copy, Check, ChevronDown, ChevronUp, Play, Maximize2 } from "lucide-react";
+import { Copy, Check, ChevronDown, ChevronUp, Play, Maximize2, Monitor, Tablet, Smartphone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { usePreview } from "../context/PreviewContext";
@@ -45,6 +45,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 	const [copied, setCopied] = useState(false);
 	const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 	const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(searchParams.get("preview") === "true");
+	const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "phone">("desktop");
 
 	// Update global data whenever it changes
 	useEffect(() => {
@@ -99,39 +100,108 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 
 	return (
 		<div className="w-full max-w-6xl font-sans">
-			{/* Tabs Row Wrapper */}
-			<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 w-max max-w-full overflow-x-auto scrollbar-none">
-				{tabs.map((tab) => (
-					<motion.button
-						key={tab.id}
-						onClick={() => setActiveTab(tab.id as any)}
-						className="relative px-3 py-1.5 text-[16px] font-medium rounded-full outline-none transition-colors duration-300"
-						style={{
-							color: activeTab === tab.id ? "var(--rb-neutral-2)" : "var(--rb-accent-2)",
-						}}
-						whileHover="hover"
-					>
-						<span className="relative z-[1]">{tab.label}</span>
+			{/* Tabs & Actions Row Wrapper */}
+			<div className="flex items-center justify-between w-full gap-4 bg-transparent">
+				{/* Tabs Container */}
+				<div className="bg-rb-neutral-3 p-1.5 pb-0 rounded-t-[20px] flex gap-1.5 overflow-x-auto scrollbar-none">
+					{tabs.map((tab) => (
+						<motion.button
+							key={tab.id}
+							onClick={() => setActiveTab(tab.id as any)}
+							className="relative px-3 py-1.5 text-[16px] font-medium rounded-full outline-none transition-colors duration-300 shrink-0"
+							style={{
+								color: activeTab === tab.id ? "var(--rb-neutral-2)" : "var(--rb-accent-2)",
+							}}
+							whileHover="hover"
+						>
+							<span className="relative z-[1]">{tab.label}</span>
 
-						{activeTab === tab.id && (
-							<motion.div
-								layoutId="preview-active-pill"
-								className="absolute inset-0 bg-rb-accent-1 rounded-full z-0"
-								transition={springConfig}
-							/>
-						)}
+							{activeTab === tab.id && (
+								<motion.div
+									layoutId="preview-active-pill"
+									className="absolute inset-0 bg-rb-accent-1 rounded-full z-0"
+									transition={springConfig}
+								/>
+							)}
 
-						{activeTab !== tab.id && (
-							<motion.div
-								className="absolute inset-0 rounded-full z-0"
-								variants={{
-									hover: { backgroundColor: "var(--rb-neutral-4)" },
-								}}
-								transition={{ duration: 0.2 }}
-							/>
-						)}
-					</motion.button>
-				))}
+							{activeTab !== tab.id && (
+								<motion.div
+									className="absolute inset-0 rounded-full z-0"
+									variants={{
+										hover: { backgroundColor: "var(--rb-neutral-4)" },
+									}}
+									transition={{ duration: 0.2 }}
+								/>
+							)}
+						</motion.button>
+					))}
+				</div>
+
+				{/* Header Actions (Switcher / Expand / Copy) */}
+				<div className="flex items-center gap-2 pr-1.5 pb-1.5 shrink-0">
+					{activeTab === "preview" ? (
+						<>
+							<div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full border border-rb-neutral-4/40 shadow-lg shrink-0">
+								<button
+									onClick={() => setPreviewMode("desktop")}
+									className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
+										? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+										: "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+										}`}
+									title="Desktop View"
+								>
+									<Monitor size={14} />
+								</button>
+								<button
+									onClick={() => setPreviewMode("tablet")}
+									className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet"
+										? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+										: "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+										}`}
+									title="Tablet View"
+								>
+									<Tablet size={14} />
+								</button>
+								<button
+									onClick={() => setPreviewMode("phone")}
+									className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone"
+										? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+										: "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+										}`}
+									title="Mobile View"
+								>
+									<Smartphone size={14} />
+								</button>
+							</div>
+
+							<button
+								onClick={handleOpenFullPreview}
+								className="p-2.5 flex items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
+								title="Expand Preview"
+							>
+								<Maximize2
+									size={14}
+									className="group-hover:scale-110 transition-transform"
+								/>
+							</button>
+						</>
+					) : (
+						<button
+							onClick={handleCopy}
+							className="p-2.5 flex items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
+							title="Copy to clipboard"
+						>
+							{copied ? (
+								<Check size={14} className="text-emerald-500" />
+							) : (
+								<Copy
+									size={14}
+									className="group-hover:scale-110 transition-transform"
+								/>
+							)}
+						</button>
+					)}
+				</div>
 			</div>
 
 			{/* Main Content Outer Wrapper */}
@@ -167,8 +237,25 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 						>
 							{activeTab === "preview" ? (
 								<>
-									<div className="w-full h-full min-h-[400px] flex items-center justify-center">
-										{previewContent}
+									<div className={`w-full h-full min-h-[400px] flex items-center justify-center transition-all duration-500 ${previewMode !== "desktop" ? "bg-rb-neutral-2/80 canvas-grid" : ""
+										}`}>
+										<div
+											className={`w-full h-full min-h-[360px] flex items-center justify-center relative transition-all duration-500 ease-in-out ${previewMode === "desktop"
+												? "max-w-full"
+												: previewMode === "tablet"
+													? "max-w-[768px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+													: "max-w-[375px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+												}`}
+										>
+											{previewMode !== "desktop" && (
+												<div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] text-rb-accent-2/20 font-mono tracking-widest uppercase pointer-events-none select-none z-10">
+													{previewMode} view
+												</div>
+											)}
+											<div className="w-full h-full flex items-center justify-center">
+												{previewContent}
+											</div>
+										</div>
 									</div>
 									{onReplay && (
 										<button
@@ -227,35 +314,15 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 							white-space: pre-wrap !important;
 							word-break: break-word !important;
 						}
+						.canvas-grid {
+							background-size: 20px 20px;
+							background-image: 
+								linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+								linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+						}
 					`}</style>
 				</div>
 
-				<div className="absolute top-4 right-4 flex gap-2">
-					<button
-						onClick={handleOpenFullPreview}
-						className="p-2.5 items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
-						title="Expand Preview"
-					>
-						<Maximize2
-							size={14}
-							className="group-hover:scale-110 transition-transform"
-						/>
-					</button>
-					<button
-						onClick={handleCopy}
-						className="p-2.5 items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
-						title="Copy to clipboard"
-					>
-						{copied ? (
-							<Check size={14} className="text-emerald-500" />
-						) : (
-							<Copy
-								size={14}
-								className="group-hover:scale-110 transition-transform"
-							/>
-						)}
-					</button>
-				</div>
 
 				{children && (
 					<div className="mt-1.5 px-3 py-3 bg-rb-neutral-1 rounded-[18px] border border-rb-neutral-4 flex flex-col gap-3">

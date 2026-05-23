@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useInView, motion, Variant, Transition } from "framer-motion";
+import { motion } from "framer-motion";
 
 export interface BlurTextProps {
 	/** The text to display and animate */
@@ -115,7 +115,6 @@ export const BlurText: React.FC<BlurTextProps> = ({
 							: "hidden"
 					}
 					variants={variants}
-
 					transition={
 						(loop
 							? {
@@ -152,7 +151,4 @@ export const BlurText: React.FC<BlurTextProps> = ({
 	);
 };
 
-
-
 export default BlurText;
-

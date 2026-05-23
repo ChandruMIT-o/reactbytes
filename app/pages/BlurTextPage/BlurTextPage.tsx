@@ -308,7 +308,10 @@ export const BlurTextPage = () => {
 
 
 			<div id="installation-tabs">
-				<InstallationTabs />
+				<InstallationTabs 
+					cliCommand="pnpm add @reactbytes/blur-text   # or: npm i @reactbytes/blur-text"
+					manualCommand="Copy the source code from the 'Code' tab above and save it to: components/animate-ui/primitives/texts/BlurText.tsx"
+				/>
 			</div>
 
 			<div id="api-reference" className="flex flex-col gap-5">
