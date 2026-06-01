@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X, ChevronRight, ChevronLeft, Play, Search, ArrowLeft, ArrowRight } from "lucide-react";
+import { X, ChevronRight, ChevronLeft, Play, Search, ArrowLeft, ArrowRight, Monitor, Tablet, Smartphone, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { allNavItems, navItems } from "@/app/meta/navigation";
@@ -28,6 +28,46 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
     const [isMobile, setIsMobile] = useState(false);
     const pathname = usePathname();
     const router = useRouter();
+
+    const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "phone" | "custom">("desktop");
+    const [customWidth, setCustomWidth] = useState<number>(800);
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleResizeStart = (
+        direction: "left" | "right",
+        e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+    ) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDragging(true);
+
+        const startX = "touches" in e ? e.touches[0].clientX : e.clientX;
+        const startWidth = customWidth;
+
+        const handleMouseMove = (moveEvent: MouseEvent | TouchEvent) => {
+            const currentX = "touches" in moveEvent ? moveEvent.touches[0].clientX : moveEvent.clientX;
+            const deltaX = currentX - startX;
+            const factor = direction === "right" ? 2 : -2;
+            const nextWidth = startWidth + deltaX * factor;
+
+            const minWidth = 320;
+            const maxWidth = window.innerWidth - 60;
+            setCustomWidth(Math.max(minWidth, Math.min(maxWidth, nextWidth)));
+        };
+
+        const handleMouseUp = () => {
+            setIsDragging(false);
+            document.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("mouseup", handleMouseUp);
+            document.removeEventListener("touchmove", handleMouseMove);
+            document.removeEventListener("touchend", handleMouseUp);
+        };
+
+        document.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("mouseup", handleMouseUp);
+        document.addEventListener("touchmove", handleMouseMove, { passive: false });
+        document.addEventListener("touchend", handleMouseUp);
+    };
 
     useEffect(() => {
         setMounted(true);
@@ -98,26 +138,120 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 </div>
                             </div>
 
-                            <button
-                                className="p-3 rounded-full bg-rb-neutral-3/80 backdrop-blur-md text-rb-accent-2 border border-rb-neutral-4 hover:bg-rb-neutral-4 transition-all group shadow-xl"
-                                title="Search Components"
-                            >
-                                <Search size={20} className="group-hover:scale-110 transition-transform" />
-                            </button>
+                            <div className="flex items-center gap-3">
+                                {/* Device Switcher */}
+                                <div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0 shadow-xl border border-rb-neutral-4">
+                                    <button
+                                        onClick={() => setPreviewMode("desktop")}
+                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
+                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                            }`}
+                                        title="Desktop View"
+                                    >
+                                        <Monitor size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => setPreviewMode("tablet")}
+                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet"
+                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                            }`}
+                                        title="Tablet View"
+                                    >
+                                        <Tablet size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => setPreviewMode("phone")}
+                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone"
+                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                            }`}
+                                        title="Mobile View"
+                                    >
+                                        <Smartphone size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => setPreviewMode("custom")}
+                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom"
+                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                            }`}
+                                        title="Custom View"
+                                    >
+                                        <MoveHorizontal size={16} />
+                                    </button>
+                                </div>
+
+                                <button
+                                    className="p-3 rounded-full bg-rb-neutral-3/80 backdrop-blur-md text-rb-accent-2 border border-rb-neutral-4 hover:bg-rb-neutral-4 transition-all group shadow-xl"
+                                    title="Search Components"
+                                >
+                                    <Search size={20} className="group-hover:scale-110 transition-transform" />
+                                </button>
+                            </div>
                         </div>
 
-                        {/* Preview Content Container - Forced to fill space with transition */}
-                        <div className="flex-1 flex items-center justify-center overflow-hidden">
+                        {/* Preview Content Container */}
+                        <div className={`flex-1 flex items-center justify-center overflow-hidden transition-all duration-500 ${previewMode !== "desktop" ? "bg-rb-neutral-2 canvas-grid w-full h-full" : "w-full h-full"}`}>
                             <AnimatePresence mode="wait">
                                 <motion.div
-                                    key={pathname}
+                                    key={pathname + "-" + previewMode}
                                     initial={{ opacity: 0, filter: "blur(20px)", scale: 0.98 }}
                                     animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
                                     exit={{ opacity: 0, filter: "blur(20px)", scale: 1.02 }}
                                     transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                                    className="w-full h-full flex items-center justify-center [&>div]:h-full [&>div]:w-full [&>div]:max-h-none [&>div]:max-w-none"
+                                    className="w-full h-full flex items-center justify-center"
                                 >
-                                    {previewContent}
+                                    <div
+                                        className={`relative flex items-center justify-center h-full ${isDragging ? "transition-none" : "transition-all duration-500 ease-in-out"}`}
+                                        style={previewMode === "custom" ? { width: `${customWidth}px`, maxWidth: "100%" } : { width: "100%" }}
+                                    >
+                                        <div
+                                            className={`w-full h-full flex items-center justify-center relative ${isDragging ? "transition-none" : "transition-all duration-500 ease-in-out"} ${previewMode === "desktop"
+                                                ? "max-w-full"
+                                                : previewMode === "tablet"
+                                                    ? "max-w-[768px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+                                                    : previewMode === "phone"
+                                                        ? "max-w-[375px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+                                                        : "bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+                                                }`}
+                                        >
+                                            {previewMode !== "desktop" && (
+                                                <div className="absolute top-4 left-1/2 -translate-x-1/2 text-[10px] text-rb-accent-2/20 font-mono tracking-widest uppercase pointer-events-none select-none z-10">
+                                                    {previewMode === "custom" ? `custom view (${customWidth}px)` : `${previewMode} view`}
+                                                </div>
+                                            )}
+                                            <div className="w-full h-full flex items-center justify-center [&>div]:h-full [&>div]:w-full [&>div]:max-h-none [&>div]:max-w-none">
+                                                {previewContent}
+                                            </div>
+                                        </div>
+
+                                        {previewMode === "custom" && (
+                                            <>
+                                                {/* Left Handle */}
+                                                <div
+                                                    onMouseDown={(e) => handleResizeStart("left", e)}
+                                                    onTouchStart={(e) => handleResizeStart("left", e)}
+                                                    className="absolute left-0 top-0 bottom-0 w-4 cursor-col-resize flex items-center justify-center group/handle z-50 -translate-x-1/2"
+                                                >
+                                                    <div className="w-1.5 h-16 rounded-full bg-rb-accent-1/20 group-hover/handle:bg-rb-accent-1/60 group-active/handle:bg-rb-accent-1 transition-colors flex items-center justify-center shadow-lg border border-white/5">
+                                                        <div className="w-0.5 h-8 bg-rb-neutral-2/40 rounded-full" />
+                                                    </div>
+                                                </div>
+                                                {/* Right Handle */}
+                                                <div
+                                                    onMouseDown={(e) => handleResizeStart("right", e)}
+                                                    onTouchStart={(e) => handleResizeStart("right", e)}
+                                                    className="absolute right-0 top-0 bottom-0 w-4 cursor-col-resize flex items-center justify-center group/handle z-50 translate-x-1/2"
+                                                >
+                                                    <div className="w-1.5 h-16 rounded-full bg-rb-accent-1/20 group-hover/handle:bg-rb-accent-1/60 group-active/handle:bg-rb-accent-1 transition-colors flex items-center justify-center shadow-lg border border-white/5">
+                                                        <div className="w-0.5 h-8 bg-rb-neutral-2/40 rounded-full" />
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                 </motion.div>
                             </AnimatePresence>
                         </div>
@@ -231,5 +365,20 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
         document.body
     );
 };
+
+// Canvas grid styles for FullPreviewTab
+const styles = `
+.canvas-grid {
+    background-size: 20px 20px;
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+`;
+if (typeof document !== 'undefined') {
+    const styleEl = document.createElement('style');
+    styleEl.innerHTML = styles;
+    document.head.appendChild(styleEl);
+}
 
 export default FullPreviewTab;

@@ -44,11 +44,11 @@ export default function LeftSidebarRefMenu({
 	} as const;
 
 	return (
-		<div className="flex font-sans w-56">
+		<div className="flex font-sans w-52">
 			<div className="relative w-56 flex flex-col">
 				{/* Continuous Vertical Connecting Line */}
-				<div 
-					className="absolute left-[29px] top-[14px] w-[2px] bg-rb-neutral-4 z-0 rounded-full transition-all duration-300" 
+				<div
+					className="absolute left-[29px] top-[14px] w-[2px] bg-rb-neutral-4 z-0 rounded-full transition-all duration-300"
 					style={{ height: items.length > 0 ? (items.length - 1) * 44 + 48 : 0 }}
 				/>
 

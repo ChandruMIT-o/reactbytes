@@ -252,6 +252,27 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("concentric-waves"),
     component: dynamic(() => import("../../pages/ConcentricWavesPage/ConcentricWavesPage").then(mod => mod.ConcentricWavesPage)),
   },
+  ripple: {
+    id: "ripple",
+    label: "Interactive Ripple",
+    category: "background",
+    sections: standardSections("ripple"),
+    component: dynamic(() => import("../../pages/RipplePage/RipplePage").then(mod => mod.RipplePage)),
+  },
+  "black-hole": {
+    id: "black-hole",
+    label: "Spacetime Black Hole",
+    category: "background",
+    sections: standardSections("black-hole"),
+    component: dynamic(() => import("../../pages/BlackHolePage/BlackHolePage").then(mod => mod.BlackHolePage)),
+  },
+  singularity: {
+    id: "singularity",
+    label: "Schwarzschild Singularity",
+    category: "background",
+    sections: standardSections("singularity"),
+    component: dynamic(() => import("../../pages/SingularityPage/SingularityPage").then(mod => mod.SingularityPage)),
+  },
   spacetime: {
     id: "spacetime",
     label: "Spacetime Grid",
@@ -265,6 +286,20 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "background",
     sections: standardSections("dither"),
     component: dynamic(() => import("../../pages/DitherPage/DitherPage").then(mod => mod.DitherPage)),
+  },
+  "petal-wave": {
+    id: "petal-wave",
+    label: "Petal Wave",
+    category: "background",
+    sections: standardSections("petal-wave"),
+    component: dynamic(() => import("../../pages/PetalWavePage/PetalWavePage").then(mod => mod.PetalWavePage)),
+  },
+  "void-orb": {
+    id: "void-orb",
+    label: "Void Orb",
+    category: "background",
+    sections: standardSections("void-orb"),
+    component: dynamic(() => import("../../pages/VoidOrbPage/VoidOrbPage").then(mod => mod.VoidOrbPage)),
   },
 
   // Carousel items
@@ -324,6 +359,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("interlocking-marquee"),
     component: dynamic(() => import("../../pages/InterlockingMarqueePage/InterlockingMarqueePage").then(mod => mod.InterlockingMarqueePage)),
   },
+  "dither-carousel": {
+    id: "dither-carousel",
+    label: "Dither Carousel",
+    category: "carousel",
+    sections: standardSections("dither-carousel"),
+    component: dynamic(() => import("../../pages/DitherCarouselPage/DitherCarouselPage").then(mod => mod.DitherCarouselPage)),
+  },
 
   // Miscellaneous items
   "standard-accordion": {
@@ -358,13 +400,6 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "miscellaneous",
     sections: standardSections("vertical-menu"),
     component: dynamic(() => import("../../pages/VerticalMenuPage/VerticalMenuPage")),
-  },
-  "novel-menu": {
-    id: "novel-menu",
-    label: "Novel Menu",
-    category: "miscellaneous",
-    sections: standardSections("novel-menu"),
-    component: dynamic(() => import("../../pages/NovelMenuPage/NovelMenuPage")),
   },
   "holo-card": {
     id: "holo-card",

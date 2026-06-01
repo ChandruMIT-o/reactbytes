@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Copy, Check, ChevronDown, ChevronUp, Play, Maximize2, Monitor, Tablet, Smartphone } from "lucide-react";
+import { Copy, Check, ChevronDown, ChevronUp, Play, Maximize2, Monitor, Tablet, Smartphone, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { usePreview } from "../context/PreviewContext";
@@ -45,7 +45,45 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 	const [copied, setCopied] = useState(false);
 	const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 	const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(searchParams.get("preview") === "true");
-	const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "phone">("desktop");
+	const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "phone" | "custom">("desktop");
+	const [customWidth, setCustomWidth] = useState<number>(800);
+	const [isDragging, setIsDragging] = useState(false);
+
+	const handleResizeStart = (
+		direction: "left" | "right",
+		e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
+	) => {
+		e.preventDefault();
+		e.stopPropagation();
+		setIsDragging(true);
+
+		const startX = "touches" in e ? e.touches[0].clientX : e.clientX;
+		const startWidth = customWidth;
+
+		const handleMouseMove = (moveEvent: MouseEvent | TouchEvent) => {
+			const currentX = "touches" in moveEvent ? moveEvent.touches[0].clientX : moveEvent.clientX;
+			const deltaX = currentX - startX;
+			const factor = direction === "right" ? 2 : -2;
+			const nextWidth = startWidth + deltaX * factor;
+
+			const minWidth = 320;
+			const maxWidth = 1152; // Matching max-w-6xl (1152px)
+			setCustomWidth(Math.max(minWidth, Math.min(maxWidth, nextWidth)));
+		};
+
+		const handleMouseUp = () => {
+			setIsDragging(false);
+			document.removeEventListener("mousemove", handleMouseMove);
+			document.removeEventListener("mouseup", handleMouseUp);
+			document.removeEventListener("touchmove", handleMouseMove);
+			document.removeEventListener("touchend", handleMouseUp);
+		};
+
+		document.addEventListener("mousemove", handleMouseMove);
+		document.addEventListener("mouseup", handleMouseUp);
+		document.addEventListener("touchmove", handleMouseMove, { passive: false });
+		document.addEventListener("touchend", handleMouseUp);
+	};
 
 	// Update global data whenever it changes
 	useEffect(() => {
@@ -138,10 +176,10 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 				</div>
 
 				{/* Header Actions (Switcher / Expand / Copy) */}
-				<div className="flex items-center gap-2 pr-1.5 pb-1.5 shrink-0">
+				<div className="flex items-center gap-1 pr-1.5 shrink-0">
 					{activeTab === "preview" ? (
 						<>
-							<div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full border border-rb-neutral-4/40 shadow-lg shrink-0">
+							<div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0">
 								<button
 									onClick={() => setPreviewMode("desktop")}
 									className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
@@ -171,6 +209,16 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 									title="Mobile View"
 								>
 									<Smartphone size={14} />
+								</button>
+								<button
+									onClick={() => setPreviewMode("custom")}
+									className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom"
+										? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+										: "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+										}`}
+									title="Custom View"
+								>
+									<MoveHorizontal size={14} />
 								</button>
 							</div>
 
@@ -237,24 +285,56 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 						>
 							{activeTab === "preview" ? (
 								<>
-									<div className={`w-full h-full min-h-[400px] flex items-center justify-center transition-all duration-500 ${previewMode !== "desktop" ? "bg-rb-neutral-2/80 canvas-grid" : ""
+									<div className={`w-full h-full min-h-[400px] flex items-center justify-center transition-all duration-500 ${previewMode !== "desktop" ? "bg-rb-neutral-2 canvas-grid" : ""
 										}`}>
 										<div
-											className={`w-full h-full min-h-[360px] flex items-center justify-center relative transition-all duration-500 ease-in-out ${previewMode === "desktop"
-												? "max-w-full"
-												: previewMode === "tablet"
-													? "max-w-[768px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
-													: "max-w-[375px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
-												}`}
+											className={`relative flex items-center justify-center ${isDragging ? "transition-none" : "transition-all duration-500 ease-in-out"}`}
+											style={previewMode === "custom" ? { width: `${customWidth}px`, maxWidth: "100%" } : { width: "100%" }}
 										>
-											{previewMode !== "desktop" && (
-												<div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] text-rb-accent-2/20 font-mono tracking-widest uppercase pointer-events-none select-none z-10">
-													{previewMode} view
+											<div
+												className={`w-full h-full min-h-[360px] flex items-center justify-center relative ${isDragging ? "transition-none" : "transition-all duration-500 ease-in-out"} ${previewMode === "desktop"
+													? "max-w-full"
+													: previewMode === "tablet"
+														? "max-w-[768px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+														: previewMode === "phone"
+															? "max-w-[375px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+															: "bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+													}`}
+											>
+												{previewMode !== "desktop" && (
+													<div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] text-rb-accent-2/20 font-mono tracking-widest uppercase pointer-events-none select-none z-10">
+														{previewMode === "custom" ? `custom view (${customWidth}px)` : `${previewMode} view`}
+													</div>
+												)}
+												<div className="w-full h-full flex items-center justify-center">
+													{previewContent}
 												</div>
-											)}
-											<div className="w-full h-full flex items-center justify-center">
-												{previewContent}
 											</div>
+
+											{previewMode === "custom" && (
+												<>
+													{/* Left Handle */}
+													<div
+														onMouseDown={(e) => handleResizeStart("left", e)}
+														onTouchStart={(e) => handleResizeStart("left", e)}
+														className="absolute left-0 top-0 bottom-0 w-4 cursor-col-resize flex items-center justify-center group/handle z-50 -translate-x-1/2"
+													>
+														<div className="w-1.5 h-12 rounded-full bg-rb-accent-1/20 group-hover/handle:bg-rb-accent-1/60 group-active/handle:bg-rb-accent-1 transition-colors flex items-center justify-center shadow-lg border border-white/5">
+															<div className="w-0.5 h-6 bg-rb-neutral-2/40 rounded-full" />
+														</div>
+													</div>
+													{/* Right Handle */}
+													<div
+														onMouseDown={(e) => handleResizeStart("right", e)}
+														onTouchStart={(e) => handleResizeStart("right", e)}
+														className="absolute right-0 top-0 bottom-0 w-4 cursor-col-resize flex items-center justify-center group/handle z-50 translate-x-1/2"
+													>
+														<div className="w-1.5 h-12 rounded-full bg-rb-accent-1/20 group-hover/handle:bg-rb-accent-1/60 group-active/handle:bg-rb-accent-1 transition-colors flex items-center justify-center shadow-lg border border-white/5">
+															<div className="w-0.5 h-6 bg-rb-neutral-2/40 rounded-full" />
+														</div>
+													</div>
+												</>
+											)}
 										</div>
 									</div>
 									{onReplay && (

@@ -1,5 +1,17 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import anime from 'animejs';
+import * as animeModule from 'animejs';
+
+const anime: any = (options: any) => {
+	if (options && options.targets) {
+		const { targets, ...rest } = options;
+		return ((animeModule.animate || (animeModule as any).default || animeModule) as any)(targets, rest);
+	}
+	return ((animeModule.animate || (animeModule as any).default || animeModule) as any)(options);
+};
+const animLib = animeModule as any;
+if (animLib.stagger) {
+	anime.stagger = animLib.stagger;
+}
 
 // --- Types & Data ---
 

@@ -15,6 +15,10 @@ export const ArrowCursor = ({ color = "#F2F5F8", size = 20 }: ArrowCursorProps) 
 
 	useEffect(() => {
 		setMounted(true);
+	}, []);
+
+	useEffect(() => {
+		if (!mounted) return;
 		const cursor = cursorRef.current;
 		const rotationWrapper = rotationRef.current;
 		if (!cursor || !rotationWrapper) return;
@@ -107,7 +111,7 @@ export const ArrowCursor = ({ color = "#F2F5F8", size = 20 }: ArrowCursorProps) 
 				document.head.removeChild(existingStyle);
 			}
 		};
-	}, [size]);
+	}, [mounted, size]);
 
 	if (!mounted) return null;
 

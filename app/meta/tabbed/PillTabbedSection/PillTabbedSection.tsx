@@ -2,7 +2,24 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import anime from 'animejs';
+import * as animeModule from 'animejs';
+
+const anime: any = (options: any) => {
+	if (options && options.targets) {
+		const { targets, ...rest } = options;
+		return ((animeModule.animate || (animeModule as any).default || animeModule) as any)(targets, rest);
+	}
+	return ((animeModule.animate || (animeModule as any).default || animeModule) as any)(options);
+};
+const animLib = animeModule as any;
+if (animLib.stagger) {
+	anime.stagger = animLib.stagger;
+}
+if (animLib.timeline) {
+	anime.timeline = animLib.timeline;
+} else if (animLib.createTimeline) {
+	anime.timeline = animLib.createTimeline;
+}
 
 // --- Types ---
 export type TabItem = {

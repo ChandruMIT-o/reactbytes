@@ -28,6 +28,8 @@ export const navItems = [
             { id: "perlin-smoke", label: "Perlin Smoke" },
             { id: "metallic-twirl", label: "Metallic Twirl" },
             { id: "liquid-noise", label: "Liquid Noise" },
+            { id: "ripple", label: "Interactive Ripple" },
+            { id: "singularity", label: "Schwarzschild Singularity" },
         ],
     },
     {

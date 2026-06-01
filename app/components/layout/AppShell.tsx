@@ -158,7 +158,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 			</header>
 
 			{/* Main Content Area with independent scrolling */}
-			<div className="flex flex-1 overflow-hidden w-full max-w-[100vw] justify-between md:px-5 md:py-2 relative">
+			<div className="flex flex-1 overflow-hidden w-full max-w-[100vw] justify-between md:px-2 md:py-3 relative">
 				{/* Mobile Backdrop */}
 				<AnimatePresence>
 					{isMobileMenuOpen && (
@@ -265,13 +265,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 					ref={scrollContainerRef}
 					className="flex-1 h-full w-full overflow-y-auto px-4 md:pl-20 md:pr-10 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
 				>
-					<div className="max-w-4xl mx-auto pb-40">
+					<div className="max-w-5xl mx-auto pb-40">
 						{children}
 					</div>
 				</main>
 
 				{/* Right Sidebar - Scrollable */}
-				<aside className="hidden md:block h-full overflow-y-auto pt-6 pl-4 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent">
+				<aside className="hidden md:block h-full overflow-y-auto pt-6 pl-1 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent">
 					<LeftSidebarRefMenu
 						items={currentSections}
 						activeId={activeSection}

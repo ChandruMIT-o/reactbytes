@@ -195,6 +195,7 @@ export const BlurTextPage = () => {
 								value={currentPreset}
 								onChange={applyPreset}
 								dynamicWidth={true}
+								label="PRESETS"
 							/>
 							<div className="flex items-center gap-3 flex-1 sm:flex-none justify-start sm:justify-end">
 								<button
@@ -308,8 +309,9 @@ export const BlurTextPage = () => {
 
 
 			<div id="installation-tabs">
-				<InstallationTabs 
-					cliCommand="pnpm add @reactbytes/blur-text   # or: npm i @reactbytes/blur-text"
+				<InstallationTabs
+					componentName="@reactbytes/blur-text"
+					extraLibraries={["framer-motion"]}
 					manualCommand="Copy the source code from the 'Code' tab above and save it to: components/animate-ui/primitives/texts/BlurText.tsx"
 				/>
 			</div>
