@@ -20,6 +20,12 @@ export const componentDocsData = [
 				defaultValue: "^2.0.0",
 				description: "Utility for efficiently merging Tailwind CSS classes.",
 			},
+			{
+				name: "clsx",
+				type: "package",
+				defaultValue: "^2.0.0",
+				description: "Utility for constructing className strings conditionally.",
+			},
 		],
 	},
 ];

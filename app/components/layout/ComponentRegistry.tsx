@@ -149,6 +149,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("keyboard-text"),
     component: dynamic(() => import("../../pages/KeyboardTextPage/KeyboardTextPage").then(mod => mod.KeyboardTextPage)),
   },
+  "swarm-text": {
+    id: "swarm-text",
+    label: "Swarm Text",
+    category: "text",
+    sections: standardSections("swarm-text"),
+    component: dynamic(() => import("../../pages/SwarmTextPage/SwarmTextPage").then(mod => mod.SwarmTextPage)),
+  },
 
   // Background items
   "ascii-wave": {

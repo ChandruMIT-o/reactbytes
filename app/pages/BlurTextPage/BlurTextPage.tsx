@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
+import { PerformanceIndicator } from "../../components/indicator/PerformanceIndicator";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -152,13 +152,11 @@ export const BlurTextPage = () => {
 
 	return (
 		<div className="flex flex-col gap-5">
-			<div id="blur-text-title">
+			<div id="blur-text-title" className="flex items-center justify-between gap-3">
 				<HeaderText text="Blur Text" option={3} />
+				<PerformanceIndicator level="extreme" />
 			</div>
-			<ParagraphText
-				text="A smooth, stagger-animated text entrance with dynamic blur and directional reveal effects. Powered by Framer Motion for high-fidelity micro-interactions."
-				option={4}
-			/>
+
 
 			<div id="preview">
 				<PreviewTab
