@@ -1,0 +1,1 @@
+Create a react, tailwindcss, typescript component. No unneccesary elements other the core component. A collapsible side in the right with prop adjustment controls. 

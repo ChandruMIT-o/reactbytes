@@ -210,6 +210,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("hive-mind"),
     component: dynamic(() => import("../../pages/HiveMindPage/HiveMindPage").then(mod => mod.HiveMindPage)),
   },
+  "helon-braid": {
+    id: "helon-braid",
+    label: "Helon Braid",
+    category: "background",
+    sections: standardSections("helon-braid"),
+    component: dynamic(() => import("../../pages/HelonBraidPage/HelonBraidPage").then(mod => mod.HelonBraidPage)),
+  },
   "perlin-smoke": {
     id: "perlin-smoke",
     label: "Perlin Smoke",
@@ -230,6 +237,20 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "background",
     sections: standardSections("liquid-noise"),
     component: dynamic(() => import("../../pages/LiquidNoisePage/LiquidNoisePage").then(mod => mod.LiquidNoisePage)),
+  },
+  "poisson-noise": {
+    id: "poisson-noise",
+    label: "Poisson Disc Noise",
+    category: "background",
+    sections: standardSections("poisson-noise"),
+    component: dynamic(() => import("../../pages/PoissonNoisePage/PoissonNoisePage").then(mod => mod.PoissonNoisePage)),
+  },
+  "liquid-grid": {
+    id: "liquid-grid",
+    label: "Liquid Grid",
+    category: "background",
+    sections: standardSections("liquid-grid"),
+    component: dynamic(() => import("../../pages/LiquidGridPage/LiquidGridPage").then(mod => mod.LiquidGridPage)),
   },
   "iridescent-gradient": {
     id: "iridescent-gradient",
@@ -308,6 +329,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("void-orb"),
     component: dynamic(() => import("../../pages/VoidOrbPage/VoidOrbPage").then(mod => mod.VoidOrbPage)),
   },
+  "warp-speed": {
+    id: "warp-speed",
+    label: "Warp Speed",
+    category: "background",
+    sections: standardSections("warp-speed"),
+    component: dynamic(() => import("../../pages/WarpSpeedPage/WarpSpeedPage").then(mod => mod.WarpSpeedPage)),
+  },
 
   // Carousel items
   "docked-carousel": {
@@ -337,6 +365,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "carousel",
     sections: standardSections("void-carousel"),
     component: dynamic(() => import("../../pages/VoidCarouselPage/VoidCarouselPage").then(mod => mod.VoidCarouselPage)),
+  },
+  "rotary-carousel": {
+    id: "rotary-carousel",
+    label: "Rotary Dial Carousel",
+    category: "carousel",
+    sections: standardSections("rotary-carousel"),
+    component: dynamic(() => import("../../pages/RotaryCarouselPage/RotaryCarouselPage").then(mod => mod.RotaryCarouselPage)),
   },
   "morph-carousel": {
     id: "morph-carousel",

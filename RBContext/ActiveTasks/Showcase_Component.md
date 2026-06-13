@@ -110,6 +110,7 @@ To prevent recurrent errors, adhere strictly to these rules:
 1. **String Escaping in Data Files**: Be extremely careful when exporting the `componentCode` string. Use standard backticks to enclose the template literal, and ensure you correctly escape *internal* backticks (e.g., \\\`) without erroneously adding backslashes to standard code.
 2. **Presets Implementation**: Always implement a full `presets` array in the `[ComponentName]Page.tsx` file. Map this array to a `DefaultComboBox` within the `header` prop of `PreviewTab`. The `applyPreset` function must update *all* configurable state values simultaneously.
 3. **Background Component Boundaries**: When showcasing a Background component, **DO NOT** place it as an absolute sibling next to foreground content—this breaks interaction bounds and pointer events on hover. The Background Component MUST be the root element of `previewContent` (e.g., `<BackgroundComponent className="w-full h-[500px]">`), wrapping the foreground UI via its `children` prop.
+4. **Canvas / Background Component Visibility & Resizing**: Canvas background components must handle cases where the parent container dimensions are initially 0 on mount due to page reflows or dynamic tab transitions. Avoid hardcoding `h-full` in the component wrapper if a custom height (e.g. `h-[500px]`) can be passed via `className`. Additionally, the component should monitor canvas client dimensions within its rendering or animation loop to dynamically trigger resizing and reconstruction of visual structures on the fly.
 
 ---
 
@@ -122,3 +123,4 @@ To prevent recurrent errors, adhere strictly to these rules:
 - [ ] Are `presets` fully implemented in the Page header?
 - [ ] Are background components wrapping their foreground content correctly?
 - [ ] Is the `componentCode` cleanly escaped without syntax errors?
+- [ ] Does the background/canvas component handle initial size reflows and dynamic height classes correctly?

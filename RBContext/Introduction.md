@@ -39,3 +39,21 @@ We don't want to dictate how you build your projects. Whether your team prefers 
 > **Note:** Use the dropdown menu in the header to instantly toggle the documentation to your preferred technologies!
 
 Shoutout to ReactBits!
+
+
+-----
+
+Hey guys! Some of you know me, but for those who don’t, I’m Chandru from the pilot batch of AI & DS.
+
+Cutting straight to the chase: I’m building a React UI library focused on aesthetic, ready-made, and highly customizable components designed for both developers and AI bots. It’s heavily inspired by an existing library called _ReactBits_, and it's mostly a fun, informal hobby project for me right now.
+
+If you're looking to collaborate, you can contribute by refining existing components, building new ones, fixing bugs, dropping feature updates, or just helping spread the word. Naturally, you’ll be fully credited for your work, and it’s a solid project to throw onto your portfolio if you'd like.
+
+Here are the links to check out:
+
+- **Live Demo (Not fully optimized for mobile yet):** [https://react-bytes.web.app](https://react-bytes.web.app/)
+
+- **Private Repo:** [https://github.com/ChandruMIT-o/reactbytes.git](https://www.google.com/search?q=https%3A%2F%2Fgithub.com%2FChandruMIT-o%2Freactbytes.git)
+
+
+You can drop your GitHub id in the group, so that I can add you to the repo! I'll soon update the initial tasks.
