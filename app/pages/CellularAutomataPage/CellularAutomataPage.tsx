@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { RotateCcw } from "lucide-react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -128,10 +127,6 @@ export const CellularAutomataPage = () => {
 			<div id="cellular-title">
 				<HeaderText text="Flux Energy Flow" option={3} />
 			</div>
-			<ParagraphText
-				text="A shimmering, multi-layered energy flow. Using high-performance Simplex noise and chromatic refraction, this animation creates a premium 'liquid silk' effect that responds to interaction. Highly performant and visually striking."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

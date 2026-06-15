@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -88,11 +87,6 @@ export const ShatterTextPage = () => {
 			<div id="shatter-text-title">
 				<HeaderText text="Cinematic Shatter" option={3} />
 			</div>
-			<ParagraphText
-				text="Calculates random X, Y, and rotation coordinates for a chaotic blur-reveal. Click on the text to replay the animation."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

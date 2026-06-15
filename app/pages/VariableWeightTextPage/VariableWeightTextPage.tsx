@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -122,10 +121,6 @@ export const VariableWeightTextPage = () => {
 			<div id="variable-weight-title">
 				<HeaderText text="Variable Weight Text" option={3} />
 			</div>
-			<ParagraphText
-				text="A novel animation leveraging modern variable fonts. Characters shift their font weight in a staggered sequence, creating a wave-like breathing effect or a punchy entry."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

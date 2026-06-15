@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { RotateCcw } from "lucide-react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -196,11 +195,6 @@ export const FractalBackgroundPage = () => {
 			<div id="fractal-title">
 				<HeaderText text="Fractal Background" option={3} />
 			</div>
-			<ParagraphText
-				text="A high-performance WebGL Julia Set fractal background. GPU-accelerated morphing, smooth interactive parallax, and cinematic post-processing effects."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -100,10 +99,6 @@ export const MagneticDotMeshPage = () => {
 			<div id="magnetic-dots-title">
 				<HeaderText text="Magnetic Dot Mesh" option={3} />
 			</div>
-			<ParagraphText
-				text="An interactive, high-performance background component using Canvas. Dots repel from the mouse and form interconnected mesh lines based on proximity. Supports click-triggered shockwaves."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

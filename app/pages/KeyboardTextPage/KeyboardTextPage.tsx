@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -91,11 +90,6 @@ export const KeyboardTextPage = () => {
 			<div id="keyboard-text-title">
 				<HeaderText text="Keyboard Text" option={3} />
 			</div>
-			<ParagraphText
-				text="A smooth auto-animating typing effect. The characters randomly press downwards simulating an invisible ghost operating a vintage mechanical keyboard or typewriter. Extremely lightweight using isolated Framer Motion springs."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

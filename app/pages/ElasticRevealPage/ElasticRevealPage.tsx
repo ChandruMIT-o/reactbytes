@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -115,11 +114,6 @@ export const ElasticRevealPage = () => {
 			<div id="elastic-reveal-title">
 				<HeaderText text="Elastic Reveal" option={3} />
 			</div>
-			<ParagraphText
-				text="A high-energy hover interaction where characters roll away to reveal a new state. Featuring staggered character delays and customizable easing for a fluid, spring-like feel."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

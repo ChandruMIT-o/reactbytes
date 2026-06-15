@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -112,10 +111,6 @@ export const RevealUnderPage = () => {
 			<div id="reveal-under-title">
 				<HeaderText text="Reveal Under" option={3} />
 			</div>
-			<ParagraphText
-				text="A sophisticated reveal animation where one word slides away to uncover another word hidden beneath it. Now upgraded with multi-directional support."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

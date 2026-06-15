@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { RotateCcw } from "lucide-react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -245,10 +244,6 @@ export const BubbleGradientPage = () => {
 			<div id="bubble-gradient-title">
 				<HeaderText text="Bubble Gradient" option={3} />
 			</div>
-			<ParagraphText
-				text="A gooey, grayscale bubble background built for dark interfaces. Tune the palette, filter response, motion speed, texture, and cursor glow without losing the moody monochrome direction."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

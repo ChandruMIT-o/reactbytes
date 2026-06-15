@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -150,11 +149,6 @@ export const AsciiWavePage = () => {
 			<div id="ascii-wave-title">
 				<HeaderText text="ASCII Wave" option={3} />
 			</div>
-			<ParagraphText
-				text="An interactive ASCII grid that reacts to cursor movement and clicks with dynamic waves of color and scaling."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

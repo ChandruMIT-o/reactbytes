@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -109,10 +108,6 @@ export const ScrambleRevealPage = () => {
 			<div id="scramble-reveal-title">
 				<HeaderText text="Scramble Reveal" option={3} />
 			</div>
-			<ParagraphText
-				text="A dynamic text entrance where characters drop in as random symbols before being 'pushed' out by the final characters. Inspired by cinematic terminal reveals and sleek GSAP animations."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

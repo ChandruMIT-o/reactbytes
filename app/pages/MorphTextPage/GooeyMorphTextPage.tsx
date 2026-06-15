@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -105,10 +104,6 @@ export const GooeyMorphTextPage = () => {
 			<div id="gooey-morph-title">
 				<HeaderText text="Gooey Morph" option={3} />
 			</div>
-			<ParagraphText
-				text="A mesmerizing text transformation effect that uses SVG filters to create a liquid-like 'gooey' transition between different words. Optimized with custom spring physics and vertical motion."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

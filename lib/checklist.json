@@ -1,0 +1,18 @@
+{
+  "shatter-text": {
+    "props": false,
+    "presets": false,
+    "installation": false,
+    "api": false,
+    "credits": false,
+    "impact": false
+  },
+  "blur-text": {
+    "props": false,
+    "presets": false,
+    "installation": false,
+    "api": false,
+    "credits": false,
+    "impact": false
+  }
+}

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -140,11 +139,6 @@ export const FallDownPage = () => {
 			<div id="fall-down-title">
 				<HeaderText text="Fall Down" option={3} />
 			</div>
-			<ParagraphText
-				text="A dynamic entrance animation where characters drop in from above. Inspired by JP Belley's work, this component features a custom bounce easing and staggered timing."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

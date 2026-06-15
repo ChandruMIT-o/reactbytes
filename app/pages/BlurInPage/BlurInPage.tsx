@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -116,10 +115,6 @@ export const BlurInPage = () => {
 			<div id="blur-in-title">
 				<HeaderText text="Blur In" option={3} />
 			</div>
-			<ParagraphText
-				text="A smooth staggered entrance animation where characters materialize from a blurred state. Fully customizable timing and blur intensity."
-				option={4}
-			/>
 
 			<div id="preview">
 				<PreviewTab

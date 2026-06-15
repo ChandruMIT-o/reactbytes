@@ -2,7 +2,6 @@
 
 import React, { useState, useMemo } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -163,11 +162,6 @@ export const SwarmTextPage = () => {
       <div id="swarm-text-title">
         <HeaderText text="Swarm Text" option={3} />
       </div>
-      <ParagraphText
-        text="An interactive text morphing component that renders words as a responsive swarm of particles using HTML5 Canvas. Includes real-time spring physics, additive rendering glow, and particle repulsion fields when hovering."
-        option={4}
-      />
-
       <div id="preview">
         <PreviewTab
           previewContent={

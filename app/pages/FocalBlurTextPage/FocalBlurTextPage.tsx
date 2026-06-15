@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -100,11 +99,6 @@ export const FocalBlurTextPage = () => {
 			<div id="focal-blur-title">
 				<HeaderText text="Focal Depth Blur" option={3} />
 			</div>
-			<ParagraphText
-				text="Applies dynamic gaussian blur, scaling, and opacity to simulate a camera lens focusing in and out based on cursor distance."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import HeaderText from "../../components/textfields/HeaderText";
-import ParagraphText from "../../components/textfields/ParagraphText";
 import PreviewTab from "../../components/tabsection/PreviewTab";
 import InstallationTabs from "../../components/tabsection/InstallationTabs";
 import { PropsTable } from "../../components/table/PropsTable";
@@ -100,11 +99,6 @@ export const MagneticTextPage = () => {
 			<div id="magnetic-text-title">
 				<HeaderText text="Magnetic Repel" option={3} />
 			</div>
-			<ParagraphText
-				text="Math-based physics pushing letters dynamically away from the cursor as you move closer."
-				option={4}
-			/>
-
 			<div id="preview">
 				<PreviewTab
 					previewContent={

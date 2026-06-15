@@ -56,6 +56,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     ],
     component: dynamic(() => import("../../pages/ChangelogPage/ChangelogPage").then(mod => mod.ChangelogPage)),
   },
+  admin: {
+    id: "admin",
+    label: "Admin Dashboard",
+    category: "general",
+    sections: [],
+    component: dynamic(() => import("../../pages/AdminPage/AdminPage").then(mod => mod.AdminPage)),
+  },
 
   // Text items
   "blur-text": {
@@ -156,6 +163,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("swarm-text"),
     component: dynamic(() => import("../../pages/SwarmTextPage/SwarmTextPage").then(mod => mod.SwarmTextPage)),
   },
+  "volumetric-text": {
+    id: "volumetric-text",
+    label: "Volumetric Text",
+    category: "text",
+    sections: standardSections("volumetric-text"),
+    component: dynamic(() => import("../../pages/VolumetricTextPage/VolumetricTextPage").then(mod => mod.VolumetricTextPage)),
+  },
 
   // Background items
   "ascii-wave": {
@@ -237,6 +251,27 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "background",
     sections: standardSections("liquid-noise"),
     component: dynamic(() => import("../../pages/LiquidNoisePage/LiquidNoisePage").then(mod => mod.LiquidNoisePage)),
+  },
+  "velvet-noise": {
+    id: "velvet-noise",
+    label: "Velvet Noise",
+    category: "background",
+    sections: standardSections("velvet-noise"),
+    component: dynamic(() => import("../../pages/VelvetNoisePage/VelvetNoisePage").then(mod => mod.VelvetNoisePage)),
+  },
+  "fbm-noise": {
+    id: "fbm-noise",
+    label: "FBM Vector Shader",
+    category: "background",
+    sections: standardSections("fbm-noise"),
+    component: dynamic(() => import("../../pages/FbmNoisePage/FbmNoisePage").then(mod => mod.FbmNoisePage)),
+  },
+  "eye-matrix": {
+    id: "eye-matrix",
+    label: "Eye Matrix",
+    category: "background",
+    sections: standardSections("eye-matrix"),
+    component: dynamic(() => import("../../pages/EyeMatrixPage/EyeMatrixPage").then(mod => mod.EyeMatrixPage)),
   },
   "poisson-noise": {
     id: "poisson-noise",
@@ -335,6 +370,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "background",
     sections: standardSections("warp-speed"),
     component: dynamic(() => import("../../pages/WarpSpeedPage/WarpSpeedPage").then(mod => mod.WarpSpeedPage)),
+  },
+  "scroll-warp": {
+    id: "scroll-warp",
+    label: "Scroll Warp",
+    category: "background",
+    sections: standardSections("scroll-warp"),
+    component: dynamic(() => import("../../pages/ScrollWarpPage/ScrollWarpPage").then(mod => mod.ScrollWarpPage)),
   },
 
   // Carousel items
@@ -457,12 +499,12 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("stacked-cards"),
     component: dynamic(() => import("../../pages/StackedCardsPage/StackedCardsPage")),
   },
-  "tabbed-section": {
-    id: "tabbed-section",
-    label: "Tabbed Section",
+  "sliding-menu": {
+    id: "sliding-menu",
+    label: "Sliding Menu",
     category: "miscellaneous",
-    sections: standardSections("tabbed-section"),
-    component: dynamic(() => import("../../pages/TabbedSectionPage/TabbedSectionPage").then(mod => mod.TabbedSectionPage)),
+    sections: standardSections("sliding-menu"),
+    component: dynamic(() => import("../../pages/SlidingMenuPage/SlidingMenuPage").then(mod => mod.SlidingMenuPage)),
   },
   "pill-tabbed-section": {
     id: "pill-tabbed-section",
