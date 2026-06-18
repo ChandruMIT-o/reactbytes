@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { X, ChevronRight, ChevronLeft, Play, Search, ArrowLeft, ArrowRight, Monitor, Tablet, Smartphone, MoveHorizontal } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
-import { allNavItems, navItems } from "@/app/meta/navigation";
+import { ComponentRegistry } from "../layout/ComponentRegistry";
 import { usePathname, useRouter } from "next/navigation";
 
 interface FullPreviewTabProps {
@@ -91,21 +91,23 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
 
     if (!mounted) return null;
 
+    const registryEntries = Object.values(ComponentRegistry);
     const currentId = pathname.split("/").pop() || "intro";
-    const currentIndex = allNavItems.findIndex(item => item.id === currentId);
-    const currentItem = allNavItems[currentIndex];
-    const prevItem = currentIndex > 0 ? allNavItems[currentIndex - 1] : null;
-    const nextItem = currentIndex < allNavItems.length - 1 ? allNavItems[currentIndex + 1] : null;
+    const currentIndex = registryEntries.findIndex(item => item.id === currentId);
+    const currentItem = registryEntries[currentIndex];
+    const prevItem = currentIndex > 0 ? registryEntries[currentIndex - 1] : null;
+    const nextItem = currentIndex < registryEntries.length - 1 && currentIndex !== -1 ? registryEntries[currentIndex + 1] : null;
 
     // Find current category
-    const currentCategory = navItems.find(cat =>
-        cat.items.some(item => item.id === currentId)
-    )?.category || "Component";
+    const currentCategory = currentItem
+        ? (currentItem.category.charAt(0).toUpperCase() + currentItem.category.slice(1))
+        : "Component";
 
     const paneWidth = isMobile ? "100vw" : 400;
 
     const handleNavigate = (id: string) => {
-        router.push(`/${id}?preview=true`);
+        const targetPath = id === "intro" ? "/?preview=true" : `/${id}?preview=true`;
+        router.push(targetPath);
     };
 
     return createPortal(

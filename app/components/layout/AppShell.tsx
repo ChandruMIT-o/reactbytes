@@ -9,10 +9,11 @@ import LeftSidebarRefMenu from "../sidebar/LeftSidebarRefMenu";
 import { GitHubStarButton } from "../buttons/GitHubStarsButton";
 import ToggleSwitch from "../buttongroup/ToggleSwitch";
 import SearchInput from "../buttons/SearchInput";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowLeft, ArrowRight } from "lucide-react";
 import FullPreviewTab from "../tabsection/FullPreviewTab";
 import { usePreview } from "../context/PreviewContext";
 import HeaderChaosBackground from "./HeaderChaosBackground";
+import { ComponentRegistry } from "./ComponentRegistry";
 
 import {
 	generalItems,
@@ -34,9 +35,18 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
 
-	// Extract activeItem from pathname if it's not and-redirect
 	const activeItem = pathname === "/" ? "intro" : pathname.slice(1);
 	const { isOpen, setIsOpen, data } = usePreview();
+
+	const registryEntries = React.useMemo(() => Object.values(ComponentRegistry), []);
+	const currentIndex = React.useMemo(() => registryEntries.findIndex(item => item.id === activeItem), [activeItem, registryEntries]);
+	const prevItem = currentIndex > 0 ? registryEntries[currentIndex - 1] : null;
+	const nextItem = currentIndex < registryEntries.length - 1 && currentIndex !== -1 ? registryEntries[currentIndex + 1] : null;
+
+	const handleNavigate = (id: string) => {
+		const targetPath = id === "intro" ? "/" : `/${id}`;
+		router.push(targetPath);
+	};
 
 	const [activeSection, setActiveSection] = React.useState<string>("");
 	const [activeMainNav, setActiveMainNav] = React.useState<string>("components");
@@ -267,6 +277,32 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 				>
 					<div className="max-w-5xl mx-auto pb-40">
 						{children}
+						{currentIndex !== -1 && (prevItem || nextItem) && (
+							<div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between w-full">
+								<div className="flex-1 flex justify-start">
+									{prevItem && (
+										<button
+											onClick={() => handleNavigate(prevItem.id)}
+											className="flex items-center gap-3 px-6 py-3 rounded-full bg-rb-neutral-3 text-rb-accent-2 hover:text-rb-accent-1 hover:bg-rb-neutral-4 hover:border-rb-accent-1/20 transition-all group shadow-lg cursor-pointer select-none"
+										>
+											<ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+											<span className="text-sm font-medium tracking-tight whitespace-nowrap">{prevItem.label}</span>
+										</button>
+									)}
+								</div>
+								<div className="flex-1 flex justify-end">
+									{nextItem && (
+										<button
+											onClick={() => handleNavigate(nextItem.id)}
+											className="flex items-center gap-3 px-6 py-3 rounded-full bg-rb-neutral-3 text-rb-accent-2 hover:text-rb-accent-1 hover:bg-rb-neutral-4 hover:border-rb-accent-1/20 transition-all group shadow-lg cursor-pointer select-none"
+										>
+											<span className="text-sm font-medium tracking-tight whitespace-nowrap">{nextItem.label}</span>
+											<ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+										</button>
+									)}
+								</div>
+							</div>
+						)}
 					</div>
 				</main>
 

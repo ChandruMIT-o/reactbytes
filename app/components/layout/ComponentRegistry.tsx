@@ -170,6 +170,76 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("volumetric-text"),
     component: dynamic(() => import("../../pages/VolumetricTextPage/VolumetricTextPage").then(mod => mod.VolumetricTextPage)),
   },
+  "kinetic-text": {
+    id: "kinetic-text",
+    label: "Kinetic Ribbon Text",
+    category: "text",
+    sections: standardSections("kinetic-text"),
+    component: dynamic(() => import("../../pages/KineticTextPage/KineticTextPage").then(mod => mod.KineticTextPage)),
+  },
+  "granular-text": {
+    id: "granular-text",
+    label: "Granular Sand Text",
+    category: "text",
+    sections: standardSections("granular-text"),
+    component: dynamic(() => import("../../pages/GranularTextPage/GranularTextPage").then(mod => mod.GranularTextPage)),
+  },
+  "tectonic-lattice": {
+    id: "tectonic-lattice",
+    label: "Tectonic Lattice",
+    category: "text",
+    sections: standardSections("tectonic-lattice"),
+    component: dynamic(() => import("../../pages/TectonicLatticeTextPage/TectonicLatticeTextPage").then(mod => mod.TectonicLatticeTextPage)),
+  },
+  "stratum-text": {
+    id: "stratum-text",
+    label: "Stratum Text",
+    category: "text",
+    sections: standardSections("stratum-text"),
+    component: dynamic(() => import("../../pages/StratumTextPage/StratumTextPage").then(mod => mod.StratumTextPage)),
+  },
+  "aperture-text": {
+    id: "aperture-text",
+    label: "Aperture Text",
+    category: "text",
+    sections: standardSections("aperture-text"),
+    component: dynamic(() => import("../../pages/ApertureTextPage/ApertureTextPage").then(mod => mod.ApertureTextPage)),
+  },
+  "helix-text": {
+    id: "helix-text",
+    label: "Helix Text",
+    category: "text",
+    sections: standardSections("helix-text"),
+    component: dynamic(() => import("../../pages/HelixTextPage/HelixTextPage").then(mod => mod.HelixTextPage)),
+  },
+  "phase-shell-text": {
+    id: "phase-shell-text",
+    label: "Phase Shell Text",
+    category: "text",
+    sections: standardSections("phase-shell-text"),
+    component: dynamic(() => import("../../pages/PhaseShellTextPage/PhaseShellTextPage").then(mod => mod.PhaseShellTextPage)),
+  },
+  "scaffold-text": {
+    id: "scaffold-text",
+    label: "Scaffold Text",
+    category: "text",
+    sections: standardSections("scaffold-text"),
+    component: dynamic(() => import("../../pages/ScaffoldTextPage/ScaffoldTextPage").then(mod => mod.ScaffoldTextPage)),
+  },
+  "tectonic-track-text": {
+    id: "tectonic-track-text",
+    label: "Tectonic Track Text",
+    category: "text",
+    sections: standardSections("tectonic-track-text"),
+    component: dynamic(() => import("../../pages/TectonicTrackTextPage/TectonicTrackTextPage").then(mod => mod.TectonicTrackTextPage)),
+  },
+  "axial-shear-text": {
+    id: "axial-shear-text",
+    label: "Axial Shear Text",
+    category: "text",
+    sections: standardSections("axial-shear-text"),
+    component: dynamic(() => import("../../pages/AxialShearTextPage/AxialShearTextPage").then(mod => mod.AxialShearTextPage)),
+  },
 
   // Background items
   "ascii-wave": {
@@ -377,6 +447,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "background",
     sections: standardSections("scroll-warp"),
     component: dynamic(() => import("../../pages/ScrollWarpPage/ScrollWarpPage").then(mod => mod.ScrollWarpPage)),
+  },
+  "superstructure": {
+    id: "superstructure",
+    label: "Superstructure Mesh",
+    category: "background",
+    sections: standardSections("superstructure"),
+    component: dynamic(() => import("../../pages/SuperstructurePage/SuperstructurePage").then(mod => mod.SuperstructurePage)),
   },
 
   // Carousel items
