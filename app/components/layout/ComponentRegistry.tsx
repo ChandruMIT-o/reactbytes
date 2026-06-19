@@ -242,6 +242,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
   },
 
   // Background items
+  "atmospheric-drift": {
+    id: "atmospheric-drift",
+    label: "Atmospheric Drift",
+    category: "background",
+    sections: standardSections("atmospheric-drift"),
+    component: dynamic(() => import("../../pages/AtmosphericDriftPage/AtmosphericDriftPage").then(mod => mod.AtmosphericDriftPage)),
+  },
   "ascii-wave": {
     id: "ascii-wave",
     label: "ASCII Wave",
@@ -455,6 +462,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("superstructure"),
     component: dynamic(() => import("../../pages/SuperstructurePage/SuperstructurePage").then(mod => mod.SuperstructurePage)),
   },
+  "stripe-flow": {
+    id: "stripe-flow",
+    label: "Stripe Flow",
+    category: "background",
+    sections: standardSections("stripe-flow"),
+    component: dynamic(() => import("../../pages/StripeFlowPage/StripeFlowPage").then(mod => mod.StripeFlowPage)),
+  },
 
   // Carousel items
   "docked-carousel": {
@@ -596,6 +610,13 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     category: "miscellaneous",
     sections: standardSections("endless-motion-footer"),
     component: dynamic(() => import("../../pages/EndlessMotionFooterPage/EndlessMotionFooterPage").then(mod => mod.EndlessMotionFooterPage)),
+  },
+  "malakor-singularity": {
+    id: "malakor-singularity",
+    label: "Malakor Singularity",
+    category: "miscellaneous",
+    sections: standardSections("malakor-singularity"),
+    component: dynamic(() => import("../../pages/MalakorSingularityPage/MalakorSingularityPage").then(mod => mod.MalakorSingularityPage)),
   },
 
   // Cursors items

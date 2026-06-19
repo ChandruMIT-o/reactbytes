@@ -160,33 +160,16 @@ export const GranularTextPage = () => {
 										Props
 									</h3>
 								</div>
-								<div className="flex gap-4 text-xs font-mono">
-									<div>
-										<span className="text-zinc-500">COHERENCE:</span>{" "}
-										<span
-											className={`font-bold tracking-widest ${
-												coherence < 100 ? "text-amber-500" : "text-emerald-400"
-											}`}
-										>
-											{coherence}%
-										</span>
-									</div>
-									<div className="hidden sm:block">
-										<span className="text-zinc-500">FIELD:</span>{" "}
-										<span className="text-zinc-300 font-bold">
-											{coherence === 100 ? "STABLE" : "INTERPOLATING"}
-										</span>
-									</div>
-								</div>
 							</div>
+							<DefaultComboBox
+								label="Presets"
+								options={presets}
+								value={currentPreset}
+								onChange={applyPreset}
+								dynamicWidth={true}
+							/>
 							<div className="flex items-center gap-3 self-end sm:self-auto">
-								<DefaultComboBox
-									label="Presets"
-									options={presets}
-									value={currentPreset}
-									onChange={applyPreset}
-									dynamicWidth={true}
-								/>
+
 								<button
 									onClick={handleReset}
 									className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"

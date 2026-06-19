@@ -120,10 +120,6 @@ export const TectonicTrackTextPage = () => {
     <div className="flex flex-col gap-5">
       <div id="tectonic-track-text-title">
         <HeaderText text="Tectonic Track Text" option={3} />
-        <ParagraphText
-          text="An interactive canvas-based tracking and scale expansion animation. Sweeping the cursor over the text applies localized horizontal pressure, expanding character tracking and width scales elastically using Hooke's Law spring dynamics and a Gaussian proximity curve, while displaying boundary ruler ticks and baseline rules."
-          option={4}
-        />
       </div>
 
       <div id="preview">

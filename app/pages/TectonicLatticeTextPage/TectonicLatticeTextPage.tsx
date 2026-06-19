@@ -164,10 +164,6 @@ export const TectonicLatticeTextPage = () => {
     <div className="flex flex-col gap-5">
       <div id="tectonic-lattice-title">
         <HeaderText text="Tectonic Lattice" option={3} />
-        <ParagraphText
-          text="An interactive physics-based text rasterization effect where individual letter blocks are connected by elastic lattice wireframes. Hovering pulls and shears blocks along custom rail quantization modes, snapping back elastically."
-          option={4}
-        />
       </div>
 
       <div id="preview">
@@ -202,17 +198,17 @@ export const TectonicLatticeTextPage = () => {
             <div className="flex items-center justify-between w-full">
               <div className="flex flex-col gap-1">
                 <h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
-                  Props Matrix
+                  Props
                 </h3>
               </div>
+              <DefaultComboBox
+                label="Presets"
+                options={presets}
+                value={currentPreset}
+                onChange={applyPreset}
+                dynamicWidth={true}
+              />
               <div className="flex items-center gap-3">
-                <DefaultComboBox
-                  label="Presets"
-                  options={presets}
-                  value={currentPreset}
-                  onChange={applyPreset}
-                  dynamicWidth={true}
-                />
                 <button
                   onClick={handleReset}
                   className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
