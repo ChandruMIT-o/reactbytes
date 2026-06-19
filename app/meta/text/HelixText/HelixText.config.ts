@@ -1,0 +1,140 @@
+import { ComponentConfig } from "@/app/registry/ComponentDatabase";
+
+export const helixTextConfig: ComponentConfig = {
+  slug: "helix-text",
+  name: "Helix Text",
+  category: "text",
+  componentPath: "app/meta/text/HelixText/HelixText.tsx",
+  props: [
+    {
+      name: "text",
+      type: "string",
+      default: "ROTOR",
+      description: "The word/text to render on the cylindrical rotors.",
+    },
+    {
+      name: "fontSize",
+      type: "number",
+      default: 90,
+      min: 40,
+      max: 140,
+      step: 5,
+      description: "Font size in pixels defining the canvas bounds.",
+    },
+    {
+      name: "torqueForce",
+      type: "number",
+      default: 0.55,
+      min: 0.1,
+      max: 3.0,
+      step: 0.05,
+      description: "Multiplier for rotational acceleration applied by mouse swipe speed.",
+    },
+    {
+      name: "influenceRadius",
+      type: "number",
+      default: 70,
+      min: 30,
+      max: 200,
+      step: 5,
+      description: "Horizontal proximity radius for mouse-triggered torque.",
+    },
+    {
+      name: "stiffness",
+      type: "number",
+      default: 0.05,
+      min: 0.02,
+      max: 0.30,
+      step: 0.01,
+      description: "Rotational home-base spring stiffness constant.",
+    },
+    {
+      name: "damping",
+      type: "number",
+      default: 0.81,
+      min: 0.50,
+      max: 0.99,
+      step: 0.01,
+      description: "Rotational damping ratio.",
+    },
+    {
+      name: "color",
+      type: "color",
+      default: "#ffffff",
+      description: "Foreground color of the front-facing characters.",
+    },
+    {
+      name: "techColor",
+      type: "color",
+      default: "rgba(245, 158, 11, 0.45)",
+      description: "Color of technical spindle components and scale markers.",
+    },
+  ],
+  presets: [
+    {
+      id: "rotor",
+      label: "Industrial Rotor (Default)",
+      config: {
+        text: "ROTOR",
+        fontSize: 90,
+        color: "#ffffff",
+        techColor: "rgba(245, 158, 11, 0.45)",
+        torqueForce: 0.55,
+        influenceRadius: 70,
+        stiffness: 0.05,
+        damping: 0.81,
+      },
+    },
+    {
+      id: "spin",
+      label: "Kinetic Spin",
+      config: {
+        text: "SPIN",
+        fontSize: 100,
+        color: "#a855f7",
+        techColor: "rgba(168, 85, 247, 0.35)",
+        torqueForce: 1.2,
+        influenceRadius: 90,
+        stiffness: 0.02,
+        damping: 0.94,
+      },
+    },
+    {
+      id: "return",
+      label: "Fast Return",
+      config: {
+        text: "CYLINDER",
+        fontSize: 75,
+        color: "#10b981",
+        techColor: "rgba(16, 185, 129, 0.5)",
+        torqueForce: 0.4,
+        influenceRadius: 60,
+        stiffness: 0.15,
+        damping: 0.70,
+      },
+    },
+  ],
+  credits: [
+    {
+      title: "Component Source",
+      items: [
+        {
+          name: "React Bytes",
+          role: "Author",
+          url: "https://reactbytes.dev",
+        },
+      ],
+    },
+    {
+      title: "Open Source Libraries",
+      items: [
+        {
+          name: "React",
+          role: "UI Framework",
+          url: "https://react.dev",
+        },
+      ],
+    },
+  ],
+  staticProps: {},
+};

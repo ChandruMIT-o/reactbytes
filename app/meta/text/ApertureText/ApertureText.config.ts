@@ -1,0 +1,140 @@
+import { ComponentConfig } from "@/app/registry/ComponentDatabase";
+
+export const apertureTextConfig: ComponentConfig = {
+  slug: "aperture-text",
+  name: "Aperture Text",
+  category: "text",
+  componentPath: "app/meta/text/ApertureText/ApertureText.tsx",
+  props: [
+    {
+      name: "text",
+      type: "string",
+      default: "DESTRUCT",
+      description: "The typography string to separate and animate.",
+    },
+    {
+      name: "fontSize",
+      type: "number",
+      default: 85,
+      min: 40,
+      max: 140,
+      step: 5,
+      description: "Scale of font size in pixels (defines localized canvas bounds).",
+    },
+    {
+      name: "expansionForce",
+      type: "number",
+      default: 18,
+      min: 5,
+      max: 50,
+      step: 1,
+      description: "Maximum displacement reach of the separating plates.",
+    },
+    {
+      name: "influenceRadius",
+      type: "number",
+      default: 75,
+      min: 30,
+      max: 200,
+      step: 5,
+      description: "Proximity threshold for the pointer pressure trigger.",
+    },
+    {
+      name: "stiffness",
+      type: "number",
+      default: 0.07,
+      min: 0.01,
+      max: 0.30,
+      step: 0.01,
+      description: "Mechanical lock-back spring stiffness index (Hooke's spring constant).",
+    },
+    {
+      name: "damping",
+      type: "number",
+      default: 0.76,
+      min: 0.50,
+      max: 0.99,
+      step: 0.01,
+      description: "Kinetic friction dampening index (velocity decay multiplier).",
+    },
+    {
+      name: "color",
+      type: "color",
+      default: "#ffffff",
+      description: "Foreground color of the solid shifting character plates.",
+    },
+    {
+      name: "blueprintColor",
+      type: "color",
+      default: "rgba(244, 63, 94, 0.45)",
+      description: "Color of the inner wireframe blueprint revealed on fracture.",
+    },
+  ],
+  presets: [
+    {
+      id: "destruct",
+      label: "Rose Destruct (Default)",
+      config: {
+        text: "DESTRUCT",
+        fontSize: 85,
+        color: "#ffffff",
+        blueprintColor: "rgba(244, 63, 94, 0.45)",
+        expansionForce: 18,
+        influenceRadius: 75,
+        stiffness: 0.07,
+        damping: 0.76,
+      },
+    },
+    {
+      id: "cyber",
+      label: "Cyber Fracture",
+      config: {
+        text: "FRACTURE",
+        fontSize: 80,
+        color: "#00f5ff",
+        blueprintColor: "rgba(255, 0, 110, 0.45)",
+        expansionForce: 30,
+        influenceRadius: 100,
+        stiffness: 0.12,
+        damping: 0.70,
+      },
+    },
+    {
+      id: "bloom",
+      label: "Soft Bloom",
+      config: {
+        text: "BLOOM",
+        fontSize: 90,
+        color: "#fef08a",
+        blueprintColor: "rgba(234, 179, 8, 0.3)",
+        expansionForce: 10,
+        influenceRadius: 60,
+        stiffness: 0.04,
+        damping: 0.88,
+      },
+    },
+  ],
+  credits: [
+    {
+      title: "Component Source",
+      items: [
+        {
+          name: "React Bytes",
+          role: "Author",
+          url: "https://reactbytes.dev",
+        },
+      ],
+    },
+    {
+      title: "Open Source Libraries",
+      items: [
+        {
+          name: "React",
+          role: "UI Framework",
+          url: "https://react.dev",
+        },
+      ],
+    },
+  ],
+  staticProps: {},
+};

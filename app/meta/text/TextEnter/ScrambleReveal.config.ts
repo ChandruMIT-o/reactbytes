@@ -1,0 +1,137 @@
+import { ComponentConfig } from "@/app/registry/ComponentDatabase";
+
+export const scrambleRevealConfig: ComponentConfig = {
+  slug: "scramble-reveal",
+  name: "Scramble Reveal",
+  category: "text",
+  componentPath: "app/meta/text/TextEnter/ScrambleReveal.tsx",
+  props: [
+    {
+      name: "text",
+      type: "string",
+      default: "CREATIVE",
+      description: "The target text to reveal.",
+    },
+    {
+      name: "scrambleChars",
+      type: "string",
+      default: "ABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*",
+      description: "Characters used during the scramble phase.",
+    },
+    {
+      name: "duration",
+      type: "number",
+      default: 0.8,
+      min: 0.1,
+      max: 3,
+      step: 0.1,
+      description: "Duration of each animation phase in seconds.",
+    },
+    {
+      name: "scrambleStagger",
+      type: "number",
+      default: 0.05,
+      min: 0,
+      max: 0.5,
+      step: 0.01,
+      description: "Delay increment for the initial scramble appearance.",
+    },
+    {
+      name: "revealStagger",
+      type: "number",
+      default: 0.1,
+      min: 0,
+      max: 0.5,
+      step: 0.01,
+      description: "Delay increment for the final character reveal.",
+    },
+    {
+      name: "color",
+      type: "color",
+      default: "#34d399",
+      description: "The base color of the text letters.",
+    },
+    {
+      name: "uppercase",
+      type: "boolean",
+      default: true,
+      description: "Whether to force the text to uppercase.",
+    },
+  ],
+  presets: [
+    {
+      id: "default",
+      label: "Classic Push",
+      config: {
+        text: "CREATIVE",
+        scrambleChars: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        duration: 0.8,
+        scrambleStagger: 0.05,
+        revealStagger: 0.1,
+        color: "#34d399",
+        uppercase: true,
+      },
+    },
+    {
+      id: "matrix",
+      label: "System Reveal",
+      config: {
+        text: "INITIALIZING",
+        scrambleChars: "01",
+        duration: 0.4,
+        scrambleStagger: 0.02,
+        revealStagger: 0.05,
+        color: "#10b981",
+        uppercase: true,
+      },
+    },
+    {
+      id: "cinematic",
+      label: "Cinematic Slow",
+      config: {
+        text: "PROCESSED",
+        scrambleChars: "!@#$%^&*",
+        duration: 1.2,
+        scrambleStagger: 0.08,
+        revealStagger: 0.15,
+        color: "#60a5fa",
+        uppercase: true,
+      },
+    },
+  ],
+  credits: [
+    {
+      title: "Component Source",
+      items: [
+        {
+          name: "GSAP Scramble CSS",
+          role: "Animation Concept",
+          url: "https://codepen.io/osublake/pen/XWwjYmO",
+        },
+        {
+          name: "React Bytes",
+          role: "Implementation",
+          url: "https://reactbytes.dev",
+        },
+      ],
+    },
+    {
+      title: "Open Source Libraries",
+      items: [
+        {
+          name: "Framer Motion",
+          role: "Animations",
+          url: "https://www.framer.com/motion/",
+        },
+        {
+          name: "React",
+          role: "UI Library",
+          url: "https://react.dev",
+        },
+      ],
+    },
+  ],
+  staticProps: {
+    textClassName: "text-6xl md:text-9xl font-bold font-mono leading-[0.75]",
+  },
+};

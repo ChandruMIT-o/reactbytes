@@ -1,0 +1,140 @@
+import { ComponentConfig } from "@/app/registry/ComponentDatabase";
+
+export const axialShearTextConfig: ComponentConfig = {
+  slug: "axial-shear-text",
+  name: "Axial Shear Text",
+  category: "text",
+  componentPath: "app/meta/text/AxialShearText/AxialShearText.tsx",
+  props: [
+    {
+      name: "text",
+      type: "string",
+      default: "SHEAR",
+      description: "The hidden text string to mount onto the shear line matrix.",
+    },
+    {
+      name: "fontSize",
+      type: "number",
+      default: 80,
+      min: 40,
+      max: 140,
+      step: 5,
+      description: "Font scale in pixels (handles absolute container footprint bounds).",
+    },
+    {
+      name: "maxShearOffset",
+      type: "number",
+      default: 24,
+      min: 5,
+      max: 60,
+      step: 1,
+      description: "Maximum vertical pixel offset a character can split apart.",
+    },
+    {
+      name: "influenceRadius",
+      type: "number",
+      default: 75,
+      min: 40,
+      max: 200,
+      step: 5,
+      description: "Proximity trigger radius surrounding the cursor position (in pixels).",
+    },
+    {
+      name: "stiffness",
+      type: "number",
+      default: 0.07,
+      min: 0.01,
+      max: 0.30,
+      step: 0.01,
+      description: "Hooke's spring calculation stiffness profile.",
+    },
+    {
+      name: "damping",
+      type: "number",
+      default: 0.75,
+      min: 0.50,
+      max: 0.99,
+      step: 0.01,
+      description: "Kinetic damping factor to settle vertical slide motion.",
+    },
+    {
+      name: "color",
+      type: "color",
+      default: "#ffffff",
+      description: "Primary typography color of the solid glyph hulls.",
+    },
+    {
+      name: "shearColor",
+      type: "color",
+      default: "rgba(14, 165, 233, 0.5)",
+      description: "Accent color of the interior alignment tracks and micro-telemetry scales.",
+    },
+  ],
+  presets: [
+    {
+      id: "precision",
+      label: "Precision Shear (Default)",
+      config: {
+        text: "SHEAR",
+        fontSize: 80,
+        color: "#ffffff",
+        shearColor: "rgba(14, 165, 233, 0.5)",
+        maxShearOffset: 24,
+        influenceRadius: 75,
+        stiffness: 0.07,
+        damping: 0.75,
+      },
+    },
+    {
+      id: "deep",
+      label: "Deep Fracture",
+      config: {
+        text: "FRACTURE",
+        fontSize: 75,
+        color: "#f43f5e",
+        shearColor: "rgba(244, 63, 94, 0.6)",
+        maxShearOffset: 45,
+        influenceRadius: 100,
+        stiffness: 0.05,
+        damping: 0.82,
+      },
+    },
+    {
+      id: "rapid",
+      label: "Rapid Divide",
+      config: {
+        text: "DIVIDE",
+        fontSize: 85,
+        color: "#10b981",
+        shearColor: "rgba(16, 185, 129, 0.45)",
+        maxShearOffset: 15,
+        influenceRadius: 60,
+        stiffness: 0.16,
+        damping: 0.68,
+      },
+    },
+  ],
+  credits: [
+    {
+      title: "Component Source",
+      items: [
+        {
+          name: "React Bytes",
+          role: "Author",
+          url: "https://reactbytes.dev",
+        },
+      ],
+    },
+    {
+      title: "Open Source Libraries",
+      items: [
+        {
+          name: "React",
+          role: "UI Framework",
+          url: "https://react.dev",
+        },
+      ],
+    },
+  ],
+  staticProps: {},
+};

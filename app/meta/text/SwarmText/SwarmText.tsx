@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 
 export interface SwarmTextProps {
-  /** Array of words to rotate through */
-  texts?: string[];
+  /** Array of words to rotate through or comma-separated string */
+  texts?: string[] | string;
   /** Static prefix text that sits in front of the animated words */
   prefix?: string;
   /** Delay in milliseconds between text switches */
@@ -195,9 +195,14 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
   const [dims, setDims] = useState({ width: 300, height: 80 });
   const [currentTextIdx, setCurrentTextIdx] = useState(0);
 
+  const processedTexts = useMemo(() => {
+    const list = typeof texts === "string" ? (texts as string).split(",").map(t => t.trim()).filter(Boolean) : texts;
+    return list || [];
+  }, [texts]);
+
   // References to keep animation loop stable and prevent effect restarts on word swaps
   const currentTextIdxRef = useRef(currentTextIdx);
-  const textsRef = useRef(texts);
+  const textsRef = useRef(processedTexts);
   const mouseRef = useRef({ x: 0, y: 0, active: false });
 
   // Update refs on changes
@@ -206,12 +211,12 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
   }, [currentTextIdx]);
 
   useEffect(() => {
-    textsRef.current = texts;
-  }, [texts]);
+    textsRef.current = processedTexts;
+  }, [processedTexts]);
 
   // Update canvas dimensions based on dynamic texts
   useEffect(() => {
-    if (typeof window === "undefined" || !texts.length) return;
+    if (typeof window === "undefined" || !processedTexts.length) return;
 
     const fontStr = `bold ${fontSize}px ${fontFamily}`;
     const tempCanvas = document.createElement("canvas");
@@ -221,7 +226,7 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     tempCtx.font = fontStr;
     
     let maxWidth = 100;
-    texts.forEach((text) => {
+    processedTexts.forEach((text) => {
       const width = tempCtx.measureText(text).width;
       if (width > maxWidth) {
         maxWidth = width;
@@ -232,18 +237,18 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
       width: Math.ceil(maxWidth + 60), // added extra padding for breathe push boundaries
       height: Math.ceil(fontSize * 1.6),
     });
-  }, [texts, fontSize, fontFamily]);
+  }, [processedTexts, fontSize, fontFamily]);
 
   // Word swapping loop
   useEffect(() => {
-    if (texts.length <= 1) return;
+    if (processedTexts.length <= 1) return;
 
     const interval = setInterval(() => {
-      setCurrentTextIdx((prev) => (prev + 1) % texts.length);
+      setCurrentTextIdx((prev) => (prev + 1) % processedTexts.length);
     }, delay);
 
     return () => clearInterval(interval);
-  }, [texts, delay]);
+  }, [processedTexts, delay]);
 
   // Stable Core Particle System Hook
   useEffect(() => {

@@ -4,8 +4,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export interface GooeyMorphProps {
-	/** Array of words to rotate through */
-	words?: string[];
+	/** Array of words to rotate through or comma-separated string */
+	words?: string[] | string;
 	/** Duration spent on each word in seconds */
 	duration?: number;
 	/** Morph speed in seconds */
@@ -35,7 +35,8 @@ export const GooeyMorph: React.FC<GooeyMorphProps> = ({
 	const [index, setIndex] = useState(0);
 
 	const processedWords = useMemo(() => {
-		return words.map((word) => (uppercase ? word.toUpperCase() : word));
+		const wordsList = typeof words === "string" ? words.split(",").map(w => w.trim()) : words;
+		return wordsList.map((word) => (uppercase ? word.toUpperCase() : word));
 	}, [words, uppercase]);
 
 	useEffect(() => {
