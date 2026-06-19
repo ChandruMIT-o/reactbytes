@@ -108,7 +108,7 @@ export interface BubbleGradientProps {
 	backgroundStart?: string;
 	backgroundEnd?: string;
 	backgroundAngle?: number;
-	bubbleColors?: string[];
+	bubbleColors?: string[] | string;
 	interactiveColor?: string;
 	circleSize?: number;
 	blurStrength?: number;
@@ -165,14 +165,21 @@ export const BubbleGradient: React.FC<BubbleGradientProps> = ({
 	const currentRef = useRef({ x: 0, y: 0 });
 	const rafRef = useRef<number | null>(null);
 
+	const parsedColors = useMemo(() => {
+		if (typeof bubbleColors === "string") {
+			return (bubbleColors as string).split(",").map((c) => c.trim());
+		}
+		return bubbleColors;
+	}, [bubbleColors]);
+
 	const layers = useMemo(() => {
 		return baseLayerConfigs.map((layer, index) => ({
 			...layer,
-			color: bubbleColors[index] ?? bubbleColors[bubbleColors.length - 1] ?? "#FFFFFF",
+			color: parsedColors[index] ?? parsedColors[parsedColors.length - 1] ?? "#FFFFFF",
 			duration: layer.duration / clamp(speedMultiplier, 0.2, 3),
 			opacity: layer.opacity * bubbleOpacity,
 		}));
-	}, [bubbleColors, bubbleOpacity, speedMultiplier]);
+	}, [parsedColors, bubbleOpacity, speedMultiplier]);
 
 	useEffect(() => {
 		const setCenter = () => {

@@ -223,7 +223,7 @@ class TouchTexture {
         this.speed = 1 / this.maxAge;
         this.trail = [];
         this.last = null;
-        
+
         this.canvas = document.createElement("canvas");
         this.canvas.width = this.width;
         this.canvas.height = this.height;
@@ -235,7 +235,7 @@ class TouchTexture {
     update() {
         this.ctx.fillStyle = "black";
         this.ctx.fillRect(0, 0, this.width, this.height);
-        
+
         const speed = this.speed;
         for (let i = this.trail.length - 1; i >= 0; i--) {
             const point = this.trail[i];
@@ -397,7 +397,7 @@ export const LiquidNoise: React.FC<LiquidNoiseProps> = ({
 
         const touchTextureObj = new TouchTexture();
         touchTextureRef.current = touchTextureObj;
-        
+
         const glTexture = gl.createTexture();
         gl.bindTexture(gl.TEXTURE_2D, glTexture);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -443,7 +443,7 @@ export const LiquidNoise: React.FC<LiquidNoiseProps> = ({
 
         const render = () => {
             const time = (performance.now() - t0) * 0.001;
-            
+
             touchTextureObj.update();
             gl.bindTexture(gl.TEXTURE_2D, glTexture);
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, touchTextureObj.canvas);
@@ -457,7 +457,7 @@ export const LiquidNoise: React.FC<LiquidNoiseProps> = ({
             gl.uniform1f(uniforms.uGradientCount, gradientCount);
             gl.uniform1f(uniforms.uColor1Weight, color1Weight);
             gl.uniform1f(uniforms.uColor2Weight, color2Weight);
-            
+
             const darkRgb = hexToRgb(darkNavy);
             gl.uniform3f(uniforms.uDarkNavy, darkRgb[0], darkRgb[1], darkRgb[2]);
 
@@ -469,7 +469,7 @@ export const LiquidNoise: React.FC<LiquidNoiseProps> = ({
             gl.uniform3f(uniforms.uColor4, normalizedColors[3][0], normalizedColors[3][1], normalizedColors[3][2]);
             gl.uniform3f(uniforms.uColor5, normalizedColors[4][0], normalizedColors[4][1], normalizedColors[4][2]);
             gl.uniform3f(uniforms.uColor6, normalizedColors[5][0], normalizedColors[5][1], normalizedColors[5][2]);
-            
+
             gl.uniform1i(uniforms.uTouchTexture, 0);
 
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

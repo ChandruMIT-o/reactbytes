@@ -23,6 +23,26 @@ import { helixTextConfig } from "../meta/text/HelixText/HelixText.config";
 import { phaseShellTextConfig } from "../meta/text/PhaseShellText/PhaseShellText.config";
 import { scaffoldTextConfig } from "../meta/text/ScaffoldText/ScaffoldText.config";
 import { tectonicTrackTextConfig } from "../meta/text/TectonicTrackText/TectonicTrackText.config";
+import { atmosphericDriftConfig } from "../meta/background/AtmosphericDrift/AtmosphericDrift.config";
+import { asciiWaveConfig } from "../meta/background/wave/AsciiWave/AsciiWave.config";
+import { magneticDotMeshConfig } from "../meta/background/dotted/MagneticDotMesh.config";
+import { bubbleGradientConfig } from "../meta/background/gradient/BubbleGradient.config";
+import { fractalBackgroundConfig } from "../meta/background/fractal/FractalBackground.config";
+import { cellularAutomataConfig } from "../meta/background/cellular/CellularAutomataBackground.config";
+import { hiveMindConfig } from "../meta/background/flowfield/HiveMind.config";
+import { helonBraidConfig } from "../meta/background/wave/HelonBraid/HelonBraid.config";
+import { perlinSmokeConfig } from "../meta/background/gradient/PerlinSmoke.config";
+import { metallicTwirlConfig } from "../meta/background/metallic/MetallicTwirl.config";
+import { liquidNoiseConfig } from "../meta/background/liquid/LiquidNoise.config";
+import { velvetNoiseConfig } from "../meta/background/liquid/VelvetNoise.config";
+import { fbmNoiseConfig } from "../meta/background/liquid/FbmNoise.config";
+import { eyeMatrixConfig } from "../meta/background/dotted/EyeMatrix.config";
+import { poissonNoiseConfig } from "../meta/background/dotted/PoissonNoise.config";
+import { liquidGridConfig } from "../meta/background/liquid/LiquidGrid.config";
+import { iridescentGradientConfig } from "../meta/background/gradient/IridescentGradient.config";
+import { kaleidoscopicConfig } from "../meta/background/fractal/Kaleidoscopic.config";
+import { dottedVortexConfig } from "../meta/background/dotted/DottedVortex.config";
+import { concentricWavesConfig } from "../meta/background/wave/ConcentricWaves/ConcentricWaves.config";
 
 export interface PropConfig {
   name: string;
@@ -91,4 +111,24 @@ export const ComponentDatabase: ComponentConfig[] = [
   phaseShellTextConfig,
   scaffoldTextConfig,
   tectonicTrackTextConfig,
+  atmosphericDriftConfig,
+  asciiWaveConfig,
+  magneticDotMeshConfig,
+  bubbleGradientConfig,
+  fractalBackgroundConfig,
+  cellularAutomataConfig,
+  hiveMindConfig,
+  helonBraidConfig,
+  perlinSmokeConfig,
+  metallicTwirlConfig,
+  liquidNoiseConfig,
+  velvetNoiseConfig,
+  fbmNoiseConfig,
+  eyeMatrixConfig,
+  poissonNoiseConfig,
+  liquidGridConfig,
+  iridescentGradientConfig,
+  kaleidoscopicConfig,
+  dottedVortexConfig,
+  concentricWavesConfig,
 ];

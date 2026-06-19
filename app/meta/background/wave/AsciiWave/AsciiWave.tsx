@@ -22,8 +22,8 @@ export interface AsciiWaveProps {
     waveSpeed?: number;
     /** Thickness of the click wave */
     waveWidth?: number;
-    /** Array of characters to use in the grid */
-    chars?: string[];
+    /** Array of characters to use in the grid or string to be split */
+    chars?: string[] | string;
     /** Array of color definitions for the characters */
     palette?: ColorDef[];
     /** Toggle between using the provided palette or grayscale equivalents */
@@ -93,6 +93,12 @@ export default function AsciiWave({
 }: AsciiWaveProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
+    const parsedChars = useMemo(() => {
+        if (!chars) return DEFAULT_CHARS;
+        if (typeof chars === 'string') return chars.split('');
+        return chars;
+    }, [chars]);
+
     // Process palette to include grayscale equivalents once when palette changes
     const processedPalette = useMemo(() => {
         return palette.map((p) => {
@@ -108,17 +114,17 @@ export default function AsciiWave({
     // This prevents having to tear down and restart the requestAnimationFrame loop
     const configRef = useRef({
         gap, radiusVmin, speedIn, speedOut, restScale, minHoverScale,
-        maxHoverScale, waveSpeed, waveWidth, chars, colorMode,
+        maxHoverScale, waveSpeed, waveWidth, chars: parsedChars, colorMode,
         backgroundColor, processedPalette
     });
 
     useEffect(() => {
         configRef.current = {
             gap, radiusVmin, speedIn, speedOut, restScale, minHoverScale,
-            maxHoverScale, waveSpeed, waveWidth, chars, colorMode,
+            maxHoverScale, waveSpeed, waveWidth, chars: parsedChars, colorMode,
             backgroundColor, processedPalette
         };
-    }, [gap, radiusVmin, speedIn, speedOut, restScale, minHoverScale, maxHoverScale, waveSpeed, waveWidth, chars, colorMode, backgroundColor, processedPalette]);
+    }, [gap, radiusVmin, speedIn, speedOut, restScale, minHoverScale, maxHoverScale, waveSpeed, waveWidth, parsedChars, colorMode, backgroundColor, processedPalette]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
