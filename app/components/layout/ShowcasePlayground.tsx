@@ -175,11 +175,11 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
   const renderPreviewContent = () => {
     if (dbEntry.category === "background") {
       return (
-        <div className={`w-full h-[600px] relative overflow-hidden flex items-center justify-center p-2 rounded-xl border border-rb-neutral-4 ${dbEntry.containerClassName || ""}`}>
+        <div className={`w-full h-[600px] relative overflow-hidden flex items-center justify-center p-0 rounded-xl border border-rb-neutral-4 ${dbEntry.containerClassName || ""}`}>
           <Component
             key={key}
             {...propStates}
-            className={`relative w-full h-full overflow-hidden select-none rounded-xl border border-neutral-800 ${dbEntry.customClassName || ""}`}
+            className={`relative w-full h-full overflow-hidden select-none ${dbEntry.customClassName || ""}`}
           />
         </div>
       );

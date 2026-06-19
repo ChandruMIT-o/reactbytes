@@ -1,0 +1,149 @@
+import { ComponentConfig } from "@/app/registry/ComponentDatabase";
+
+export const stripeFlowConfig: ComponentConfig = {
+  slug: "stripe-flow",
+  name: "Stripe Flow",
+  category: "background",
+  componentPath: "app/meta/background/StripeFlow/StripeFlow.tsx",
+  props: [
+    {
+      name: "seed",
+      type: "number",
+      default: 422,
+      min: 0,
+      max: 1000,
+      step: 1,
+      description: "Active seed for noise calculation.",
+    },
+    {
+      name: "distortion",
+      type: "number",
+      default: 45.0,
+      min: 10,
+      max: 120,
+      step: 1,
+      description: "Multiplier controlling scalar field deformation.",
+    },
+    {
+      name: "scale",
+      type: "number",
+      default: 0.008,
+      min: 0.002,
+      max: 0.025,
+      step: 0.001,
+      description: "Scale (density) of the Perlin noise texture grid.",
+    },
+    {
+      name: "radius",
+      type: "number",
+      default: 0.8,
+      min: 0.3,
+      max: 1.5,
+      step: 0.1,
+      description: "Vignette circular boundary size multiplier.",
+    },
+    {
+      name: "speed",
+      type: "number",
+      default: 1.0,
+      min: 0.0,
+      max: 2.0,
+      step: 0.1,
+      description: "Animation timeline speed multiplier.",
+    },
+    {
+      name: "palette",
+      type: "select",
+      default: "vapor",
+      options: [
+        { id: "vapor", label: "Neo-Mint" },
+        { id: "sunset", label: "Copper Glow" },
+        { id: "slate", label: "Brutalist Gray" },
+        { id: "acid", label: "Indigo Acid" },
+      ],
+      description: "Selected color preset mapping from PALETTES matrix.",
+    },
+    {
+      name: "isPaused",
+      type: "boolean",
+      default: false,
+      description: "Freeze the background wave flow animation.",
+    },
+  ],
+  presets: [
+    {
+      id: "default",
+      label: "Neo-Mint Wave (Default)",
+      config: {
+        seed: 422,
+        distortion: 45.0,
+        scale: 0.008,
+        radius: 0.8,
+        speed: 1.0,
+        palette: "vapor",
+        isPaused: false,
+      },
+    },
+    {
+      id: "sunset",
+      label: "Sunset Glow",
+      config: {
+        seed: 125,
+        distortion: 75.0,
+        scale: 0.012,
+        radius: 1.1,
+        speed: 1.2,
+        palette: "sunset",
+        isPaused: false,
+      },
+    },
+    {
+      id: "brutalist",
+      label: "Brutalist Monochrome",
+      config: {
+        seed: 888,
+        distortion: 30.0,
+        scale: 0.005,
+        radius: 0.6,
+        speed: 0.5,
+        palette: "slate",
+        isPaused: false,
+      },
+    },
+    {
+      id: "acid",
+      label: "Acid Flow",
+      config: {
+        seed: 941,
+        distortion: 90.0,
+        scale: 0.018,
+        radius: 1.3,
+        speed: 1.6,
+        palette: "acid",
+        isPaused: false,
+      },
+    },
+  ],
+  credits: [
+    {
+      title: "Component Source",
+      items: [
+        {
+          name: "React Bytes",
+          role: "Styling & UI Assembly",
+          url: "https://reactbytes.dev",
+        },
+      ],
+    },
+    {
+      title: "Noise Physics",
+      items: [
+        {
+          name: "Gustavson 3D Noise",
+          role: "WebGL Classic Perlin Noise",
+          url: "https://github.com/stegu/webgl-noise",
+        },
+      ],
+    },
+  ],
+};

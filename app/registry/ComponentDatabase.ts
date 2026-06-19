@@ -43,6 +43,18 @@ import { iridescentGradientConfig } from "../meta/background/gradient/Iridescent
 import { kaleidoscopicConfig } from "../meta/background/fractal/Kaleidoscopic.config";
 import { dottedVortexConfig } from "../meta/background/dotted/DottedVortex.config";
 import { concentricWavesConfig } from "../meta/background/wave/ConcentricWaves/ConcentricWaves.config";
+import { rippleConfig } from "../meta/background/wave/Ripples/Ripple.config";
+import { blackHoleConfig } from "../meta/background/space/BlackHole.config";
+import { singularityConfig } from "../meta/background/space/Singularity.config";
+import { spaceTimeConfig } from "../meta/background/topographic/SpaceTime.config";
+import { ditherConfig } from "../meta/background/dotted/Dither.config";
+import { superstructureConfig } from "../meta/background/space/Superstructure.config";
+import { scrollWarpConfig } from "../meta/background/space/ScrollWarp/ScrollWarp.config";
+import { warpSpeedConfig } from "../meta/background/space/WarpSpeed/WarpSpeed.config";
+import { voidOrbConfig } from "../meta/background/space/VoidOrb.config";
+import { petalWaveConfig } from "../meta/background/wave/PetalWave/PetalWave.config";
+import { stripeFlowConfig } from "../meta/background/StripeFlow/StripeFlow.config";
+import { dockedCarouselConfig } from "../meta/carousel/DockedCarousel/DockedCarousel.config";
 
 export interface PropConfig {
   name: string;
@@ -131,4 +143,16 @@ export const ComponentDatabase: ComponentConfig[] = [
   kaleidoscopicConfig,
   dottedVortexConfig,
   concentricWavesConfig,
+  rippleConfig,
+  blackHoleConfig,
+  singularityConfig,
+  spaceTimeConfig,
+  ditherConfig,
+  superstructureConfig,
+  scrollWarpConfig,
+  warpSpeedConfig,
+  voidOrbConfig,
+  petalWaveConfig,
+  stripeFlowConfig,
+  dockedCarouselConfig,
 ];

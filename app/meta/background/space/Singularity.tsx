@@ -7,7 +7,7 @@ export interface SingularityProps {
   intensity?: number;
   orbitScale?: number;
   rotateSpeed?: number;
-  colorBase?: [number, number, number];
+  colorBase?: string | [number, number, number];
   camDist?: number;
   camPhi?: number;
   className?: string;
@@ -61,6 +61,15 @@ const NOISE_CHUNK = `
   }
 `;
 
+const parseColorBase = (color: string | [number, number, number]): [number, number, number] => {
+  if (Array.isArray(color)) return color;
+  const cleanHex = color.replace("#", "");
+  const r = parseInt(cleanHex.slice(0, 2), 16) / 255 || 0;
+  const g = parseInt(cleanHex.slice(2, 4), 16) / 255 || 0;
+  const b = parseInt(cleanHex.slice(4, 6), 16) / 255 || 0;
+  return [r, g, b];
+};
+
 export const Singularity: React.FC<SingularityProps> = ({
   morph = 0.1,
   compress = 1.0,
@@ -76,6 +85,8 @@ export const Singularity: React.FC<SingularityProps> = ({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+  const parsedColor = parseColorBase(colorBase);
+
   // References for live rendering loops (Lerping values dynamically for cinematic inertia)
   const renderValsRef = useRef({
     morph,
@@ -83,7 +94,7 @@ export const Singularity: React.FC<SingularityProps> = ({
     intensity,
     orbitScale,
     rotateSpeed,
-    colorBase,
+    colorBase: parsedColor,
     camDist,
     camPhi
   });
@@ -96,11 +107,11 @@ export const Singularity: React.FC<SingularityProps> = ({
       intensity,
       orbitScale,
       rotateSpeed,
-      colorBase,
+      colorBase: parsedColor,
       camDist,
       camPhi
     };
-  }, [morph, compress, intensity, orbitScale, rotateSpeed, colorBase, camDist, camPhi]);
+  }, [morph, compress, intensity, orbitScale, rotateSpeed, parsedColor[0], parsedColor[1], parsedColor[2], camDist, camPhi]);
 
   // Setup Three.js Pipeline inside Canvas
   useEffect(() => {
@@ -127,7 +138,7 @@ export const Singularity: React.FC<SingularityProps> = ({
       intensity: intensity,
       orbitScale: orbitScale,
       rotateSpeed: rotateSpeed,
-      colorBase: [...colorBase] as [number, number, number],
+      colorBase: [...parsedColor] as [number, number, number],
       radius: camDist,
       phi: camPhi
     };
@@ -154,7 +165,7 @@ export const Singularity: React.FC<SingularityProps> = ({
       uniforms: { 
         uTime: { value: 0 }, 
         uIntensity: { value: 1.0 },
-        uColorBase: { value: new THREE.Color(colorBase[0], colorBase[1], colorBase[2]) }
+        uColorBase: { value: new THREE.Color(parsedColor[0], parsedColor[1], parsedColor[2]) }
       },
       vertexShader: `
         varying vec3 vNormal;
@@ -194,7 +205,7 @@ export const Singularity: React.FC<SingularityProps> = ({
         uCompression: { value: 1.0 },
         uIntensity: { value: 1.0 },
         uOrbitScale: { value: 1.0 },
-        uColorBase: { value: new THREE.Color(colorBase[0], colorBase[1], colorBase[2]) }
+        uColorBase: { value: new THREE.Color(parsedColor[0], parsedColor[1], parsedColor[2]) }
       },
       vertexShader: `
         ${NOISE_CHUNK}

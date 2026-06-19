@@ -1,0 +1,173 @@
+import { ComponentConfig } from "@/app/registry/ComponentDatabase";
+
+export const blackHoleConfig: ComponentConfig = {
+  slug: "black-hole",
+  name: "Spacetime Black Hole",
+  category: "background",
+  componentPath: "app/meta/background/space/BlackHole.tsx",
+  props: [
+    {
+      name: "speed",
+      type: "number",
+      default: 1.0,
+      min: 0.1,
+      max: 3.0,
+      step: 0.1,
+      description: "Speed of the particle acceleration and funnel space-mesh grid rotation (0.1 to 3.0).",
+    },
+    {
+      name: "depth",
+      type: "number",
+      default: 1.0,
+      min: 0.4,
+      max: 2.0,
+      step: 0.1,
+      description: "Scale of the core spacetime depth coordinate funnel (0.4 to 2.0).",
+    },
+    {
+      name: "gridDensity",
+      type: "number",
+      default: 60,
+      min: 20,
+      max: 140,
+      step: 5,
+      description: "Number of slices/density of the radial space grid line curves (20 to 140).",
+    },
+    {
+      name: "particleFlux",
+      type: "number",
+      default: 150,
+      min: 30,
+      max: 220,
+      step: 10,
+      description: "Number of active orbiting plasma accretion particles to render (30 to 220).",
+    },
+    {
+      name: "mouseParallax",
+      type: "number",
+      default: 1.2,
+      min: 0.0,
+      max: 3.0,
+      step: 0.1,
+      description: "Scale factor for interactive viewport center point displacement on hover (0.0 to 3.0).",
+    },
+    {
+      name: "colorPreset",
+      type: "select",
+      default: "original",
+      options: [
+        { id: "original", label: "Wormhole Core (Cyan/Magenta)" },
+        { id: "solar", label: "Solar Flare (Amber/Orange)" },
+        { id: "matrix", label: "Cyber Lattice (Neon Green)" },
+        { id: "quasar", label: "Deep Quasar (Steel Blue)" },
+      ],
+      description: "Spectral chromatic color scheme preset for accretion particles and gravitational lensing auras.",
+    },
+    {
+      name: "soundEnabled",
+      type: "boolean",
+      default: false,
+      description: "Toggles a continuous space-hum synthesized audio hum using Web Audio API low-frequency oscillators.",
+    },
+    {
+      name: "hyperdriveActive",
+      type: "boolean",
+      default: false,
+      description: "Initiates speed warp: boosts velocity metrics and applies an elongated elliptical stretch shader to orbiting stream entities.",
+    },
+  ],
+  presets: [
+    {
+      id: "default",
+      label: "Wormhole Singularity",
+      config: {
+        speed: 1.0,
+        depth: 1.0,
+        gridDensity: 60,
+        particleFlux: 150,
+        mouseParallax: 1.2,
+        colorPreset: "original",
+        hyperdriveActive: false,
+      },
+    },
+    {
+      id: "solar",
+      label: "Amber Flare Core",
+      config: {
+        speed: 1.8,
+        depth: 1.3,
+        gridDensity: 85,
+        particleFlux: 200,
+        mouseParallax: 1.5,
+        colorPreset: "solar",
+        hyperdriveActive: false,
+      },
+    },
+    {
+      id: "cyber",
+      label: "Cyber Lattice Grid",
+      config: {
+        speed: 0.6,
+        depth: 0.8,
+        gridDensity: 110,
+        particleFlux: 100,
+        mouseParallax: 2.0,
+        colorPreset: "matrix",
+        hyperdriveActive: false,
+      },
+    },
+    {
+      id: "quasar",
+      label: "Deep Blue Quasar",
+      config: {
+        speed: 2.2,
+        depth: 1.6,
+        gridDensity: 50,
+        particleFlux: 180,
+        mouseParallax: 1.0,
+        colorPreset: "quasar",
+        hyperdriveActive: false,
+      },
+    },
+    {
+      id: "warp",
+      label: "Hyperdrive Warp Speed",
+      config: {
+        speed: 2.5,
+        depth: 1.1,
+        gridDensity: 70,
+        particleFlux: 220,
+        mouseParallax: 2.5,
+        colorPreset: "original",
+        hyperdriveActive: true,
+      },
+    },
+  ],
+  credits: [
+    {
+      title: "Visual Design & Math",
+      items: [
+        {
+          name: "HTML5 Canvas 2D Matrix",
+          role: "Vector Rendering",
+          url: "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+        },
+        {
+          name: "Lense-Thirring Effect",
+          role: "Physics Inspiration",
+          url: "https://en.wikipedia.org/wiki/Lense%E2%80%93Thirring_precession",
+        },
+      ],
+    },
+    {
+      title: "Development Team",
+      items: [
+        {
+          name: "React Bytes",
+          role: "Attribution and Licensing",
+          url: "https://reactbytes.dev",
+        },
+      ],
+    },
+  ],
+};

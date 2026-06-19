@@ -4,7 +4,7 @@ export interface RippleProps {
     zoom?: number;
     speed?: number;
     threadsFreq?: number;
-    colorBase?: [number, number, number];
+    colorBase?: string | [number, number, number];
     brightness?: number;
     mouseInfluence?: number;
     clickToSpike?: boolean;
@@ -104,6 +104,15 @@ const FRAGMENT_SHADER_SOURCE = `
   }
 `;
 
+const parseColorBase = (color: string | [number, number, number]): [number, number, number] => {
+    if (Array.isArray(color)) return color;
+    const cleanHex = color.replace("#", "");
+    const r = parseInt(cleanHex.slice(0, 2), 16) / 255 || 0;
+    const g = parseInt(cleanHex.slice(2, 4), 16) / 255 || 0;
+    const b = parseInt(cleanHex.slice(4, 6), 16) / 255 || 0;
+    return [r, g, b];
+};
+
 export const Ripple: React.FC<RippleProps> = ({
     zoom = 1.5,
     speed = 0.25,
@@ -135,13 +144,16 @@ export const Ripple: React.FC<RippleProps> = ({
         }
     }, [mouseInfluence]);
 
+    const parsedColor = parseColorBase(colorBase);
+    const [colorR, colorG, colorB] = parsedColor;
+
     // Update dynamic values in refs for instant GL rendering loops
     const uniformsRef = useRef({
         zoom,
         speed,
         threadsFreq,
         brightness,
-        colorBase
+        colorBase: parsedColor
     });
 
     useEffect(() => {
@@ -150,9 +162,9 @@ export const Ripple: React.FC<RippleProps> = ({
             speed,
             threadsFreq,
             brightness,
-            colorBase
+            colorBase: parsedColor
         };
-    }, [zoom, speed, threadsFreq, brightness, colorBase]);
+    }, [zoom, speed, threadsFreq, brightness, colorR, colorG, colorB]);
 
     // WebGL Pipeline Setup
     useEffect(() => {

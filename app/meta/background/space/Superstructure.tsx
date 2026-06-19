@@ -32,7 +32,7 @@ export interface SuperstructureProps {
 export const Superstructure: React.FC<SuperstructureProps> = ({
   startColor = "#ff00ff",
   endColor = "#8080ff",
-  bgColor = "#244832",
+  bgColor = "#010c05",
   radius = 900,
   detail = 20,
   opacity = 0.25,
