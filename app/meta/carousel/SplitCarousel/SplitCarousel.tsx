@@ -7,7 +7,7 @@ interface SplitCarouselProps {
     backgroundColor?: string;
     imageWidth?: string;
     imageMinHeight?: string;
-    borderRadius?: string;
+    borderRadius?: string | number;
     className?: string;
 }
 
@@ -97,13 +97,15 @@ export default function SplitCarousel({
         const currentX = initialX + (targetX - initialX) * localProgress;
         const currentScale = 1 + (FINAL_SCALES[idx] - 1) * localProgress;
 
+        const radiusValue = typeof borderRadius === 'number' ? `${borderRadius}rem` : borderRadius;
+
         return {
             transform: `translateX(${currentX}%) scale(${currentScale})`,
             transition: 'transform 0.15s ease-out',
             width: imageWidth,
             minWidth: '200px',
-            [side === 'left' ? 'borderTopLeftRadius' : 'borderTopRightRadius']: borderRadius,
-            [side === 'left' ? 'borderBottomLeftRadius' : 'borderBottomRightRadius']: borderRadius,
+            [side === 'left' ? 'borderTopLeftRadius' : 'borderTopRightRadius']: radiusValue,
+            [side === 'left' ? 'borderBottomLeftRadius' : 'borderBottomRightRadius']: radiusValue,
         };
     };
 

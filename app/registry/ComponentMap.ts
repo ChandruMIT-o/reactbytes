@@ -61,4 +61,13 @@ export const ComponentMap: Record<string, React.ComponentType<any>> = {
   "petal-wave": dynamic(() => import("../meta/background/wave/PetalWave/PetalWave")),
   "stripe-flow": dynamic(() => import("../meta/background/StripeFlow/StripeFlow")),
   "docked-carousel": dynamic(() => import("../meta/carousel/DockedCarousel/DockedCarousel")),
+  "stacked-carousel": dynamic(() => import("../meta/carousel/StackedCarousel/StackedCarousel")),
+  "stacked-card-carousel": dynamic(() => import("../meta/carousel/StackedCardCarousel/StackedCardCarousel")),
+  "void-carousel": dynamic(() => import("../meta/carousel/VoidCarousel/VoidCarousel")),
+  "rotary-carousel": dynamic(() => import("../meta/carousel/RotaryCarousel/RotaryCarousel")),
+  "morph-carousel": dynamic(() => import("../meta/carousel/MorphCarousel/MorphCarousel")),
+  "split-carousel": dynamic(() => import("../meta/carousel/SplitCarousel/SplitCarousel")),
+  "list-carousel": dynamic(() => import("../meta/carousel/ListCarousel/ListCarousel")),
+  "interlocking-marquee": dynamic(() => import("../meta/marquee/InterlockingMarquee/InterlockingMarquee")),
+  "dither-carousel": dynamic(() => import("../meta/carousel/DitherCarousel/DitherCarousel")),
 };

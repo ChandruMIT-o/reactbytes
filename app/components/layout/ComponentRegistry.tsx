@@ -67,69 +67,13 @@ const baseRegistry: Record<string, RegistryEntry> = {
 
   // Carousel items
 
-  "stacked-carousel": {
-    id: "stacked-carousel",
-    label: "Stacked Carousel",
-    category: "carousel",
-    sections: standardSections("stacked-carousel"),
-    component: dynamic(() => import("../../pages/StackedCarouselPage/StackedCarouselPage")),
-  },
-  "stacked-card-carousel": {
-    id: "stacked-card-carousel",
-    label: "Stacked Card Carousel",
-    category: "carousel",
-    sections: standardSections("stacked-card-carousel"),
-    component: dynamic(() => import("../../pages/StackedCardCarouselPage/StackedCardCarouselPage")),
-  },
-  "void-carousel": {
-    id: "void-carousel",
-    label: "Void Carousel",
-    category: "carousel",
-    sections: standardSections("void-carousel"),
-    component: dynamic(() => import("../../pages/VoidCarouselPage/VoidCarouselPage").then(mod => mod.VoidCarouselPage)),
-  },
-  "rotary-carousel": {
-    id: "rotary-carousel",
-    label: "Rotary Dial Carousel",
-    category: "carousel",
-    sections: standardSections("rotary-carousel"),
-    component: dynamic(() => import("../../pages/RotaryCarouselPage/RotaryCarouselPage").then(mod => mod.RotaryCarouselPage)),
-  },
-  "morph-carousel": {
-    id: "morph-carousel",
-    label: "Morph Carousel",
-    category: "carousel",
-    sections: standardSections("morph-carousel"),
-    component: dynamic(() => import("../../pages/MorphCarouselPage/MorphCarouselPage").then(mod => mod.MorphCarouselPage)),
-  },
-  "split-carousel": {
-    id: "split-carousel",
-    label: "Split Carousel",
-    category: "carousel",
-    sections: standardSections("split-carousel"),
-    component: dynamic(() => import("../../pages/SplitCarouselPage/SplitCarouselPage").then(mod => mod.SplitCarouselPage)),
-  },
-  "list-carousel": {
-    id: "list-carousel",
-    label: "List Carousel",
-    category: "carousel",
-    sections: standardSections("list-carousel"),
-    component: dynamic(() => import("../../pages/ListCarouselPage/ListCarouselPage").then(mod => mod.ListCarouselPage)),
-  },
-  "interlocking-marquee": {
-    id: "interlocking-marquee",
-    label: "Interlocking Marquee",
-    category: "carousel",
-    sections: standardSections("interlocking-marquee"),
-    component: dynamic(() => import("../../pages/InterlockingMarqueePage/InterlockingMarqueePage").then(mod => mod.InterlockingMarqueePage)),
-  },
-  "dither-carousel": {
-    id: "dither-carousel",
-    label: "Dither Carousel",
-    category: "carousel",
-    sections: standardSections("dither-carousel"),
-    component: dynamic(() => import("../../pages/DitherCarouselPage/DitherCarouselPage").then(mod => mod.DitherCarouselPage)),
-  },
+
+
+
+
+
+
+
 
   // Miscellaneous items
   "standard-accordion": {

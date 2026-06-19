@@ -55,6 +55,15 @@ import { voidOrbConfig } from "../meta/background/space/VoidOrb.config";
 import { petalWaveConfig } from "../meta/background/wave/PetalWave/PetalWave.config";
 import { stripeFlowConfig } from "../meta/background/StripeFlow/StripeFlow.config";
 import { dockedCarouselConfig } from "../meta/carousel/DockedCarousel/DockedCarousel.config";
+import { stackedCarouselConfig } from "../meta/carousel/StackedCarousel/StackedCarousel.config";
+import { stackedCardCarouselConfig } from "../meta/carousel/StackedCardCarousel/StackedCardCarousel.config";
+import { voidCarouselConfig } from "../meta/carousel/VoidCarousel/VoidCarousel.config";
+import { rotaryCarouselConfig } from "../meta/carousel/RotaryCarousel/RotaryCarousel.config";
+import { morphCarouselConfig } from "../meta/carousel/MorphCarousel/MorphCarousel.config";
+import { splitCarouselConfig } from "../meta/carousel/SplitCarousel/SplitCarousel.config";
+import { listCarouselConfig } from "../meta/carousel/ListCarousel/ListCarousel.config";
+import { interlockingMarqueeConfig } from "../meta/marquee/InterlockingMarquee/InterlockingMarquee.config";
+import { ditherCarouselConfig } from "../meta/carousel/DitherCarousel/DitherCarousel.config";
 
 export interface PropConfig {
   name: string;
@@ -155,4 +164,13 @@ export const ComponentDatabase: ComponentConfig[] = [
   petalWaveConfig,
   stripeFlowConfig,
   dockedCarouselConfig,
+  stackedCarouselConfig,
+  stackedCardCarouselConfig,
+  voidCarouselConfig,
+  rotaryCarouselConfig,
+  morphCarouselConfig,
+  splitCarouselConfig,
+  listCarouselConfig,
+  interlockingMarqueeConfig,
+  ditherCarouselConfig,
 ];
