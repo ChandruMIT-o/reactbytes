@@ -80,4 +80,5 @@ export const ComponentMap: Record<string, React.ComponentType<any>> = {
   "pill-tabbed-section": dynamic(() => import("../meta/tabbed/PillTabbedSection/PillTabbedSection")),
   "endless-motion-footer": dynamic(() => import("../meta/footer/EndlessMotionFooter/EndlessMotionFooter")),
   "malakor-singularity": dynamic(() => import("../meta/misc/MalakorSingularity/MalakorSingularity")),
+  "follow-cursor": dynamic(() => import("../meta/cursor/ArrowCursor").then(mod => ({ default: mod.ArrowCursor }))),
 };

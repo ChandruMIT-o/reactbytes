@@ -79,13 +79,7 @@ const baseRegistry: Record<string, RegistryEntry> = {
 
 
   // Cursors items
-  "follow-cursor": {
-    id: "follow-cursor",
-    label: "Follow Cursor",
-    category: "cursor",
-    sections: standardSections("follow-cursor"),
-    component: dynamic(() => import("../../pages/FollowCursorPage/FollowCursorPage").then(mod => mod.FollowCursorPage)),
-  },
+
 };
 
 export const ComponentRegistry: Record<string, RegistryEntry> = {

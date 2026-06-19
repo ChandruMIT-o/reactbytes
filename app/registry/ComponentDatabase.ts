@@ -74,6 +74,7 @@ import { slidingMenuConfig } from "../meta/menu/SlidingMenu/SlidingMenu.config";
 import { pillTabbedSectionConfig } from "../meta/tabbed/PillTabbedSection/PillTabbedSection.config";
 import { endlessMotionFooterConfig } from "../meta/footer/EndlessMotionFooter/EndlessMotionFooter.config";
 import { malakorSingularityConfig } from "../meta/misc/MalakorSingularity/MalakorSingularity.config";
+import { arrowCursorConfig } from "../meta/cursor/ArrowCursor.config";
 
 export interface PropConfig {
   name: string;
@@ -193,4 +194,5 @@ export const ComponentDatabase: ComponentConfig[] = [
   pillTabbedSectionConfig,
   endlessMotionFooterConfig,
   malakorSingularityConfig,
+  arrowCursorConfig,
 ];
