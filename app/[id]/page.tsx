@@ -1,45 +1,50 @@
-"use client";
 import React from "react";
-import { useParams } from "next/navigation";
-import { motion } from "framer-motion";
-import HeaderText from "../components/textfields/HeaderText";
-import ParagraphText from "../components/textfields/ParagraphText";
-import { ComponentRegistry } from "../components/layout/ComponentRegistry";
+import fs from "fs/promises";
+import path from "path";
+import { registryKeys } from "../components/layout/RegistryKeys";
+import { ComponentDatabase } from "../registry/ComponentDatabase";
+import ShowcasePlayground from "../components/layout/ShowcasePlayground";
+import PageTransition from "../components/layout/PageTransition";
+import LegacyPageRenderer from "../components/layout/LegacyPageRenderer";
 
-export default function DynamicComponentPage() {
-	const params = useParams();
-	const id = params.id as string;
-
-	const entry = ComponentRegistry[id];
-
-	const renderContent = () => {
-		if (entry) {
-			const Component = entry.component;
-			return <Component />;
-		}
-
-		return (
-			<div className="flex flex-col gap-5">
-				<HeaderText
-					text={id.charAt(0).toUpperCase() + id.slice(1).replace(/-/g, " ")}
-					option={3}
-				/>
-				<ParagraphText
-					text="Content for this section is coming soon."
-					option={4}
-				/>
-			</div>
-		);
-	};
-
-	return (
-		<motion.div
-			key={id}
-			initial={{ opacity: 0, filter: "blur(12px)", y: 4 }}
-			animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-			transition={{ duration: 0.4, ease: "easeOut" }}
-		>
-			{renderContent()}
-		</motion.div>
-	);
+export async function generateStaticParams() {
+  return registryKeys.map((id) => ({ id }));
 }
+
+export default async function DynamicComponentPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  // 1. Check if the component is in the new database
+  const dbEntry = ComponentDatabase.find((entry) => entry.slug === id);
+
+  if (dbEntry) {
+    let codeContent = "";
+    try {
+      const fullPath = path.join(process.cwd(), dbEntry.componentPath);
+      codeContent = await fs.readFile(fullPath, "utf-8");
+    } catch (err) {
+      console.error(`Failed to read component source code at ${dbEntry.componentPath}`, err);
+    }
+
+    return (
+      <PageTransition routeKey={id}>
+        <ShowcasePlayground
+          dbEntry={dbEntry}
+          codeContent={codeContent}
+        />
+      </PageTransition>
+    );
+  }
+
+  // 2. Fallback to legacy ComponentRegistry entries via client-side LegacyPageRenderer
+  return (
+    <PageTransition routeKey={id}>
+      <LegacyPageRenderer id={id} />
+    </PageTransition>
+  );
+}
+export const dynamicParams = true;

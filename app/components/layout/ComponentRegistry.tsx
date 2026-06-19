@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import React from "react";
+import { ComponentDatabase } from "../../registry/ComponentDatabase";
 
 export interface RegistrySection {
   id: string;
@@ -21,7 +22,7 @@ const standardSections = (id: string) => [
   { id: "credits", label: "Credits" },
 ];
 
-export const ComponentRegistry: Record<string, RegistryEntry> = {
+const baseRegistry: Record<string, RegistryEntry> = {
   // General items
   intro: {
     id: "intro",
@@ -72,13 +73,7 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("blur-text"),
     component: dynamic(() => import("../../pages/BlurTextPage/BlurTextPage").then(mod => mod.BlurTextPage)),
   },
-  "fall-down": {
-    id: "fall-down",
-    label: "Fall Down",
-    category: "text",
-    sections: standardSections("fall-down"),
-    component: dynamic(() => import("../../pages/FallDownPage/FallDownPage").then(mod => mod.FallDownPage)),
-  },
+
   "blur-in": {
     id: "blur-in",
     label: "Blur In",
@@ -86,20 +81,8 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("blur-in"),
     component: dynamic(() => import("../../pages/BlurInPage/BlurInPage").then(mod => mod.BlurInPage)),
   },
-  "reveal-under": {
-    id: "reveal-under",
-    label: "Reveal Under",
-    category: "text",
-    sections: standardSections("reveal-under"),
-    component: dynamic(() => import("../../pages/RevealUnderPage/RevealUnderPage").then(mod => mod.RevealUnderPage)),
-  },
-  "variable-weight": {
-    id: "variable-weight",
-    label: "Variable Weight",
-    category: "text",
-    sections: standardSections("variable-weight"),
-    component: dynamic(() => import("../../pages/VariableWeightTextPage/VariableWeightTextPage")),
-  },
+
+
   "wave-text": {
     id: "wave-text",
     label: "Proximity Ripple",
@@ -627,4 +610,18 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
     sections: standardSections("follow-cursor"),
     component: dynamic(() => import("../../pages/FollowCursorPage/FollowCursorPage").then(mod => mod.FollowCursorPage)),
   },
+};
+
+export const ComponentRegistry: Record<string, RegistryEntry> = {
+  ...baseRegistry,
+  ...ComponentDatabase.reduce((acc, comp) => {
+    acc[comp.slug] = {
+      id: comp.slug,
+      label: comp.name,
+      category: comp.category,
+      sections: standardSections(comp.slug),
+      component: () => null,
+    };
+    return acc;
+  }, {} as Record<string, RegistryEntry>),
 };
