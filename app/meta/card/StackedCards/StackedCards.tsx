@@ -35,6 +35,10 @@ interface StackedCardsProps {
     borderRadius?: string;
     /** Custom class name for the main container */
     className?: string;
+    /** Optional header text to show before the cards */
+    headerText?: string;
+    /** Optional footer text to show after the cards */
+    footerText?: string;
 }
 
 declare global {
@@ -48,14 +52,16 @@ export default function StackedCards({
     items,
     textColor = '#F2EEE9',
     accentColor = '#C0DEDD',
-    stickyTop = '10vh',
-    cardHeight = '60vh',
+    stickyTop = '40px',
+    cardHeight = '360px',
     rotationStrength = 3,
     scaleStrength = 0.9,
-    yOffset = '-3vh',
+    yOffset = '-20px',
     scroller = null,
-    borderRadius = '0 80px 0 80px',
+    borderRadius = '40px',
     className = '',
+    headerText = '',
+    footerText = '',
 }: StackedCardsProps) {
     const [engineLoaded, setEngineLoaded] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -104,6 +110,27 @@ export default function StackedCards({
         const ScrollTrigger = window.ScrollTrigger;
         gsap.registerPlugin(ScrollTrigger);
 
+        // Auto-detect scroll parent if scroller is not explicitly passed
+        let activeScroller: HTMLElement | Window = window;
+        if (scroller) {
+            if (typeof scroller === 'string') {
+                const el = document.querySelector<HTMLElement>(scroller);
+                if (el) activeScroller = el;
+            } else {
+                activeScroller = scroller;
+            }
+        } else if (containerRef.current) {
+            let current = containerRef.current.parentElement;
+            while (current) {
+                const overflowY = window.getComputedStyle(current).overflowY;
+                if (overflowY === 'auto' || overflowY === 'scroll') {
+                    activeScroller = current;
+                    break;
+                }
+                current = current.parentElement;
+            }
+        }
+
         const ctx = gsap.context(() => {
             // Intro fade-in
             gsap.to(containerRef.current, { opacity: 1, duration: 1.2, ease: 'power3.out' });
@@ -127,7 +154,7 @@ export default function StackedCards({
                     ease: 'none',
                     scrollTrigger: {
                         trigger: card,
-                        scroller: scroller || window,
+                        scroller: activeScroller,
                         start: `top ${stickyTop}`,
                         end: `bottom ${stickyTop}`,
                         scrub: true,
@@ -140,7 +167,7 @@ export default function StackedCards({
                         ease: 'none',
                         scrollTrigger: {
                             trigger: card,
-                            scroller: scroller || window,
+                            scroller: activeScroller,
                             start: `top ${stickyTop}`,
                             end: `bottom ${stickyTop}`,
                             scrub: true,
@@ -165,6 +192,16 @@ export default function StackedCards({
                 ['--selection-text' as any]: '#000000'
             }}
         >
+            {/* Header Text */}
+            {headerText && (
+                <div className="pt-20 pb-10 flex flex-col items-center justify-center w-full text-white/50 select-none">
+                    <h1 className="text-[clamp(2rem,5vw,4rem)] font-bold tracking-tighter uppercase opacity-50 text-center">
+                        {headerText}
+                    </h1>
+                    <div className="mt-8 w-px h-24 bg-gradient-to-b from-current to-transparent opacity-20" />
+                </div>
+            )}
+
             {/* --- Cards Section --- */}
             <ul className="flex flex-col gap-[3vh] pb-[10vh]">
                 {items.map((card, index) => (
@@ -227,6 +264,16 @@ export default function StackedCards({
                     </li>
                 ))}
             </ul>
+
+            {/* Footer Text */}
+            {footerText && (
+                <div className="pt-10 pb-20 flex flex-col items-center text-white/50 select-none">
+                    <div className="mb-8 w-px h-24 bg-gradient-to-t from-current to-transparent opacity-20" />
+                    <h1 className="text-[clamp(1.5rem,4vw,3rem)] font-bold uppercase tracking-widest opacity-50 text-center">
+                        {footerText}
+                    </h1>
+                </div>
+            )}
 
             <style jsx global>{`
                 ::selection {

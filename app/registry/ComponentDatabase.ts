@@ -64,6 +64,16 @@ import { splitCarouselConfig } from "../meta/carousel/SplitCarousel/SplitCarouse
 import { listCarouselConfig } from "../meta/carousel/ListCarousel/ListCarousel.config";
 import { interlockingMarqueeConfig } from "../meta/marquee/InterlockingMarquee/InterlockingMarquee.config";
 import { ditherCarouselConfig } from "../meta/carousel/DitherCarousel/DitherCarousel.config";
+import { standardAccordionConfig } from "../meta/misc/StandardAccordion/StandardAccordion.config";
+import { glowCardConfig } from "../meta/buttons/GlowCard/GlowCard.config";
+import { shinyButtonConfig } from "../meta/buttons/ShinyButton/ShinyButton.config";
+import { verticalMenuConfig } from "../meta/menu/VerticalMenu/VerticalMenu.config";
+import { holoCardConfig } from "../meta/card/HoloCard/HoloCard.config";
+import { stackedCardsConfig } from "../meta/card/StackedCards/StackedCards.config";
+import { slidingMenuConfig } from "../meta/menu/SlidingMenu/SlidingMenu.config";
+import { pillTabbedSectionConfig } from "../meta/tabbed/PillTabbedSection/PillTabbedSection.config";
+import { endlessMotionFooterConfig } from "../meta/footer/EndlessMotionFooter/EndlessMotionFooter.config";
+import { malakorSingularityConfig } from "../meta/misc/MalakorSingularity/MalakorSingularity.config";
 
 export interface PropConfig {
   name: string;
@@ -173,4 +183,14 @@ export const ComponentDatabase: ComponentConfig[] = [
   listCarouselConfig,
   interlockingMarqueeConfig,
   ditherCarouselConfig,
+  standardAccordionConfig,
+  glowCardConfig,
+  shinyButtonConfig,
+  verticalMenuConfig,
+  holoCardConfig,
+  stackedCardsConfig,
+  slidingMenuConfig,
+  pillTabbedSectionConfig,
+  endlessMotionFooterConfig,
+  malakorSingularityConfig,
 ];

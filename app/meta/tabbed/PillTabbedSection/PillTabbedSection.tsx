@@ -2,6 +2,45 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Home, ArrowRightLeft, Box, SquareDashed, Command } from 'lucide-react';
+
+const DEFAULT_TABS: TabItem[] = [
+    {
+        id: 'home',
+        icon: Home,
+        label: 'Dashboard Home',
+        title: 'Dashboard Overview',
+        content: "Most tabbed panes follow a very predictable rectangular format. While functional, there's plenty of room for creative interpretation. This concept reimagines the traditional approach, using non-standard shapes and fluid transitions to create a more engaging experience."
+    },
+    {
+        id: 'flow',
+        icon: ArrowRightLeft,
+        label: 'Data Flow',
+        title: 'Data Flow Management',
+        content: "Visualize and manage the intricate pathways your data takes. Most tabbed panes follow a very predictable rectangular format. While functional, there's plenty of room for creative interpretation. This concept reimagines the traditional approach, using non-standard shapes and fluid transitions to create a more engaging experience."
+    },
+    {
+        id: 'modules',
+        icon: Box,
+        label: 'Core Modules',
+        title: 'Core System Modules',
+        content: "Access and configure fundamental system components. Most tabbed panes follow a very predictable rectangular format. While functional, there's plenty of room for creative interpretation. This concept reimagines the traditional approach, using non-standard shapes and fluid transitions to create a more engaging experience."
+    },
+    {
+        id: 'architecture',
+        icon: SquareDashed,
+        label: 'System Architecture',
+        title: 'System Architecture',
+        content: "Most tabbed panes follow a very predictable rectangular format. While functional, there's plenty of room for creative interpretation. This concept reimagines the traditional approach, using non-standard shapes and fluid transitions to create a more engaging experience."
+    },
+    {
+        id: 'orchestrations',
+        icon: Command,
+        label: 'Open Orchestrations',
+        title: 'Open Orchestrations',
+        content: "Most tabbed panes follow a very predictable rectangular format. While functional, there's plenty of room for creative interpretation. This concept reimagines the traditional approach, using non-standard shapes and fluid transitions to create a more engaging experience."
+    }
+];
 import * as animeModule from 'animejs';
 
 const anime: any = (options: any) => {
@@ -95,7 +134,7 @@ const AnimatedContent: React.FC<{ title: string; content: string }> = ({ title, 
 
 // --- Main Component ---
 export const PillTabbedSection: React.FC<PillTabbedSectionProps> = ({
-    tabs,
+    tabs = DEFAULT_TABS,
     defaultTab,
     containerClassName = "",
     contentClassName = "",

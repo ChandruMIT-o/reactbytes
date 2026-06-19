@@ -1,0 +1,124 @@
+import { ComponentConfig } from "@/app/registry/ComponentDatabase";
+
+export const shinyButtonConfig: ComponentConfig = {
+  slug: "shiny-button",
+  name: "Shiny CTA",
+  category: "miscellaneous",
+  componentPath: "app/meta/buttons/ShinyButton/ShinyButton.tsx",
+  containerClassName: "w-full min-h-[400px] flex items-center justify-center p-12 bg-black rounded-[32px] border border-white/5 relative overflow-hidden group",
+  props: [
+    {
+      name: "text",
+      type: "string",
+      default: "Join the waitlist",
+      description: "Label displayed on the button.",
+    },
+    {
+      name: "duration",
+      type: "number",
+      default: 3,
+      min: 0.5,
+      max: 10.0,
+      step: 0.5,
+      description: "Rotation speed of the border gradient in seconds.",
+    },
+    {
+      name: "highlightColor",
+      type: "color",
+      default: "rgb(0, 0, 255)",
+      description: "Primary color for the border and shimmer energy.",
+    },
+    {
+      name: "highlightSubtleColor",
+      type: "color",
+      default: "#8484ff",
+      description: "Secondary color used for high-intensity highlights on hover.",
+    },
+    {
+      name: "baseColor",
+      type: "color",
+      default: "#000000",
+      description: "Background color of the button.",
+    },
+    {
+      name: "textColor",
+      type: "color",
+      default: "#ffffff",
+      description: "Color of the label text.",
+    },
+  ],
+  presets: [
+    {
+      id: "default",
+      label: "Blue Plasma",
+      config: {
+        text: "Join the waitlist",
+        highlightColor: "rgb(0, 0, 255)",
+        highlightSubtleColor: "#8484ff",
+        duration: 3,
+        baseColor: "#000000",
+        textColor: "#ffffff",
+      },
+    },
+    {
+      id: "emerald-pulse",
+      label: "Emerald Pulse",
+      config: {
+        text: "Join the waitlist",
+        highlightColor: "rgb(0, 255, 100)",
+        highlightSubtleColor: "#a7f3d0",
+        duration: 2,
+        baseColor: "#022c22",
+        textColor: "#ffffff",
+      },
+    },
+    {
+      id: "amber-glow",
+      label: "Amber Glow",
+      config: {
+        text: "Join the waitlist",
+        highlightColor: "rgb(255, 165, 0)",
+        highlightSubtleColor: "#fde68a",
+        duration: 4,
+        baseColor: "#1c0a00",
+        textColor: "#ffffff",
+      },
+    },
+    {
+      id: "crimson-rush",
+      label: "Crimson Rush",
+      config: {
+        text: "Join the waitlist",
+        highlightColor: "rgb(255, 0, 80)",
+        highlightSubtleColor: "#fda4af",
+        duration: 1.5,
+        baseColor: "#2d000a",
+        textColor: "#ffffff",
+      },
+    },
+    {
+      id: "monochrome",
+      label: "Silver Blade",
+      config: {
+        text: "Join the waitlist",
+        highlightColor: "rgb(255, 255, 255)",
+        highlightSubtleColor: "#d4d4d8",
+        duration: 5,
+        baseColor: "#09090b",
+        textColor: "#ffffff",
+      },
+    },
+  ],
+  credits: [
+    {
+      title: "Inspiration",
+      items: [
+        {
+          name: "Ryan Mulligan",
+          role: "Article Reference",
+          url: "https://ryanmulligan.dev/blog/css-property-new-style/",
+        },
+      ],
+    },
+  ],
+};

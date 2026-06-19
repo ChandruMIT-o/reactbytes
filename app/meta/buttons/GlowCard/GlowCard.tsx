@@ -6,6 +6,7 @@ import "./GlowCard.css";
 interface GlowCardProps {
     children?: React.ReactNode;
     className?: string;
+    title?: string;
     // Animation Controls
     animationSpeed?: number; // seconds
     // Shadow/Glow Controls
@@ -24,6 +25,7 @@ interface GlowCardProps {
 export const GlowCard: React.FC<GlowCardProps> = ({
     children,
     className = "",
+    title = "Glow Card",
     animationSpeed = 4,
     glowBlur = 6,
     glowOpacity = 1,
@@ -51,7 +53,15 @@ export const GlowCard: React.FC<GlowCardProps> = ({
         >
             <span className="glow-card-glow" />
             <div className={`glow-card-content ${uppercase ? "uppercase" : ""}`}>
-                {children}
+                {children || (
+                    <div className="flex flex-col items-center pointer-events-none">
+                        <div className="flex items-center gap-3">
+                            <span className="px-2 py-0.5 bg-white text-black text-[10px] font-black rounded uppercase tracking-tighter">Premium</span>
+                            <span className="text-white text-lg font-black tracking-widest uppercase">{title}</span>
+                        </div>
+                        <p className="text-white/30 text-[10px] mt-2 uppercase tracking-[0.3em] font-medium leading-none">Houdini Engine v1.0</p>
+                    </div>
+                )}
             </div>
         </div>
     );
