@@ -1,4 +1,5 @@
 import { ComponentDatabase } from "../app/registry/ComponentDatabase";
+import { generateReadmeContent } from "../app/registry/ReadmeGenerator";
 import { execSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
@@ -105,58 +106,8 @@ async function run() {
       JSON.stringify(packageJsonContent, null, 2)
     );
 
-    // Generate README.md dynamically from config metadata
-    const componentName = path.basename(componentPath, path.extname(componentPath));
-    let readmeContent = `# ${component.name}\n\n`;
-    readmeContent += `A premium, modular React component from the **React Bytes** collection. Built with React and TypeScript.\n\n`;
-    readmeContent += `## Installation\n\n`;
-    readmeContent += `\`\`\`bash\nnpm install ${npmPackageName}\n\`\`\`\n\n`;
-    
-    readmeContent += `## Usage\n\n`;
-    readmeContent += `\`\`\`tsx\nimport { ${componentName} } from "${npmPackageName}";\n\n`;
-    readmeContent += `export default function Example() {\n`;
-    readmeContent += `  return (\n`;
-    readmeContent += `    <${componentName} />\n`;
-    readmeContent += `  );\n`;
-    readmeContent += `}\n`;
-    readmeContent += `\`\`\`\n\n`;
-
-    if (component.props && component.props.length > 0) {
-      readmeContent += `## Properties\n\n`;
-      readmeContent += `| Prop | Type | Default | Description |\n`;
-      readmeContent += `| :--- | :--- | :--- | :--- |\n`;
-      for (const prop of component.props) {
-        const defaultVal = prop.default !== undefined
-          ? (typeof prop.default === "object" ? JSON.stringify(prop.default) : String(prop.default))
-          : "-";
-        readmeContent += `| \`${prop.name}\` | \`${prop.type}\` | \`${defaultVal}\` | ${prop.description} |\n`;
-      }
-      readmeContent += `\n`;
-    }
-
-    if (component.presets && component.presets.length > 0) {
-      readmeContent += `## Presets\n\n`;
-      readmeContent += `This component includes the following design presets:\n\n`;
-      for (const preset of component.presets) {
-        readmeContent += `- **${preset.label}** (\`${preset.id}\`)\n`;
-      }
-      readmeContent += `\n`;
-    }
-
-    if (component.credits && component.credits.length > 0) {
-      readmeContent += `## Credits & Inspiration\n\n`;
-      for (const section of component.credits) {
-        readmeContent += `### ${section.title}\n`;
-        for (const item of section.items) {
-          readmeContent += `- [${item.name}](${item.url}) - ${item.role}\n`;
-        }
-        readmeContent += `\n`;
-      }
-    }
-
-    readmeContent += `---\n\n`;
-    readmeContent += `For interactive playgrounds, customizable controls, and code copy-pasting, visit the full showcase page at [React Bytes - ${component.name}](https://reactbytes.dev/${component.slug}).\n`;
-
+    // Generate README.md dynamically from config metadata using shared utility
+    const readmeContent = generateReadmeContent(component);
     fs.writeFileSync(
       path.join(compTempDir, "README.md"),
       readmeContent

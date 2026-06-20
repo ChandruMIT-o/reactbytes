@@ -119,6 +119,7 @@ export interface ComponentConfig {
   version?: string;
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
+  context_from_dev?: string;
 }
 
 export const ComponentDatabase: ComponentConfig[] = [

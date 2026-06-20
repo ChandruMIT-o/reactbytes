@@ -10,6 +10,7 @@ export const shinyButtonConfig: ComponentConfig = {
   peerDependencies: {
     "framer-motion": "^12.38.0"
   },
+  context_from_dev: "A sleek, glowing call-to-action button featuring animated gradients rotating around its border. Requires modern CSS support for CSS.registerProperty. Best used for critical action items such as signups or waitlist forms.",
   containerClassName: "w-full min-h-[400px] flex items-center justify-center p-12 bg-black rounded-[32px] border border-white/5 relative overflow-hidden group",
   props: [
     {

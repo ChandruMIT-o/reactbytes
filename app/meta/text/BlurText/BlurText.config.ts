@@ -10,6 +10,7 @@ export const blurTextConfig: ComponentConfig = {
   peerDependencies: {
     "framer-motion": "^12.38.0"
   },
+  context_from_dev: "Use this component to animate text with a smooth blur entry effect. It breaks down text into characters or words dynamically. Note: best used for hero headlines and text overlays, not for large bodies of paragraphs.",
   props: [
     {
       name: "text",
