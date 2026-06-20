@@ -5,6 +5,11 @@ export const shinyButtonConfig: ComponentConfig = {
   name: "Shiny CTA",
   category: "miscellaneous",
   componentPath: "app/meta/buttons/ShinyButton/ShinyButton.tsx",
+  npmPackageName: "@reactbytes/shiny-cta",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   containerClassName: "w-full min-h-[400px] flex items-center justify-center p-12 bg-black rounded-[32px] border border-white/5 relative overflow-hidden group",
   props: [
     {

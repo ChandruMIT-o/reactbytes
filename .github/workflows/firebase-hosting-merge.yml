@@ -27,3 +27,7 @@ jobs:
         run: npx firebase-tools deploy --only hosting
         env:
           FIREBASE_CLI_EXPERIMENTS: webframeworks
+      - name: Publish pending components to npm
+        run: npm run components:publish-pending
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

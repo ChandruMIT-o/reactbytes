@@ -5,6 +5,8 @@ export const magneticTextConfig: ComponentConfig = {
   name: "Magnetic Repel",
   category: "text",
   componentPath: "app/meta/text/Interactive/MagneticText.tsx",
+  npmPackageName: "@reactbytes/magnetic-repel",
+  version: "1.0.0",
   props: [
     {
       name: "text",

@@ -5,6 +5,11 @@ export const blurTextConfig: ComponentConfig = {
   name: "Blur Text",
   category: "text",
   componentPath: "app/meta/text/BlurText/BlurText.tsx",
+  npmPackageName: "@reactbytes/blur-text",
+  version: "1.0.1",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   props: [
     {
       name: "text",

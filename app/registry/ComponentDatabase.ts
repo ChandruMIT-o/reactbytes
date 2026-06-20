@@ -115,6 +115,10 @@ export interface ComponentConfig {
   staticProps?: Record<string, any>;
   customClassName?: string;
   containerClassName?: string;
+  npmPackageName?: string;
+  version?: string;
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
 }
 
 export const ComponentDatabase: ComponentConfig[] = [
