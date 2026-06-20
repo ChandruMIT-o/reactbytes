@@ -64,6 +64,17 @@ const baseRegistry: Record<string, RegistryEntry> = {
     sections: [],
     component: dynamic(() => import("../../pages/AdminPage/AdminPage").then(mod => mod.AdminPage)),
   },
+  mcp: {
+    id: "mcp",
+    label: "Model Context Protocol",
+    category: "general",
+    sections: [
+      { id: "mcp-header", label: "MCP Server" },
+      { id: "mcp-setup", label: "Setup" },
+      { id: "mcp-usage", label: "Usage" },
+    ],
+    component: dynamic(() => import("../../pages/McpPage/McpPage").then(mod => mod.McpPage)),
+  },
 
   // Carousel items
 

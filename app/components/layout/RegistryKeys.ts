@@ -4,6 +4,7 @@ export const registryKeys = [
   "install",
   "changelog",
   "admin",
+  "mcp",
 
   // Text items
   "blur-text",
