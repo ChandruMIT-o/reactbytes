@@ -44,3 +44,7 @@ next-env.d.ts
 
 .firebase
 key.json
+
+# Generated Registry Code
+/app/registry/ComponentCodeDatabase.ts
+/app/registry/code-chunks/

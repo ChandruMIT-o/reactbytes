@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { resolveComponent } from "@/app/registry/Resolver";
 import { generateReadmeContent } from "@/app/registry/ReadmeGenerator";
-import fs from "fs/promises";
-import path from "path";
+import { ComponentCodeDatabase } from "@/app/registry/ComponentCodeDatabase";
 
 export async function GET(
   request: Request,
@@ -19,22 +18,16 @@ export async function GET(
     );
   }
 
-  // Load component source code and file stats
-  let code = "";
-  let lastModified = "";
-  try {
-    const fullPath = path.join(process.cwd(), component.componentPath);
-    code = await fs.readFile(fullPath, "utf-8");
-    
-    const stat = await fs.stat(fullPath);
-    lastModified = stat.mtime.toISOString();
-  } catch (err) {
-    console.error(`Failed to read component code file at path: ${component.componentPath}`, err);
+  // Fetch component source code and file stats from in-memory database
+  const lazyLoad = ComponentCodeDatabase[component.slug];
+  if (!lazyLoad) {
     return NextResponse.json(
-      { error: `Component source file not found or unreadable on disk.` },
+      { error: `Component source code not found in bundled code database.` },
       { status: 500 }
     );
   }
+
+  const { code, lastModified } = await lazyLoad();
 
   // Generate dynamic documentation (which incorporates context_from_dev)
   const readme = generateReadmeContent(component);

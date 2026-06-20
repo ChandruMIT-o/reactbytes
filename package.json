@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "tsx scripts/generate-code-database.ts && next dev",
+    "build": "tsx scripts/generate-code-database.ts && next build",
     "start": "next start",
     "lint": "eslint",
     "components:publish-pending": "tsx scripts/publish-pending.ts"
