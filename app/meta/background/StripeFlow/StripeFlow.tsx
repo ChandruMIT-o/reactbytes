@@ -222,6 +222,11 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
   const lastTimeRef = useRef<number>(performance.now());
   const sizeRef = useRef<{ width: number; height: number }>({ width: 0, height: 0 });
 
+  const isVisibleRef = useRef(true);
+  const isLoopingRef = useRef(false);
+  const drawFrameRef = useRef<() => void>(undefined);
+  const startLoopRef = useRef<() => void>(undefined);
+
   const currentParamsRef = useRef({
     distortion, scale, radius, speed, isPaused, palette, seed
   });
@@ -230,6 +235,11 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
     currentParamsRef.current = {
       distortion, scale, radius, speed, isPaused, palette, seed
     };
+    if (!isPaused && isVisibleRef.current && startLoopRef.current) {
+      startLoopRef.current();
+    } else if (drawFrameRef.current) {
+      drawFrameRef.current();
+    }
   }, [distortion, scale, radius, speed, isPaused, palette, seed]);
 
   useEffect(() => {
@@ -317,32 +327,45 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
       canvas.height = targetHeight;
       gl.viewport(0, 0, targetWidth, targetHeight);
       sizeRef.current = { width: targetWidth, height: targetHeight };
+      if (drawFrameRef.current) drawFrameRef.current();
     };
 
     resizeHandler();
     window.addEventListener("resize", resizeHandler);
 
-    const tick = (now: number) => {
-      const delta = (now - lastTimeRef.current) / 1000;
-      lastTimeRef.current = now;
+    const container = canvas.parentElement;
+    if (!container) return;
 
-      const p = currentParamsRef.current;
-      if (!p.isPaused) {
-        timeRef.current += delta * p.speed;
+    const observer = new IntersectionObserver(([entry]) => {
+      const visible = entry.isIntersecting;
+      const wasVisible = isVisibleRef.current;
+      isVisibleRef.current = visible;
+
+      if (visible && !wasVisible) {
+        const p = currentParamsRef.current;
+        if (!p.isPaused) {
+          if (startLoopRef.current) startLoopRef.current();
+        } else {
+          if (drawFrameRef.current) drawFrameRef.current();
+        }
       }
+    }, { threshold: 0 });
+    observer.observe(container);
 
-      // Sync sizes & metrics
+    const drawFrame = () => {
+      const gl = glRef.current;
+      if (!gl) return;
+      const p = currentParamsRef.current;
+
       gl.uniform2f(uLocs.resolution, sizeRef.current.width, sizeRef.current.height);
       gl.uniform2f(uLocs.mouse, mouseRef.current[0], mouseRef.current[1]);
       gl.uniform1f(uLocs.time, timeRef.current);
       gl.uniform1f(uLocs.seed, p.seed);
 
-      // Modulators
       gl.uniform1f(uLocs.distortion, p.distortion);
       gl.uniform1f(uLocs.scale, p.scale);
       gl.uniform1f(uLocs.radius, p.radius);
 
-      // Select and send colors
       const chosenPalette = PALETTES[p.palette] || PALETTES.vapor;
       gl.uniform3fv(uLocs.palette_a, new Float32Array(chosenPalette.a));
       gl.uniform3fv(uLocs.palette_b, new Float32Array(chosenPalette.b));
@@ -350,12 +373,50 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
       gl.uniform3fv(uLocs.palette_d, new Float32Array(chosenPalette.d));
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
+    };
+
+    drawFrameRef.current = drawFrame;
+
+    const tick = (now: number) => {
+      const delta = (now - lastTimeRef.current) / 1000;
+      lastTimeRef.current = now;
+
+      const p = currentParamsRef.current;
+
+      if (!isVisibleRef.current) {
+        isLoopingRef.current = false;
+        return;
+      }
+
+      if (p.isPaused) {
+        drawFrame();
+        isLoopingRef.current = false;
+        return;
+      }
+
+      isLoopingRef.current = true;
+      timeRef.current += delta * p.speed;
+      drawFrame();
       animationFrameIdRef.current = requestAnimationFrame(tick);
     };
 
-    animationFrameIdRef.current = requestAnimationFrame(tick);
+    const startLoop = () => {
+      if (!isLoopingRef.current && isVisibleRef.current) {
+        lastTimeRef.current = performance.now();
+        animationFrameIdRef.current = requestAnimationFrame(tick);
+      }
+    };
+
+    startLoopRef.current = startLoop;
+
+    if (!isPaused && isVisibleRef.current) {
+      startLoop();
+    } else {
+      drawFrame();
+    }
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("resize", resizeHandler);
       if (animationFrameIdRef.current) cancelAnimationFrame(animationFrameIdRef.current);
     };

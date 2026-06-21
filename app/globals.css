@@ -211,3 +211,25 @@ body {
 		display: block;
 	}
 }
+
+/* Ball-wave page transition loader */
+.ball-wave-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--rb-accent-1);
+	opacity: 0.6;
+	animation: ball-wave-right 1s infinite ease-in-out;
+}
+
+@keyframes ball-wave-right {
+	0% {
+		transform: translateX(-12px);
+	}
+	50% {
+		transform: translateX(12px);
+	}
+	100% {
+		transform: translateX(-12px);
+	}
+}

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,6 +15,7 @@ import { usePreview } from "../context/PreviewContext";
 import HeaderChaosBackground from "./HeaderChaosBackground";
 import { ComponentRegistry } from "./ComponentRegistry";
 import LogoMorphLoading from "./LogoMorphLoading";
+import BallWaveLoader from "./BallWaveLoader";
 
 import {
 	generalItems,
@@ -27,15 +28,30 @@ import {
 	cursorItems
 } from "./AppShellData";
 
-
-
-
-
+const INTRO_PLAYED_KEY = "rb-intro-played";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
-	const [showLoading, setShowLoading] = React.useState(true);
+
+	if (pathname === "/landing") {
+		return <>{children}</>;
+	}
+
+	// Only show the intro animation once per browser session
+	const [showLoading, setShowLoading] = React.useState(() => {
+		if (typeof window !== "undefined") {
+			return !sessionStorage.getItem(INTRO_PLAYED_KEY);
+		}
+		return false;
+	});
+
+	const handleIntroComplete = React.useCallback(() => {
+		if (typeof window !== "undefined") {
+			sessionStorage.setItem(INTRO_PLAYED_KEY, "1");
+		}
+		setShowLoading(false);
+	}, []);
 
 	const activeItem = pathname === "/" ? "intro" : pathname.slice(1);
 	const { isOpen, setIsOpen, data } = usePreview();
@@ -111,7 +127,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 	return (
 		<div className="flex flex-col h-[100dvh] overflow-hidden font-sans bg-background text-foreground transition-colors duration-500">
 			{showLoading && (
-				<LogoMorphLoading onComplete={() => setShowLoading(false)} />
+				<LogoMorphLoading onComplete={handleIntroComplete} />
 			)}
 			{/* Fixed Header */}
 			<header
@@ -281,7 +297,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 					className="flex-1 h-full w-full overflow-y-auto px-4 md:pl-10 md:pr-5 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
 				>
 					<div className="max-w-5xl mx-auto pb-40">
-						{children}
+						<Suspense fallback={<BallWaveLoader />}>
+							{children}
+						</Suspense>
 						{currentIndex !== -1 && (prevItem || nextItem) && (
 							<div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between w-full">
 								<div className="flex-1 flex justify-start">

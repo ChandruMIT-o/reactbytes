@@ -156,6 +156,7 @@ export interface FbmNoiseProps {
   colorG?: number;
   colorB?: number;
   paused?: boolean;
+  observeVisibility?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -171,6 +172,7 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
   colorG = 1.0,
   colorB = 1.0,
   paused = false,
+  observeVisibility = true,
   className = "",
   children,
 }) => {
@@ -232,9 +234,36 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
     document.body.appendChild(script);
   }, []);
 
+  const isVisibleRef = useRef(true);
+  const isLoopingRef = useRef(false);
+  const animateRef = useRef<() => void>(undefined);
+
+  useEffect(() => {
+    if (!observeVisibility) {
+      isVisibleRef.current = true;
+      return;
+    }
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      const visible = entry.isIntersecting;
+      const wasVisible = isVisibleRef.current;
+      isVisibleRef.current = visible;
+      if (visible && !wasVisible && animateRef.current && !isLoopingRef.current) {
+        animateRef.current();
+      }
+    }, { threshold: 0 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [observeVisibility]);
+
   // Three.js Scene Setup and rendering Loop
   useEffect(() => {
     if (!threeLoaded || !canvasRef.current || !containerRef.current) return;
+
+    if (!observeVisibility) {
+      isVisibleRef.current = true;
+    }
 
     const THREE = window.THREE;
     const canvas = canvasRef.current;
@@ -312,6 +341,11 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
     let animationFrameId: number;
 
     const animate = () => {
+      if (!isVisibleRef.current) {
+        isLoopingRef.current = false;
+        return;
+      }
+      isLoopingRef.current = true;
       animationFrameId = requestAnimationFrame(animate);
 
       // Rule #4: Dynamic viewport resizing checks inside rendering loop to prevent 0px collapses
@@ -334,12 +368,14 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
       renderer.render(scene, camera);
     };
 
+    animateRef.current = animate;
     animate();
 
     return () => {
       container.removeEventListener("mousemove", handleMouseMove);
       container.removeEventListener("touchmove", handleTouchMove);
       cancelAnimationFrame(animationFrameId);
+      isLoopingRef.current = false;
       geometry.dispose();
       material.dispose();
       renderer.dispose();

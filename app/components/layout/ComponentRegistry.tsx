@@ -75,6 +75,13 @@ const baseRegistry: Record<string, RegistryEntry> = {
     ],
     component: dynamic(() => import("../../pages/McpPage/McpPage").then(mod => mod.McpPage)),
   },
+  landing: {
+    id: "landing",
+    label: "Landing Showcase",
+    category: "general",
+    sections: [],
+    component: dynamic(() => import("../../landing/page").then(mod => mod.default)),
+  },
 
   // Carousel items
 

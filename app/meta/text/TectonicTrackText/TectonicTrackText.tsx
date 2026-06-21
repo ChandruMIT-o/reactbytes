@@ -48,6 +48,7 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
     className = "",
 }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const nodesRef = useRef<TectonicNode[]>([]);
     const mouseRef = useRef({ x: -1000, y: -1000, active: false });
     const animationFrameId = useRef<number | null>(null);
@@ -57,48 +58,59 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
     const paddingY = fontSize * 0.4;
 
     useEffect(() => {
+        const container = containerRef.current;
         const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
+        if (!container || !canvas) return;
 
-        const fontStyle = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
-        ctx.font = fontStyle;
+        const handleResize = () => {
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
 
-        const characters = text.split("");
-        let maximalPossibleWidth = 0;
+            const fontStyle = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
+            ctx.font = fontStyle;
 
-        // Step 1: Scan pristine typographic metrics out of system context
-        const initialNodes = characters.map((char) => {
-            const w = ctx.measureText(char).width;
-            // Pre-calculate maximal bounds footprint to safely prevent canvas clippings
-            maximalPossibleWidth += w * maxScaleX + maxTrackingExpansion;
-            return {
-                char,
-                baseWidth: w,
-                currentWidth: w,
-                targetWidth: w,
-                x: 0,
-                expansion: 0,
-                vx: 0,
-            };
+            const characters = text.split("");
+            const initialNodes = characters.map((char) => {
+                const w = ctx.measureText(char).width;
+                return {
+                    char,
+                    baseWidth: w,
+                    currentWidth: w,
+                    targetWidth: w,
+                    x: 0,
+                    expansion: 0,
+                    vx: 0,
+                };
+            });
+
+            const containerWidth = container.clientWidth || 300;
+            const canvasHeight = fontSize + paddingY * 2;
+            const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+
+            canvas.width = containerWidth * dpr;
+            canvas.height = canvasHeight * dpr;
+            canvas.style.width = `${containerWidth}px`;
+            canvas.style.height = `${canvasHeight}px`;
+
+            ctx.scale(dpr, dpr);
+            ctx.font = fontStyle;
+            ctx.textBaseline = "middle";
+
+            nodesRef.current = initialNodes;
+        };
+
+        const observer = new ResizeObserver(() => {
+            handleResize();
         });
+        observer.observe(container);
 
-        const canvasWidth = maximalPossibleWidth + paddingX * 2;
-        const canvasHeight = fontSize + paddingY * 2;
-        const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+        // Initial measurement
+        handleResize();
 
-        canvas.width = canvasWidth * dpr;
-        canvas.height = canvasHeight * dpr;
-        canvas.style.width = `${canvasWidth}px`;
-        canvas.style.height = `${canvasHeight}px`;
-
-        ctx.scale(dpr, dpr);
-        ctx.font = fontStyle;
-        ctx.textBaseline = "middle";
-
-        nodesRef.current = initialNodes;
-    }, [text, fontSize, maxTrackingExpansion, maxScaleX, paddingX, paddingY]);
+        return () => {
+            observer.disconnect();
+        };
+    }, [text, fontSize, paddingY]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -242,14 +254,14 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
     };
 
     return (
-        <div className={`inline-block select-none overflow-hidden ${className}`}>
+        <div ref={containerRef} className={`w-full select-none overflow-hidden ${className}`}>
             <canvas
                 ref={canvasRef}
                 onPointerMove={handlePointerMove}
                 onPointerLeave={() => {
                     mouseRef.current = { x: -1000, y: -1000, active: false };
                 }}
-                className="block touch-none cursor-ew-resize"
+                className="mx-auto block touch-none cursor-ew-resize"
             />
         </div>
     );
