@@ -2,7 +2,7 @@ import { ComponentConfig } from "@/app/registry/ComponentDatabase";
 
 export const singularityConfig: ComponentConfig = {
   slug: "singularity",
-  name: "Schwarzschild Singularity",
+  name: "Schwarzschild",
   category: "background",
   componentPath: "app/meta/background/space/Singularity.tsx",
   props: [

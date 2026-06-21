@@ -143,9 +143,9 @@ export const Singularity: React.FC<SingularityProps> = ({
       phi: camPhi
     };
 
-    const renderer = new THREE.WebGLRenderer({ 
-      canvas, 
-      antialias: true, 
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
       powerPreference: "high-performance",
       alpha: false
     });
@@ -162,8 +162,8 @@ export const Singularity: React.FC<SingularityProps> = ({
 
     // Gravitational Aura / Lensing Glow shader mesh
     const auraMat = new THREE.ShaderMaterial({
-      uniforms: { 
-        uTime: { value: 0 }, 
+      uniforms: {
+        uTime: { value: 0 },
         uIntensity: { value: 1.0 },
         uColorBase: { value: new THREE.Color(parsedColor[0], parsedColor[1], parsedColor[2]) }
       },
@@ -278,13 +278,13 @@ export const Singularity: React.FC<SingularityProps> = ({
       const r = 5.0 + Math.pow(Math.random(), 1.3) * 40.0;
       const angle = Math.random() * Math.PI * 2;
       dummy.position.set(
-        Math.cos(angle) * r, 
-        (Math.random() - 0.5) * (8.0 / r), 
+        Math.cos(angle) * r,
+        (Math.random() - 0.5) * (8.0 / r),
         Math.sin(angle) * r
       );
       dummy.lookAt(
-        dummy.position.x + Math.sin(angle), 
-        dummy.position.y, 
+        dummy.position.x + Math.sin(angle),
+        dummy.position.y,
         dummy.position.z - Math.cos(angle)
       );
       dummy.updateMatrix();
@@ -323,14 +323,14 @@ export const Singularity: React.FC<SingularityProps> = ({
       if (!isDragging) return;
       const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
       const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
-      
+
       const deltaX = clientX - prevMouseX;
       const deltaY = clientY - prevMouseY;
-      
+
       spherical.theta -= deltaX * 0.005;
       // Clamp vertical inclination so camera never flips upside down
       spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi - deltaY * 0.005));
-      
+
       prevMouseX = clientX;
       prevMouseY = clientY;
     };
@@ -347,7 +347,7 @@ export const Singularity: React.FC<SingularityProps> = ({
     canvas.addEventListener('mousedown', handlePointerDown);
     window.addEventListener('mousemove', handlePointerMove);
     window.addEventListener('mouseup', handlePointerUp);
-    
+
     // Add touch listeners for responsive mobile usage
     canvas.addEventListener('touchstart', handlePointerDown, { passive: true });
     window.addEventListener('touchmove', handlePointerMove, { passive: true });
@@ -356,7 +356,7 @@ export const Singularity: React.FC<SingularityProps> = ({
 
     // Render loop helper (lerping variables dynamically for organic transitions)
     const clock = new THREE.Clock();
-    
+
     const animate = () => {
       const time = clock.getElapsedTime();
       const current = renderValsRef.current;
@@ -368,7 +368,7 @@ export const Singularity: React.FC<SingularityProps> = ({
       currentPhysics.intensity += (current.intensity - currentPhysics.intensity) * lerpFactor;
       currentPhysics.orbitScale += (current.orbitScale - currentPhysics.orbitScale) * lerpFactor;
       currentPhysics.rotateSpeed += (current.rotateSpeed - currentPhysics.rotateSpeed) * lerpFactor;
-      
+
       currentPhysics.colorBase[0] += (current.colorBase[0] - currentPhysics.colorBase[0]) * lerpFactor;
       currentPhysics.colorBase[1] += (current.colorBase[1] - currentPhysics.colorBase[1]) * lerpFactor;
       currentPhysics.colorBase[2] += (current.colorBase[2] - currentPhysics.colorBase[2]) * lerpFactor;
@@ -396,16 +396,16 @@ export const Singularity: React.FC<SingularityProps> = ({
       diskMaterial.uniforms.uIntensity.value = currentPhysics.intensity;
       diskMaterial.uniforms.uOrbitScale.value = currentPhysics.orbitScale;
       diskMaterial.uniforms.uColorBase.value.setRGB(
-        currentPhysics.colorBase[0], 
-        currentPhysics.colorBase[1], 
+        currentPhysics.colorBase[0],
+        currentPhysics.colorBase[1],
         currentPhysics.colorBase[2]
       );
 
       auraMat.uniforms.uTime.value = time;
       auraMat.uniforms.uIntensity.value = currentPhysics.intensity;
       auraMat.uniforms.uColorBase.value.setRGB(
-        currentPhysics.colorBase[0], 
-        currentPhysics.colorBase[1], 
+        currentPhysics.colorBase[0],
+        currentPhysics.colorBase[1],
         currentPhysics.colorBase[2]
       );
 
@@ -427,7 +427,7 @@ export const Singularity: React.FC<SingularityProps> = ({
       window.removeEventListener('touchmove', handlePointerMove);
       window.removeEventListener('touchend', handlePointerUp);
       canvas.removeEventListener('wheel', handleWheel);
-      
+
       cancelAnimationFrame(requestRef.current);
       renderer.dispose();
       bhGeo.dispose();
@@ -439,13 +439,13 @@ export const Singularity: React.FC<SingularityProps> = ({
   }, []);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`relative overflow-hidden bg-[#010103] select-none ${className}`}
     >
       {/* 3D Singularity Render Canvas */}
-      <canvas 
-        ref={canvasRef} 
+      <canvas
+        ref={canvasRef}
         className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing block z-0"
       />
 

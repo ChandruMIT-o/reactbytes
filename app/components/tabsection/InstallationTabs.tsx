@@ -182,12 +182,14 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 			if (extraLibraries && extraLibraries.length > 0) {
 				text = manualCommandToDisplay;
 			} else {
-				text = manualCommand || "git clone https://github.com/ChandruMIT-o/reactbytes.git";
+				text = manualCommand || "";
 			}
 		}
-		navigator.clipboard.writeText(text);
-		setCopied(true);
-		setTimeout(() => setCopied(false), 2000);
+		if (text) {
+			navigator.clipboard.writeText(text);
+			setCopied(true);
+			setTimeout(() => setCopied(false), 2000);
+		}
 	};
 
 	const springConfig = {
@@ -328,34 +330,19 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 							)}
 
 							{extraLibraries && extraLibraries.length > 0 ? (
-								<div className="flex flex-col gap-1.5 mt-1 border-t border-rb-neutral-4/30 pt-3">
-									<p data-layout-id="install-label" className="text-xs text-rb-accent-2/50 font-medium tracking-wide uppercase select-none block">
-										Install dependencies:
-									</p>
-									<div className="flex items-center gap-3 font-mono text-[16px]">
-										<span data-layout-id="dollar" className="text-rb-accent-1 select-none inline-block">
-											$
-										</span>
-										<span className="inline-block text-rb-accent-1">
-											{renderTokens(manualCommandToDisplay)}
-										</span>
-									</div>
+								<div className="flex items-center gap-3 font-mono text-[16px]">
+									<span data-layout-id="dollar" className="text-rb-accent-1 select-none inline-block">
+										$
+									</span>
+									<span className="inline-block text-rb-accent-1">
+										{renderTokens(manualCommandToDisplay)}
+									</span>
 								</div>
 							) : (
 								!manualCommand && (
-									<div className="flex flex-col gap-2">
-										<p data-layout-id="clone-label" className="text-rb-accent-1 text-sm block">
-											Clone the repository from GitHub:
-										</p>
-										<div className="flex items-center gap-3 font-mono text-[16px]">
-											<span data-layout-id="dollar" className="text-rb-accent-1 select-none inline-block">
-												$
-											</span>
-											<span className="inline-block text-rb-accent-1">
-												{renderTokens("git clone https://github.com/ChandruMIT-o/reactbytes.git")}
-											</span>
-										</div>
-									</div>
+									<p className="text-sm text-rb-accent-2/50 font-sans italic">
+										No dependencies required for manual installation.
+									</p>
 								)
 							)}
 						</div>

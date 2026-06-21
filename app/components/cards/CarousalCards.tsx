@@ -100,9 +100,9 @@ export const CarousalCards = () => {
 
 	const containerVariants: Variants = {
 		initial: { opacity: 0, x: 10, filter: "blur(8px)" },
-		animate: { 
-			opacity: 1, 
-			x: 0, 
+		animate: {
+			opacity: 1,
+			x: 0,
 			filter: "blur(0px)",
 			transition: {
 				duration: 0.6,
@@ -111,9 +111,9 @@ export const CarousalCards = () => {
 				delayChildren: 0.1
 			}
 		},
-		exit: { 
-			opacity: 0, 
-			x: -10, 
+		exit: {
+			opacity: 0,
+			x: -10,
 			filter: "blur(8px)",
 			transition: {
 				duration: 0.4,
@@ -280,7 +280,7 @@ export const CarousalCards = () => {
 										/>
 									</motion.div>
 
-									<motion.h2 
+									<motion.h2
 										variants={itemVariants}
 										className="text-2xl md:text-4xl lg:text-5xl font-bold text-rb-accent-1 mb-6 leading-[1.15] tracking-tight font-sans"
 									>

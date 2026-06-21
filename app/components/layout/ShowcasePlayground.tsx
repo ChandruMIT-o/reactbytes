@@ -244,7 +244,18 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
       </div>
 
       <div id="installation-tabs">
-        <InstallationTabs />
+        <InstallationTabs
+          componentName={dbEntry.npmPackageName || "react-bytes"}
+          extraLibraries={
+            (() => {
+              const libs = [
+                ...Object.keys(dbEntry.dependencies || {}),
+                ...Object.keys(dbEntry.peerDependencies || {}),
+              ];
+              return libs.length > 0 ? libs : undefined;
+            })()
+          }
+        />
       </div>
 
       <div id="api-reference" className="flex flex-col gap-5">

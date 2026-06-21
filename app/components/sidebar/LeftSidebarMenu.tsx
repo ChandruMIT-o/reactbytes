@@ -132,7 +132,7 @@ export default function LeftSidebarMenu({
 	};
 
 	return (
-		<div className="flex flex-col font-sans mb-2 w-full md:w-[224px]">
+		<div className="flex flex-col font-sans mb-2 w-full md:w-[240px]">
 			<div className="relative w-full flex flex-col">
 				{/* Continuous Vertical Connecting Line */}
 				<div className="absolute left-[29px] top-[14px] bottom-0 w-[2px] bg-rb-neutral-4 z-0 rounded-full" />
@@ -178,19 +178,19 @@ export default function LeftSidebarMenu({
 					animate={
 						isCollapsed
 							? {
-									height: 0,
-									opacity: 0,
-									filter: "blur(16px)",
-									marginBottom: 0,
-									scale: 0.98,
-								}
+								height: 0,
+								opacity: 0,
+								filter: "blur(16px)",
+								marginBottom: 0,
+								scale: 0.98,
+							}
 							: {
-									height: "auto",
-									opacity: 1,
-									filter: "blur(0px)",
-									marginBottom: 16,
-									scale: 1,
-								}
+								height: "auto",
+								opacity: 1,
+								filter: "blur(0px)",
+								marginBottom: 16,
+								scale: 1,
+							}
 					}
 					transition={{
 						height: { type: "spring", stiffness: 220, damping: 24 },
@@ -310,17 +310,17 @@ export default function LeftSidebarMenu({
 									animate={
 										isCollapsed
 											? {
-													x: -20,
-													opacity: 0,
-													scale: 0.9,
-													filter: "blur(10px)",
-												}
+												x: -20,
+												opacity: 0,
+												scale: 0.9,
+												filter: "blur(10px)",
+											}
 											: {
-													x: 0,
-													opacity: 1,
-													scale: 1,
-													filter: "blur(0px)",
-												}
+												x: 0,
+												opacity: 1,
+												scale: 1,
+												filter: "blur(0px)",
+											}
 									}
 									transition={{
 										...springConfig,

@@ -35,13 +35,18 @@ export default function HeaderText({
 	...props
 }: HeaderTextProps) {
 	const [isHovered, setIsHovered] = React.useState(false);
+	const containerRef = React.useRef<HTMLDivElement>(null);
 	const Tag = `h${option}` as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-	const handleScroll = () => {
-		window.scrollTo({ top: 0, behavior: "smooth" });
+	const handleScroll = (e: React.MouseEvent) => {
+		e.stopPropagation();
+		if (containerRef.current) {
+			containerRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+		}
 	};
 
 	return (
 		<div
+			ref={containerRef}
 			className="group flex flex-row items-center gap-4 py-2 w-fit"
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}

@@ -14,6 +14,7 @@ import FullPreviewTab from "../tabsection/FullPreviewTab";
 import { usePreview } from "../context/PreviewContext";
 import HeaderChaosBackground from "./HeaderChaosBackground";
 import { ComponentRegistry } from "./ComponentRegistry";
+import LogoMorphLoading from "./LogoMorphLoading";
 
 import {
 	generalItems,
@@ -34,6 +35,7 @@ import {
 export default function AppShell({ children }: { children: React.ReactNode }) {
 	const router = useRouter();
 	const pathname = usePathname();
+	const [showLoading, setShowLoading] = React.useState(true);
 
 	const activeItem = pathname === "/" ? "intro" : pathname.slice(1);
 	const { isOpen, setIsOpen, data } = usePreview();
@@ -108,6 +110,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
 	return (
 		<div className="flex flex-col h-[100dvh] overflow-hidden font-sans bg-background text-foreground transition-colors duration-500">
+			{showLoading && (
+				<LogoMorphLoading onComplete={() => setShowLoading(false)} />
+			)}
 			{/* Fixed Header */}
 			<header
 				onMouseEnter={() => setIsHeaderHovered(true)}
@@ -141,7 +146,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 									width={17}
 									height={28}
 									className="relative z-10"
-									style={{ height: "auto" }}
+									style={{ width: "auto", height: "auto" }}
 								/>
 							</div>
 							<div className="hidden md:block text-[16px] text-rb-accent-2 font-medium tracking-tight">
@@ -184,7 +189,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
 				{/* Left Sidebar */}
 				<aside
-					className={`fixed inset-y-0 left-0 z-[70] w-[280px] max-w-[85vw] bg-rb-neutral-2 border-r border-white/5 md:bg-transparent md:border-none md:relative md:w-auto h-full flex flex-col transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+					className={`fixed inset-y-0 left-0 z-[70] w-[280px] max-w-[90vw] bg-rb-neutral-2 border-r border-white/5 md:bg-transparent md:border-none md:relative md:w-auto h-full flex flex-col transform transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
 						}`}
 				>
 					{/* Fixed Mobile Header */}
@@ -273,7 +278,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 				{/* Center Content - Scrollable */}
 				<main
 					ref={scrollContainerRef}
-					className="flex-1 h-full w-full overflow-y-auto px-4 md:pl-20 md:pr-10 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
+					className="flex-1 h-full w-full overflow-y-auto px-4 md:pl-10 md:pr-5 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
 				>
 					<div className="max-w-5xl mx-auto pb-40">
 						{children}
