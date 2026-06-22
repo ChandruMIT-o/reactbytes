@@ -27,7 +27,7 @@ export const LazySection: React.FC<LazySectionProps> = ({
         }
       },
       {
-        rootMargin: "300px 0px", // Preload when within 300px of viewport
+        rootMargin: "500px 0px", // Preload when within 500px of viewport
         threshold: 0.0,
       }
     );
@@ -43,9 +43,9 @@ export const LazySection: React.FC<LazySectionProps> = ({
     <div
       ref={ref}
       id={id}
-      className={`w-full min-h-screen flex items-center justify-center relative overflow-hidden ${className}`}
+      className={`w-full relative ${className}`}
     >
-      {isInView ? children : <div className="h-screen w-full" />}
+      {isInView ? children : <div className="min-h-screen w-full" />}
     </div>
   );
 };

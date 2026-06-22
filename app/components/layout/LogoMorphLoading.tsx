@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { animate, createTimeline, Timeline, JSAnimation } from 'animejs';
+import { createTimeline, Timeline } from 'animejs';
 import RevealUnder from '../../meta/text/TextEnter/RevealUnder';
 
 // Target SVG paths of the brand logo parts
@@ -52,6 +52,7 @@ export interface LogoMorphLoadingProps {
 }
 
 export default function LogoMorphLoading({ onComplete }: LogoMorphLoadingProps) {
+  const [isMounted, setIsMounted] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
 
@@ -75,6 +76,9 @@ export default function LogoMorphLoading({ onComplete }: LogoMorphLoadingProps) 
   const animStateRef = useRef({ bigScale: 0, smallY: -20, roll: 0, morph: 0 });
 
   useEffect(() => {
+    // Flag that component has safely loaded on the client browser
+    setIsMounted(true);
+
     // 1. Sample all points securely on mount
     pointsRef.current = {
       bigStart: samplePathPoints(getCirclePath(9.5, 15, 6)),
@@ -174,11 +178,13 @@ export default function LogoMorphLoading({ onComplete }: LogoMorphLoadingProps) 
     };
   }, [onComplete]);
 
+  // Critical fix: Returns nothing on Server-side render pass to keep DOM clean.
+  if (!isMounted) return null;
+
   return (
     <div
-      className={`fixed inset-0 flex flex-col items-center justify-center bg-[#060010] select-none overflow-hidden z-[9999] transition-all duration-700 ease-in-out ${
-        isFadingOut ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'
-      }`}
+      className={`fixed inset-0 flex flex-col items-center justify-center bg-[#060010] select-none overflow-hidden z-[9999] transition-all duration-700 ease-in-out ${isFadingOut ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'
+        }`}
     >
       <div className="relative flex flex-col items-center justify-center w-70 h-70">
         {/* SVG Container: Fade in once points are sampled */}

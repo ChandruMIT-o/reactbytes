@@ -11,6 +11,11 @@ interface StackedCarouselProps {
     items?: StackedCarouselCard[];
     autoRotateInterval?: number;
     showPagination?: boolean;
+    cardBgColor?: string;
+    cardBorderColor?: string;
+    liquidColor?: string;
+    activeDotColor?: string;
+    inactiveDotColor?: string;
     className?: string;
 }
 
@@ -39,6 +44,11 @@ export default function StackedCarousel({
     items = defaultCards,
     autoRotateInterval = 5000,
     showPagination = true,
+    cardBgColor = "#121214",
+    cardBorderColor = "rgba(255, 255, 255, 0.08)",
+    liquidColor = "rgba(255, 255, 255, 0.25)",
+    activeDotColor = "#e4e4e7",
+    inactiveDotColor = "#3f3f46",
     className = "",
 }: StackedCarouselProps) {
     const [active, setActive] = useState(0);
@@ -113,11 +123,13 @@ export default function StackedCarousel({
                     return (
                         <div
                             key={card.id}
-                            className="absolute inset-0 w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border border-white/[0.08] bg-[#121214] select-none flex flex-col md:flex-row p-8 md:p-10 gap-8 md:gap-12"
+                            className="absolute inset-0 w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border select-none flex flex-col md:flex-row p-8 md:p-10 gap-8 md:gap-12"
                             style={{
                                 transform: `translateY(${offset * -24}px) scale(${1 - absOffset * 0.04})`,
                                 opacity: 1 - absOffset * 0.35,
                                 zIndex: 10 - absOffset + (offset > 0 ? 0.1 : 0), // Subtle bias for stable stacking
+                                backgroundColor: cardBgColor,
+                                borderColor: cardBorderColor,
                                 transition: "all 600ms cubic-bezier(0.34, 1.15, 0.64, 1)",
                             }}
                         >
@@ -163,7 +175,7 @@ export default function StackedCarousel({
                                             y="-20"
                                             width="120"
                                             height="120"
-                                            fill="rgba(255, 255, 255, 0.25)"
+                                            fill={liquidColor}
                                             mask={`url(#liquid-mask-${card.id})`}
                                         />
                                     </g>
@@ -197,8 +209,11 @@ export default function StackedCarousel({
                     {items.map((_, i) => (
                         <div
                             key={i}
-                            className={`h-1.5 rounded-full transition-all duration-500 cubic-bezier(0.34, 1.15, 0.64, 1) ${i === active ? "w-8 bg-zinc-200" : "w-2 bg-zinc-700"
+                            className={`h-1.5 rounded-full transition-all duration-500 cubic-bezier(0.34, 1.15, 0.64, 1) ${i === active ? "w-8" : "w-2"
                                 }`}
+                            style={{
+                                backgroundColor: i === active ? activeDotColor : inactiveDotColor,
+                            }}
                         />
                     ))}
                 </div>

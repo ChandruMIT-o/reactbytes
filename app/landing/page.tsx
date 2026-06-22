@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react";
 
 import dynamic from "next/dynamic";
 import FbmNoise from "../meta/background/liquid/FbmNoise";
-import GlideSection from "./components/GlideSection";
 import LazySection from "./components/LazySection";
 import CreativeNavbar from "./components/CreativeNavbar";
-import BlueprintDivider from "./components/BlueprintDivider";
 import ScrollTimeline from "./components/ScrollTimeline";
 import CreativeFooter from "./components/CreativeFooter";
+import SmoothScrollProvider from "./components/SmoothScrollProvider";
+
 
 // Lazy-loaded section components for performance optimization
 const HeroSection = dynamic(() => import("./components/HeroSection"), { ssr: false });
@@ -17,8 +17,7 @@ const FeatureDetailsSection = dynamic(() => import("./components/FeatureDetailsS
 const InteractiveShowcaseSection = dynamic(() => import("./components/InteractiveShowcaseSection"), { ssr: false });
 const VisualPlaygroundSection = dynamic(() => import("./components/VisualPlaygroundSection"), { ssr: false });
 const PageSpecs = dynamic(() => import("./components/PageSpecs"), { ssr: false });
-
-// Custom SVGs and logos removed since the marquee was replaced with StackedCarousel.
+const BentoShowcaseSection = dynamic(() => import("./components/BentoShowcaseSection"), { ssr: false });
 
 // --- FbmNoise presets for fluid simulation ---
 interface ShaderPreset {
@@ -99,7 +98,7 @@ export default function LandingPage() {
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    const sections = ["hero", "features", "marquee", "shader-playground", "specs"];
+    const sections = ["hero", "features", "marquee", "scroll-marquee", "shader-playground", "specs", "production-ready"];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -110,12 +109,10 @@ export default function LandingPage() {
 
   // Section-driven background profile morphing
   useEffect(() => {
-    // If the user has scrolled to the dashboard section, keep their live manual settings intact
     if (activeSection === "shader-playground") {
       return;
     }
 
-    // Otherwise, transition global variables smoothly to section profiles
     switch (activeSection) {
       case "hero":
         setSpeed(0.12);
@@ -134,6 +131,7 @@ export default function LandingPage() {
         setBrightness(0.9);
         break;
       case "marquee":
+      case "scroll-marquee":
         setSpeed(0.07);
         setScale(1.8);
         setColorR(0.2);
@@ -148,6 +146,14 @@ export default function LandingPage() {
         setColorG(1.2);
         setColorB(0.8);
         setBrightness(1.0);
+        break;
+      case "production-ready":
+        setSpeed(0.06);
+        setScale(2.0);
+        setColorR(0.3);
+        setColorG(0.6);
+        setColorB(0.9);
+        setBrightness(0.7);
         break;
       default:
         break;
@@ -173,59 +179,53 @@ export default function LandingPage() {
     { id: "marquee", label: "Component Deck" },
     { id: "shader-playground", label: "Shader Deck" },
     { id: "specs", label: "Tech Details" },
+    { id: "production-ready", label: "Ready" },
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#060010] text-[#f2eee9] font-sans selection:bg-[#c0dedd]/30 selection:text-white overflow-x-hidden">
-      
-      {/* Root-level FbmNoise shader backdrop */}
-      <FbmNoise 
-        complex={false} 
-        speed={speed} 
-        scale={scale} 
-        brightness={brightness} 
-        colorR={colorR} 
-        colorG={colorG} 
-        colorB={colorB} 
-        mouseInfluence={0.5}
-        paused={false}
-        observeVisibility={false}
-        className="fixed inset-0 z-0 w-full h-full"
-      />
+    <SmoothScrollProvider>
+      <div className="relative min-h-screen bg-[#060010] text-[#f2eee9] font-sans selection:bg-[#c0dedd]/30 selection:text-white overflow-x-hidden">
 
-      {/* Floating Layout Indicators */}
-      <CreativeNavbar activeSection={activeSection} />
-      <ScrollTimeline sections={sectionsList} activeSection={activeSection} />
+        {/* Root-level FbmNoise shader backdrop */}
+        <FbmNoise
+          complex={false}
+          speed={speed}
+          scale={scale}
+          brightness={brightness}
+          colorR={colorR}
+          colorG={colorG}
+          colorB={colorB}
+          mouseInfluence={0.5}
+          paused={false}
+          observeVisibility={false}
+          className="fixed inset-0 z-0 w-full h-full"
+        />
 
-      {/* Orchestrated Section Views wrapped in LazySection and GlideSection */}
-      <div className="relative z-10 w-full flex flex-col">
-        <LazySection id="hero">
-          <GlideSection id="hero-glide">
+        {/* Floating Layout Indicators */}
+        <CreativeNavbar activeSection={activeSection} />
+        <ScrollTimeline sections={sectionsList} activeSection={activeSection} />
+
+
+        {/* Orchestrated Section Views — each section has its own unique scroll choreography */}
+        <div className="relative z-10 w-full flex flex-col">
+          {/* Hero — parallax layers, pinned entrance, cinematic exit */}
+          <LazySection id="hero">
             <HeroSection />
-          </GlideSection>
-        </LazySection>
+          </LazySection>
 
-        <BlueprintDivider step="features" />
-
-        <LazySection id="features">
-          <GlideSection id="features-glide">
+          {/* Features — GSAP staggered cards, scroll-driven title, circuit SVG lines */}
+          <LazySection id="features">
             <FeatureDetailsSection />
-          </GlideSection>
-        </LazySection>
+          </LazySection>
 
-        <BlueprintDivider step="marquee" />
-
-        <LazySection id="marquee">
-          <GlideSection id="marquee-glide">
+          {/* Showcase — pinned horizontal scroll gallery (no LazySection wrapper — GSAP pin needs direct DOM) */}
+          <div id="marquee">
             <InteractiveShowcaseSection />
-          </GlideSection>
-        </LazySection>
-        
-        <BlueprintDivider step="shader-playground" />
+          </div>
 
-        <LazySection id="shader-playground">
-          <GlideSection id="shader-playground-glide">
-            <VisualPlaygroundSection 
+          {/* Shader Playground — interactive WebGL controls */}
+          <LazySection id="shader-playground">
+            <VisualPlaygroundSection
               presets={SHADER_PRESETS}
               activePreset={activePreset}
               speed={speed}
@@ -242,20 +242,22 @@ export default function LandingPage() {
               onColorBChange={(val) => { setColorB(val); setActivePreset(""); }}
               onBrightnessChange={(val) => { setBrightness(val); setActivePreset(""); }}
             />
-          </GlideSection>
-        </LazySection>
+          </LazySection>
 
-        <BlueprintDivider step="specs" />
-
-        <LazySection id="specs">
-          <GlideSection id="specs-glide">
+          {/* Specs — scroll-driven counters, animated bars, waterfall cascade */}
+          <LazySection id="specs">
             <PageSpecs />
-          </GlideSection>
-        </LazySection>
+          </LazySection>
 
-        <CreativeFooter />
+          {/* Production-Ready capabilities bento grid showcase */}
+          <LazySection id="production-ready">
+            <BentoShowcaseSection />
+          </LazySection>
+
+          <CreativeFooter />
+        </div>
+
       </div>
-
-    </div>
+    </SmoothScrollProvider>
   );
 }

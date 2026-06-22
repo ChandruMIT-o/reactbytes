@@ -1,64 +1,164 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { Info, BarChart2 } from "lucide-react";
+import React, { useRef, useLayoutEffect } from "react";
+import { BarChart2, Info } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import AxialShearText from "@/app/meta/text/AxialShearText/AxialShearText";
-import BlurIn from "@/app/meta/text/TextEnter/BlurIn";
+
+gsap.registerPlugin(ScrollTrigger);
+
+interface SpecItem {
+  label: string;
+  value: string;
+  numericValue: number;
+  suffix: string;
+  prefix: string;
+  status: string;
+  percentage: number;
+  decimals: number;
+}
+
+const specs: SpecItem[] = [
+  { label: "BUNDLE footprint", value: "< 12KB", numericValue: 12, suffix: "KB", prefix: "< ", status: "OPTIMAL", percentage: 12, decimals: 0 },
+  { label: "SHADERS compile time", value: "~0.15s", numericValue: 0.15, suffix: "s", prefix: "~", status: "FAST", percentage: 15, decimals: 2 },
+  { label: "WebGL version", value: "1.0 ES", numericValue: 1.0, suffix: " ES", prefix: "", status: "STABLE", percentage: 100, decimals: 1 },
+  { label: "FRAME delta rate", value: "< 16.6ms", numericValue: 16.6, suffix: "ms", prefix: "< ", status: "60 FPS", percentage: 95, decimals: 1 },
+  { label: "Core dependencies", value: "ZERO", numericValue: 0, suffix: "", prefix: "", status: "STANDALONE", percentage: 0, decimals: 0 },
+  { label: "Tailwind engine", value: "V4.0", numericValue: 4.0, suffix: "", prefix: "V", status: "NATIVE", percentage: 100, decimals: 1 },
+];
 
 export const PageSpecs: React.FC = () => {
-  const specs = [
-    { label: "BUNDLE footprint", value: "< 12KB", status: "OPTIMAL", percentage: 12 },
-    { label: "SHADERS compile time", value: "~0.15s", status: "FAST", percentage: 15 },
-    { label: "WebGL version", value: "1.0 ES", status: "STABLE", percentage: 100 },
-    { label: "FRAME delta rate", value: "< 16.6ms", status: "60 FPS", percentage: 95 },
-    { label: "Core dependencies", value: "ZERO", status: "STANDALONE", percentage: 0 },
-    { label: "Tailwind engine", value: "V4.0", status: "NATIVE", percentage: 100 },
-  ];
+  const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!sectionRef.current || !gridRef.current) return;
+
+      // --- Title entrance ---
+      if (titleRef.current) {
+        gsap.fromTo(
+          titleRef.current.children,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: titleRef.current,
+              start: "top 85%",
+              end: "top 55%",
+              scrub: 1,
+            },
+          }
+        );
+      }
+
+      // --- Staggered card waterfall ---
+      const cards = gridRef.current.querySelectorAll(".spec-card");
+      gsap.fromTo(
+        cards,
+        { opacity: 0, y: 40, scale: 0.95 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          stagger: 0.08,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: gridRef.current,
+            start: "top 80%",
+            end: "top 40%",
+            scrub: 1,
+          },
+        }
+      );
+
+      // --- Scroll-driven number counters ---
+      cards.forEach((card, idx) => {
+        const spec = specs[idx];
+        const valueEl = card.querySelector(".spec-value") as HTMLElement;
+        const barEl = card.querySelector(".spec-bar-fill") as HTMLElement;
+
+        if (valueEl && spec) {
+          const obj = { val: 0 };
+          gsap.to(obj, {
+            val: spec.numericValue,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 75%",
+              end: "top 35%",
+              scrub: 1,
+            },
+            onUpdate: () => {
+              if (spec.numericValue === 0) {
+                valueEl.textContent = "ZERO";
+              } else {
+                valueEl.textContent = `${spec.prefix}${obj.val.toFixed(spec.decimals)}${spec.suffix}`;
+              }
+            },
+          });
+        }
+
+        // --- Scroll-driven progress bars ---
+        if (barEl && spec.percentage > 0) {
+          gsap.fromTo(
+            barEl,
+            { width: "0%" },
+            {
+              width: `${spec.percentage}%`,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 70%",
+                end: "top 30%",
+                scrub: 1,
+              },
+            }
+          );
+        }
+      });
+    });
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section id="specs" className="relative w-full py-24 bg-[#060010] z-20 border-t border-white/5">
+    <section ref={sectionRef} id="specs" className="relative w-full py-32 z-20 border-t border-white/5">
       {/* Blueprint layout grids */}
       <div className="absolute inset-y-0 left-10 w-[1px] bg-white/[0.01] pointer-events-none" />
       <div className="absolute inset-y-0 right-10 w-[1px] bg-white/[0.01] pointer-events-none" />
 
-      <div className="max-w-6xl mx-auto px-6 flex flex-col gap-14">
-        
+      <div className="max-w-6xl mx-auto px-6 flex flex-col gap-16">
         {/* Header */}
-        <div className="text-center flex flex-col items-center gap-4">
+        <div ref={titleRef} className="text-center flex flex-col items-center gap-4">
           <div className="inline-flex items-center gap-1.5 text-xs uppercase font-mono tracking-widest text-[#c0dedd]">
-            <BarChart2 size={13} /> Performance metrics
+            <BarChart2 size={13} /> Performance Metrics
           </div>
           <div className="select-none py-2">
-            <AxialShearText 
-              text="TECHNICAL DATA" 
-              fontSize={50} 
-              color="#f2eee9" 
+            <AxialShearText
+              text="TECHNICAL DATA"
+              fontSize={50}
+              color="#f2eee9"
               shearColor="rgba(192, 222, 221, 0.4)"
               influenceRadius={90}
             />
           </div>
-          <BlurIn 
-            text="Meticulously scoped calculations. Each metric represents hardware benchmarks designed to keep your load speeds lightning-fast."
-            color="rgba(230, 223, 241, 0.5)"
-            duration={0.6}
-            stagger={0.005}
-            initialBlur={8}
-            textClassName="text-xs md:text-sm leading-relaxed font-light font-sans text-center"
-            containerClassName="flex justify-center"
-          />
+          <p className="text-xs md:text-sm text-[#e6dff1]/50 leading-relaxed font-light font-sans text-center max-w-lg">
+            Meticulously scoped calculations. Each metric represents hardware benchmarks designed to keep your load speeds lightning-fast.
+          </p>
         </div>
 
         {/* Specs Technical Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border border-white/5 rounded-2xl overflow-hidden bg-[#181a1e]/10 backdrop-blur-md">
+        <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 border border-white/5 rounded-2xl overflow-hidden bg-[#181a1e]/10 backdrop-blur-md">
           {specs.map((item, idx) => (
-            <motion.div
+            <div
               key={item.label}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="p-6 border-b border-r border-white/5 flex flex-col gap-3 group hover:bg-[#c0dedd]/5 transition-colors duration-300"
+              className="spec-card p-6 border-b border-r border-white/5 flex flex-col gap-3 group hover:bg-[#c0dedd]/5 transition-colors duration-300"
             >
               <div className="flex justify-between items-center text-[10px] font-mono tracking-wider">
                 <span className="text-[#e6dff1]/30 uppercase">{item.label}</span>
@@ -66,20 +166,17 @@ export const PageSpecs: React.FC = () => {
                   {item.status}
                 </span>
               </div>
-              <span className="text-xl font-bold font-mono text-white group-hover:translate-x-1.5 transition-transform duration-300">
-                {item.value}
+              <span className="spec-value text-xl font-bold font-mono text-white group-hover:translate-x-1.5 transition-transform duration-300">
+                {item.prefix}0{item.suffix}
               </span>
 
-              {/* Technical animated bar graph */}
+              {/* Scroll-driven bar graph */}
               <div className="mt-2 flex flex-col gap-1 w-full">
                 <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden relative border border-white/[0.02]">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${item.percentage}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.2, delay: idx * 0.12 + 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="h-full bg-gradient-to-r from-[#c0dedd]/60 to-[#c0dedd] rounded-full"
+                  <div
+                    className="spec-bar-fill h-full bg-gradient-to-r from-[#c0dedd]/60 to-[#c0dedd] rounded-full"
                     style={{
+                      width: "0%",
                       boxShadow: item.percentage > 0 ? "0 0 6px rgba(192,222,221,0.4)" : "none",
                     }}
                   />
@@ -90,7 +187,7 @@ export const PageSpecs: React.FC = () => {
                   <span>100</span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
