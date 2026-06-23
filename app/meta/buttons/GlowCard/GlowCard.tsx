@@ -20,6 +20,8 @@ interface GlowCardProps {
     baseColor?: string;
     /** Whether to force content text to uppercase */
     uppercase?: boolean;
+    /** Custom padding for the card content container */
+    padding?: string;
 }
 
 export const GlowCard: React.FC<GlowCardProps> = ({
@@ -34,6 +36,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
     borderWidth = 3,
     baseColor = "hsl(260deg 100% 3%)",
     uppercase = false,
+    padding,
 }) => {
     const style = {
         "--animation-speed": `${animationSpeed}s`,
@@ -43,6 +46,7 @@ export const GlowCard: React.FC<GlowCardProps> = ({
         "--card-radius": borderRadius,
         "--border-width": `${borderWidth}px`,
         "--card-color": baseColor,
+        ...(padding !== undefined ? { "--card-padding": padding } : {}),
     } as React.CSSProperties;
 
     return (

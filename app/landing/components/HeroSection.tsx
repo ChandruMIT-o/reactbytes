@@ -27,9 +27,9 @@ export const HeroSection: React.FC = () => {
     >
 
       {/* Background Void Orb with overflow margins to prevent rotation clipping */}
-      <motion.div 
-        style={{ 
-          scale, 
+      <motion.div
+        style={{
+          scale,
           rotate,
           top: "-20%",
           bottom: "-20%",
@@ -42,10 +42,10 @@ export const HeroSection: React.FC = () => {
           primaryColor="#c0dedd"
           secondaryColor="#e6dff1"
           accentColor="#060010"
-          fractalScale={0.4}
-          lightCount={3}
+          fractalScale={0.6}
+          lightCount={4}
           lightIntensity={1.4}
-          lightSpeed={0.8}
+          lightSpeed={1}
         />
       </motion.div>
 

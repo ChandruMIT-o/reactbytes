@@ -32,43 +32,43 @@ const DownloadPanel: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col justify-between py-2 bg-zinc-950 px-2 relative">
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-4 text-xs font-mono text-zinc-400">
+    <div className="w-full h-full flex flex-col justify-between py-3 px-3 relative bg-transparent">
+      <div className="flex items-center justify-between border-b border-zinc-800 pb-3 text-sm font-mono text-zinc-300">
         <span>04 // FREE_GET_CHANNELS</span>
-        <span className="text-[#c0dedd] font-bold text-[9px] uppercase tracking-wider">Free & Open Source</span>
+        <span className="text-[#c0dedd] font-bold text-[11px] uppercase tracking-wider">Free & Open Source</span>
       </div>
 
-      <div className="flex flex-col gap-3 flex-grow justify-center py-4 px-2">
+      <div className="flex flex-col gap-4 flex-grow justify-center py-4 px-1">
         {/* Simple visual tabs */}
-        <div className="flex gap-2 border-b border-zinc-850 pb-2 font-mono text-[9px]">
-          <span className={`px-2 py-0.5 rounded cursor-pointer transition-colors duration-200 ${activeTab === 'cli' ? 'bg-[#c0dedd]/10 text-[#c0dedd]' : 'text-zinc-500'}`}>CLI</span>
-          <span className={`px-2 py-0.5 rounded cursor-pointer transition-colors duration-200 ${activeTab === 'npm' ? 'bg-[#c0dedd]/10 text-[#c0dedd]' : 'text-zinc-500'}`}>NPM</span>
-          <span className={`px-2 py-0.5 rounded cursor-pointer transition-colors duration-200 ${activeTab === 'mcp' ? 'bg-[#c0dedd]/10 text-[#c0dedd]' : 'text-zinc-500'}`}>MCP</span>
+        <div className="flex gap-3 border-b border-zinc-800 pb-3 font-mono text-xs">
+          <span className={`px-2.5 py-1 rounded cursor-pointer transition-colors duration-200 ${activeTab === 'cli' ? 'bg-[#c0dedd]/10 text-[#c0dedd]' : 'text-zinc-500'}`}>CLI</span>
+          <span className={`px-2.5 py-1 rounded cursor-pointer transition-colors duration-200 ${activeTab === 'npm' ? 'bg-[#c0dedd]/10 text-[#c0dedd]' : 'text-zinc-500'}`}>NPM</span>
+          <span className={`px-2.5 py-1 rounded cursor-pointer transition-colors duration-200 ${activeTab === 'mcp' ? 'bg-[#c0dedd]/10 text-[#c0dedd]' : 'text-zinc-500'}`}>MCP</span>
         </div>
 
-        <div className="bg-zinc-900 border border-zinc-850 rounded-lg p-3 font-mono text-xs text-zinc-200 h-16 flex items-center justify-between">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-lg p-4 font-mono text-sm text-zinc-200 h-20 flex items-center justify-between">
           {activeTab === 'cli' && (
             <>
               <span className="text-zinc-400 select-all">npx reactbytes add ripple</span>
-              <Terminal size={14} className="text-zinc-500" />
+              <Terminal size={18} className="text-zinc-500" />
             </>
           )}
           {activeTab === 'npm' && (
             <>
               <span className="text-zinc-400 select-all">npm i @reactbytes/ripple</span>
-              <Box size={14} className="text-zinc-500" />
+              <Box size={18} className="text-zinc-500" />
             </>
           )}
           {activeTab === 'mcp' && (
             <>
               <span className="text-zinc-400 select-all">@reactbytes insert ripple</span>
-              <Cpu size={14} className="text-zinc-500" />
+              <Cpu size={18} className="text-zinc-500" />
             </>
           )}
         </div>
       </div>
 
-      <div className="flex items-center justify-between font-mono text-[9px] text-zinc-500 border-t border-zinc-800 pt-4 uppercase">
+      <div className="flex items-center justify-between font-mono text-[11px] text-zinc-500 border-t border-zinc-800 pt-3 uppercase">
         <span>No signup required</span>
         <span>MIT License</span>
       </div>
@@ -81,7 +81,7 @@ const DownloadPanel: React.FC = () => {
 // ============================================================================
 const CodePanel: React.FC = () => {
   return (
-    <div className="font-mono text-xs md:text-sm leading-loose text-zinc-400 w-full h-full flex flex-col justify-center px-6 overflow-hidden select-text bg-zinc-950">
+    <div className="font-mono text-sm md:text-base leading-loose text-zinc-400 w-full h-full flex flex-col justify-center px-4 overflow-hidden select-text bg-transparent">
       <div>
         <span className="text-blue-400">import</span>{" "}
         <span className="text-zinc-100">React, &#123; useState &#125;</span>{" "}
@@ -119,19 +119,19 @@ const CopyCodePanel: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col justify-between py-2 bg-zinc-950 px-2">
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-4 text-xs font-mono text-zinc-400">
+    <div className="w-full h-full flex flex-col justify-between py-3 px-3 bg-transparent">
+      <div className="flex items-center justify-between border-b border-zinc-800 pb-3 text-sm font-mono text-zinc-300">
         <div className="flex items-center gap-2">
-          <Terminal size={14} />
+          <Terminal size={16} />
           <span>03 // CODE_GENERATOR</span>
         </div>
-        <span className="text-emerald-400 font-bold flex items-center gap-1.5 text-[9px] uppercase tracking-wider">
-          {copied ? "COPIED" : "READY"} {copied && <CheckCircle size={10} />}
+        <span className="text-emerald-400 font-bold flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+          {copied ? "COPIED" : "READY"} {copied && <CheckCircle size={12} />}
         </span>
       </div>
 
-      <div className="flex gap-4 items-center flex-grow py-4 px-2">
-        <div className="font-mono text-[11px] text-zinc-300 leading-normal w-2/3 flex flex-col gap-1.5 select-text">
+      <div className="flex gap-4 items-center flex-grow py-4 px-1">
+        <div className="font-mono text-[13px] text-zinc-300 leading-normal w-2/3 flex flex-col gap-2 select-text">
           <div className="text-zinc-500">// Custom styling ready</div>
           <div>
             <span className="text-blue-400">&lt;</span>
@@ -151,22 +151,22 @@ const CopyCodePanel: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-1/3 flex flex-col items-center justify-center gap-2.5 bg-zinc-900 border border-zinc-850 rounded-xl p-3 h-24 relative overflow-hidden">
-          <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${copied ? "bg-emerald-500/20 border-emerald-500 text-emerald-400" : "bg-[#c0dedd]/10 border-white/5 text-[#c0dedd] hover:bg-[#c0dedd]/20"} border`}>
-            {copied ? <CheckCircle size={18} /> : <Box size={18} />}
+        <div className="w-1/3 flex flex-col items-center justify-center gap-3 bg-zinc-900 border border-zinc-800 rounded-xl p-4 h-28 relative overflow-hidden">
+          <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${copied ? "bg-emerald-500/20 border-emerald-500 text-emerald-400" : "bg-[#c0dedd]/10 border-white/5 text-[#c0dedd] hover:bg-[#c0dedd]/20"} border`}>
+            {copied ? <CheckCircle size={20} /> : <Box size={20} />}
           </div>
-          <span className="font-mono text-[8px] text-zinc-400 uppercase tracking-widest text-center">
+          <span className="font-mono text-[10px] text-zinc-400 uppercase tracking-widest text-center">
             {copied ? "Copied!" : "Copy Code"}
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 text-[9px] font-mono text-zinc-500 border-t border-zinc-800 pt-4 uppercase">
+      <div className="grid grid-cols-2 gap-4 text-[11px] font-mono text-zinc-500 border-t border-zinc-800 pt-3 uppercase">
         <div className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" /> JSX Validated
+          <div className="w-2 h-2 bg-emerald-500 rounded-full" /> JSX Validated
         </div>
         <div className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full" /> Zero Imports
+          <div className="w-2 h-2 bg-emerald-500 rounded-full" /> Zero Imports
         </div>
       </div>
     </div>
@@ -193,48 +193,48 @@ const TestCombinationsPanel: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-full flex flex-col justify-between py-2 bg-zinc-950 px-2">
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-4 text-xs font-mono text-zinc-400">
+    <div className="w-full h-full flex flex-col justify-between py-3 px-3 bg-transparent">
+      <div className="flex items-center justify-between border-b border-zinc-800 pb-3 text-sm font-mono text-zinc-300">
         <div className="flex items-center gap-2">
-          <Settings size={14} />
+          <Settings size={16} />
           <span>02 // PROP_CONTROLLER</span>
         </div>
-        <span className="text-zinc-100 bg-[#c0dedd]/10 text-[#c0dedd] px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider">Tuning</span>
+        <span className="text-zinc-100 bg-[#c0dedd]/10 text-[#c0dedd] px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider">Tuning</span>
       </div>
 
-      <div className="flex flex-col justify-center gap-5 flex-grow py-4 px-2">
+      <div className="flex flex-col justify-center gap-6 flex-grow py-3 px-1">
         <div className="flex flex-col gap-1.5">
-          <div className="flex justify-between font-mono text-xs">
+          <div className="flex justify-between font-mono text-[13px]">
             <span className="text-zinc-400">speed</span>
             <span className="text-white font-bold">{speed}s</span>
           </div>
-          <div className="w-full h-1.5 bg-zinc-850 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-zinc-850 rounded-full overflow-hidden">
             <div className="h-full bg-[#c0dedd]" style={{ width: `${(speed / 4) * 100}%` }} />
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <div className="flex justify-between font-mono text-xs">
+          <div className="flex justify-between font-mono text-[13px]">
             <span className="text-zinc-400">glowIntensity</span>
             <span className="text-white font-bold">{glow}%</span>
           </div>
-          <div className="w-full h-1.5 bg-zinc-850 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-zinc-850 rounded-full overflow-hidden">
             <div className="h-full bg-purple-500" style={{ width: `${glow}%` }} />
           </div>
         </div>
 
         <div className="flex flex-col gap-1.5">
-          <div className="flex justify-between font-mono text-xs">
+          <div className="flex justify-between font-mono text-[13px]">
             <span className="text-zinc-400">zoomFactor</span>
             <span className="text-white font-bold">{zoom}x</span>
           </div>
-          <div className="w-full h-1.5 bg-zinc-850 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-zinc-850 rounded-full overflow-hidden">
             <div className="h-full bg-blue-500" style={{ width: `${(zoom / 5) * 100}%` }} />
           </div>
         </div>
       </div>
 
-      <div className="w-full bg-zinc-900 rounded-lg p-2.5 border border-zinc-800 font-mono text-[10px] text-zinc-400 flex justify-between items-center overflow-x-auto whitespace-nowrap">
+      <div className="w-full bg-zinc-900 rounded-lg p-3 border border-zinc-800 font-mono text-xs text-zinc-400 flex justify-between items-center overflow-x-auto whitespace-nowrap">
         <code>{`<Component speed={${speed}} glow={${glow}} zoom={${zoom}} />`}</code>
       </div>
     </div>
@@ -248,29 +248,29 @@ const LivePreviewPanel: React.FC = () => {
   const [hovered, setHovered] = useState(false);
   return (
     <div
-      className="w-full h-full flex flex-col justify-between py-2 bg-zinc-950 px-2 relative overflow-hidden"
+      className="w-full h-full flex flex-col justify-between py-3 px-3 bg-transparent relative overflow-hidden"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div className="flex items-center justify-between border-b border-zinc-800 pb-4 text-xs font-mono text-zinc-400">
+      <div className="flex items-center justify-between border-b border-zinc-800 pb-3 text-sm font-mono text-zinc-300">
         <span>01 // LIVE_PREVIEW</span>
         <span className="flex items-center gap-2 text-white">
-          <div className="w-2 h-2 bg-[#c0dedd] rounded-full animate-ping" />
+          <div className="w-2.5 h-2.5 bg-[#c0dedd] rounded-full animate-ping" />
           ACTIVE
         </span>
       </div>
 
       <div className="flex flex-col items-center justify-center flex-grow py-4 relative">
-        <div className={`w-28 h-28 rounded-full bg-gradient-to-tr from-[#c0dedd]/20 via-[#e6dff1]/30 to-[#060010] border border-white/10 flex items-center justify-center transition-all duration-700 relative group shadow-[0_0_40px_rgba(192,222,221,0.15)] ${hovered ? "scale-110" : "scale-100"}`}>
-          <div className="absolute inset-2 rounded-full border border-dashed border-[#c0dedd]/30 animate-spin" style={{ animationDuration: "12s" }} />
-          <div className="absolute inset-6 rounded-full bg-[#0a0712] border border-white/5 flex items-center justify-center">
-            <Cpu size={24} className="text-[#c0dedd]" />
+        <div className={`w-36 h-36 rounded-full bg-gradient-to-tr from-[#c0dedd]/20 via-[#e6dff1]/30 to-[#060010] border border-white/10 flex items-center justify-center transition-all duration-700 relative group shadow-[0_0_40px_rgba(192,222,221,0.15)] ${hovered ? "scale-110" : "scale-100"}`}>
+          <div className="absolute inset-3 rounded-full border border-dashed border-[#c0dedd]/30 animate-spin" style={{ animationDuration: "12s" }} />
+          <div className="absolute inset-8 rounded-full bg-[#0a0712] border border-white/5 flex items-center justify-center">
+            <Cpu size={32} className="text-[#c0dedd]" />
           </div>
         </div>
-        <span className="mt-4 font-mono text-[9px] text-[#e6dff1]/40 uppercase tracking-widest">Hover to test cursor response</span>
+        <span className="mt-4 font-mono text-[10px] text-[#e6dff1]/40 uppercase tracking-widest">Hover to test cursor response</span>
       </div>
 
-      <div className="flex items-center justify-between font-mono text-[9px] text-zinc-500 border-t border-zinc-800 pt-4 uppercase">
+      <div className="flex items-center justify-between font-mono text-[11px] text-zinc-500 border-t border-zinc-800 pt-3 uppercase">
         <span>Renderer: WebGL / CSS</span>
         <span>Status: 60fps</span>
       </div>
@@ -449,8 +449,8 @@ export const BentoShowcaseSection: React.FC = () => {
             {/* Layers - Swapped to Solid Backgrounds and will-change for performance */}
             {/* Layer 1: Download Panel */}
             <div className="layer-el absolute inset-0 flex items-center justify-center will-change-transform">
-              <GlowCard className="w-full h-full shadow-2xl" borderWidth={3} baseColor="#09090b" borderRadius="1rem">
-                <div className="p-6 flex flex-col justify-between w-full h-full">
+              <GlowCard className="w-full h-full" borderWidth={3} baseColor="#09090b" borderRadius="1rem" padding="0">
+                <div className="p-3 flex flex-col justify-between w-full h-full">
                   <DownloadPanel />
                 </div>
               </GlowCard>
@@ -458,13 +458,13 @@ export const BentoShowcaseSection: React.FC = () => {
 
             {/* Layer 2: Clean component code */}
             <div className="layer-el absolute inset-0 flex items-center justify-center will-change-transform">
-              <GlowCard className="w-full h-full shadow-2xl" borderWidth={3} baseColor="#09090b" borderRadius="1rem">
-                <div className="p-6 flex flex-col justify-between w-full h-full">
-                  <div className="flex items-center justify-between text-xs font-mono text-zinc-400 border-b border-zinc-800 pb-4">
+              <GlowCard className="w-full h-full" borderWidth={3} baseColor="#09090b" borderRadius="1rem" padding="0">
+                <div className="p-3 flex flex-col justify-between w-full h-full">
+                  <div className="flex items-center justify-between text-sm font-mono text-zinc-300 border-b border-zinc-800 pb-3">
                     <span>05 // TSX_SOURCE_CODE</span>
-                    <span className="text-white font-bold">RAW CODE</span>
+                    <span className="text-white font-bold text-[11px] uppercase tracking-wider">RAW CODE</span>
                   </div>
-                  <div className="flex-grow flex items-center justify-center py-4">
+                  <div className="flex-grow flex items-center justify-center py-2">
                     <CodePanel />
                   </div>
                 </div>
@@ -473,8 +473,8 @@ export const BentoShowcaseSection: React.FC = () => {
 
             {/* Layer 3: Code Generator / Copy JSX */}
             <div className="layer-el absolute inset-0 flex items-center justify-center will-change-transform">
-              <GlowCard className="w-full h-full shadow-2xl" borderWidth={3} baseColor="#09090b" borderRadius="1rem">
-                <div className="p-6 flex flex-col justify-between w-full h-full">
+              <GlowCard className="w-full h-full" borderWidth={3} baseColor="#09090b" borderRadius="1rem" padding="0">
+                <div className="p-3 flex flex-col justify-between w-full h-full">
                   <CopyCodePanel />
                 </div>
               </GlowCard>
@@ -482,8 +482,8 @@ export const BentoShowcaseSection: React.FC = () => {
 
             {/* Layer 4: Prop Combinations testing */}
             <div className="layer-el absolute inset-0 flex items-center justify-center will-change-transform">
-              <GlowCard className="w-full h-full shadow-2xl" borderWidth={3} baseColor="#09090b" borderRadius="1rem">
-                <div className="p-6 flex flex-col justify-between w-full h-full">
+              <GlowCard className="w-full h-full" borderWidth={3} baseColor="#09090b" borderRadius="1rem" padding="0">
+                <div className="p-3 flex flex-col justify-between w-full h-full">
                   <TestCombinationsPanel />
                 </div>
               </GlowCard>
@@ -491,8 +491,8 @@ export const BentoShowcaseSection: React.FC = () => {
 
             {/* Layer 5: Live Interactive Preview */}
             <div className="layer-el absolute inset-0 flex items-center justify-center will-change-transform">
-              <GlowCard className="w-full h-full shadow-2xl" borderWidth={3} baseColor="#09090b" borderRadius="1rem">
-                <div className="p-6 flex flex-col justify-between w-full h-full">
+              <GlowCard className="w-full h-full" borderWidth={3} baseColor="#09090b" borderRadius="1rem" padding="0">
+                <div className="p-3 flex flex-col justify-between w-full h-full">
                   <LivePreviewPanel />
                 </div>
               </GlowCard>
@@ -543,8 +543,8 @@ export const BentoShowcaseSection: React.FC = () => {
         <div className="flex flex-col gap-10 w-full">
           <div className="flex flex-col gap-4">
             <span className="font-mono text-xs text-white uppercase tracking-widest">01 // Live Preview</span>
-            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="1rem">
-              <div className="p-6 flex flex-col justify-between w-full h-full">
+            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="3rem" padding="0">
+              <div className="p-3 flex flex-col justify-between w-full h-full">
                 <LivePreviewPanel />
               </div>
             </GlowCard>
@@ -552,8 +552,8 @@ export const BentoShowcaseSection: React.FC = () => {
 
           <div className="flex flex-col gap-4">
             <span className="font-mono text-xs text-white uppercase tracking-widest">02 // Props Tuning</span>
-            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="1rem">
-              <div className="p-6 flex flex-col justify-between w-full h-full">
+            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="3rem" padding="0">
+              <div className="p-3 flex flex-col justify-between w-full h-full">
                 <TestCombinationsPanel />
               </div>
             </GlowCard>
@@ -561,8 +561,8 @@ export const BentoShowcaseSection: React.FC = () => {
 
           <div className="flex flex-col gap-4">
             <span className="font-mono text-xs text-white uppercase tracking-widest">03 // Code Generator</span>
-            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="1rem">
-              <div className="p-6 flex flex-col justify-between w-full h-full">
+            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="3rem" padding="0">
+              <div className="p-3 flex flex-col justify-between w-full h-full">
                 <CopyCodePanel />
               </div>
             </GlowCard>
@@ -570,8 +570,8 @@ export const BentoShowcaseSection: React.FC = () => {
 
           <div className="flex flex-col gap-4">
             <span className="font-mono text-xs text-white uppercase tracking-widest">04 // Download channels</span>
-            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="1rem">
-              <div className="p-6 flex flex-col justify-between w-full h-full">
+            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="3rem" padding="0">
+              <div className="p-3 flex flex-col justify-between w-full h-full">
                 <DownloadPanel />
               </div>
             </GlowCard>
@@ -579,13 +579,13 @@ export const BentoShowcaseSection: React.FC = () => {
 
           <div className="flex flex-col gap-4">
             <span className="font-mono text-xs text-white uppercase tracking-widest">05 // Raw Source Code</span>
-            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="1rem">
-              <div className="p-6 flex flex-col justify-between w-full h-full">
-                <div className="flex items-center justify-between text-xs font-mono text-zinc-400 border-b border-zinc-800 pb-4">
+            <GlowCard className="shadow-2xl h-[320px] w-full" borderWidth={1} baseColor="#09090b" borderRadius="3rem" padding="0">
+              <div className="p-3 flex flex-col justify-between w-full h-full">
+                <div className="flex items-center justify-between text-sm font-mono text-zinc-300 border-b border-zinc-800 pb-3">
                   <span>05 // TSX_SOURCE_CODE</span>
-                  <span className="text-white font-bold">RAW CODE</span>
+                  <span className="text-white font-bold text-[11px] uppercase tracking-wider">RAW CODE</span>
                 </div>
-                <div className="flex-grow flex items-center justify-center py-4">
+                <div className="flex-grow flex items-center justify-center py-2">
                   <CodePanel />
                 </div>
               </div>

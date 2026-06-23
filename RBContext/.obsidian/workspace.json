@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Content For Landing Page.md",
+                "file": "Content For Footer.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Content For Landing Page"
+              "title": "Content For Footer"
             }
           }
         ],
@@ -214,8 +214,9 @@
   },
   "active": "607d88089c1f7b78",
   "lastOpenFiles": [
+    "Pasted image 20260623212638.png",
     "Color Palette.md",
-    "Content For Landing Page.md",
+    "Content For Footer.md",
     "Introduction.md",
     "Implementation.md",
     "ActiveTasks/Showcase_Component.md",

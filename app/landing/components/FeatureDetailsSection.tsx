@@ -390,11 +390,12 @@ export const FeatureDetailsSection: React.FC = () => {
           ref={lineRef}
           className="absolute top-[180px] left-0 w-full h-[calc(100%-180px)] pointer-events-none z-0 hidden md:block"
           fill="none"
+          viewBox="0 0 100 100"
           preserveAspectRatio="none"
         >
-          <path d="M 16.66% 0% L 16.66% 50% L 50% 50%" stroke="rgba(192,222,221,0.08)" strokeWidth="1" />
-          <path d="M 50% 0% L 50% 50% L 83.33% 50%" stroke="rgba(192,222,221,0.08)" strokeWidth="1" />
-          <path d="M 83.33% 0% L 83.33% 50% L 50% 100%" stroke="rgba(192,222,221,0.08)" strokeWidth="1" />
+          <path d="M 16.66 0 L 16.66 50 L 50 50" stroke="rgba(192,222,221,0.08)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+          <path d="M 50 0 L 50 50 L 83.33 50" stroke="rgba(192,222,221,0.08)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+          <path d="M 83.33 0 L 83.33 50 L 50 100" stroke="rgba(192,222,221,0.08)" strokeWidth="1" vectorEffect="non-scaling-stroke" />
         </svg>
 
         <div ref={gridRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10" style={{ perspective: "1000px" }}>

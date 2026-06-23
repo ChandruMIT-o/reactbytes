@@ -218,15 +218,6 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
       uniformsRef.current.u_mouse_influence.value = mouseInfluence;
       uniformsRef.current.u_brightness.value = brightness;
       uniformsRef.current.u_color_shift.value.set(colorR, colorG, colorB);
-
-      // Trigger a render frame (either resumes loop or draws a static frame)
-      if (animateRef.current && isVisibleRef.current) {
-        if (!paused && !isLoopingRef.current) {
-          animateRef.current();
-        } else if (paused) {
-          animateRef.current();
-        }
-      }
     }
   }, [complex, speed, scale, seed, mouseInfluence, brightness, colorR, colorG, colorB, paused]);
 
@@ -354,12 +345,6 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
         isLoopingRef.current = false;
         return;
       }
-      if (paramsRef.current.paused) {
-        // Render exactly one frame to apply uniforms, then stop looping
-        renderer.render(scene, camera);
-        isLoopingRef.current = false;
-        return;
-      }
       isLoopingRef.current = true;
       animationFrameId = requestAnimationFrame(animate);
 
@@ -374,9 +359,11 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
         handleResize();
       }
 
-      const screenWidth = uniforms.u_resolution.value.x || 1;
-      const speedBoost = 1.0 + (uniforms.u_mouse.value.x / screenWidth) * 0.8;
-      uniforms.u_time.value += 0.05 * speedBoost;
+      if (!paramsRef.current.paused) {
+        const screenWidth = uniforms.u_resolution.value.x || 1;
+        const speedBoost = 1.0 + (uniforms.u_mouse.value.x / screenWidth) * 0.8;
+        uniforms.u_time.value += 0.05 * speedBoost;
+      }
 
       renderer.render(scene, camera);
     };
@@ -396,11 +383,12 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
   }, [threeLoaded]);
 
   const hasHeight = className.includes("h-") || className.includes("height-");
+  const hasPosition = className.includes("fixed") || className.includes("absolute") || className.includes("relative") || className.includes("sticky");
 
   return (
     <div 
       ref={containerRef} 
-      className={`relative overflow-hidden w-full ${hasHeight ? "" : "h-full"} ${className}`}
+      className={`${hasPosition ? "" : "relative"} overflow-hidden w-full ${hasHeight ? "" : "h-full"} ${className}`}
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
       

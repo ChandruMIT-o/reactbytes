@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-// Declare global THREE interface for TypeScript
 declare global {
     interface Window {
         THREE: any;
@@ -10,35 +9,20 @@ declare global {
 }
 
 export interface VoidOrbProps {
-    /** Primary glow color (Hex) */
     primaryColor?: string;
-    /** Secondary swirly highlight color (Hex) */
     secondaryColor?: string;
-    /** Deep dark backstop background color (Hex) */
     accentColor?: string;
-    /** Sizing / scale factor of the main orb shape */
     fractalScale?: number;
-    /** Center offset X coordinates */
     fractalX?: number;
-    /** Center offset Y coordinates */
     fractalY?: number;
-    /** Active light orbits count (1 to 8) */
     lightCount?: number;
-    /** Luminous glow intensity factor */
     lightIntensity?: number;
-    /** Speed factor of light sources orbit */
     lightSpeed?: number;
-    /** Strength factor of shader film grain noise */
     grainStrength?: number;
-    /** High-frequency static noise size in pixels */
     grainSize?: number;
-    /** Wave morphing speed factor */
     animationSpeed?: number;
-    /** Toggle spatial orbit rotation */
     autoRotate?: boolean;
-    /** Custom CSS classes for root wrapper */
     className?: string;
-    /** Optional overlays layered in front of the background */
     children?: React.ReactNode;
 }
 
@@ -67,7 +51,7 @@ export default function VoidOrb({
 
     const [threeLoaded, setThreeLoaded] = useState(false);
 
-    // Dynamic THREE.js script injection to bypass modular environment bounds
+    // Dynamic THREE.js script injection
     useEffect(() => {
         if (window.THREE) {
             setThreeLoaded(true);
@@ -86,32 +70,24 @@ export default function VoidOrb({
         const script = document.createElement('script');
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
         script.async = true;
-        script.onload = () => {
-            setThreeLoaded(true);
-        };
+        script.onload = () => setThreeLoaded(true);
         document.head.appendChild(script);
     }, []);
 
     // Sync interactive props directly with WebGL uniform values in real-time
     useEffect(() => {
-        const THREE = window.THREE;
-        if (shaderMaterialRef.current && THREE) {
+        if (shaderMaterialRef.current && window.THREE) {
             const uniforms = shaderMaterialRef.current.uniforms;
 
-            const hexToRgb = (hex: string) => {
-                const r = parseInt(hex.slice(1, 3), 16) / 255;
-                const g = parseInt(hex.slice(3, 5), 16) / 255;
-                const b = parseInt(hex.slice(5, 7), 16) / 255;
-                return new THREE.Color(r, g, b);
-            };
-
-            uniforms.primaryColor.value = hexToRgb(primaryColor);
-            uniforms.secondaryColor.value = hexToRgb(secondaryColor);
-            uniforms.accentColor.value = hexToRgb(accentColor);
+            // OPTIMIZATION: Mutate colors in place using Three's native hex string parser.
+            // Zero object creation / Zero GC thrashing.
+            uniforms.primaryColor.value.set(primaryColor);
+            uniforms.secondaryColor.value.set(secondaryColor);
+            uniforms.accentColor.value.set(accentColor);
 
             uniforms.fractalScale.value = fractalScale;
             uniforms.fractalOffset.value.set(fractalX, fractalY);
-            uniforms.lightCount.value = parseInt(lightCount.toString(), 10);
+            uniforms.lightCount.value = Math.floor(lightCount);
             uniforms.lightIntensity.value = lightIntensity;
             uniforms.lightSpeed.value = lightSpeed;
             uniforms.grainStrength.value = grainStrength;
@@ -120,7 +96,6 @@ export default function VoidOrb({
             uniforms.autoRotate.value = autoRotate ? 1.0 : 0.0;
         }
     }, [
-        threeLoaded,
         primaryColor,
         secondaryColor,
         accentColor,
@@ -170,26 +145,18 @@ export default function VoidOrb({
         mouseRef.current = mouse;
         smoothedMouseRef.current = smoothedMouse;
 
-        const hexToRgb = (hex: string) => {
-            const r = parseInt(hex.slice(1, 3), 16) / 255;
-            const g = parseInt(hex.slice(3, 5), 16) / 255;
-            const b = parseInt(hex.slice(5, 7), 16) / 255;
-            return new THREE.Color(r, g, b);
-        };
-
-        // Custom Fragment Shader creating organic pulsating fractal space, swirly details, and orbiting light reflections
         const shaderMaterial = new THREE.ShaderMaterial({
             uniforms: {
                 iResolution: { value: new THREE.Vector2(container.clientWidth, container.clientHeight) },
                 iTime: { value: 0.0 },
                 smoothedMouse: { value: new THREE.Vector2(container.clientWidth / 2, container.clientHeight / 2) },
                 mouseDown: { value: 0.0 },
-                primaryColor: { value: hexToRgb(primaryColor) },
-                secondaryColor: { value: hexToRgb(secondaryColor) },
-                accentColor: { value: hexToRgb(accentColor) },
+                primaryColor: { value: new THREE.Color(primaryColor) },
+                secondaryColor: { value: new THREE.Color(secondaryColor) },
+                accentColor: { value: new THREE.Color(accentColor) },
                 fractalScale: { value: fractalScale },
                 fractalOffset: { value: new THREE.Vector2(fractalX, fractalY) },
-                lightCount: { value: parseInt(lightCount.toString(), 10) },
+                lightCount: { value: Math.floor(lightCount) },
                 lightIntensity: { value: lightIntensity },
                 lightSpeed: { value: lightSpeed },
                 grainStrength: { value: grainStrength },
@@ -242,38 +209,30 @@ export default function VoidOrb({
                 }
 
                 float orbShape(vec2 uv, float time) {
-                  // Adjust UV to be from -1 to 1 with aspect ratio correction
                   uv = (uv * 2.0 - 1.0);
                   uv.x *= iResolution.x / iResolution.y;
                   
-                  // Apply dynamic rotation if auto-rotate is toggled
                   if (autoRotate > 0.5) {
                     uv *= rot(time * animationSpeed * 2.0);
                   }
 
-                  // Apply scale and offset
                   uv *= fractalScale;
                   uv += fractalOffset;
                   
-                  // Create pulsating orb space
                   float d = length(uv);
                   float pulse = 0.5 + 0.1 * sin(time * animationSpeed * 2.0);
-                  
-                  // Base orb shape
                   float shape = smoothstep(pulse, pulse - 0.1, d);
-                  
-                  // Add internal glow and structural details
                   float innerGlow = smoothstep(pulse * 0.8, 0.0, d) * 0.5;
                   
-                  // Add organic swirls
                   float angle = atan(uv.y, uv.x);
                   float swirl = 0.15 * sin(angle * 8.0 + time * 3.0 * animationSpeed) * smoothstep(pulse, 0.0, d);
                   
                   return shape + innerGlow + swirl;
                 }
 
-                vec3 getLightPosition(int index, float time) {
-                  float angle = float(index) * (2.0 * PI / float(lightCount)) + time * lightSpeed;
+                // OPTIMIZATION: Passed down precalculated lightStep to keep it out of the per-pixel calculation loop
+                vec3 getLightPosition(int index, float time, float lightStep) {
+                  float angle = float(index) * lightStep + time * lightSpeed;
                   float radius = 1.5;
                   float height = sin(time * lightSpeed * 0.5 + float(index)) * 0.5;
                   return vec3(radius * cos(angle), height, radius * sin(angle));
@@ -283,14 +242,16 @@ export default function VoidOrb({
                   vec3 pos = vec3(uv.x, uv.y, 0.0);
                   float totalLight = 0.0;
                   
+                  // OPTIMIZATION: Calculated loop-invariant scalar outside loop block
+                  float lightStep = (2.0 * PI) / max(float(lightCount), 1.0);
+                  
                   for (int i = 0; i < 10; i++) {
                     if (i >= lightCount) break;
-                    vec3 lightPos = getLightPosition(i, time);
+                    vec3 lightPos = getLightPosition(i, time, lightStep);
                     float dist = length(pos - lightPos);
                     totalLight += lightIntensity / (1.0 + dist * dist * 2.0);
                   }
                   
-                  // Mouse interactivity light sweep
                   vec2 mousePos = smoothedMouse / iResolution.xy;
                   mousePos = (mousePos * 2.0 - 1.0);
                   mousePos.x *= iResolution.x / iResolution.y;
@@ -307,33 +268,24 @@ export default function VoidOrb({
                   vec2 centeredUV = (uv * 2.0 - 1.0);
                   centeredUV.x *= iResolution.x / iResolution.y;
                   
-                  // Get shape value
                   float shape = orbShape(uv, iTime);
-                  
-                  // Calculate orbiting lighting influence
                   float light = calculateLight(centeredUV, iTime);
                   
-                  // Rich color mixing combining primary, secondary and accent deep void colors
                   float orbMask = clamp(shape, 0.0, 1.0);
                   vec3 baseColor = mix(primaryColor, secondaryColor, orbMask);
                   
-                  // Highlight blending (center shadow)
-                  float highlight = clamp(pow(shape, 3.0) * 0.7, 0.0, 1.0);
+                  // OPTIMIZATION: Replaced mathematical pow(shape, 3.0) with faster algebraic multiplication
+                  float highlight = clamp((shape * shape * shape) * 0.7, 0.0, 1.0);
                   baseColor = mix(baseColor, accentColor, highlight);
-                  
-                  // Blend the entire orb structure onto the dark backdrop (accentColor)!
                   baseColor = mix(accentColor, baseColor, orbMask);
                   
-                  // Lighting overlay
                   baseColor *= light * (shape + 0.2);
                   
-                  // Procedural dynamic high-frequency static film grain
                   vec2 uvRandom = vUv;
                   uvRandom.y *= hash(vec2(uvRandom.y, iTime * 0.01));
                   float noise = hash(uvRandom * grainSize + iTime * 0.1) * grainStrength;
                   baseColor += noise - grainStrength * 0.5;
                   
-                  // Standard vignette shading
                   float vignette = uv.x * uv.y * (1.0 - uv.x) * (1.0 - uv.y);
                   vignette = clamp(pow(16.0 * vignette, 0.35), 0.0, 1.0);
                   baseColor *= vignette;
@@ -348,9 +300,7 @@ export default function VoidOrb({
         const plane = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), shaderMaterial);
         scene.add(plane);
 
-        const resizeObserver = new ResizeObserver(() => {
-            handleResize();
-        });
+        const resizeObserver = new ResizeObserver(() => handleResize());
         resizeObserver.observe(container);
 
         let animationFrameId: number;
@@ -378,26 +328,26 @@ export default function VoidOrb({
         };
     }, [threeLoaded]);
 
-    // Localized React Pointer Trackers that translate coordinates correctly inside containers
-    const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    // OPTIMIZATION: Memoized pointer listeners via useCallback
+    const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
         if (!canvasRef.current || !mouseRef.current) return;
         const rect = canvasRef.current.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
         const mouseY = rect.height - (e.clientY - rect.top);
         mouseRef.current.set(mouseX, mouseY);
-    };
+    }, []);
 
-    const handlePointerDown = () => {
+    const handlePointerDown = useCallback(() => {
         if (shaderMaterialRef.current) {
             shaderMaterialRef.current.uniforms.mouseDown.value = 1.0;
         }
-    };
+    }, []);
 
-    const handlePointerUp = () => {
+    const handlePointerUp = useCallback(() => {
         if (shaderMaterialRef.current) {
             shaderMaterialRef.current.uniforms.mouseDown.value = 0.0;
         }
-    };
+    }, []);
 
     return (
         <div
@@ -407,10 +357,10 @@ export default function VoidOrb({
             onPointerUp={handlePointerUp}
             className={`relative w-full h-full overflow-hidden select-none bg-black ${className}`}
         >
-            {/* SVG noise grain filter */}
+            {/* OPTIMIZATION: Decreased numOctaves from 4 to 2 to minimize critical rendering path layout paint cycles */}
             <svg className="absolute w-0 h-0 pointer-events-none">
                 <filter id="noise-generator-voidorb">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.80" numOctaves="4" stitchTiles="stitch" />
+                    <feTurbulence type="fractalNoise" baseFrequency="0.80" numOctaves="2" stitchTiles="stitch" />
                     <feColorMatrix type="matrix" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.45 0" />
                 </filter>
             </svg>
@@ -419,7 +369,6 @@ export default function VoidOrb({
                 style={{ filter: 'url(#noise-generator-voidorb)', mixBlendMode: 'overlay' }}
             />
 
-            {/* Load indicator spinner */}
             {!threeLoaded && (
                 <div className="absolute inset-0 bg-neutral-950/90 flex flex-col justify-center items-center z-10 transition-opacity duration-300">
                     <div className="w-10 h-10 border-2 border-white/5 border-t-white/80 rounded-full animate-spin mb-4" />
@@ -429,13 +378,11 @@ export default function VoidOrb({
                 </div>
             )}
 
-            {/* Main WebGL Canvas */}
             <canvas
                 ref={canvasRef}
                 className="absolute top-0 left-0 w-full h-full block z-0"
             />
 
-            {/* Content overlay slot */}
             {children && (
                 <div className="relative w-full h-full z-[2] pointer-events-auto">
                     {children}

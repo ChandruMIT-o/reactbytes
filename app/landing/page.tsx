@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 
 import dynamic from "next/dynamic";
-import FbmNoise from "../meta/background/liquid/FbmNoise";
 import LazySection from "./components/LazySection";
 import CreativeNavbar from "./components/CreativeNavbar";
 import ScrollTimeline from "./components/ScrollTimeline";
@@ -186,21 +185,6 @@ export default function LandingPage() {
     <SmoothScrollProvider>
       <div className="relative min-h-screen bg-[#060010] text-[#f2eee9] font-sans selection:bg-[#c0dedd]/30 selection:text-white overflow-x-hidden">
 
-        {/* Root-level FbmNoise shader backdrop */}
-        <FbmNoise
-          complex={false}
-          speed={speed}
-          scale={scale}
-          brightness={brightness}
-          colorR={colorR}
-          colorG={colorG}
-          colorB={colorB}
-          mouseInfluence={0.5}
-          paused={activeSection === "marquee" || activeSection === "production-ready"}
-          observeVisibility={false}
-          className="fixed inset-0 z-0 w-full h-full"
-        />
-
         {/* Floating Layout Indicators */}
         {/* <CreativeNavbar activeSection={activeSection} /> */}
         <ScrollTimeline sections={sectionsList} activeSection={activeSection} />
@@ -214,15 +198,15 @@ export default function LandingPage() {
             <HeroSection />
           </LazySection>
 
-          {/* Features — GSAP staggered cards, scroll-driven title, circuit SVG lines */}
-          <LazySection id="features">
-            <FeatureDetailsSection />
-          </LazySection>
-
           {/* Showcase — pinned horizontal scroll gallery (no LazySection wrapper — GSAP pin needs direct DOM) */}
           <div id="marquee">
             <InteractiveShowcaseSection />
           </div>
+
+          {/* Features — GSAP staggered cards, scroll-driven title, circuit SVG lines */}
+          <LazySection id="features">
+            <FeatureDetailsSection />
+          </LazySection>
 
           {/* Shader Playground — interactive WebGL controls */}
           <LazySection id="shader-playground">

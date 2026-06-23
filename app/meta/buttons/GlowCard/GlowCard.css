@@ -122,7 +122,7 @@
   align-items: center;
   justify-content: center;
   color: white;
-  padding: 2rem;
+  padding: var(--card-padding, 2rem);
   z-index: 1;
 }
 

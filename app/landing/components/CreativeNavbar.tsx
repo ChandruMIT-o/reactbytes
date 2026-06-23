@@ -52,7 +52,7 @@ export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection })
       }}
       className={`fixed left-0 right-0 mx-auto z-50 flex items-center justify-between transition-[background-color,border-color,backdrop-filter,box-shadow] duration-500 ease-in-out ${isScrolled
         ? "top-4 w-[92%] md:w-[80%] max-w-5xl px-6 py-2.5 border border-white/10 bg-[#060010]/70 backdrop-blur-md rounded-full shadow-[0_12px_40px_0_rgba(0,0,0,0.5)]"
-        : "top-0 w-full px-6 md:px-12 py-4 border border-transparent bg-transparent backdrop-blur-none rounded-none shadow-none"
+        : "top-0 w-full px-6 md:px-12 py-2 border border-transparent bg-transparent bg-[#060010]/40 backdrop-blur-lg rounded-none shadow-none"
         }`}
     >
       {/* Brand logo container */}
@@ -85,14 +85,14 @@ export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection })
             <a
               key={item.id}
               href={`#${item.id}`}
-              className={`relative py-1 transition-colors duration-300 ${isActive ? "text-[#c0dedd]" : "hover:text-white"
+              className={`relative py-1 transition-colors duration-300 ${isActive ? "text-[#e6dff1]" : "hover:text-white"
                 }`}
             >
               {item.label}
               {isActive && (
                 <motion.span
                   layoutId="activeNavIndicator"
-                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#c0dedd]"
+                  className="absolute bottom-0 left-0 right-0 h-[1.5px] bg-[#e6dff1]"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}

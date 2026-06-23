@@ -2,16 +2,17 @@
 
 import React, { useRef, useState } from "react";
 import Image from "next/image";
-import { ArrowUp, ArrowUpRight } from "lucide-react";
+import { ArrowUp, ChevronRight, Send } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import GradientText from "@/app/components/textfields/GradientText";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, useGSAP);
 }
 
-// Custom brand SVG Icons for socials
+// Custom brand SVG Icons for socials, simplified to feel more tech-focused
 const GithubIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { size?: number | string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -20,6 +21,7 @@ const GithubIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { s
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
@@ -29,7 +31,7 @@ const GithubIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { s
   </svg>
 );
 
-const TwitterIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { size?: number | string }) => (
+const InstagramIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { size?: number | string }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -37,11 +39,14 @@ const TwitterIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { 
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
   >
-    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
   </svg>
 );
 
@@ -53,6 +58,7 @@ const LinkedinIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & {
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
@@ -71,6 +77,7 @@ const DiscordIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { 
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
+    strokeWidth="1.5"
     strokeLinecap="round"
     strokeLinejoin="round"
     {...props}
@@ -80,65 +87,40 @@ const DiscordIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { 
   </svg>
 );
 
-// Structured Links
-const FOOTER_LINKS = [
-  {
-    title: "Product",
-    links: [
-      { label: "Technology", href: "#features" },
-      { label: "Integrations", href: "#marquee" },
-      { label: "Releases", href: "#" },
-      { label: "Status", href: "#" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Docs", href: "#" },
-      { label: "API Reference", href: "#" },
-      { label: "Tutorials", href: "#" },
-      { label: "System Guide", href: "#specs" },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "Team", href: "#" },
-      { label: "Culture", href: "#" },
-      { label: "Jobs", href: "#" },
-      { label: "Press Kit", href: "#" },
-    ],
-  },
-  {
-    title: "Legal",
-    links: [
-      { label: "Imprint", href: "#" },
-      { label: "Data Policy", href: "#" },
-      { label: "Cookie Policy", href: "#" },
-      { label: "Accessibility", href: "#" },
-      { label: "Terms of Use", href: "#" },
-    ],
-  },
-];
+// Minimalist, visible but subtle tech watermark SVG
+const SubtleWatermarkTexture = () => (
+  <svg width="100%" height="100%" className="absolute inset-0 z-0 pointer-events-none opacity-10 filter blur-[0.5px]">
+    <pattern id="pattern-hex" patternUnits="userSpaceOnUse" width="80" height="80" patternTransform="scale(1) rotate(15)">
+      <path d="M0,0 M40,20 L60,40 L40,60 L20,40 Z M0,40 L20,60 L0,80" fill="none" stroke="#2a2a2a" strokeWidth="0.5" />
+      <circle cx="40" cy="40" r="1.5" fill="#2a2a2a" />
+      <circle cx="80" cy="80" r="1.5" fill="#2a2a2a" />
+    </pattern>
+    <rect width="100%" height="100%" fill="url(#pattern-hex)" />
+  </svg>
+);
 
 export const CreativeFooter: React.FC = () => {
   const footerRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [email, setEmail] = useState("");
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [message, setMessage] = useState("");
+  const [isSent, setIsSent] = useState(false);
   const [latency, setLatency] = useState(14);
   const [isDiagnosing, setIsDiagnosing] = useState(false);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+  const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
   };
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    setIsSubscribed(true);
-    setEmail("");
+    if (!message) return;
+    setIsSent(true);
+    setMessage("");
+
+    setTimeout(() => {
+      setIsSent(false);
+    }, 4000);
   };
 
   const runDiagnostics = () => {
@@ -187,77 +169,71 @@ export const CreativeFooter: React.FC = () => {
   );
 
   const socialItems = [
-    { label: "Discord", icon: <DiscordIcon size={16} strokeWidth={1.5} />, href: "#" },
-    { label: "Twitter", icon: <TwitterIcon size={16} strokeWidth={1.5} />, href: "#" },
-    { label: "GitHub", icon: <GithubIcon size={16} strokeWidth={1.5} />, href: "https://github.com/ChandruMIT-o/reactbytes" },
-    { label: "LinkedIn", icon: <LinkedinIcon size={16} strokeWidth={1.5} />, href: "#" },
+    { label: "Discord", icon: <DiscordIcon strokeWidth={1.5} />, href: "#" },
+    { label: "Instagram", icon: <InstagramIcon strokeWidth={1.5} />, href: "#" },
+    { label: "GitHub", icon: <GithubIcon strokeWidth={1.5} />, href: "https://github.com/ChandruMIT-o/reactbytes" },
+    { label: "LinkedIn", icon: <LinkedinIcon strokeWidth={1.5} />, href: "#" },
   ];
 
   return (
     <footer
       ref={footerRef}
-      className="relative w-full pt-16 pb-10 bg-transparent text-zinc-400 font-sans z-20 overflow-hidden"
+      className="relative w-full pt-16 pb-10 bg-black text-zinc-400 font-sans z-20 overflow-hidden"
     >
-      <div ref={containerRef} className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex flex-col">
+      {/* A clean, visible but subtle tech pattern that feels more intentional than 
+        a faint logo mask. Look carefully at the background texture in the ref.
+      */}
+      <SubtleWatermarkTexture />
+
+      <div ref={containerRef} className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex flex-col">
 
         {/* ====================================================================
-            1. TOP HERO CALL TO ACTION (Centered typography + Ambient Glow)
+            1. TOP HERO CALL TO ACTION (Improved, Inspired by Ref)
             ==================================================================== */}
         <div className="relative w-full py-20 md:py-28 flex flex-col items-center justify-center text-center overflow-hidden gsap-reveal">
-
-          {/* Spatial blur gradient glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] md:w-[480px] h-[350px] md:h-[480px] pointer-events-none select-none mix-blend-screen opacity-[0.12] filter blur-[90px] bg-gradient-to-tr from-[#c0dedd] via-[#e6dff1] to-white rounded-full z-0" />
-
-          {/* Volumetric Brand Symbol: Sharp Top Half */}
-          <div
-            className="absolute top-[48%] md:top-[10%] left-1/2 -translate-x-1/2 w-[320px] md:w-[460px] h-[320px] md:h-[460px] pointer-events-none select-none opacity-20 z-0"
-            style={{
-              WebkitMaskImage: "linear-gradient(to bottom, black 25%, transparent 75%)",
-              maskImage: "linear-gradient(to bottom, black 25%, transparent 75%)",
-            }}
-          >
-            <Image
-              src="/logo.svg"
-              alt="Brand Emblem Sharp Top"
-              width={460}
-              height={460}
-              className="w-full h-full object-contain"
-            />
-          </div>
-
-          {/* Volumetric Brand Symbol: Blurred Bottom Half */}
-          <div
-            className="absolute top-[48%] md:top-[52%] left-1/2 -translate-x-1/2 w-[320px] md:w-[460px] h-[320px] md:h-[460px] pointer-events-none select-none opacity-15 filter blur-[15px] z-0"
-            style={{
-              WebkitMaskImage: "linear-gradient(to bottom, transparent 25%, black 75%)",
-              maskImage: "linear-gradient(to bottom, transparent 25%, black 75%)",
-            }}
-          >
-            <Image
-              src="/logo.svg"
-              alt="Brand Emblem Blurred Bottom"
-              width={460}
-              height={460}
-              className="w-full h-full object-contain"
-            />
-          </div>
-
-          <h2 className="relative z-10 text-4xl md:text-6xl font-sans font-black tracking-tight text-white max-w-2xl mb-4 select-none uppercase">
-            Built for What Comes Next.
+          {/* Main Title, Bold like Ref */}
+          <h2 className="relative z-10 text-4xl md:text-6xl font-sans font-extrabold tracking-tight text-white max-w-2xl mb-5 uppercase select-none">
+            <GradientText
+              colors={["#5227FF", "#FF9FFC", "#B497CF"]}
+              animationSpeed={2}
+              showBorder={false}
+              className="font-extrabold tracking-tight"
+            >
+              The building blocks for remarkable products.
+            </GradientText>
           </h2>
-          <p className="relative z-10 text-xs md:text-sm font-mono tracking-wider text-zinc-500 max-w-md mb-8 select-none uppercase">
-            Future-ready tools for teams moving at the speed of innovation.
+          {/* Subtitle, Clean & Centered like Ref */}
+          <p className="relative z-10 text-xs md:text-sm font-sans tracking-wide text-zinc-500 max-w-md mb-8 select-none">
+            Free access to every component, block, and template. No payment, monthly updates forever.
           </p>
-          <a
-            href="/"
-            className="relative z-10 px-8 py-3 bg-[#f2eee9] hover:bg-white text-black font-mono font-bold text-xs uppercase tracking-widest rounded-sm transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_12px_25px_-5px_rgba(255,255,255,0.06)] cursor-pointer"
-          >
-            Get Started
-          </a>
+
+          {/* New Buttons Layout, Inspired by Ref */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
+            <a
+              href="/"
+              className="relative group px-8 py-3.5 bg-white text-black font-mono font-extrabold text-xs uppercase tracking-widest rounded-md overflow-hidden flex items-center gap-2"
+            >
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
+
+              <span className="relative z-10">Get Lifetime Access</span>
+              <ChevronRight
+                size={16}
+                className="relative z-10 transition-transform group-hover:translate-x-1"
+                strokeWidth={2.5}
+              />
+            </a>
+            <a
+              href="/"
+              className="relative z-10 group px-8 py-3.5 bg-zinc-900/50 hover:bg-zinc-900 text-white font-mono font-medium text-xs uppercase tracking-widest rounded-md border border-white/5 hover:border-white/10 transition-all duration-300 cursor-pointer flex items-center gap-2"
+            >
+              Browse Docs
+              <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" strokeWidth={2} />
+            </a>
+          </div>
         </div>
 
         {/* ====================================================================
-            2. GRID-DIVIDER SOCIALS ROW (Tabular columns split by vertical lines)
+            2. GRID-DIVIDER SOCIALS ROW (Cleaned, simplified colors)
             ==================================================================== */}
         <div className="grid grid-cols-2 md:grid-cols-4 border-t border-b border-white/10 gsap-reveal">
           {socialItems.map((social) => (
@@ -266,98 +242,84 @@ export const CreativeFooter: React.FC = () => {
               href={social.href}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-between p-6 border-b border-white/10 md:border-b-0 md:border-r border-white/10 even:border-r-0 md:even:border-r last:border-r-0 hover:bg-white/[0.012] transition-all group font-mono text-xs uppercase tracking-widest text-[#e6dff1] cursor-pointer"
+              className="flex items-center justify-between p-6 border-b border-white/10 md:border-b-0 md:border-r border-white/10 even:border-r-0 md:even:border-r last:border-r-0 hover:bg-zinc-900 transition-all group font-mono text-xs uppercase tracking-widest text-zinc-400 cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 {social.icon}
-                <span>{social.label}</span>
+                <span className="font-semibold">{social.label}</span>
               </div>
-              <ArrowUpRight size={14} className="text-zinc-500 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+              <ChevronRight size={14} className="text-zinc-600 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
             </a>
           ))}
         </div>
 
         {/* ====================================================================
-            3. GRID-DIVIDER DIRECTORIES SECTION (Vertical pane splits)
+            3. CLEAN ASYMMETRICAL INTERFACE ZONE (More premium, cleaned colors)
             ==================================================================== */}
-        <div className="grid grid-cols-2 md:grid-cols-4 border-b border-white/10 gsap-reveal">
-          {FOOTER_LINKS.map((group) => (
-            <div
-              key={group.title}
-              className="p-8 flex flex-col gap-6 border-b border-white/10 md:border-b-0 md:border-r border-white/10 even:border-r-0 md:even:border-r last:border-r-0 last:border-b-0 [&:nth-last-child(2)]:border-b-0"
-            >
-              <span className="font-mono text-[10px] tracking-widest uppercase text-zinc-500 font-bold select-none">
-                {group.title}
-              </span>
-              <ul className="flex flex-col gap-3">
-                {group.links.map((link) => (
-                  <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-xs md:text-sm text-zinc-400 hover:text-white hover:translate-x-0.5 transition-all duration-300 block w-fit"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 py-16 gap-12 lg:gap-8 border-b border-white/10 items-center gsap-reveal">
 
-        {/* ====================================================================
-            4. BOTTOM BRANDING & HIGH-CONTRAST NEWSLETTER INPUT
-            ==================================================================== */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center py-12 gap-8 border-b border-white/10 gsap-reveal">
-
-          {/* Brand Info */}
-          <div className="flex flex-col gap-3.5 max-w-md">
+          {/* Left Side: Brand Identity block */}
+          <div className="lg:col-span-4 flex flex-col gap-4">
             <div className="flex items-center gap-3 select-none">
               <Image
                 src="/logo.svg"
                 alt="React Bytes Logo"
-                width={16}
-                height={16}
+                width={20}
+                height={20}
                 className="w-auto h-5 object-contain"
               />
-              <span className="font-sans font-black text-xl tracking-tight text-white uppercase">
+              <span className="font-sans font-extrabold text-2xl tracking-tight text-white uppercase">
                 React Bytes.
               </span>
             </div>
-            <p className="text-xs leading-relaxed text-zinc-500">
-              In the new era of technology we look to the future with hardware-accelerated interfaces, crafting UI modules that render at the speed of light.
+            <p className="text-xs leading-relaxed text-zinc-500 max-w-sm">
+              Crafting premium hardware-accelerated interfaces for next-generation platforms. Performance and elegance by design.
             </p>
           </div>
 
-          {/* High-Contrast Input Form */}
-          <form onSubmit={handleSubscribe} className="flex gap-2 w-full lg:max-w-md">
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={handleEmailChange}
-              placeholder="NAME@EMAIL.COM"
-              className="flex-grow bg-white text-black placeholder-zinc-400 text-xs font-mono py-3.5 px-4 rounded-sm focus:outline-none uppercase tracking-wider"
-            />
-            <button
-              type="submit"
-              disabled={isSubscribed}
-              className="bg-black hover:bg-zinc-950 border border-white/20 text-white disabled:border-zinc-800 disabled:text-zinc-600 px-6 py-3.5 rounded-sm text-xs font-mono uppercase tracking-widest transition-all duration-300 font-bold active:scale-95 cursor-pointer"
-            >
-              {isSubscribed ? "CONNECTED" : "SUBSCRIBE"}
-            </button>
+          {/* Right Side: Reimagined High-End Message Input Form */}
+          <form onSubmit={handleSendMessage} className="lg:col-span-8 w-full flex flex-col gap-2">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-zinc-600 font-bold select-none mb-1 block">
+              // SECURE COMMUNICATION CHANNEL
+            </span>
+            <div className="relative flex items-center w-full group">
+              <input
+                type="text"
+                required
+                value={message}
+                onChange={handleMessageChange}
+                placeholder="Type your message or optional email terminal..."
+                className="w-full bg-zinc-950 border border-white/10 hover:border-white/20 focus:border-white/30 text-white placeholder-zinc-700 text-sm font-mono py-4 pl-5 pr-36 rounded-sm focus:outline-none transition-all duration-300 tracking-wide backdrop-blur-xs"
+              />
+              <div className="absolute right-2 flex items-center gap-2">
+                <button
+                  type="submit"
+                  disabled={isSent}
+                  className="bg-white hover:bg-white text-black disabled:bg-zinc-800 disabled:text-zinc-600 px-5 py-2.5 rounded-xs text-xs font-mono uppercase tracking-wider transition-all duration-300 font-black flex items-center gap-2 active:scale-95 cursor-pointer"
+                >
+                  {isSent ? (
+                    "TRANSMITTED"
+                  ) : (
+                    <>
+                      SEND MAIL
+                      <Send size={12} className="stroke-[2.5]" />
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </form>
         </div>
 
         {/* ====================================================================
-            5. SUB-FOOTER ROW (Diagnostics, Copyright & Top Scroll)
+            4. SUB-FOOTER ROW (More minimalist)
             ==================================================================== */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 text-xs font-mono gsap-reveal">
 
           <div className="flex flex-col sm:flex-row items-center gap-4 text-zinc-500">
-            <span>© {new Date().getFullYear()} React Bytes. All rights reserved.</span>
+            <span className="font-bold">© {new Date().getFullYear()} React Bytes Inc.</span>
             <div className="hidden sm:block w-1 h-1 rounded-full bg-zinc-800" />
-            <span className="text-zinc-600">STABLE_BUILD_4.02</span>
+            <span className="text-zinc-700">STABLE_BUILD_4.02</span>
           </div>
 
           <div className="flex items-center gap-6">
@@ -366,7 +328,7 @@ export const CreativeFooter: React.FC = () => {
             <button
               onClick={runDiagnostics}
               disabled={isDiagnosing}
-              className="flex items-center gap-3 bg-zinc-900/40 border border-white/5 rounded-full px-4 py-1.5 hover:border-white/10 transition-all text-[10px] text-[#e6dff1]/90 select-none group active:scale-95 cursor-pointer"
+              className="flex items-center gap-3 bg-zinc-950 border border-white/5 rounded-full px-4 py-1.5 hover:border-white/10 transition-all text-[10px] text-zinc-500 select-none group active:scale-95 cursor-pointer"
               title="Click to diagnostic latency"
             >
               <span className="relative flex h-1.5 w-1.5">
@@ -375,8 +337,8 @@ export const CreativeFooter: React.FC = () => {
               </span>
               <span className="flex items-center gap-1.5">
                 ALL SYSTEMS OPERATIONAL
-                <span className="text-zinc-700">//</span>
-                <span className="text-[#c0dedd]">
+                <span className="text-zinc-800">//</span>
+                <span className="text-zinc-200">
                   {isDiagnosing ? "Pinging..." : `${latency}ms`}
                 </span>
               </span>
@@ -385,10 +347,10 @@ export const CreativeFooter: React.FC = () => {
             {/* Return to top arrow */}
             <button
               onClick={handleScrollTop}
-              className="p-3 rounded-full bg-zinc-900 border border-white/5 hover:border-white/20 text-zinc-400 hover:text-white transition-all active:scale-90 cursor-pointer"
+              className="p-3 rounded-full bg-zinc-950 border border-white/5 hover:border-white/10 text-zinc-600 hover:text-white transition-all active:scale-90 cursor-pointer"
               aria-label="Scroll to top"
             >
-              <ArrowUp size={14} />
+              <ArrowUp size={14} strokeWidth={2.5} />
             </button>
           </div>
         </div>
