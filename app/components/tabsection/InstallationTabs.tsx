@@ -21,10 +21,10 @@ interface Token {
 const tokenizeCommand = (code: string): Token[] => {
 	const keywordSet = /^(const|let|var|function|return|if|else|for|while|new|this|true|false|null|undefined|async|await|import|export|from|class|extends|pnpm|npm|yarn|bun|add|install|i|git|clone)$/;
 	const tokenRegex = /(['"`])(?:\\.|[^\\])*?\1|[a-zA-Z_$][a-zA-Z0-9_$]*|\s+|[^a-zA-Z_$'"`\s]+/g;
-	
+
 	const tokens = code.match(tokenRegex) || [];
 	const counts: { [key: string]: number } = {};
-	
+
 	return tokens.map((t, idx) => {
 		if (/^\s+$/.test(t)) {
 			return {
@@ -35,7 +35,7 @@ const tokenizeCommand = (code: string): Token[] => {
 		}
 		counts[t] = (counts[t] || 0) + 1;
 		const layoutId = `${t}-${counts[t]}`;
-		
+
 		let className = "text-rb-accent-1"; // default
 		if (/^['"`]/.test(t)) {
 			className = "text-emerald-400"; // string
@@ -48,7 +48,7 @@ const tokenizeCommand = (code: string): Token[] => {
 		} else {
 			className = "text-rb-accent-2/50"; // operator/symbol
 		}
-		
+
 		return {
 			text: t,
 			className,
@@ -216,6 +216,50 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 		});
 	};
 
+	const renderPkgSelector = (classNameStyle: string) => {
+		if (!showPkgSelector) return null;
+		return (
+			<div className={`bg-rb-neutral-3 p-1.5 pb-0 flex gap-1.5 w-max ${classNameStyle}`}>
+				{(["pnpm", "npm", "yarn", "bun"] as const).map((pkg) => (
+					<motion.button
+						key={pkg}
+						onClick={() => handlePkgChange(pkg)}
+						className="relative px-2.5 py-1.5 text-sm font-medium rounded-full outline-none transition-colors duration-300 cursor-pointer"
+						style={{
+							color:
+								activePkgManager === pkg
+									? "var(--rb-neutral-2)"
+									: "var(--rb-accent-2)",
+						}}
+						whileHover="hover"
+					>
+						<span className="relative z-[1]">{pkg}</span>
+
+						{activePkgManager === pkg && (
+							<motion.div
+								layoutId="pkg-active-pill"
+								className="absolute inset-0 bg-rb-accent-1 rounded-full z-0"
+								transition={springConfig}
+							/>
+						)}
+
+						{activePkgManager !== pkg && (
+							<motion.div
+								className="absolute inset-0 rounded-full z-0"
+								variants={{
+									hover: {
+										backgroundColor: "var(--rb-neutral-2)",
+									},
+								}}
+								transition={{ duration: 0.2 }}
+							/>
+						)}
+					</motion.button>
+				))}
+			</div>
+		);
+	};
+
 	return (
 		<div className="w-full max-w-4xl font-sans">
 			{/* Tabs Header Row */}
@@ -260,51 +304,12 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 					))}
 				</div>
 
-				{/* Package Manager Tabs */}
-				{showPkgSelector && (
-					<div className="bg-rb-neutral-3 p-2 pb-0 rounded-t-[20px] flex gap-1.5 w-max sm:self-end">
-						{(["pnpm", "npm", "yarn", "bun"] as const).map((pkg) => (
-							<motion.button
-								key={pkg}
-								onClick={() => handlePkgChange(pkg)}
-								className="relative px-2.5 py-1.5 text-sm font-medium rounded-full outline-none transition-colors duration-300 cursor-pointer"
-								style={{
-									color:
-										activePkgManager === pkg
-											? "var(--rb-neutral-2)"
-											: "var(--rb-accent-2)",
-								}}
-								whileHover="hover"
-							>
-								<span className="relative z-[1]">{pkg}</span>
-
-								{activePkgManager === pkg && (
-									<motion.div
-										layoutId="pkg-active-pill"
-										className="absolute inset-0 bg-rb-accent-1 rounded-full z-0"
-										transition={springConfig}
-									/>
-								)}
-
-								{activePkgManager !== pkg && (
-									<motion.div
-										className="absolute inset-0 rounded-full z-0"
-										variants={{
-											hover: {
-												backgroundColor: "var(--rb-neutral-4)",
-											},
-										}}
-										transition={{ duration: 0.2 }}
-									/>
-								)}
-							</motion.button>
-						))}
-					</div>
-				)}
+				{/* Package Manager Tabs (Desktop top position) */}
+				{renderPkgSelector("hidden sm:flex rounded-t-[20px] sm:self-end")}
 			</div>
 
 			{/* Main Content Outer Wrapper (Acts as the thick grey border) */}
-			<div className="bg-rb-neutral-3 p-1.5 rounded-[24px] sm:rounded-tl-none sm:rounded-tr-none w-full relative">
+			<div className={`bg-rb-neutral-3 p-1.5 rounded-[24px] sm:rounded-tl-none sm:rounded-tr-none w-full relative ${showPkgSelector ? 'rounded-b-none sm:rounded-b-[24px]' : ''}`}>
 				{/* Actual Content Area */}
 				<div
 					ref={containerRef}
@@ -365,6 +370,9 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 					)}
 				</button>
 			</div>
+
+			{/* Package Manager Tabs (Mobile bottom position) */}
+			{renderPkgSelector("flex sm:hidden rounded-b-[20px] mx-auto pb-1.5")}
 		</div>
 	);
 };

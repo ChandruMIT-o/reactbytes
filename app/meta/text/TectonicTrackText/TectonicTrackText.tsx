@@ -53,9 +53,8 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
     const mouseRef = useRef({ x: -1000, y: -1000, active: false });
     const animationFrameId = useRef<number | null>(null);
 
-    // Padding margins to safely accommodate extreme horizontal accordion expansions
-    const paddingX = fontSize * 0.8;
-    const paddingY = fontSize * 0.4;
+    const currentScaleRef = useRef(1);
+    const currentFontSizeRef = useRef(fontSize);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -66,10 +65,27 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
             const ctx = canvas.getContext("2d");
             if (!ctx) return;
 
-            const fontStyle = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
+            // Measure original size to determine scaling
+            ctx.font = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
+            const characters = text.split("");
+            const baseTextWidth = characters.reduce((sum, char) => sum + ctx.measureText(char).width, 0);
+
+            const containerWidth = container.clientWidth || 300;
+
+            // Calculate scale factor: we want baseTextWidth + safety padding (30px) to fit
+            const targetFitWidth = containerWidth - 30;
+            let scale = 1;
+            if (baseTextWidth > targetFitWidth && targetFitWidth > 0) {
+                scale = targetFitWidth / baseTextWidth;
+            }
+            currentScaleRef.current = scale;
+            
+            const activeFontSize = Math.max(12, fontSize * scale);
+            currentFontSizeRef.current = activeFontSize;
+
+            const fontStyle = `900 ${activeFontSize}px "Space Grotesk", -apple-system, sans-serif`;
             ctx.font = fontStyle;
 
-            const characters = text.split("");
             const initialNodes = characters.map((char) => {
                 const w = ctx.measureText(char).width;
                 return {
@@ -83,8 +99,8 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
                 };
             });
 
-            const containerWidth = container.clientWidth || 300;
-            const canvasHeight = fontSize + paddingY * 2;
+            const activePaddingY = activeFontSize * 0.4;
+            const canvasHeight = activeFontSize + activePaddingY * 2;
             const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
 
             canvas.width = containerWidth * dpr;
@@ -110,7 +126,7 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
         return () => {
             observer.disconnect();
         };
-    }, [text, fontSize, paddingY]);
+    }, [text, fontSize, maxTrackingExpansion, maxScaleX]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -134,6 +150,11 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
                 return;
             }
 
+            const activeScale = currentScaleRef.current;
+            const activeFontSize = currentFontSizeRef.current;
+            const activeInfluenceRadius = influenceRadius * activeScale;
+            const activeMaxTrackingExpansion = maxTrackingExpansion * activeScale;
+
             // 1. CALCULATE HORIZONTAL PRESSURE DISTRIBUTION FIELD
             let calculatedTotalWordWidth = 0;
 
@@ -146,9 +167,9 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
 
                 let targetedExpansionState = 0;
 
-                if (mouse.active && distance < influenceRadius) {
+                if (mouse.active && distance < activeInfluenceRadius) {
                     // Smooth bell-curve Gaussian profile for organic, smooth-step spacing transitions
-                    const normalizeDistance = distance / influenceRadius;
+                    const normalizeDistance = distance / activeInfluenceRadius;
                     targetedExpansionState = Math.pow(Math.cos(normalizeDistance * Math.PI / 2), 2);
                 }
 
@@ -163,7 +184,7 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
 
                 // Linearly interpolate dynamic structural footprint width
                 const expandedGlyphWidth = node.baseWidth * (1 + (maxScaleX - 1) * node.expansion);
-                const expandedTrackingPadding = maxTrackingExpansion * node.expansion;
+                const expandedTrackingPadding = activeMaxTrackingExpansion * node.expansion;
 
                 node.currentWidth = expandedGlyphWidth + expandedTrackingPadding;
                 calculatedTotalWordWidth += node.currentWidth;
@@ -178,15 +199,16 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
 
             // 2. MODERN RENDER MATRIX PASSTHROUGH
             const centerY = height / 2;
-            const baselineY = centerY + fontSize * 0.45;
+            const baselineY = centerY + activeFontSize * 0.45;
+            const activePaddingX = activeFontSize * 0.8;
 
             // Draw Minimalist Architectural Tech Baseline Rule
             ctx.save();
             ctx.strokeStyle = lineColor;
             ctx.lineWidth = 1;
             ctx.beginPath();
-            ctx.moveTo(paddingX * 0.5, baselineY);
-            ctx.lineTo(width - paddingX * 0.5, baselineY);
+            ctx.moveTo(activePaddingX * 0.5, baselineY);
+            ctx.lineTo(width - activePaddingX * 0.5, baselineY);
             ctx.stroke();
             ctx.restore();
 
@@ -219,7 +241,7 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
 
                 // Render Crisp Solid Text Glyph Face
                 ctx.save();
-                ctx.font = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
+                ctx.font = `900 ${activeFontSize}px "Space Grotesk", -apple-system, sans-serif`;
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
                 ctx.fillStyle = color;

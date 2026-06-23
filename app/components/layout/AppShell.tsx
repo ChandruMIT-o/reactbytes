@@ -294,7 +294,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 				{/* Center Content - Scrollable */}
 				<main
 					ref={scrollContainerRef}
-					className="flex-1 h-full w-full overflow-y-auto px-4 md:pl-10 md:pr-5 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
+					className="flex-1 h-full w-full relative overflow-y-auto px-4 md:pl-10 md:pr-5 pt-6 scrollbar-none hover:scrollbar-thin scrollbar-thumb-rb-neutral-4 scrollbar-track-transparent scroll-smooth"
 				>
 					<div className="max-w-5xl mx-auto pb-40">
 						<Suspense fallback={<BallWaveLoader />}>

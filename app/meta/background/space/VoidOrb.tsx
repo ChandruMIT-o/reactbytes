@@ -58,10 +58,13 @@ export default function VoidOrb({
             return;
         }
 
-        const existingScript = document.querySelector('script[src*="three.min.js"]');
+        const existingScript = document.querySelector('script[src*="three.min.js"]') as HTMLScriptElement;
         if (existingScript) {
             const handleLoad = () => setThreeLoaded(true);
             existingScript.addEventListener('load', handleLoad);
+            if (window.THREE) {
+                setThreeLoaded(true);
+            }
             return () => {
                 existingScript.removeEventListener('load', handleLoad);
             };

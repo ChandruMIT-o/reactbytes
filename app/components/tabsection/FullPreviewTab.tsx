@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { X, ChevronRight, ChevronLeft, Play, Search, ArrowLeft, ArrowRight, Monitor, Tablet, Smartphone, MoveHorizontal } from "lucide-react";
+import { X, ChevronRight, ChevronLeft, Play, Search, ArrowLeft, ArrowRight, Monitor, Tablet, Smartphone, MoveHorizontal, Sliders } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { ComponentRegistry } from "../layout/ComponentRegistry";
@@ -134,15 +134,15 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                     <X size={20} className="group-hover:scale-110 transition-transform" />
                                 </button>
 
-                                <div className="flex flex-col">
+                                 <div className="flex flex-col">
                                     <span className="text-[10px] uppercase tracking-widest text-rb-accent-2/40 font-bold">{currentCategory}</span>
-                                    <h2 className="text-xl font-bold tracking-tight">{currentItem?.label || "Preview"}</h2>
+                                    <h2 className="text-base md:text-xl font-bold tracking-tight">{currentItem?.label || "Preview"}</h2>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-3">
                                 {/* Device Switcher */}
-                                <div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0 shadow-xl border border-rb-neutral-4">
+                                <div className="hidden md:flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0 shadow-xl border border-rb-neutral-4">
                                     <button
                                         onClick={() => setPreviewMode("desktop")}
                                         className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
@@ -186,7 +186,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 </div>
 
                                 <button
-                                    className="p-3 rounded-full bg-rb-neutral-3/80 backdrop-blur-md text-rb-accent-2 border border-rb-neutral-4 hover:bg-rb-neutral-4 transition-all group shadow-xl"
+                                    className="hidden md:block p-3 rounded-full bg-rb-neutral-3/80 backdrop-blur-md text-rb-accent-2 border border-rb-neutral-4 hover:bg-rb-neutral-4 transition-all group shadow-xl"
                                     title="Search Components"
                                 >
                                     <Search size={20} className="group-hover:scale-110 transition-transform" />
@@ -195,7 +195,10 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                         </div>
 
                         {/* Preview Content Container */}
-                        <div className={`flex-1 flex items-center justify-center overflow-hidden transition-all duration-500 ${previewMode !== "desktop" ? "bg-rb-neutral-2 canvas-grid w-full h-full" : "w-full h-full"}`}>
+                        <div 
+                            style={{ paddingBottom: isMobile && isPaneOpen ? "50vh" : "0px" }}
+                            className={`flex-1 flex items-center justify-center overflow-hidden transition-all duration-500 ${previewMode !== "desktop" ? "bg-rb-neutral-2 canvas-grid w-full h-full" : "w-full h-full"}`}
+                        >
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={pathname + "-" + previewMode}
@@ -265,10 +268,10 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 {prevItem && (
                                     <button
                                         onClick={() => handleNavigate(prevItem.id)}
-                                        className="flex items-center gap-3 px-6 py-3 rounded-full bg-rb-neutral-3/40 backdrop-blur-md text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-rb-neutral-3 transition-all group shadow-lg"
+                                        className="flex items-center gap-2 px-3 md:px-6 py-3 rounded-full bg-rb-neutral-3/40 backdrop-blur-md text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-rb-neutral-3 transition-all group shadow-lg"
                                     >
-                                        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                                        <span className="text-sm font-medium tracking-tight whitespace-nowrap">{prevItem.label}</span>
+                                        <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform shrink-0" />
+                                        <span className="text-sm font-medium tracking-tight whitespace-nowrap hidden md:inline">{prevItem.label}</span>
                                     </button>
                                 )}
                             </div>
@@ -287,41 +290,53 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 {nextItem && (
                                     <button
                                         onClick={() => handleNavigate(nextItem.id)}
-                                        className="flex items-center gap-3 px-6 py-3 rounded-full bg-rb-neutral-3/40 backdrop-blur-md text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-rb-neutral-3 transition-all group shadow-lg"
+                                        className="flex items-center gap-2 px-3 md:px-6 py-3 rounded-full bg-rb-neutral-3/40 backdrop-blur-md text-rb-accent-2/60 hover:text-rb-accent-1 hover:bg-rb-neutral-3 transition-all group shadow-lg"
                                     >
-                                        <span className="text-sm font-medium tracking-tight whitespace-nowrap">{nextItem.label}</span>
-                                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                                        <span className="text-sm font-medium tracking-tight whitespace-nowrap hidden md:inline">{nextItem.label}</span>
+                                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform shrink-0" />
                                     </button>
                                 )}
                             </div>
                         </div>
                     </div>
 
-                    {/* Right Collapsible Pane for Props */}
+                    {/* Collapsible Pane for Props */}
                     {children && (
                         <motion.div
                             initial={false}
                             animate={{
-                                width: isPaneOpen ? paneWidth : 0
+                                width: isMobile ? "100%" : (isPaneOpen ? paneWidth : 0),
+                                height: isMobile ? (isPaneOpen ? "50vh" : 0) : "100%"
                             }}
                             transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-                            className={`relative border-l border-rb-neutral-4 bg-rb-neutral-2/50 backdrop-blur-xl h-full flex flex-col will-change-[width] ${isMobile ? 'fixed inset-0 z-[1200]' : ''}`}
+                            className={`border-rb-neutral-4 bg-rb-neutral-2/50 backdrop-blur-xl flex flex-col will-change-[width,height] overflow-hidden
+                                ${isMobile 
+                                    ? 'fixed bottom-0 left-0 right-0 z-[1200] border-t' 
+                                    : 'relative border-l h-full'
+                                }`}
                         >
                             <motion.button
                                 layout
                                 onClick={() => setIsPaneOpen(!isPaneOpen)}
                                 initial={false}
                                 animate={{
-                                    x: isPaneOpen ? 0 : (isMobile ? 0 : -28),
-                                    rotate: isPaneOpen ? 0 : 0,
+                                    x: 0,
+                                    rotate: 0,
                                     backgroundColor: isPaneOpen ? "var(--rb-neutral-3)" : "var(--rb-accent-1)"
                                 }}
                                 transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
-                                className={`absolute top-1/2 -translate-y-1/2 p-2.5 rounded-full shadow-2xl z-[1300] transition-colors group ${isMobile ? 'right-6 top-6 translate-y-0' : '-left-5'} ${!isPaneOpen && !isMobile ? 'text-rb-neutral-1 border-rb-accent-1' : 'text-rb-accent-2 hover:bg-rb-neutral-4'}`}
+                                className={`absolute shadow-2xl z-[1300] transition-colors group p-2.5 rounded-full
+                                    ${isMobile 
+                                        ? 'right-6 top-4 translate-y-0' 
+                                        : 'top-1/2 -translate-y-1/2 -left-5'
+                                    } 
+                                    ${!isPaneOpen && !isMobile 
+                                        ? 'text-rb-neutral-1 border-rb-accent-1' 
+                                        : 'text-rb-accent-2 hover:bg-rb-neutral-4'
+                                    }`}
                                 title={isPaneOpen ? "Collapse Pane" : "Expand Pane"}
                             >
                                 <motion.div
-                                    animate={{ rotate: isPaneOpen ? 0 : 0 }}
                                     className="group-hover:scale-110 transition-transform"
                                 >
                                     {isPaneOpen ? (isMobile ? <X size={18} /> : <ChevronRight size={18} />) : <ChevronLeft size={18} />}
@@ -331,11 +346,11 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                             <AnimatePresence>
                                 {isPaneOpen && (
                                     <motion.div
-                                        initial={{ opacity: 0, x: 20, filter: "blur(10px)" }}
-                                        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                                        exit={{ opacity: 0, x: 20, filter: "blur(10px)" }}
+                                        initial={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, filter: "blur(10px)" }}
+                                        animate={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
+                                        exit={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, filter: "blur(10px)" }}
                                         transition={{ duration: 0.4, delay: isPaneOpen ? 0.1 : 0 }}
-                                        className={`h-full flex flex-col overflow-hidden ${isMobile ? 'w-full' : 'w-full'}`}
+                                        className="h-full flex flex-col overflow-hidden w-full"
                                     >
                                         <div className="p-4 px-6 border-b border-rb-neutral-4 flex items-center justify-between">
                                             <div className="flex flex-col">
@@ -360,6 +375,17 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 )}
                             </AnimatePresence>
                         </motion.div>
+                    )}
+
+                    {/* Floating settings action button for mobile view */}
+                    {isMobile && !isPaneOpen && (
+                        <button
+                            onClick={() => setIsPaneOpen(true)}
+                            className="fixed bottom-6 right-6 z-[1300] p-4 rounded-full bg-rb-accent-1 text-rb-neutral-2 shadow-2xl border border-white/10 flex items-center justify-center hover:scale-110 active:scale-95 transition-all"
+                            title="Tune Props"
+                        >
+                            <Sliders size={20} />
+                        </button>
                     )}
                 </motion.div>
             )}

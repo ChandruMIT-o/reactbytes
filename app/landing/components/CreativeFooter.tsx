@@ -91,9 +91,9 @@ const DiscordIcon = ({ size = 18, ...props }: React.SVGProps<SVGSVGElement> & { 
 const SubtleWatermarkTexture = () => (
   <svg width="100%" height="100%" className="absolute inset-0 z-0 pointer-events-none opacity-10 filter blur-[0.5px]">
     <pattern id="pattern-hex" patternUnits="userSpaceOnUse" width="80" height="80" patternTransform="scale(1) rotate(15)">
-      <path d="M0,0 M40,20 L60,40 L40,60 L20,40 Z M0,40 L20,60 L0,80" fill="none" stroke="#2a2a2a" strokeWidth="0.5" />
-      <circle cx="40" cy="40" r="1.5" fill="#2a2a2a" />
-      <circle cx="80" cy="80" r="1.5" fill="#2a2a2a" />
+      <path d="M0,0 M40,20 L60,40 L40,60 L20,40 Z M0,40 L20,60 L0,80" fill="none" stroke="#1d1c21" strokeWidth="0.5" />
+      <circle cx="40" cy="40" r="1.5" fill="#1d1c21" />
+      <circle cx="80" cy="80" r="1.5" fill="#1d1c21" />
     </pattern>
     <rect width="100%" height="100%" fill="url(#pattern-hex)" />
   </svg>
@@ -178,7 +178,7 @@ export const CreativeFooter: React.FC = () => {
   return (
     <footer
       ref={footerRef}
-      className="relative w-full pt-16 pb-10 bg-black text-zinc-400 font-sans z-20 overflow-hidden"
+      className="relative w-full pt-16 pb-10 bg-[#030008] text-[#e6dff1]/60 font-sans z-20 overflow-hidden"
     >
       {/* A clean, visible but subtle tech pattern that feels more intentional than 
         a faint logo mask. Look carefully at the background texture in the ref.
@@ -203,7 +203,7 @@ export const CreativeFooter: React.FC = () => {
             </GradientText>
           </h2>
           {/* Subtitle, Clean & Centered like Ref */}
-          <p className="relative z-10 text-xs md:text-sm font-sans tracking-wide text-zinc-500 max-w-md mb-8 select-none">
+          <p className="relative z-10 text-xs md:text-sm font-sans tracking-wide text-[#e6dff1]/40 max-w-md mb-8 select-none">
             Free access to every component, block, and template. No payment, monthly updates forever.
           </p>
 
@@ -211,7 +211,7 @@ export const CreativeFooter: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
             <a
               href="/"
-              className="relative group px-8 py-3.5 bg-white text-black font-mono font-extrabold text-xs uppercase tracking-widest rounded-md overflow-hidden flex items-center gap-2"
+              className="relative group px-8 py-3.5 bg-white text-black font-mono font-extrabold text-xs uppercase tracking-widest rounded-full overflow-hidden flex items-center gap-2"
             >
               <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
 
@@ -224,7 +224,7 @@ export const CreativeFooter: React.FC = () => {
             </a>
             <a
               href="/"
-              className="relative z-10 group px-8 py-3.5 bg-zinc-900/50 hover:bg-zinc-900 text-white font-mono font-medium text-xs uppercase tracking-widest rounded-md border border-white/5 hover:border-white/10 transition-all duration-300 cursor-pointer flex items-center gap-2"
+              className="relative z-10 group px-8 py-3.5 bg-[#181a1e]/40 hover:bg-[#181a1e]/80 text-white font-mono font-medium text-xs uppercase tracking-widest rounded-full border border-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer flex items-center gap-2"
             >
               Browse Docs
               <ChevronRight size={16} className="transition-transform group-hover:translate-x-1" strokeWidth={2} />
@@ -242,13 +242,13 @@ export const CreativeFooter: React.FC = () => {
               href={social.href}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center justify-between p-6 border-b border-white/10 md:border-b-0 md:border-r border-white/10 even:border-r-0 md:even:border-r last:border-r-0 hover:bg-zinc-900 transition-all group font-mono text-xs uppercase tracking-widest text-zinc-400 cursor-pointer"
+              className="flex items-center justify-between p-6 border-b border-white/10 md:border-b-0 md:border-r border-white/10 even:border-r-0 md:even:border-r last:border-r-0 hover:bg-[#181a1e]/40 transition-all group font-mono text-xs uppercase tracking-widest text-[#e6dff1]/70 cursor-pointer"
             >
               <div className="flex items-center gap-3">
                 {social.icon}
                 <span className="font-semibold">{social.label}</span>
               </div>
-              <ChevronRight size={14} className="text-zinc-600 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
+              <ChevronRight size={14} className="text-[#e6dff1]/30 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
             </a>
           ))}
         </div>
@@ -266,20 +266,21 @@ export const CreativeFooter: React.FC = () => {
                 alt="React Bytes Logo"
                 width={20}
                 height={20}
+                style={{ width: "auto", height: "auto" }}
                 className="w-auto h-5 object-contain"
               />
               <span className="font-sans font-extrabold text-2xl tracking-tight text-white uppercase">
                 React Bytes.
               </span>
             </div>
-            <p className="text-xs leading-relaxed text-zinc-500 max-w-sm">
+            <p className="text-xs leading-relaxed text-[#e6dff1]/50 max-w-sm">
               Crafting premium hardware-accelerated interfaces for next-generation platforms. Performance and elegance by design.
             </p>
           </div>
 
           {/* Right Side: Reimagined High-End Message Input Form */}
           <form onSubmit={handleSendMessage} className="lg:col-span-8 w-full flex flex-col gap-2">
-            <span className="font-mono text-[10px] tracking-widest uppercase text-zinc-600 font-bold select-none mb-1 block">
+            <span className="font-mono text-[10px] tracking-widest uppercase text-[#e6dff1]/40 font-bold select-none mb-1 block">
               // SECURE COMMUNICATION CHANNEL
             </span>
             <div className="relative flex items-center w-full group">
@@ -289,13 +290,13 @@ export const CreativeFooter: React.FC = () => {
                 value={message}
                 onChange={handleMessageChange}
                 placeholder="Type your message or optional email terminal..."
-                className="w-full bg-zinc-950 border border-white/10 hover:border-white/20 focus:border-white/30 text-white placeholder-zinc-700 text-sm font-mono py-4 pl-5 pr-36 rounded-sm focus:outline-none transition-all duration-300 tracking-wide backdrop-blur-xs"
+                className="w-full bg-[#060010] border border-white/10 hover:border-white/20 focus:border-white/30 text-white placeholder-[#e6dff1]/20 text-sm font-mono py-4 pl-6 pr-36 rounded-full focus:outline-none transition-all duration-300 tracking-wide backdrop-blur-xs"
               />
               <div className="absolute right-2 flex items-center gap-2">
                 <button
                   type="submit"
                   disabled={isSent}
-                  className="bg-white hover:bg-white text-black disabled:bg-zinc-800 disabled:text-zinc-600 px-5 py-2.5 rounded-xs text-xs font-mono uppercase tracking-wider transition-all duration-300 font-black flex items-center gap-2 active:scale-95 cursor-pointer"
+                  className="bg-white hover:bg-white text-black disabled:bg-[#181a1e] disabled:text-[#e6dff1]/20 px-5 py-2.5 rounded-full text-xs font-mono uppercase tracking-wider transition-all duration-300 font-black flex items-center gap-2 active:scale-95 cursor-pointer"
                 >
                   {isSent ? (
                     "TRANSMITTED"
@@ -316,10 +317,10 @@ export const CreativeFooter: React.FC = () => {
             ==================================================================== */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 text-xs font-mono gsap-reveal">
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 text-zinc-500">
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-[#e6dff1]/40">
             <span className="font-bold">© {new Date().getFullYear()} React Bytes Inc.</span>
-            <div className="hidden sm:block w-1 h-1 rounded-full bg-zinc-800" />
-            <span className="text-zinc-700">STABLE_BUILD_4.02</span>
+            <div className="hidden sm:block w-1 h-1 rounded-full bg-white/10" />
+            <span className="text-[#e6dff1]/20">STABLE_BUILD_4.02</span>
           </div>
 
           <div className="flex items-center gap-6">
@@ -328,7 +329,7 @@ export const CreativeFooter: React.FC = () => {
             <button
               onClick={runDiagnostics}
               disabled={isDiagnosing}
-              className="flex items-center gap-3 bg-zinc-950 border border-white/5 rounded-full px-4 py-1.5 hover:border-white/10 transition-all text-[10px] text-zinc-500 select-none group active:scale-95 cursor-pointer"
+              className="flex items-center gap-3 bg-[#060010] border border-white/10 rounded-full px-4 py-1.5 hover:border-white/20 transition-all text-[10px] text-[#e6dff1]/40 select-none group active:scale-95 cursor-pointer"
               title="Click to diagnostic latency"
             >
               <span className="relative flex h-1.5 w-1.5">
@@ -337,7 +338,7 @@ export const CreativeFooter: React.FC = () => {
               </span>
               <span className="flex items-center gap-1.5">
                 ALL SYSTEMS OPERATIONAL
-                <span className="text-zinc-800">//</span>
+                <span className="text-white/10">//</span>
                 <span className="text-zinc-200">
                   {isDiagnosing ? "Pinging..." : `${latency}ms`}
                 </span>
@@ -347,7 +348,7 @@ export const CreativeFooter: React.FC = () => {
             {/* Return to top arrow */}
             <button
               onClick={handleScrollTop}
-              className="p-3 rounded-full bg-zinc-950 border border-white/5 hover:border-white/10 text-zinc-600 hover:text-white transition-all active:scale-90 cursor-pointer"
+              className="p-3 rounded-full bg-[#060010] border border-white/10 hover:border-white/20 text-[#e6dff1]/40 hover:text-white transition-all active:scale-90 cursor-pointer"
               aria-label="Scroll to top"
             >
               <ArrowUp size={14} strokeWidth={2.5} />

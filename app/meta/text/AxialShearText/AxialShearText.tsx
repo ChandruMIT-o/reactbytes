@@ -46,59 +46,100 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
     className = "",
 }) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
     const nodesRef = useRef<ShearNode[]>([]);
     const mouseRef = useRef({ x: -1000, y: -1000, active: false });
     const animationFrameId = useRef<number | null>(null);
 
-    const paddingX = fontSize * 0.4;
-    const paddingY = fontSize * 0.5;
+    const currentScaleRef = useRef(1);
+    const currentFontSizeRef = useRef(fontSize);
 
     useEffect(() => {
+        const container = containerRef.current;
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        if (!container || !canvas) return;
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const fontStyle = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
-        ctx.font = fontStyle;
+        const handleResize = () => {
+            const ctx = canvas.getContext("2d");
+            if (!ctx) return;
 
-        // Trace typography string geometry down to the exact pixel footprint
-        const characters = text.split("");
-        let accumulatedX = 0;
-        const metrics = characters.map((char) => {
-            const w = ctx.measureText(char).width;
-            const res = { char, width: w, startX: accumulatedX };
-            accumulatedX += w;
-            return res;
+            // Measure original size to determine scaling
+            ctx.font = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
+            const characters = text.split("");
+            const baseTextWidthOriginal = characters.reduce((sum, char) => sum + ctx.measureText(char).width, 0);
+            const originalPaddingX = fontSize * 0.4;
+            const totalWidthOriginal = baseTextWidthOriginal + originalPaddingX * 2;
+
+            const containerWidth = container.clientWidth || 300;
+
+            // Determine scale factor: we want totalWidthOriginal + safety padding (20px) to fit
+            const targetFitWidth = containerWidth - 20;
+            let scale = 1;
+            if (totalWidthOriginal > targetFitWidth && targetFitWidth > 0) {
+                scale = targetFitWidth / totalWidthOriginal;
+            }
+            currentScaleRef.current = scale;
+
+            const activeFontSize = Math.max(12, fontSize * scale);
+            currentFontSizeRef.current = activeFontSize;
+
+            const activePaddingX = activeFontSize * 0.4;
+            const activePaddingY = activeFontSize * 0.5;
+
+            const fontStyle = `900 ${activeFontSize}px "Space Grotesk", -apple-system, sans-serif`;
+            ctx.font = fontStyle;
+
+            // Measure characters with active font size
+            let accumulatedX = 0;
+            const metrics = characters.map((char) => {
+                const w = ctx.measureText(char).width;
+                const res = { char, width: w, startX: accumulatedX };
+                accumulatedX += w;
+                return res;
+            });
+
+            const totalWidth = accumulatedX + activePaddingX * 2;
+            const totalHeight = activeFontSize + activePaddingY * 2;
+            const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+
+            canvas.width = totalWidth * dpr;
+            canvas.height = totalHeight * dpr;
+            canvas.style.width = `${totalWidth}px`;
+            canvas.style.height = `${totalHeight}px`;
+
+            ctx.scale(dpr, dpr);
+            ctx.font = fontStyle;
+            ctx.textBaseline = "middle";
+
+            const centerY = totalHeight / 2;
+
+            // Map characters to independent split-axis structural nodes
+            nodesRef.current = metrics.map((m) => ({
+                char: m.char,
+                centerX: activePaddingX + m.startX + m.width / 2,
+                centerY: centerY,
+                width: m.width,
+                leftY: 0,
+                rightY: 0,
+                leftVy: 0,
+                rightVy: 0,
+            }));
+        };
+
+        const observer = new ResizeObserver(() => {
+            handleResize();
         });
+        observer.observe(container);
 
-        const totalWidth = accumulatedX + paddingX * 2;
-        const totalHeight = fontSize + paddingY * 2;
-        const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+        // Initial measurement
+        handleResize();
 
-        canvas.width = totalWidth * dpr;
-        canvas.height = totalHeight * dpr;
-        canvas.style.width = `${totalWidth}px`;
-        canvas.style.height = `${totalHeight}px`;
-
-        ctx.scale(dpr, dpr);
-        ctx.font = fontStyle;
-        ctx.textBaseline = "middle";
-
-        const centerY = totalHeight / 2;
-
-        // Map characters to independent split-axis structural nodes
-        nodesRef.current = metrics.map((m) => ({
-            char: m.char,
-            centerX: paddingX + m.startX + m.width / 2,
-            centerY: centerY,
-            width: m.width,
-            leftY: 0,
-            rightY: 0,
-            leftVy: 0,
-            rightVy: 0,
-        }));
-    }, [text, fontSize, paddingX, paddingY]);
+        return () => {
+            observer.disconnect();
+        };
+    }, [text, fontSize]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -117,6 +158,11 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
             const mouse = mouseRef.current;
             const nodes = nodesRef.current;
 
+            const activeScale = currentScaleRef.current;
+            const activeFontSize = currentFontSizeRef.current;
+            const activeInfluenceRadius = influenceRadius * activeScale;
+            const activeMaxShearOffset = maxShearOffset * activeScale;
+
             nodes.forEach((node) => {
                 const dx = mouse.x - node.centerX;
                 const dy = mouse.y - node.centerY;
@@ -126,8 +172,8 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
                 let targetRightY = 0;
 
                 // 1. AXIAL MAGNETIC SHEAR FORCE FIELD PHASES
-                if (mouse.active && distance < influenceRadius) {
-                    const powerFactor = (influenceRadius - distance) / influenceRadius;
+                if (mouse.active && distance < activeInfluenceRadius) {
+                    const powerFactor = (activeInfluenceRadius - distance) / activeInfluenceRadius;
                     
                     // Smooth bell-curve dropoff profile for organic tracking transitions
                     const smoothPower = Math.pow(Math.cos((1 - powerFactor) * Math.PI / 2), 2);
@@ -136,8 +182,8 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
                     const directionMultiplier = dy >= 0 ? 1 : -1;
                     
                     // Push Left Hull up and Right Hull down cleanly along the split guide axis
-                    targetLeftY = -maxShearOffset * smoothPower * directionMultiplier;
-                    targetRightY = maxShearOffset * smoothPower * directionMultiplier;
+                    targetLeftY = -activeMaxShearOffset * smoothPower * directionMultiplier;
+                    targetRightY = activeMaxShearOffset * smoothPower * directionMultiplier;
                 }
 
                 // Process Hooke's differential spring laws to manage vertical offsets smoothly
@@ -151,12 +197,12 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
 
                 // 2. MODERN RASTER GRAPHICS CLIPPING & RENDERING PASS
                 ctx.save();
-                ctx.font = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
+                ctx.font = `900 ${activeFontSize}px "Space Grotesk", -apple-system, sans-serif`;
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
 
                 const halfW = node.width / 2;
-                const halfH = fontSize / 2;
+                const halfH = activeFontSize / 2;
 
                 // INTERIOR DETAIL: Render technical indicator tracks inside the division void
                 const activeShearMagnitude = Math.abs(node.leftY - node.rightY);
@@ -175,7 +221,7 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
                     // Micro offset tracking telemetry tags
                     if (activeShearMagnitude > 12) {
                         ctx.fillStyle = shearColor;
-                        ctx.font = "600 8px monospace";
+                        ctx.font = `600 ${Math.max(6, 8 * activeScale)}px monospace`;
                         ctx.textAlign = "left";
                         
                         // Output real-time structural displacement height
@@ -235,7 +281,7 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
     };
 
     return (
-        <div className={`inline-block select-none overflow-hidden ${className}`}>
+        <div ref={containerRef} className={`w-full select-none overflow-hidden flex justify-center ${className}`}>
             <canvas
                 ref={canvasRef}
                 onPointerMove={handlePointerMove}
@@ -243,7 +289,7 @@ export const AxialShearText: React.FC<AxialShearTextProps> = ({
                     mouseRef.current.active = false;
                     mouseRef.current = { x: -1000, y: -1000, active: false };
                 }}
-                className="block touch-none cursor-crosshair"
+                className="block touch-none cursor-crosshair mx-auto"
             />
         </div>
     );

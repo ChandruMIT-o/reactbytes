@@ -179,7 +179,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 				<div className="flex items-center gap-1 pr-1.5 shrink-0">
 					{activeTab === "preview" ? (
 						<>
-							<div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0">
+							<div className="hidden md:flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0">
 								<button
 									onClick={() => setPreviewMode("desktop")}
 									className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"

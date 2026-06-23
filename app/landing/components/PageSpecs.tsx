@@ -139,7 +139,7 @@ export const PageSpecs: React.FC = () => {
           <div className="inline-flex items-center gap-1.5 text-xs uppercase font-mono tracking-widest text-[#c0dedd]">
             <BarChart2 size={13} /> Performance Metrics
           </div>
-          <div className="select-none py-2">
+          <div className="select-none py-2 w-full max-w-full flex justify-center">
             <AxialShearText
               text="TECHNICAL DATA"
               fontSize={50}

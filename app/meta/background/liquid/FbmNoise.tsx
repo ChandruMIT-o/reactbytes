@@ -227,11 +227,24 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
       setThreeLoaded(true);
       return;
     }
+
+    const existingScript = document.querySelector('script[src*="three.min.js"]') as HTMLScriptElement;
+    if (existingScript) {
+      const handleLoad = () => setThreeLoaded(true);
+      existingScript.addEventListener('load', handleLoad);
+      if (window.THREE) {
+        setThreeLoaded(true);
+      }
+      return () => {
+        existingScript.removeEventListener('load', handleLoad);
+      };
+    }
+
     const script = document.createElement("script");
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
     script.async = true;
     script.onload = () => setThreeLoaded(true);
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   }, []);
 
   const isVisibleRef = useRef(true);

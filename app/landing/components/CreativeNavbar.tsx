@@ -67,8 +67,8 @@ export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection })
             alt="Logo"
             width={14}
             height={25}
-            className="relative z-10"
-            style={{ width: "auto", height: "80%" }}
+            className="relative z-10 h-6 w-auto"
+            style={{ width: "auto", height: "auto" }}
           />
         </div>
         <span className="font-mono text-sm tracking-widest uppercase font-semibold text-[#f2eee9] group-hover:text-[#c0dedd] transition-colors duration-300">
