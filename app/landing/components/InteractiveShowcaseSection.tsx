@@ -90,4 +90,4 @@ export const InteractiveShowcaseSection: React.FC = () => {
   );
 };
 
-export default InteractiveShowcaseSection;
+export default React.memo(InteractiveShowcaseSection);

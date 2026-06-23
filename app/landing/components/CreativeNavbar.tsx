@@ -125,4 +125,4 @@ export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection })
   );
 };
 
-export default CreativeNavbar;
+export default React.memo(CreativeNavbar);

@@ -105,4 +105,4 @@ export const ScrollTimeline: React.FC<ScrollTimelineProps> = ({
   );
 };
 
-export default ScrollTimeline;
+export default React.memo(ScrollTimeline);

@@ -398,4 +398,4 @@ export const CreativeFooter: React.FC = () => {
   );
 };
 
-export default CreativeFooter;
+export default React.memo(CreativeFooter);

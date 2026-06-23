@@ -247,7 +247,7 @@ const TestCombinationsPanel: React.FC = () => {
 const LivePreviewPanel: React.FC = () => {
   const [hovered, setHovered] = useState(false);
   return (
-    <div 
+    <div
       className="w-full h-full flex flex-col justify-between py-2 bg-zinc-950 px-2 relative overflow-hidden"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -286,8 +286,6 @@ export const BentoShowcaseSection: React.FC = () => {
   const titleRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
 
-  const [scrollProgress, setScrollProgress] = useState(0);
-
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
@@ -306,9 +304,6 @@ export const BentoShowcaseSection: React.FC = () => {
           pin: true,
           pinSpacing: true,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            setScrollProgress(self.progress);
-          }
         }
       });
 
@@ -504,7 +499,7 @@ export const BentoShowcaseSection: React.FC = () => {
             </div>
 
             {/* Prominent Center-Aligned Mouse Scroll Indicator (Aligned with Bento Cards) */}
-            <div
+            {/* <div
               className="absolute -bottom-20 left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-2.5 pointer-events-none transition-all duration-500 ease-out"
               style={{
                 opacity: scrollProgress > 0.95 ? 0 : 1,
@@ -522,7 +517,7 @@ export const BentoShowcaseSection: React.FC = () => {
               <span className="text-[9px] font-mono tracking-widest text-[#e6dff1]/50 uppercase select-none text-center bg-[#09090b]/60 px-2.5 py-0.5 rounded-full backdrop-blur-sm shadow-[0_0_10px_rgba(0,0,0,0.5)]">
                 {scrollProgress > 0.85 ? "Release" : "Scroll to explode"}
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -602,4 +597,4 @@ export const BentoShowcaseSection: React.FC = () => {
   );
 };
 
-export default BentoShowcaseSection;
+export default React.memo(BentoShowcaseSection);

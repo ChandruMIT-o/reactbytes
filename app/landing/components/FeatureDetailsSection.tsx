@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useLayoutEffect, useState } from "react";
+import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Cpu, Sliders, Layers, Zap, Palette, Code2 } from "lucide-react";
 import gsap from "gsap";
@@ -10,7 +10,7 @@ import StripeFlow from "@/app/meta/background/StripeFlow/StripeFlow";
 gsap.registerPlugin(ScrollTrigger);
 
 interface StripeConfig {
-  palette: "vapor" | "sunset" | "slate" | "acid";
+  palette: "vapor" | "sunset" | "slate" | "acid" | "cyberpunk" | "abyss" | "aurora";
   speed: number;
   distortion: number;
   scale: number;
@@ -37,6 +37,18 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
+  const [shouldRenderStripeFlow, setShouldRenderStripeFlow] = useState(false);
+
+  useEffect(() => {
+    if (hovered) {
+      setShouldRenderStripeFlow(true);
+    } else {
+      const timer = setTimeout(() => {
+        setShouldRenderStripeFlow(false);
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [hovered]);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -83,14 +95,16 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         >
           {/* StripeFlow animated background on hover */}
           <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-25 transition-opacity duration-700 pointer-events-none rounded-3xl overflow-hidden">
-            <StripeFlow
-              palette={stripeConfig.palette}
-              isPaused={!hovered}
-              speed={stripeConfig.speed}
-              distortion={stripeConfig.distortion}
-              scale={stripeConfig.scale}
-              className="absolute inset-0 w-full h-full bg-transparent border-none scale-105"
-            />
+            {shouldRenderStripeFlow && (
+              <StripeFlow
+                palette={stripeConfig.palette}
+                isPaused={!hovered}
+                speed={stripeConfig.speed}
+                distortion={stripeConfig.distortion}
+                scale={stripeConfig.scale}
+                className="absolute inset-0 w-full h-full bg-transparent border-none scale-105"
+              />
+            )}
           </div>
 
           {/* Dynamic Glow Highlight tracking the cursor position */}
@@ -161,7 +175,7 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Sliders size={22} />,
       title: "Declarative Control",
       description: "Fully customize layout variables. Set spring physics constants, uniform arrays, scale multipliers, colors, and motion offsets on the fly.",
-      stripeConfig: { palette: "sunset" as const, speed: 0.6, distortion: 20, scale: 0.005 },
+      stripeConfig: { palette: "cyberpunk" as const, speed: 1.2, distortion: 60, scale: 0.010 },
       stat: "100%",
       statLabel: "CUSTOMIZABLE",
     },
@@ -169,7 +183,7 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Layers size={22} />,
       title: "Less Overhead",
       description: "Uses only well-known and tested packages like WebGL, Three.js, and framer-motion.",
-      stripeConfig: { palette: "acid" as const, speed: 1.1, distortion: 55, scale: 0.02 },
+      stripeConfig: { palette: "abyss" as const, speed: 0.8, distortion: 50, scale: 0.007 },
       stat: "0",
       statLabel: "DEPENDENCIES",
     },
@@ -185,7 +199,7 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Palette size={22} />,
       title: "Design System Ready",
       description: "It won't adapt automatically, but you can easily customize styles and colors to match your existing themes.",
-      stripeConfig: { palette: "sunset" as const, speed: 1.0, distortion: 30, scale: 0.012 },
+      stripeConfig: { palette: "aurora" as const, speed: 1.1, distortion: 65, scale: 0.009 },
       stat: "∞",
       statLabel: "THEMES",
     },
@@ -402,4 +416,4 @@ export const FeatureDetailsSection: React.FC = () => {
   );
 };
 
-export default FeatureDetailsSection;
+export default React.memo(FeatureDetailsSection);

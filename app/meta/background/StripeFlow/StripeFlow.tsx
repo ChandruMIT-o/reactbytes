@@ -177,6 +177,27 @@ const PALETTES: Record<string, PalettePreset> = {
     b: [0.2, 0.4, 0.2],
     c: [2.0, 1.0, 1.0],
     d: [0.0, 0.25, 0.25]
+  },
+  cyberpunk: {
+    name: "Cyberpunk Neon",
+    a: [0.5, 0.5, 0.5],
+    b: [0.5, 0.5, 0.5],
+    c: [2.0, 1.0, 0.0],
+    d: [0.5, 0.2, 0.25]
+  },
+  abyss: {
+    name: "Ocean Abyss",
+    a: [0.2, 0.4, 0.6],
+    b: [0.2, 0.3, 0.4],
+    c: [1.0, 1.0, 1.0],
+    d: [0.0, 0.1, 0.2]
+  },
+  aurora: {
+    name: "Northern Lights",
+    a: [0.2, 0.7, 0.5],
+    b: [0.5, 0.4, 0.5],
+    c: [1.0, 1.0, 1.0],
+    d: [0.0, 0.15, 0.3]
   }
 };
 
@@ -194,7 +215,7 @@ export interface StripeFlowProps {
   /** Active flow speed multiplier */
   speed?: number;
   /** Active color palette name */
-  palette?: "vapor" | "sunset" | "slate" | "acid";
+  palette?: "vapor" | "sunset" | "slate" | "acid" | "cyberpunk" | "abyss" | "aurora";
   /** Pause animation timeline */
   isPaused?: boolean;
   /** Custom wrapper CSS style classes */

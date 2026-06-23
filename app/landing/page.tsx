@@ -196,7 +196,7 @@ export default function LandingPage() {
           colorG={colorG}
           colorB={colorB}
           mouseInfluence={0.5}
-          paused={false}
+          paused={activeSection === "marquee" || activeSection === "production-ready"}
           observeVisibility={false}
           className="fixed inset-0 z-0 w-full h-full"
         />
@@ -205,6 +205,7 @@ export default function LandingPage() {
         {/* <CreativeNavbar activeSection={activeSection} /> */}
         <ScrollTimeline sections={sectionsList} activeSection={activeSection} />
 
+        <CreativeNavbar activeSection={activeSection} />
 
         {/* Orchestrated Section Views — each section has its own unique scroll choreography */}
         <div className="relative z-10 w-full flex flex-col">

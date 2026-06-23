@@ -204,4 +204,4 @@ export const PageSpecs: React.FC = () => {
   );
 };
 
-export default PageSpecs;
+export default React.memo(PageSpecs);

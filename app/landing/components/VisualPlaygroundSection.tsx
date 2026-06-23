@@ -3,7 +3,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Sliders, Zap, Undo, Eye, MousePointer } from "lucide-react";
-import FbmNoise from "@/app/meta/background/liquid/FbmNoise";
 import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 
@@ -60,19 +59,6 @@ export const VisualPlaygroundSection: React.FC<VisualPlaygroundSectionProps> = (
       
       {/* Immersive FbmNoise Background for the Section */}
       <div className="absolute inset-0 z-0">
-        <FbmNoise 
-          complex={false} 
-          speed={speed} 
-          scale={scale} 
-          brightness={brightness} 
-          colorR={colorR} 
-          colorG={colorG} 
-          colorB={colorB} 
-          mouseInfluence={0.8}
-          paused={false}
-          observeVisibility={true}
-          className="w-full h-full"
-        />
         {/* Dark radial and linear gradients to blend the section background with the rest of the page */}
         <div className="absolute inset-0 bg-[#060010]/40 z-10 pointer-events-none" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#060010] via-transparent to-[#060010] z-20 pointer-events-none" />
@@ -237,4 +223,4 @@ export const VisualPlaygroundSection: React.FC<VisualPlaygroundSectionProps> = (
   );
 };
 
-export default VisualPlaygroundSection;
+export default React.memo(VisualPlaygroundSection);
