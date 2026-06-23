@@ -7,21 +7,33 @@ import StackedCarousel from "../../meta/carousel/StackedCarousel/StackedCarousel
 const showcaseCards = [
   {
     id: 1,
-    title: "Axial Shear Text",
-    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-    content: "Splits and shears characters vertically along structural guidelines on hover. Driven by Hooke's spring calculation.",
+    title: "Fractal Background",
+    image: "/landing/Fractal.png",
+    content: "A premium, GPU-accelerated WebGL fractal canvas with real-time iteration controls, parallax mouse tracking, and smooth noise overlays.",
   },
   {
     id: 2,
-    title: "HoloCard 3D",
-    image: "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=600&q=80",
-    content: "A holographic trading-card effect featuring real-time light refraction, cursor coordinate shimmer tracking, and prismatic foils.",
+    title: "Interlocking Marquee",
+    image: "/landing/Marquee.png",
+    content: "An interactive jigsaw marquee scrolling component supporting curvy, hex, wave, and classic interlocking shapes with customizable timing.",
   },
   {
     id: 3,
-    title: "GlowCard & ShinyButton",
-    image: "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80",
-    content: "Combine cards, hover boundaries, and button customizers to build premium user dashboards.",
+    title: "Ripple Background",
+    image: "/landing/Ripple.png",
+    content: "WebGL-based interactive water ripples that distort with cursor movement and generate high-impact shockwaves on click.",
+  },
+  {
+    id: 4,
+    title: "SuperMesh Sphere",
+    image: "/landing/SuperMesh.png",
+    content: "A 3D wireframe lattice sphere built on Three.js featuring animated vertex displacement waves and orbit control camera views.",
+  },
+  {
+    id: 5,
+    title: "Standard Accordion",
+    image: "/landing/Accordion.png",
+    content: "A smooth, spring-physics-driven React accordion with layout morphing, hover scale effects, and custom SVG icons.",
   },
 ];
 
@@ -50,7 +62,7 @@ export const InteractiveShowcaseSection: React.FC = () => {
           Stacked Highlights
         </h2>
         <p className="text-sm text-[#e6dff1]/50 max-w-lg font-light leading-relaxed font-sans">
-          Click the card deck to rotate. Smooth CSS transforms, 3D stack perspective, and liquid gooey numbers.
+          Click the card deck to rotate. Checkout each component in the documentation.
         </p>
       </div>
 

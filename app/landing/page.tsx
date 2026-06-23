@@ -202,7 +202,7 @@ export default function LandingPage() {
         />
 
         {/* Floating Layout Indicators */}
-        <CreativeNavbar activeSection={activeSection} />
+        {/* <CreativeNavbar activeSection={activeSection} /> */}
         <ScrollTimeline sections={sectionsList} activeSection={activeSection} />
 
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -10,6 +10,21 @@ interface CreativeNavbarProps {
 }
 
 export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection }) => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const handleLogoClick = () => {
     const el = document.getElementById("hero");
     if (el) {
@@ -27,10 +42,18 @@ export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection })
 
   return (
     <motion.header
+      layout
       initial={{ y: -30, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 w-full px-6 md:px-12 py-4 z-50 flex items-center justify-between border-b border-white/5 bg-[#060010]/40 backdrop-blur-md"
+      transition={{
+        layout: { type: "spring", stiffness: 180, damping: 25 },
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+      className={`fixed left-0 right-0 mx-auto z-50 flex items-center justify-between transition-[background-color,border-color,backdrop-filter,box-shadow] duration-500 ease-in-out ${isScrolled
+        ? "top-4 w-[92%] md:w-[80%] max-w-5xl px-6 py-2.5 border border-white/10 bg-[#060010]/70 backdrop-blur-md rounded-full shadow-[0_12px_40px_0_rgba(0,0,0,0.5)]"
+        : "top-0 w-full px-6 md:px-12 py-4 border border-transparent bg-transparent backdrop-blur-none rounded-none shadow-none"
+        }`}
     >
       {/* Brand logo container */}
       <div
@@ -42,10 +65,10 @@ export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection })
           <Image
             src="/logo.svg"
             alt="Logo"
-            width={17}
-            height={28}
+            width={14}
+            height={25}
             className="relative z-10"
-            style={{ width: "auto", height: "auto" }}
+            style={{ width: "auto", height: "80%" }}
           />
         </div>
         <span className="font-mono text-sm tracking-widest uppercase font-semibold text-[#f2eee9] group-hover:text-[#c0dedd] transition-colors duration-300">

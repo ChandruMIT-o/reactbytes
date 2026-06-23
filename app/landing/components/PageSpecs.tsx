@@ -20,12 +20,12 @@ interface SpecItem {
 }
 
 const specs: SpecItem[] = [
-  { label: "BUNDLE footprint", value: "< 12KB", numericValue: 12, suffix: "KB", prefix: "< ", status: "OPTIMAL", percentage: 12, decimals: 0 },
-  { label: "SHADERS compile time", value: "~0.15s", numericValue: 0.15, suffix: "s", prefix: "~", status: "FAST", percentage: 15, decimals: 2 },
-  { label: "WebGL version", value: "1.0 ES", numericValue: 1.0, suffix: " ES", prefix: "", status: "STABLE", percentage: 100, decimals: 1 },
-  { label: "FRAME delta rate", value: "< 16.6ms", numericValue: 16.6, suffix: "ms", prefix: "< ", status: "60 FPS", percentage: 95, decimals: 1 },
-  { label: "Core dependencies", value: "ZERO", numericValue: 0, suffix: "", prefix: "", status: "STANDALONE", percentage: 0, decimals: 0 },
-  { label: "Tailwind engine", value: "V4.0", numericValue: 4.0, suffix: "", prefix: "V", status: "NATIVE", percentage: 100, decimals: 1 },
+  { label: "Bundle Format", value: "TSX Source", numericValue: 0, suffix: "", prefix: "", status: "RAW", percentage: 100, decimals: 0 },
+  { label: "Hours you can save", value: "40+ Hours", numericValue: 40, suffix: "+ Hours", prefix: "", status: "EFFICIENT", percentage: 90, decimals: 0 },
+  { label: "Less dependencies", value: "Minimal", numericValue: 0, suffix: "", prefix: "", status: "LIGHTWEIGHT", percentage: 10, decimals: 0 },
+  { label: "Component options", value: "25+ Variants", numericValue: 25, suffix: "+ Variants", prefix: "", status: "CREATIVE", percentage: 85, decimals: 0 },
+  { label: "Styling freedom", value: "Tailwind / CSS", numericValue: 0, suffix: "", prefix: "", status: "FLEXIBLE", percentage: 100, decimals: 0 },
+  { label: "Frame target", value: "60 FPS", numericValue: 60, suffix: " FPS", prefix: "", status: "SMOOTH", percentage: 95, decimals: 0 },
 ];
 
 export const PageSpecs: React.FC = () => {
@@ -96,7 +96,7 @@ export const PageSpecs: React.FC = () => {
             },
             onUpdate: () => {
               if (spec.numericValue === 0) {
-                valueEl.textContent = "ZERO";
+                valueEl.textContent = spec.value;
               } else {
                 valueEl.textContent = `${spec.prefix}${obj.val.toFixed(spec.decimals)}${spec.suffix}`;
               }
@@ -149,7 +149,7 @@ export const PageSpecs: React.FC = () => {
             />
           </div>
           <p className="text-xs md:text-sm text-[#e6dff1]/50 leading-relaxed font-light font-sans text-center max-w-lg">
-            Meticulously scoped calculations. Each metric represents hardware benchmarks designed to keep your load speeds lightning-fast.
+            Well planned prop control. All components are performance tested to ensure smoothness.
           </p>
         </div>
 
@@ -195,7 +195,7 @@ export const PageSpecs: React.FC = () => {
         <div className="flex justify-between items-center text-[8px] font-mono text-[#e6dff1]/15">
           <div className="flex items-center gap-1.5">
             <Info size={10} />
-            <span>MEASURED ON AMD RYZEN 9 // RTX 4070 LAB BENCHMARKS</span>
+            <span>DEVELOPED WITH HIGH-FIDELITY DESIGN PRINCIPLES // ZERO BUILD OVERHEAD</span>
           </div>
           <span>SPEC_MATRIX_V1</span>
         </div>

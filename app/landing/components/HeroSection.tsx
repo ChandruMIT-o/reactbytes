@@ -84,7 +84,7 @@ export const HeroSection: React.FC = () => {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#c0dedd]" />
           </span>
           <span className="text-[10px] font-mono tracking-widest text-[#c0dedd] uppercase font-semibold">
-            Creative Interface System
+            Free Component Library
           </span>
         </motion.div>
 
@@ -108,7 +108,7 @@ export const HeroSection: React.FC = () => {
 
         {/* Subtitle statement */}
         <BlurIn
-          text="An open-source collection of meticulously engineered, highly interactive, and WebGL-accelerated React components. Craft interface experiences that stand out with bold creativity."
+          text="An open-source collection of meticulously designed, highly interactive, aesthetic front React components. Highly customisable with clean code."
           color="rgba(230, 223, 241, 0.8)"
           duration={0.5}
           stagger={0.008}
