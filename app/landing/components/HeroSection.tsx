@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import TectonicTrackText from "../../meta/text/TectonicTrackText/TectonicTrackText";
-import BlurIn from "../../meta/text/TextEnter/BlurIn";
+import BlurText from "../../meta/text/BlurText/BlurText";
 import VoidOrb from "../../meta/background/space/VoidOrb";
 
 export const HeroSection: React.FC = () => {
@@ -107,15 +107,16 @@ export const HeroSection: React.FC = () => {
         </motion.div>
 
         {/* Subtitle statement */}
-        <BlurIn
+        <BlurText
           text="An open-source collection of meticulously designed, highly interactive, aesthetic front React components. Highly customisable with clean code."
           color="rgba(230, 223, 241, 0.8)"
           duration={0.5}
           stagger={0.008}
           initialBlur={10}
-          textClassName="text-base md:text-lg max-w-2xl leading-relaxed font-light font-sans"
-          containerClassName="flex justify-center"
-        />
+          animationStyle="blur-in"
+          triggerOnView={false}
+          className="text-base md:text-lg max-w-2xl leading-relaxed font-light font-sans flex justify-center"
+/>
 
         {/* Clickable portals */}
         <motion.div

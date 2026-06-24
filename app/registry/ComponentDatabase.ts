@@ -12,7 +12,6 @@ import { shatterTextConfig } from "../meta/text/Interactive/ShatterText.config";
 import { waveTextConfig } from "../meta/text/Interactive/WaveText.config";
 import { gooeyMorphConfig } from "../meta/text/Morph/GooeyMorph.config";
 import { swarmTextConfig } from "../meta/text/SwarmText/SwarmText.config";
-import { blurInConfig } from "../meta/text/TextEnter/BlurIn.config";
 import { scrambleRevealConfig } from "../meta/text/TextEnter/ScrambleReveal.config";
 import { volumetricTextConfig } from "../meta/text/VolumetricText/VolumetricText.config";
 import { keyboardTextConfig } from "../meta/text/keyboard/KeyboardText.config";
@@ -137,7 +136,6 @@ export const ComponentDatabase: ComponentConfig[] = [
   waveTextConfig,
   gooeyMorphConfig,
   swarmTextConfig,
-  blurInConfig,
   scrambleRevealConfig,
   volumetricTextConfig,
   keyboardTextConfig,

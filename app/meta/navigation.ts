@@ -4,7 +4,6 @@ export const navItems = [
         items: [
             { id: "blur-text", label: "Blur Text" },
             { id: "fall-down", label: "Fall Down" },
-            { id: "blur-in", label: "Blur In" },
             { id: "reveal-under", label: "Reveal Under" },
             { id: "variable-weight", label: "Variable Weight" },
             { id: "wave-text", label: "Proximity Ripple" },

@@ -18,7 +18,6 @@ export const ComponentMap: Record<string, React.ComponentType<any>> = {
   "wave-text": dynamic(() => import("../meta/text/Interactive/WaveText")),
   "gooey-morph": dynamic(() => import("../meta/text/Morph/GooeyMorph")),
   "swarm-text": dynamic(() => import("../meta/text/SwarmText/SwarmText")),
-  "blur-in": dynamic(() => import("../meta/text/TextEnter/BlurIn")),
   "scramble-reveal": dynamic(() => import("../meta/text/TextEnter/ScrambleReveal")),
   "volumetric-text": dynamic(() => import("../meta/text/VolumetricText/VolumetricText")),
   "keyboard-text": dynamic(() => import("../meta/text/keyboard/KeyboardText")),
