@@ -4,6 +4,7 @@ export const gooeyMorphConfig: ComponentConfig = {
   slug: "gooey-morph",
   name: "Gooey Morph",
   category: "text",
+  tags: ["gooey", "morph", "liquid", "transition", "blob"],
   componentPath: "app/meta/text/Morph/GooeyMorph.tsx",
   props: [
     {

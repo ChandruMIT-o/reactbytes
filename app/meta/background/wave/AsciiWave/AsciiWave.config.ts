@@ -4,6 +4,7 @@ export const asciiWaveConfig: ComponentConfig = {
   slug: "ascii-wave",
   name: "ASCII Wave",
   category: "background",
+  tags: ["ascii", "wave", "text", "retro", "terminal", "characters"],
   componentPath: "app/meta/background/wave/AsciiWave/AsciiWave.tsx",
   props: [
     {
@@ -118,7 +119,8 @@ export const asciiWaveConfig: ComponentConfig = {
       name: "colorMode",
       type: "boolean",
       default: true,
-      description: "Toggle between using the provided palette or grayscale equivalents.",
+      description:
+        "Toggle between using the provided palette or grayscale equivalents.",
     },
     {
       name: "backgroundColor",

@@ -4,6 +4,7 @@ export const shatterTextConfig: ComponentConfig = {
   slug: "shatter-text",
   name: "Cinematic Shatter",
   category: "text",
+  tags: ["shatter", "break", "cinematic", "particles", "explode"],
   componentPath: "app/meta/text/Interactive/ShatterText.tsx",
   props: [
     {
@@ -19,7 +20,8 @@ export const shatterTextConfig: ComponentConfig = {
       min: 100,
       max: 1500,
       step: 50,
-      description: "Maximum distance for initial chaos scatter on both X and Y axis.",
+      description:
+        "Maximum distance for initial chaos scatter on both X and Y axis.",
     },
     {
       name: "color",

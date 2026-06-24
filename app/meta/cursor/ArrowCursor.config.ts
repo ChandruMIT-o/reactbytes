@@ -4,6 +4,7 @@ export const arrowCursorConfig: ComponentConfig = {
   slug: "follow-cursor",
   name: "Follow Cursor",
   category: "cursor",
+  tags: ["cursor", "arrow", "custom", "pointer", "mouse"],
   componentPath: "app/meta/cursor/ArrowCursor.tsx",
   props: [
     {

@@ -4,6 +4,7 @@ export const revealUnderConfig: ComponentConfig = {
   slug: "reveal-under",
   name: "Reveal Under",
   category: "text",
+  tags: ["reveal", "clip", "entrance", "underline", "wipe"],
   componentPath: "app/meta/text/TextEnter/RevealUnder.tsx",
   props: [
     {

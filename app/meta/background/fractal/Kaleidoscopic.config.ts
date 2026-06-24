@@ -4,6 +4,7 @@ export const kaleidoscopicConfig: ComponentConfig = {
   slug: "kaleidoscopic",
   name: "Kaleidoscopic",
   category: "background",
+  tags: ["kaleidoscope", "fractal", "mirror", "symmetry", "pattern"],
   componentPath: "app/meta/background/fractal/Kaleidoscopic.tsx",
   props: [
     {

@@ -4,6 +4,7 @@ export const tectonicTrackTextConfig: ComponentConfig = {
   slug: "tectonic-track-text",
   name: "Tectonic Track Text",
   category: "text",
+  tags: ["tectonic", "track", "slide", "mechanical", "reveal"],
   componentPath: "app/meta/text/TectonicTrackText/TectonicTrackText.tsx",
   props: [
     {
@@ -28,7 +29,8 @@ export const tectonicTrackTextConfig: ComponentConfig = {
       min: 5,
       max: 100,
       step: 5,
-      description: "Maximum letter spacing tracking expansion value (in pixels).",
+      description:
+        "Maximum letter spacing tracking expansion value (in pixels).",
     },
     {
       name: "maxScaleX",
@@ -53,7 +55,7 @@ export const tectonicTrackTextConfig: ComponentConfig = {
       type: "number",
       default: 0.08,
       min: 0.01,
-      max: 0.30,
+      max: 0.3,
       step: 0.01,
       description: "Elastic tracking snap stiffness coefficient.",
     },
@@ -61,7 +63,7 @@ export const tectonicTrackTextConfig: ComponentConfig = {
       name: "damping",
       type: "number",
       default: 0.74,
-      min: 0.50,
+      min: 0.5,
       max: 0.99,
       step: 0.01,
       description: "Spring system damping friction factor.",

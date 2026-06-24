@@ -4,6 +4,7 @@ export const velvetNoiseConfig: ComponentConfig = {
   slug: "velvet-noise",
   name: "Velvet Noise",
   category: "background",
+  tags: ["velvet", "noise", "texture", "soft", "fabric"],
   componentPath: "app/meta/background/liquid/VelvetNoise.tsx",
   props: [
     {
@@ -40,7 +41,8 @@ export const velvetNoiseConfig: ComponentConfig = {
       min: 0.0,
       max: 1.0,
       step: 0.01,
-      description: "RGB shift intensity creating the chromatic aberration offset.",
+      description:
+        "RGB shift intensity creating the chromatic aberration offset.",
     },
     {
       name: "isPlaying",

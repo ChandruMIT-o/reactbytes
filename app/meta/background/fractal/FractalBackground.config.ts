@@ -4,6 +4,7 @@ export const fractalBackgroundConfig: ComponentConfig = {
   slug: "fractal-background",
   name: "Fractal Background",
   category: "background",
+  tags: ["fractal", "math", "recursive", "pattern", "zoom"],
   componentPath: "app/meta/background/fractal/FractalBackground.tsx",
   props: [
     {

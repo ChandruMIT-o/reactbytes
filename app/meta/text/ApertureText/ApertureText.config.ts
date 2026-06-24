@@ -4,6 +4,7 @@ export const apertureTextConfig: ComponentConfig = {
   slug: "aperture-text",
   name: "Aperture Text",
   category: "text",
+  tags: ["aperture", "iris", "camera", "reveal", "circle"],
   componentPath: "app/meta/text/ApertureText/ApertureText.tsx",
   props: [
     {
@@ -19,7 +20,8 @@ export const apertureTextConfig: ComponentConfig = {
       min: 40,
       max: 140,
       step: 5,
-      description: "Scale of font size in pixels (defines localized canvas bounds).",
+      description:
+        "Scale of font size in pixels (defines localized canvas bounds).",
     },
     {
       name: "expansionForce",
@@ -44,18 +46,20 @@ export const apertureTextConfig: ComponentConfig = {
       type: "number",
       default: 0.07,
       min: 0.01,
-      max: 0.30,
+      max: 0.3,
       step: 0.01,
-      description: "Mechanical lock-back spring stiffness index (Hooke's spring constant).",
+      description:
+        "Mechanical lock-back spring stiffness index (Hooke's spring constant).",
     },
     {
       name: "damping",
       type: "number",
       default: 0.76,
-      min: 0.50,
+      min: 0.5,
       max: 0.99,
       step: 0.01,
-      description: "Kinetic friction dampening index (velocity decay multiplier).",
+      description:
+        "Kinetic friction dampening index (velocity decay multiplier).",
     },
     {
       name: "color",
@@ -67,7 +71,8 @@ export const apertureTextConfig: ComponentConfig = {
       name: "blueprintColor",
       type: "color",
       default: "rgba(244, 63, 94, 0.45)",
-      description: "Color of the inner wireframe blueprint revealed on fracture.",
+      description:
+        "Color of the inner wireframe blueprint revealed on fracture.",
     },
   ],
   presets: [
@@ -96,7 +101,7 @@ export const apertureTextConfig: ComponentConfig = {
         expansionForce: 30,
         influenceRadius: 100,
         stiffness: 0.12,
-        damping: 0.70,
+        damping: 0.7,
       },
     },
     {

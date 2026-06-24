@@ -4,6 +4,7 @@ export const iridescentGradientConfig: ComponentConfig = {
   slug: "iridescent-gradient",
   name: "Iridescent Gradient",
   category: "background",
+  tags: ["iridescent", "gradient", "rainbow", "holographic", "color"],
   componentPath: "app/meta/background/gradient/IridescentGradient.tsx",
   props: [
     {
@@ -28,7 +29,8 @@ export const iridescentGradientConfig: ComponentConfig = {
       name: "bgColor",
       type: "color",
       default: "",
-      description: "The background color. Defaults to stripeColor if not provided.",
+      description:
+        "The background color. Defaults to stripeColor if not provided.",
     },
     {
       name: "checked",

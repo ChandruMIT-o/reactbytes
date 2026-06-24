@@ -4,6 +4,7 @@ export const cellularAutomataConfig: ComponentConfig = {
   slug: "cellular-automata",
   name: "Cellular Automata",
   category: "background",
+  tags: ["cellular", "automata", "simulation", "life", "grid", "pattern"],
   componentPath: "app/meta/background/cellular/CellularAutomataBackground.tsx",
   props: [
     {
@@ -40,7 +41,8 @@ export const cellularAutomataConfig: ComponentConfig = {
       min: 0.5,
       max: 3.0,
       step: 0.1,
-      description: "Zoom level of the noise patterns. Higher values show more detail.",
+      description:
+        "Zoom level of the noise patterns. Higher values show more detail.",
     },
     {
       name: "intensity",

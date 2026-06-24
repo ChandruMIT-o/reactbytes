@@ -4,6 +4,7 @@ export const perlinSmokeConfig: ComponentConfig = {
   slug: "perlin-smoke",
   name: "Perlin Smoke",
   category: "background",
+  tags: ["perlin", "smoke", "noise", "fog", "wisp"],
   componentPath: "app/meta/background/gradient/PerlinSmoke.tsx",
   props: [
     {
@@ -37,13 +38,15 @@ export const perlinSmokeConfig: ComponentConfig = {
       min: 0,
       max: 1.0,
       step: 0.01,
-      description: "How 'milky' or white the brighter parts of the smoke should be.",
+      description:
+        "How 'milky' or white the brighter parts of the smoke should be.",
     },
     {
       name: "eco",
       type: "boolean",
       default: true,
-      description: "Enables eco mode which dynamically changes resolution to save power.",
+      description:
+        "Enables eco mode which dynamically changes resolution to save power.",
     },
     {
       name: "maxFPS",

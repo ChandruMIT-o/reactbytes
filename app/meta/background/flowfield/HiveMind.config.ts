@@ -4,6 +4,7 @@ export const hiveMindConfig: ComponentConfig = {
   slug: "hive-mind",
   name: "Hive Mind",
   category: "background",
+  tags: ["hive", "flow", "field", "agents", "particles", "swarm"],
   componentPath: "app/meta/background/flowfield/HiveMind.tsx",
   props: [
     {
@@ -49,7 +50,8 @@ export const hiveMindConfig: ComponentConfig = {
       min: 0.001,
       max: 0.5,
       step: 0.001,
-      description: "Trailing effect intensity (tail opacity). Lower is longer trails.",
+      description:
+        "Trailing effect intensity (tail opacity). Lower is longer trails.",
     },
     {
       name: "radius",

@@ -4,6 +4,7 @@ export const helonBraidConfig: ComponentConfig = {
   slug: "helon-braid",
   name: "Helon Braid",
   category: "background",
+  tags: ["braid", "wave", "rope", "weave", "ribbon"],
   componentPath: "app/meta/background/wave/HelonBraid/HelonBraid.tsx",
   props: [
     {
@@ -55,7 +56,8 @@ export const helonBraidConfig: ComponentConfig = {
       name: "backgroundColor",
       type: "color",
       default: "#070a12",
-      description: "Background container color (also used for masking Over/Under weaving layers).",
+      description:
+        "Background container color (also used for masking Over/Under weaving layers).",
     },
   ],
   presets: [

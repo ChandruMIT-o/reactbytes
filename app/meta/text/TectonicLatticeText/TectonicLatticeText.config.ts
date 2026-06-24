@@ -4,6 +4,7 @@ export const tectonicLatticeTextConfig: ComponentConfig = {
   slug: "tectonic-lattice-text",
   name: "Tectonic Lattice",
   category: "text",
+  tags: ["tectonic", "lattice", "grid", "fracture", "shift"],
   componentPath: "app/meta/text/TectonicLatticeText/TectonicLatticeText.tsx",
   props: [
     {
@@ -75,7 +76,7 @@ export const tectonicLatticeTextConfig: ComponentConfig = {
       type: "number",
       default: 0.08,
       min: 0.01,
-      max: 0.30,
+      max: 0.3,
       step: 0.01,
       description: "Stiffness of the snap-back home-seeking spring.",
     },

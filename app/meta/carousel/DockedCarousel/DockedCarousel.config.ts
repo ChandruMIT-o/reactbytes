@@ -4,8 +4,10 @@ export const dockedCarouselConfig: ComponentConfig = {
   slug: "docked-carousel",
   name: "Docked Carousel",
   category: "carousel",
+  tags: ["carousel", "docked", "scroll", "dock", "slide"],
   componentPath: "app/meta/carousel/DockedCarousel/DockedCarousel.tsx",
-  containerClassName: "rounded-[32px] border border-white/5 bg-black shadow-2xl min-h-[500px] !h-auto !p-0",
+  containerClassName:
+    "rounded-[32px] border border-white/5 bg-black shadow-2xl min-h-[500px] !h-auto !p-0",
   props: [
     {
       name: "animationType",
@@ -39,7 +41,8 @@ export const dockedCarouselConfig: ComponentConfig = {
       name: "autoSlide",
       type: "boolean",
       default: true,
-      description: "Whether the carousel should automatically cycle through images.",
+      description:
+        "Whether the carousel should automatically cycle through images.",
     },
     {
       name: "autoSlideInterval",
@@ -54,7 +57,8 @@ export const dockedCarouselConfig: ComponentConfig = {
       name: "equalSize",
       type: "boolean",
       default: false,
-      description: "If true, all thumbnails will have the same width instead of the dynamic dock effect.",
+      description:
+        "If true, all thumbnails will have the same width instead of the dynamic dock effect.",
     },
     {
       name: "showArrows",

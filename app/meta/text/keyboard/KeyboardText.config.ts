@@ -4,6 +4,7 @@ export const keyboardTextConfig: ComponentConfig = {
   slug: "keyboard-text",
   name: "Keyboard Text",
   category: "text",
+  tags: ["keyboard", "typing", "keys", "mechanical", "click"],
   componentPath: "app/meta/text/keyboard/KeyboardText.tsx",
   props: [
     {
@@ -19,7 +20,8 @@ export const keyboardTextConfig: ComponentConfig = {
       min: 0,
       max: 35,
       step: 1,
-      description: "The distance in pixels each character travels downward mimicking a key press.",
+      description:
+        "The distance in pixels each character travels downward mimicking a key press.",
     },
     {
       name: "color",
@@ -94,6 +96,7 @@ export const keyboardTextConfig: ComponentConfig = {
     },
   ],
   staticProps: {
-    className: "text-[2.5rem] sm:text-[3rem] md:text-[5rem] lg:text-[7rem] tracking-tighter mix-blend-difference z-10 font-[Poppins]",
+    className:
+      "text-[2.5rem] sm:text-[3rem] md:text-[5rem] lg:text-[7rem] tracking-tighter mix-blend-difference z-10 font-[Poppins]",
   },
 };

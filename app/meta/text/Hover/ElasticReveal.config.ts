@@ -4,6 +4,7 @@ export const elasticRevealConfig: ComponentConfig = {
   slug: "elastic-reveal",
   name: "Elastic Reveal",
   category: "text",
+  tags: ["elastic", "spring", "hover", "reveal", "bounce"],
   componentPath: "app/meta/text/Hover/ElasticReveal.tsx",
   props: [
     {

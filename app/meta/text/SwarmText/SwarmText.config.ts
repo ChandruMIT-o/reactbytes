@@ -4,6 +4,7 @@ export const swarmTextConfig: ComponentConfig = {
   slug: "swarm-text",
   name: "Swarm Text",
   category: "text",
+  tags: ["swarm", "particles", "scatter", "assemble", "chaos"],
   componentPath: "app/meta/text/SwarmText/SwarmText.tsx",
   props: [
     {
@@ -16,7 +17,8 @@ export const swarmTextConfig: ComponentConfig = {
       name: "prefix",
       type: "string",
       default: "I am a",
-      description: "Static prefix text displayed in front of the dynamic words.",
+      description:
+        "Static prefix text displayed in front of the dynamic words.",
     },
     {
       name: "delay",
@@ -25,7 +27,8 @@ export const swarmTextConfig: ComponentConfig = {
       min: 1000,
       max: 10000,
       step: 500,
-      description: "Duration in milliseconds to display each word before swapping.",
+      description:
+        "Duration in milliseconds to display each word before swapping.",
     },
     {
       name: "fontSize",
@@ -52,7 +55,8 @@ export const swarmTextConfig: ComponentConfig = {
       min: 0.01,
       max: 0.3,
       step: 0.01,
-      description: "Spring stiffness factor pulling particles back to text target points.",
+      description:
+        "Spring stiffness factor pulling particles back to text target points.",
     },
     {
       name: "particleSize",
@@ -70,13 +74,15 @@ export const swarmTextConfig: ComponentConfig = {
       min: 2,
       max: 6,
       step: 1,
-      description: "Grid pixel sampling step. Lower values increase particle density but decrease performance.",
+      description:
+        "Grid pixel sampling step. Lower values increase particle density but decrease performance.",
     },
     {
       name: "mouseRepel",
       type: "boolean",
       default: true,
-      description: "Enables particle repulsion when hovering with the cursor or dragging.",
+      description:
+        "Enables particle repulsion when hovering with the cursor or dragging.",
     },
     {
       name: "repelRadius",
@@ -94,7 +100,8 @@ export const swarmTextConfig: ComponentConfig = {
       min: 0.5,
       max: 10.0,
       step: 0.5,
-      description: "Repelling force factor pushing particles away from the mouse.",
+      description:
+        "Repelling force factor pushing particles away from the mouse.",
     },
     {
       name: "textColor",
@@ -137,7 +144,7 @@ export const swarmTextConfig: ComponentConfig = {
         fontSize: 40,
         textColor: "#10B981",
         prefixColor: "#6B7280",
-        friction: 0.80,
+        friction: 0.8,
         springStiffness: 0.12,
         particleSize: 2.2,
         repelRadius: 75,

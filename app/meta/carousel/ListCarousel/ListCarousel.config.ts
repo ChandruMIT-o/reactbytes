@@ -4,8 +4,10 @@ export const listCarouselConfig: ComponentConfig = {
   slug: "list-carousel",
   name: "List Carousel",
   category: "carousel",
+  tags: ["carousel", "list", "scroll", "items", "horizontal"],
   componentPath: "app/meta/carousel/ListCarousel/ListCarousel.tsx",
-  containerClassName: "h-[600px] w-full rounded-xl border border-rb-neutral-4 shadow-2xl !p-0",
+  containerClassName:
+    "h-[600px] w-full rounded-xl border border-rb-neutral-4 shadow-2xl !p-0",
   props: [
     {
       name: "defaultBg",
@@ -26,14 +28,16 @@ export const listCarouselConfig: ComponentConfig = {
       id: "vibrant",
       label: "Vibrant Abstract",
       config: {
-        defaultBg: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop",
+        defaultBg:
+          "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop",
       },
     },
     {
       id: "dark",
       label: "Deep Midnight",
       config: {
-        defaultBg: "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071&auto=format&fit=crop",
+        defaultBg:
+          "https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071&auto=format&fit=crop",
       },
     },
   ],

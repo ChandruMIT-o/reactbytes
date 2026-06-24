@@ -4,13 +4,22 @@ export const liquidNoiseConfig: ComponentConfig = {
   slug: "liquid-noise",
   name: "Liquid Noise",
   category: "background",
+  tags: ["liquid", "noise", "fluid", "organic", "flow"],
   componentPath: "app/meta/background/liquid/LiquidNoise.tsx",
   props: [
     {
       name: "colors",
       type: "string[]" as any,
-      default: ["#f15a22", "#0a0e27", "#40e0d0", "#f15a22", "#0a0e27", "#40e0d0"],
-      description: "Array of 6 hex colors that define the main gradient shades.",
+      default: [
+        "#f15a22",
+        "#0a0e27",
+        "#40e0d0",
+        "#f15a22",
+        "#0a0e27",
+        "#40e0d0",
+      ],
+      description:
+        "Array of 6 hex colors that define the main gradient shades.",
     },
     {
       name: "speed",
@@ -93,7 +102,14 @@ export const liquidNoiseConfig: ComponentConfig = {
       id: "scheme1",
       label: "Scheme 1 (Orange & Navy)",
       config: {
-        colors: ["#f15a22", "#0a0e27", "#f15a22", "#0a0e27", "#f15a22", "#0a0e27"],
+        colors: [
+          "#f15a22",
+          "#0a0e27",
+          "#f15a22",
+          "#0a0e27",
+          "#f15a22",
+          "#0a0e27",
+        ],
         speed: 1.5,
         intensity: 1.8,
         grainIntensity: 0.08,
@@ -109,7 +125,14 @@ export const liquidNoiseConfig: ComponentConfig = {
       id: "scheme2",
       label: "Scheme 2 (Turquoise & Coral)",
       config: {
-        colors: ["#ff6c50", "#40e0d0", "#ff6c50", "#40e0d0", "#ff6c50", "#40e0d0"],
+        colors: [
+          "#ff6c50",
+          "#40e0d0",
+          "#ff6c50",
+          "#40e0d0",
+          "#ff6c50",
+          "#40e0d0",
+        ],
         speed: 1.2,
         intensity: 1.8,
         grainIntensity: 0.08,
@@ -125,7 +148,14 @@ export const liquidNoiseConfig: ComponentConfig = {
       id: "scheme3",
       label: "Scheme 3 (Triple Blend)",
       config: {
-        colors: ["#f15a22", "#0a0e27", "#40e0d0", "#f15a22", "#0a0e27", "#40e0d0"],
+        colors: [
+          "#f15a22",
+          "#0a0e27",
+          "#40e0d0",
+          "#f15a22",
+          "#0a0e27",
+          "#40e0d0",
+        ],
         speed: 1.2,
         intensity: 1.8,
         grainIntensity: 0.08,
@@ -141,7 +171,14 @@ export const liquidNoiseConfig: ComponentConfig = {
       id: "scheme4",
       label: "Scheme 4 (Desert Mirage)",
       config: {
-        colors: ["#f26633", "#2d6b6d", "#d1af9c", "#f26633", "#2d6b6d", "#d1af9c"],
+        colors: [
+          "#f26633",
+          "#2d6b6d",
+          "#d1af9c",
+          "#f26633",
+          "#2d6b6d",
+          "#d1af9c",
+        ],
         speed: 1.2,
         intensity: 1.8,
         grainIntensity: 0.08,
@@ -157,7 +194,14 @@ export const liquidNoiseConfig: ComponentConfig = {
       id: "scheme5",
       label: "Scheme 5 (Teal Darkness)",
       config: {
-        colors: ["#f15a22", "#004238", "#f15a22", "#000000", "#f15a22", "#000000"],
+        colors: [
+          "#f15a22",
+          "#004238",
+          "#f15a22",
+          "#000000",
+          "#f15a22",
+          "#000000",
+        ],
         speed: 1.5,
         intensity: 1.8,
         grainIntensity: 0.08,

@@ -4,6 +4,7 @@ export const dottedVortexConfig: ComponentConfig = {
   slug: "dotted-vortex",
   name: "Dotted Vortex",
   category: "background",
+  tags: ["dots", "vortex", "spiral", "swirl", "rotation"],
   componentPath: "app/meta/background/dotted/DottedVortex.tsx",
   props: [
     {
@@ -46,7 +47,8 @@ export const dottedVortexConfig: ComponentConfig = {
       min: 0.05,
       max: 0.5,
       step: 0.05,
-      description: "The maximum distance of the reveal effect relative to screen width.",
+      description:
+        "The maximum distance of the reveal effect relative to screen width.",
     },
     {
       name: "kineticEnergyMultiplier",
@@ -55,7 +57,8 @@ export const dottedVortexConfig: ComponentConfig = {
       min: 0.1,
       max: 2.0,
       step: 0.1,
-      description: "How intensely the cursor speed injects kinetic energy into dots.",
+      description:
+        "How intensely the cursor speed injects kinetic energy into dots.",
     },
     {
       name: "rippleSpeed",

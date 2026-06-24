@@ -4,6 +4,7 @@ export const voidOrbConfig: ComponentConfig = {
   slug: "void-orb",
   name: "Void Orb",
   category: "background",
+  tags: ["void", "orb", "dark", "energy", "glow", "space"],
   componentPath: "app/meta/background/space/VoidOrb.tsx",
   props: [
     {

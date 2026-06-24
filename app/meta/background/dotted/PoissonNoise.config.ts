@@ -4,6 +4,7 @@ export const poissonNoiseConfig: ComponentConfig = {
   slug: "poisson-noise",
   name: "Poisson Disc Noise",
   category: "background",
+  tags: ["poisson", "noise", "scatter", "dots", "distribution"],
   componentPath: "app/meta/background/dotted/PoissonNoise.tsx",
   props: [
     {
@@ -16,7 +17,8 @@ export const poissonNoiseConfig: ComponentConfig = {
         { id: "constellation", label: "Constellation" },
         { id: "hybrid", label: "Hybrid View" },
       ],
-      description: "The aesthetic representation style of the particles or grid structures.",
+      description:
+        "The aesthetic representation style of the particles or grid structures.",
     },
     {
       name: "colorTheme",
@@ -28,7 +30,8 @@ export const poissonNoiseConfig: ComponentConfig = {
         { id: "nebula", label: "Deep Nebula" },
         { id: "cyberpunk", label: "Cyber Neon" },
       ],
-      description: "Curated harmonious color palette preset applied to render elements.",
+      description:
+        "Curated harmonious color palette preset applied to render elements.",
     },
     {
       name: "mouseInfluence",
@@ -41,7 +44,8 @@ export const poissonNoiseConfig: ComponentConfig = {
         { id: "scaleDown", label: "Scale Down Size" },
         { id: "none", label: "No Influence" },
       ],
-      description: "How the pointer alters particle positioning or local scaling.",
+      description:
+        "How the pointer alters particle positioning or local scaling.",
     },
     {
       name: "minRadius",
@@ -75,7 +79,7 @@ export const poissonNoiseConfig: ComponentConfig = {
       type: "number",
       default: 0.003,
       min: 0.001,
-      max: 0.010,
+      max: 0.01,
       step: 0.0005,
       description: "Zoom level/frequency of the 2D gradient noise field.",
     },
@@ -86,14 +90,15 @@ export const poissonNoiseConfig: ComponentConfig = {
       min: 0.5,
       max: 5.0,
       step: 0.1,
-      description: "Force strength of the noise field applied to particle velocities.",
+      description:
+        "Force strength of the noise field applied to particle velocities.",
     },
     {
       name: "driftSpeed",
       type: "number",
       default: 0.015,
       min: 0.001,
-      max: 0.050,
+      max: 0.05,
       step: 0.001,
       description: "Evolution rate/speed of the vector field over time.",
     },
@@ -113,7 +118,8 @@ export const poissonNoiseConfig: ComponentConfig = {
       min: 0.1,
       max: 3.0,
       step: 0.1,
-      description: "Force strength / intensity multiplier of the cursor interaction.",
+      description:
+        "Force strength / intensity multiplier of the cursor interaction.",
     },
     {
       name: "isPlaying",

@@ -4,6 +4,7 @@ export const petalWaveConfig: ComponentConfig = {
   slug: "petal-wave",
   name: "Petal Wave",
   category: "background",
+  tags: ["petal", "wave", "flower", "organic", "rotation"],
   componentPath: "app/meta/background/wave/PetalWave/PetalWave.tsx",
   props: [
     {
@@ -25,7 +26,8 @@ export const petalWaveConfig: ComponentConfig = {
       min: 0.1,
       max: 3.0,
       step: 0.1,
-      description: "Animation speed multiplier (GSAP timeScale). Controls loop speed.",
+      description:
+        "Animation speed multiplier (GSAP timeScale). Controls loop speed.",
     },
     {
       name: "shape",

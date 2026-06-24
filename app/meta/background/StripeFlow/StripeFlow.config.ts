@@ -4,6 +4,7 @@ export const stripeFlowConfig: ComponentConfig = {
   slug: "stripe-flow",
   name: "Stripe Flow",
   category: "background",
+  tags: ["stripe", "flow", "lines", "gradient", "motion"],
   componentPath: "app/meta/background/StripeFlow/StripeFlow.tsx",
   props: [
     {

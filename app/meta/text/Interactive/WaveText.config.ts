@@ -4,6 +4,7 @@ export const waveTextConfig: ComponentConfig = {
   slug: "wave-text",
   name: "Proximity Ripple",
   category: "text",
+  tags: ["wave", "proximity", "ripple", "interactive", "mouse", "hover"],
   componentPath: "app/meta/text/Interactive/WaveText.tsx",
   props: [
     {
@@ -19,7 +20,8 @@ export const waveTextConfig: ComponentConfig = {
       min: 0,
       max: 400,
       step: 10,
-      description: "The maximum distance from the cursor to apply the wave scale/jump.",
+      description:
+        "The maximum distance from the cursor to apply the wave scale/jump.",
     },
     {
       name: "hoverColor",

@@ -4,8 +4,11 @@ export const stackedCardCarouselConfig: ComponentConfig = {
   slug: "stacked-card-carousel",
   name: "Stacked Card Carousel",
   category: "carousel",
-  componentPath: "app/meta/carousel/StackedCardCarousel/StackedCardCarousel.tsx",
-  containerClassName: "rounded-3xl border border-white/5 bg-zinc-950 min-h-[600px] !h-auto !p-0",
+  tags: ["carousel", "cards", "stack", "slide", "3d"],
+  componentPath:
+    "app/meta/carousel/StackedCardCarousel/StackedCardCarousel.tsx",
+  containerClassName:
+    "rounded-3xl border border-white/5 bg-zinc-950 min-h-[600px] !h-auto !p-0",
   props: [
     {
       name: "cardWidth",

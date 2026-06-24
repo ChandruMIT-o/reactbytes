@@ -4,38 +4,45 @@ export const malakorSingularityConfig: ComponentConfig = {
   slug: "malakor-singularity",
   name: "Malakor Singularity",
   category: "miscellaneous",
+  tags: ["singularity", "orb", "dark", "energy", "vortex"],
   componentPath: "app/meta/misc/MalakorSingularity/MalakorSingularity.tsx",
-  containerClassName: "w-full h-[600px] relative overflow-hidden flex items-center justify-center p-2",
+  containerClassName:
+    "w-full h-[600px] relative overflow-hidden flex items-center justify-center p-2",
   props: [
     {
       name: "coreName",
       type: "string",
       default: "MALAKOR.SINGULARITY",
-      description: "Upper-left atmospheric label indicating the core's identity.",
+      description:
+        "Upper-left atmospheric label indicating the core's identity.",
     },
     {
       name: "initialWhisper",
       type: "string",
       default: "Hover over the void and type your command...",
-      description: "Initial message typed out letter-by-letter on core initialization.",
+      description:
+        "Initial message typed out letter-by-letter on core initialization.",
     },
     {
       name: "apiKey",
       type: "string",
       default: "",
-      description: "Optional Gemini API key to enable sarcastic conversational AI replies.",
+      description:
+        "Optional Gemini API key to enable sarcastic conversational AI replies.",
     },
     {
       name: "typingColor",
       type: "color",
       default: "#ff1407",
-      description: "Hex color for typing bursts and the blinking command caret.",
+      description:
+        "Hex color for typing bursts and the blinking command caret.",
     },
     {
       name: "hoverColor",
       type: "color",
       default: "#0b52ff",
-      description: "Hex color representing the electric-blue kinetic friction cursor trail.",
+      description:
+        "Hex color representing the electric-blue kinetic friction cursor trail.",
     },
   ],
   presets: [
@@ -72,7 +79,8 @@ export const malakorSingularityConfig: ComponentConfig = {
   ],
   staticProps: {
     showApiKeyButton: false,
-    className: "relative w-full h-full bg-black overflow-hidden select-none cursor-crosshair text-neutral-200 border border-neutral-800 rounded-xl",
+    className:
+      "relative w-full h-full bg-black overflow-hidden select-none cursor-crosshair text-neutral-200 border border-neutral-800 rounded-xl",
   },
   credits: [
     {

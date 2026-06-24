@@ -4,6 +4,7 @@ export const morphCarouselConfig: ComponentConfig = {
   slug: "morph-carousel",
   name: "Morph Carousel",
   category: "carousel",
+  tags: ["carousel", "morph", "shape", "transition", "fluid"],
   componentPath: "app/meta/carousel/MorphCarousel/MorphCarousel.tsx",
   containerClassName: "!p-0 !h-auto w-full max-w-5xl",
   props: [

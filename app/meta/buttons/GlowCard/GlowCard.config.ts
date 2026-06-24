@@ -4,8 +4,10 @@ export const glowCardConfig: ComponentConfig = {
   slug: "glow-card",
   name: "Glowing Shadows",
   category: "miscellaneous",
+  tags: ["glow", "card", "shadow", "hover", "light", "gradient"],
   componentPath: "app/meta/buttons/GlowCard/GlowCard.tsx",
-  containerClassName: "w-full min-h-[500px] !h-auto flex items-center justify-center p-8 bg-[#020005] rounded-[32px] border border-white/5 relative overflow-hidden",
+  containerClassName:
+    "w-full min-h-[500px] !h-auto flex items-center justify-center p-8 bg-[#020005] rounded-[32px] border border-white/5 relative overflow-hidden",
   props: [
     {
       name: "title",

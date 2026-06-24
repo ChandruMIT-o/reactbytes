@@ -4,8 +4,10 @@ export const slidingMenuConfig: ComponentConfig = {
   slug: "sliding-menu",
   name: "Sliding Menu",
   category: "miscellaneous",
+  tags: ["menu", "slide", "navigation", "drawer", "animated"],
   componentPath: "app/meta/menu/SlidingMenu/SlidingMenu.tsx",
-  containerClassName: "w-full h-[550px] relative bg-zinc-950 rounded-3xl overflow-hidden border border-white/5 flex flex-col justify-center items-center",
+  containerClassName:
+    "w-full h-[550px] relative bg-zinc-950 rounded-3xl overflow-hidden border border-white/5 flex flex-col justify-center items-center",
   props: [
     {
       name: "logoText",
@@ -17,7 +19,8 @@ export const slidingMenuConfig: ComponentConfig = {
       name: "textColor",
       type: "color",
       default: "#ffffff",
-      description: "Default text color for labels, headings, and branding elements.",
+      description:
+        "Default text color for labels, headings, and branding elements.",
     },
     {
       name: "accentColor",

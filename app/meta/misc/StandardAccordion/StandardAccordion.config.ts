@@ -4,8 +4,10 @@ export const standardAccordionConfig: ComponentConfig = {
   slug: "standard-accordion",
   name: "Standard Accordion",
   category: "miscellaneous",
+  tags: ["accordion", "faq", "collapse", "expand", "sections"],
   componentPath: "app/meta/misc/StandardAccordion/StandardAccordion.tsx",
-  containerClassName: "w-full min-h-[550px] !h-auto flex items-center justify-center p-8 rounded-[32px] border border-white/5 bg-[#030008] shadow-2xl relative overflow-hidden",
+  containerClassName:
+    "w-full min-h-[550px] !h-auto flex items-center justify-center p-8 rounded-[32px] border border-white/5 bg-[#030008] shadow-2xl relative overflow-hidden",
   props: [
     {
       name: "stiffness",
@@ -14,7 +16,8 @@ export const standardAccordionConfig: ComponentConfig = {
       min: 50,
       max: 800,
       step: 10,
-      description: "Stiffness of the spring. Higher values make the movement snappier.",
+      description:
+        "Stiffness of the spring. Higher values make the movement snappier.",
     },
     {
       name: "damping",
@@ -23,7 +26,8 @@ export const standardAccordionConfig: ComponentConfig = {
       min: 5,
       max: 100,
       step: 1,
-      description: "Strength of opposing force. Lower values create more 'bounce'.",
+      description:
+        "Strength of opposing force. Lower values create more 'bounce'.",
     },
     {
       name: "mass",
@@ -32,7 +36,8 @@ export const standardAccordionConfig: ComponentConfig = {
       min: 0.1,
       max: 3.0,
       step: 0.1,
-      description: "The weight of the moving object. Higher mass feels heavier and slower.",
+      description:
+        "The weight of the moving object. Higher mass feels heavier and slower.",
     },
     {
       name: "floatOffset",
@@ -41,7 +46,8 @@ export const standardAccordionConfig: ComponentConfig = {
       min: 0,
       max: 80,
       step: 1,
-      description: "The vertical distance items float away when an adjacent item expands.",
+      description:
+        "The vertical distance items float away when an adjacent item expands.",
     },
     {
       name: "hoverScale",
@@ -56,7 +62,8 @@ export const standardAccordionConfig: ComponentConfig = {
       name: "allowMultiple",
       type: "boolean",
       default: false,
-      description: "If true, multiple accordion items can be open simultaneously.",
+      description:
+        "If true, multiple accordion items can be open simultaneously.",
     },
     {
       name: "uppercase",

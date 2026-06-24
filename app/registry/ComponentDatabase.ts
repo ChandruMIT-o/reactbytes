@@ -108,6 +108,7 @@ export interface ComponentConfig {
   slug: string;
   name: string;
   category: "text" | "background" | "carousel" | "miscellaneous" | "cursor";
+  tags?: string[];
   componentPath: string;
   props: PropConfig[];
   presets: PresetConfig[];
