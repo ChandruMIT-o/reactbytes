@@ -21,11 +21,35 @@ export interface ColorPickerProps {
 	compact?: boolean;
 }
 
-const normalizeHex = (value: string) => {
-	const normalized = value.trim();
-	return normalized.startsWith("#")
-		? normalized.toUpperCase()
-		: `#${normalized.toUpperCase()}`;
+// Converts any variation of rgb/rgba to an uppercase hex string
+const normalizeHex = (value: string): string => {
+	if (!value) return "#000000";
+
+	let cleaned = value.trim();
+
+	// Check for formats like rgb(...), rgba(...), or atypical #RGBA(...) strings
+	const rgbRegex = /(?:rgba?|#rgba?)\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+)\s*)?\)/i;
+	const match = cleaned.match(rgbRegex);
+
+	if (match) {
+		const r = parseInt(match[1], 10);
+		const g = parseInt(match[2], 10);
+		const b = parseInt(match[3], 10);
+		const a = match[4] !== undefined ? parseFloat(match[4]) : 1;
+
+		const toHex = (num: number) => num.toString(16).padStart(2, "0").toUpperCase();
+
+		if (a < 1) {
+			// Include alpha channel if opacity is present
+			const alphaHex = Math.round(a * 255).toString(16).padStart(2, "0").toUpperCase();
+			return `#${toHex(r)}${toHex(g)}${toHex(b)}${alphaHex}`;
+		}
+		return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+	}
+
+	// Standard Hex fallback formatting
+	cleaned = cleaned.replace("#", "");
+	return `#${cleaned.toUpperCase()}`;
 };
 
 export default function ColorPicker({
@@ -88,8 +112,11 @@ export default function ColorPicker({
 	};
 
 	const handleHexSubmit = () => {
-		const formatted = hexInput.startsWith("#") ? hexInput : `#${hexInput}`;
-		if (/^#([0-9A-F]{3}){1,2}$/i.test(formatted)) {
+		// Run input through validation/normalization before evaluating regex
+		const formatted = normalizeHex(hexInput);
+
+		// Regex matches standard 3-char, 6-char, or 8-char (with alpha channel) Hex
+		if (/^#([0-9A-F]{3,4}|[0-9A-F]{6}|[0-9A-F]{8})$/i.test(formatted)) {
 			handleSelectColor(formatted);
 		} else {
 			setHexInput(selectedColor);
@@ -243,6 +270,3 @@ export default function ColorPicker({
 		</div>
 	);
 }
-
-
-

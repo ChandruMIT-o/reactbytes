@@ -9,7 +9,6 @@ export const registryKeys = [
   // Text items
   "blur-text",
   "fall-down",
-  "blur-in",
   "reveal-under",
   "variable-weight",
   "wave-text",

@@ -23,9 +23,30 @@ export const blurTextConfig: ComponentConfig = {
     "Use this component to animate text with a smooth blur entry effect. It breaks down text into characters or words dynamically. Note: best used for hero headlines and text overlays, not for large bodies of paragraphs.",
   props: [
     {
+      name: "triggerOnView",
+      type: "boolean",
+      default: true,
+      description: "Whether animation waits until entering viewport."
+    },
+    {
+      name: "initialBlur",
+      type: "number",
+      default: 10,
+      min: 0,
+      max: 100,
+      step: 1,
+      description: "Initial blur intensity."
+    },
+    {
+      name: "color",
+      type: "color",
+      default: "#FFFFFF",
+      description: "Text color."
+    },
+    {
       name: "text",
       type: "string",
-      default: "BLURRY MOTION",
+      default: "All Hail Rameez",
       description: "The text to be broken down and animated.",
     },
     {
@@ -108,6 +129,24 @@ export const blurTextConfig: ComponentConfig = {
   ],
   presets: [
     {
+      id: "default",
+      label: "Default Style",
+      config: {
+        text: "All Hail Rameez",
+        duration: 0.6,
+        stagger: 0.04,
+        animateBy: "letters",
+        direction: "none",
+        initialBlur: 12,
+        triggerOnView: false,
+        color: "#E8EAF0",
+        uppercase: false,
+        className: "text-6xl font-bold tracking-tight font-mono",
+        animationStyle: "blur-in",
+      },
+    },
+
+    {
       id: "soft-reveal",
       label: "Soft Reveal",
       config: {
@@ -120,10 +159,12 @@ export const blurTextConfig: ComponentConfig = {
         loop: false,
         blurAmount: 8,
         uppercase: true,
+        animationStyle: "blur-text",
         className:
           "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-2",
       },
     },
+
     {
       id: "infinite-fog",
       label: "Infinite Fog",
@@ -139,8 +180,10 @@ export const blurTextConfig: ComponentConfig = {
         uppercase: true,
         className:
           "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-1",
+        animationStyle: "blur-text",
       },
     },
+
     {
       id: "smoky",
       label: "Smoky Entrance",
@@ -156,6 +199,61 @@ export const blurTextConfig: ComponentConfig = {
         uppercase: true,
         className:
           "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-white",
+        animationStyle: "blur-text",
+      },
+    },
+
+    {
+      id: "sharp",
+      label: "Rapid Entry",
+      config: {
+        text: "REACTION",
+        duration: 0.3,
+        stagger: 0.02,
+        animateBy: "letters",
+        direction: "none",
+        initialBlur: 8,
+        triggerOnView: false,
+        color: "#2DD4BF",
+        uppercase: true,
+        className: "text-6xl font-bold tracking-tight font-mono",
+        animationStyle: "blur-in",
+      },
+    },
+
+    {
+      id: "ethereal",
+      label: "Ethereal Mist",
+      config: {
+        text: "ETHEREAL",
+        duration: 1.5,
+        stagger: 0.1,
+        animateBy: "letters",
+        direction: "none",
+        initialBlur: 32,
+        triggerOnView: false,
+        color: "#A78BFA",
+        uppercase: true,
+        className: "text-6xl font-bold tracking-tight font-mono",
+        animationStyle: "blur-in",
+      },
+    },
+
+    {
+      id: "cascade",
+      label: "Slow Cascade",
+      config: {
+        text: "BLURRING",
+        duration: 2.0,
+        stagger: 0.05,
+        animateBy: "letters",
+        direction: "none",
+        initialBlur: 24,
+        triggerOnView: false,
+        color: "#FB7185",
+        uppercase: true,
+        className: "text-6xl font-bold tracking-tight font-mono",
+        animationStyle: "blur-in",
       },
     },
   ],

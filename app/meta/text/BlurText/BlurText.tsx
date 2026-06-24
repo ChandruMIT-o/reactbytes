@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { useInView, motion, Variant, Transition } from "framer-motion";
+import { motion } from "framer-motion";
 
 export interface BlurTextProps {
 	/** The text to display and animate */
@@ -30,7 +30,72 @@ export interface BlurTextProps {
 	blurAmount?: number;
 	/** Whether to force text to uppercase */
 	uppercase?: boolean;
+	/** Initial blur amount */
+	initialBlur?: number;
+	/** Final opacity */
+	endOpacity?: number;
+	/** Text color */
+	color?: string;
+	/** Animate immediately instead of waiting for viewport */
+	triggerOnView?: boolean;
+	animationStyle?: "blur-text" | "blur-in";
 }
+
+const BlurInRenderer = ({
+	text,
+	duration,
+	stagger,
+	easing,
+	initialBlur,
+	endOpacity,
+	color,
+	uppercase,
+	className,
+}: any) => {
+	const letters = (uppercase ? text.toUpperCase() : text).split("");
+
+	return (
+		<motion.div
+			className={`flex flex-wrap justify-center ${className ?? ""}`}
+			initial="hidden"
+			animate="visible"
+			variants={{
+				visible: {
+					transition: {
+						staggerChildren: stagger,
+					},
+				},
+			}}
+		>
+			{letters.map((char: string, index: number) => (
+				<motion.span
+					key={`${index}-${char}`}
+					variants={{
+						hidden: {
+							opacity: 0,
+							filter: `blur(${initialBlur}px)`,
+						},
+						visible: {
+							opacity: endOpacity,
+							filter: "blur(0px)",
+						},
+					}}
+					transition={{
+						duration,
+						ease: easing,
+					}}
+					className="inline-block"
+					style={{
+						whiteSpace: "pre",
+						color,
+					}}
+				>
+					{char === " " ? "\u00A0" : char}
+				</motion.span>
+			))}
+		</motion.div>
+	);
+};
 
 export const BlurText: React.FC<BlurTextProps> = ({
 	text = "",
@@ -46,6 +111,11 @@ export const BlurText: React.FC<BlurTextProps> = ({
 	easing = "easeOut",
 	loop = false,
 	blurAmount = 10,
+	initialBlur,
+	endOpacity = 1,
+	color = "#FFFFFF",
+	triggerOnView = true,
+	animationStyle = "blur-in",
 	uppercase = false,
 }) => {
 	const displayText = uppercase ? text.toUpperCase() : text;
@@ -53,46 +123,69 @@ export const BlurText: React.FC<BlurTextProps> = ({
 	const [inView, setInView] = useState(false);
 	const ref = useRef<HTMLParagraphElement>(null);
 	const animatedCount = useRef(0);
-
+	const blurValue = initialBlur ?? blurAmount;
+	const shouldAnimate = triggerOnView ? inView : true;
+	
 	// Use intersection observer to trigger animation
 	useEffect(() => {
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting) {
-					setInView(true);
-					if (ref.current) {
-						observer.unobserve(ref.current);
-					}
+	if (!triggerOnView) {
+		setInView(true);
+		return;
+	}
+
+	const observer = new IntersectionObserver(
+		([entry]) => {
+			if (entry.isIntersecting) {
+				setInView(true);
+				if (ref.current) {
+					observer.unobserve(ref.current);
 				}
-			},
-			{ threshold, rootMargin }
-		);
+			}
+		},
+		{ threshold, rootMargin }
+	);
 
-		if (ref.current) {
-			observer.observe(ref.current);
-		}
+	if (ref.current) {
+		observer.observe(ref.current);
+	}
 
-		return () => observer.disconnect();
-	}, [threshold, rootMargin]);
+	return () => observer.disconnect();
+}, [threshold, rootMargin, triggerOnView]);
 
 	const getVariants = () => {
 		const yOffset = direction === "top" ? -40 : direction === "bottom" ? 40 : 0;
 
 		return {
 			hidden: {
-				filter: `blur(${blurAmount}px)`,
-				opacity: 0,
-				y: yOffset,
+    			filter: `blur(${blurValue}px)`,
+    			opacity: 0,
+    			y: yOffset,
 			},
 			visible: {
-				filter: "blur(0px)",
-				opacity: 1,
-				y: 0,
+    			filter: "blur(0px)",
+    			opacity: endOpacity,
+    			y: 0,
 			},
 		};
 	};
 
 	const variants = getVariants();
+    
+	if (animationStyle === "blur-in") {
+	return (
+		<BlurInRenderer
+			text={text}
+			duration={duration}
+			stagger={stagger}
+			easing={easing}
+			initialBlur={blurValue}
+			endOpacity={endOpacity}
+			color={color}
+			uppercase={uppercase}
+			className={className}
+		/>
+	);
+}
 
 	return (
 		<p
@@ -104,10 +197,10 @@ export const BlurText: React.FC<BlurTextProps> = ({
 					key={i}
 					initial="hidden"
 					animate={
-						inView
+						shouldAnimate
 							? loop
 								? {
-										filter: ["blur(0px)", `blur(${blurAmount}px)`, "blur(0px)"],
+										filter: ["blur(0px)", `blur(${blurValue}px)`, "blur(0px)"],
 										opacity: [1, 0.5, 1],
 										y: 0,
 								  }
@@ -142,7 +235,7 @@ export const BlurText: React.FC<BlurTextProps> = ({
 						}
 					}}
 					className="inline-block"
-					style={{ whiteSpace: "pre" }}
+					style={{whiteSpace: "pre",color,}}
 				>
 					{el === " " ? "\u00A0" : el}
 					{animateBy === "words" && i < elements.length - 1 && "\u00A0"}
