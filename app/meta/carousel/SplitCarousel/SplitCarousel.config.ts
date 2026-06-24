@@ -4,8 +4,10 @@ export const splitCarouselConfig: ComponentConfig = {
   slug: "split-carousel",
   name: "Split Carousel",
   category: "carousel",
+  tags: ["carousel", "split", "reveal", "panels", "slide"],
   componentPath: "app/meta/carousel/SplitCarousel/SplitCarousel.tsx",
-  containerClassName: "rounded-2xl border border-white/5 bg-black min-h-[500px] !h-auto !p-0",
+  containerClassName:
+    "rounded-2xl border border-white/5 bg-black min-h-[500px] !h-auto !p-0",
   props: [
     {
       name: "sensitivity",
@@ -14,7 +16,8 @@ export const splitCarouselConfig: ComponentConfig = {
       min: 0.1,
       max: 3.0,
       step: 0.1,
-      description: "Controls how fast the animation advances based on mouse wheel speed.",
+      description:
+        "Controls how fast the animation advances based on mouse wheel speed.",
     },
     {
       name: "backgroundColor",
@@ -29,7 +32,8 @@ export const splitCarouselConfig: ComponentConfig = {
       min: 0.0,
       max: 5.0,
       step: 0.1,
-      description: "The border radius applied to the inner corners of the split images (in rem).",
+      description:
+        "The border radius applied to the inner corners of the split images (in rem).",
     },
   ],
   presets: [

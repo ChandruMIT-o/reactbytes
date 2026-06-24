@@ -4,6 +4,7 @@ export const scrambleRevealConfig: ComponentConfig = {
   slug: "scramble-reveal",
   name: "Scramble Reveal",
   category: "text",
+  tags: ["scramble", "glitch", "reveal", "matrix", "random", "chars"],
   componentPath: "app/meta/text/TextEnter/ScrambleReveal.tsx",
   props: [
     {

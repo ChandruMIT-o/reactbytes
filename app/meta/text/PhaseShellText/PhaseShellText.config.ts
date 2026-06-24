@@ -4,6 +4,7 @@ export const phaseShellTextConfig: ComponentConfig = {
   slug: "phase-shell-text",
   name: "Phase Shell Text",
   category: "text",
+  tags: ["phase", "shell", "outline", "stroke", "reveal"],
   componentPath: "app/meta/text/PhaseShellText/PhaseShellText.tsx",
   props: [
     {
@@ -19,7 +20,8 @@ export const phaseShellTextConfig: ComponentConfig = {
       min: 40,
       max: 140,
       step: 5,
-      description: "Font size in pixels defining absolute container boundaries.",
+      description:
+        "Font size in pixels defining absolute container boundaries.",
     },
     {
       name: "impactForce",
@@ -28,7 +30,8 @@ export const phaseShellTextConfig: ComponentConfig = {
       min: 0.1,
       max: 4.0,
       step: 0.1,
-      description: "Multiplier applied to cursor deflection force on characters.",
+      description:
+        "Multiplier applied to cursor deflection force on characters.",
     },
     {
       name: "influenceRadius",

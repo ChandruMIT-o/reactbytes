@@ -4,6 +4,7 @@ export const concentricWavesConfig: ComponentConfig = {
   slug: "concentric-waves",
   name: "Concentric Waves",
   category: "background",
+  tags: ["concentric", "waves", "ripple", "rings", "pulse"],
   componentPath: "app/meta/background/wave/ConcentricWaves/ConcentricWaves.tsx",
   props: [
     {
@@ -49,7 +50,8 @@ export const concentricWavesConfig: ComponentConfig = {
       min: 500,
       max: 10000,
       step: 100,
-      description: "How long it takes for the gradient to complete a 360 rotation (in ms).",
+      description:
+        "How long it takes for the gradient to complete a 360 rotation (in ms).",
     },
     {
       name: "minOpacity",

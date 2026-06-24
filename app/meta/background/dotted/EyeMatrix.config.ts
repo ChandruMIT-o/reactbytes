@@ -4,6 +4,7 @@ export const eyeMatrixConfig: ComponentConfig = {
   slug: "eye-matrix",
   name: "Eye Matrix",
   category: "background",
+  tags: ["eye", "matrix", "dots", "grid", "gaze", "pattern"],
   componentPath: "app/meta/background/dotted/EyeMatrix.tsx",
   props: [
     {
@@ -56,7 +57,8 @@ export const eyeMatrixConfig: ComponentConfig = {
       min: 0.0,
       max: 16.0,
       step: 0.5,
-      description: "Horizontal/vertical spacing offset separating neighboring nodes.",
+      description:
+        "Horizontal/vertical spacing offset separating neighboring nodes.",
     },
     {
       name: "minRadius",
@@ -125,7 +127,8 @@ export const eyeMatrixConfig: ComponentConfig = {
       min: 0.005,
       max: 0.1,
       step: 0.005,
-      description: "Probability threshold of triggering close eyelids on each frame loop.",
+      description:
+        "Probability threshold of triggering close eyelids on each frame loop.",
     },
     {
       name: "flatBorderEnabled",

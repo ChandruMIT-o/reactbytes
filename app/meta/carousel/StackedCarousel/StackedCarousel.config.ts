@@ -4,6 +4,7 @@ export const stackedCarouselConfig: ComponentConfig = {
   slug: "stacked-carousel",
   name: "Stacked Carousel",
   category: "carousel",
+  tags: ["carousel", "stacked", "deck", "cards", "3d"],
   componentPath: "app/meta/carousel/StackedCarousel/StackedCarousel.tsx",
   containerClassName: "min-h-[500px] !h-auto !p-0",
   props: [

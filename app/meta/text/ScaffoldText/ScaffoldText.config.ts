@@ -4,6 +4,7 @@ export const scaffoldTextConfig: ComponentConfig = {
   slug: "scaffold-text",
   name: "Scaffold Text",
   category: "text",
+  tags: ["scaffold", "build", "construct", "skeleton", "reveal"],
   componentPath: "app/meta/text/ScaffoldText/ScaffoldText.tsx",
   props: [
     {

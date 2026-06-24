@@ -4,6 +4,7 @@ export const stratumTextConfig: ComponentConfig = {
   slug: "stratum-text",
   name: "Stratum Text",
   category: "text",
+  tags: ["stratum", "layer", "stack", "3d", "reveal"],
   componentPath: "app/meta/text/StratumText/StratumText.tsx",
   props: [
     {
@@ -26,7 +27,7 @@ export const stratumTextConfig: ComponentConfig = {
       type: "number",
       default: 0.045,
       min: 0.005,
-      max: 0.20,
+      max: 0.2,
       step: 0.005,
       description: "Hooke's spring stiffness constant.",
     },
@@ -34,7 +35,7 @@ export const stratumTextConfig: ComponentConfig = {
       name: "damping",
       type: "number",
       default: 0.82,
-      min: 0.50,
+      min: 0.5,
       max: 0.99,
       step: 0.01,
       description: "Damping ratio of the spring physics.",
@@ -46,7 +47,8 @@ export const stratumTextConfig: ComponentConfig = {
       min: 0.05,
       max: 2.0,
       step: 0.05,
-      description: "Multiplier determining displacement force applied to slices.",
+      description:
+        "Multiplier determining displacement force applied to slices.",
     },
     {
       name: "influenceRadius",

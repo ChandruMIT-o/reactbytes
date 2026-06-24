@@ -4,8 +4,10 @@ export const verticalMenuConfig: ComponentConfig = {
   slug: "vertical-menu",
   name: "Vertical Menu",
   category: "miscellaneous",
+  tags: ["menu", "vertical", "navigation", "sidebar", "list"],
   componentPath: "app/meta/menu/VerticalMenu/VerticalMenu.tsx",
-  containerClassName: "w-full min-h-[450px] !h-auto relative overflow-hidden flex items-center justify-end pr-12 group bg-[#060010] rounded-[18px] border border-white/5",
+  containerClassName:
+    "w-full min-h-[450px] !h-auto relative overflow-hidden flex items-center justify-end pr-12 group bg-[#060010] rounded-[18px] border border-white/5",
   props: [
     {
       name: "activeColor",

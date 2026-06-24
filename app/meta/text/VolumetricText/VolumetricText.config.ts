@@ -4,6 +4,7 @@ export const volumetricTextConfig: ComponentConfig = {
   slug: "volumetric-text",
   name: "Volumetric Text",
   category: "text",
+  tags: ["volumetric", "3d", "depth", "shadow", "extrude"],
   componentPath: "app/meta/text/VolumetricText/VolumetricText.tsx",
   props: [
     {
@@ -49,7 +50,8 @@ export const volumetricTextConfig: ComponentConfig = {
       min: 1,
       max: 32,
       step: 1,
-      description: "Number of samples along the ray path (requires shader compilation).",
+      description:
+        "Number of samples along the ray path (requires shader compilation).",
     },
     {
       name: "octaves",
@@ -58,7 +60,8 @@ export const volumetricTextConfig: ComponentConfig = {
       min: 1,
       max: 5,
       step: 1,
-      description: "Number of octaves for FBM noise (requires shader compilation).",
+      description:
+        "Number of octaves for FBM noise (requires shader compilation).",
     },
     {
       name: "lightStrength",

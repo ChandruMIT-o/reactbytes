@@ -4,6 +4,16 @@ export const singularityConfig: ComponentConfig = {
   slug: "singularity",
   name: "Schwarzschild",
   category: "background",
+  tags: [
+    "gravitational",
+    "lensing",
+    "halo",
+    "disk",
+    "streaks",
+    "procedural",
+    "noise",
+    "blackhole"
+  ],
   componentPath: "app/meta/background/space/Singularity.tsx",
   props: [
     {
@@ -13,7 +23,8 @@ export const singularityConfig: ComponentConfig = {
       min: 0.2,
       max: 2.5,
       step: 0.05,
-      description: "Accretion disk coordinate compression multiplier, pulling/pushing disk particles relative to event horizon.",
+      description:
+        "Accretion disk coordinate compression multiplier, pulling/pushing disk particles relative to event horizon.",
     },
     {
       name: "morph",
@@ -22,7 +33,8 @@ export const singularityConfig: ComponentConfig = {
       min: 0.0,
       max: 10.0,
       step: 0.1,
-      description: "Accretion disk turbulence/wave morph intensity based on procedural 3D noise.",
+      description:
+        "Accretion disk turbulence/wave morph intensity based on procedural 3D noise.",
     },
     {
       name: "intensity",
@@ -31,7 +43,8 @@ export const singularityConfig: ComponentConfig = {
       min: 0.1,
       max: 5.0,
       step: 0.1,
-      description: "Radiation glow luminosity/brightness of the gravitational lensing halo and disk streaks.",
+      description:
+        "Radiation glow luminosity/brightness of the gravitational lensing halo and disk streaks.",
     },
     {
       name: "orbitScale",
@@ -40,7 +53,8 @@ export const singularityConfig: ComponentConfig = {
       min: 0.1,
       max: 6.0,
       step: 0.1,
-      description: "Rotational orbit speed scaling factor for accretion disk streamers.",
+      description:
+        "Rotational orbit speed scaling factor for accretion disk streamers.",
     },
     {
       name: "rotateSpeed",
@@ -49,7 +63,8 @@ export const singularityConfig: ComponentConfig = {
       min: 0.0,
       max: 5.0,
       step: 0.1,
-      description: "Auto-rotation speed of the viewport coordinate system around the singularity core.",
+      description:
+        "Auto-rotation speed of the viewport coordinate system around the singularity core.",
     },
     {
       name: "camDist",
@@ -58,7 +73,8 @@ export const singularityConfig: ComponentConfig = {
       min: 25,
       max: 180,
       step: 1,
-      description: "Radial orbit distance of the viewport camera from the center Schwarzschild singularity.",
+      description:
+        "Radial orbit distance of the viewport camera from the center Schwarzschild singularity.",
     },
     {
       name: "camPhi",
@@ -67,13 +83,15 @@ export const singularityConfig: ComponentConfig = {
       min: 0.15,
       max: 1.52,
       step: 0.05,
-      description: "Vertical latitude inclination angle (in radians) of the orbital camera.",
+      description:
+        "Vertical latitude inclination angle (in radians) of the orbital camera.",
     },
     {
       name: "colorBase",
       type: "color",
       default: "#00f2ff",
-      description: "Base color used to tint the gravitational lens and emission jets.",
+      description:
+        "Base color used to tint the gravitational lens and emission jets.",
     },
   ],
   presets: [

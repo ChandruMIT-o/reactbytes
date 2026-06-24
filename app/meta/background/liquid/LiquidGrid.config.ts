@@ -4,6 +4,7 @@ export const liquidGridConfig: ComponentConfig = {
   slug: "liquid-grid",
   name: "Liquid Grid",
   category: "background",
+  tags: ["liquid", "grid", "ripple", "distort", "mesh"],
   componentPath: "app/meta/background/liquid/LiquidGrid.tsx",
   props: [
     {
@@ -40,7 +41,8 @@ export const liquidGridConfig: ComponentConfig = {
       min: 3,
       max: 35,
       step: 1,
-      description: "Resting size (radius in pixels) of the individual grid dots.",
+      description:
+        "Resting size (radius in pixels) of the individual grid dots.",
     },
     {
       name: "springK",
@@ -55,7 +57,7 @@ export const liquidGridConfig: ComponentConfig = {
       name: "damp",
       type: "number",
       default: 0.78,
-      min: 0.40,
+      min: 0.4,
       max: 0.98,
       step: 0.01,
       description: "Friction / damping factor applied to node velocities.",
@@ -76,7 +78,8 @@ export const liquidGridConfig: ComponentConfig = {
       min: -60,
       max: 80,
       step: 2,
-      description: "Max displacement force toward (positive) or away from (negative) cursor.",
+      description:
+        "Max displacement force toward (positive) or away from (negative) cursor.",
     },
     {
       name: "bounceAmp",
@@ -91,10 +94,11 @@ export const liquidGridConfig: ComponentConfig = {
       name: "rowDelay",
       type: "number",
       default: 0.055,
-      min: 0.010,
-      max: 0.250,
+      min: 0.01,
+      max: 0.25,
       step: 0.005,
-      description: "Delay in seconds for wave propagation between consecutive rows.",
+      description:
+        "Delay in seconds for wave propagation between consecutive rows.",
     },
     {
       name: "decay",
@@ -118,8 +122,8 @@ export const liquidGridConfig: ComponentConfig = {
       name: "colSpread",
       type: "number",
       default: 0.65,
-      min: 0.10,
-      max: 2.00,
+      min: 0.1,
+      max: 2.0,
       step: 0.05,
       description: "Lateral Gaussian dispersion factor across columns.",
     },
@@ -130,7 +134,8 @@ export const liquidGridConfig: ComponentConfig = {
       min: 0,
       max: 25,
       step: 1,
-      description: "CSS blur filter radius in pixels, driving the gooey liquid merge effect.",
+      description:
+        "CSS blur filter radius in pixels, driving the gooey liquid merge effect.",
     },
     {
       name: "contrast",
@@ -139,7 +144,8 @@ export const liquidGridConfig: ComponentConfig = {
       min: 1,
       max: 50,
       step: 1,
-      description: "CSS contrast filter threshold applied to sharpen blurred edges.",
+      description:
+        "CSS contrast filter threshold applied to sharpen blurred edges.",
     },
     {
       name: "dotColor",
@@ -218,7 +224,7 @@ export const liquidGridConfig: ComponentConfig = {
         spacing: 44,
         baseRadius: 7,
         springK: 0.16,
-        damp: 0.70,
+        damp: 0.7,
         gravityRadius: 140,
         gravityMax: 45,
         rowDelay: 0.035,
@@ -242,7 +248,7 @@ export const liquidGridConfig: ComponentConfig = {
         spacing: 68,
         baseRadius: 20,
         springK: 0.07,
-        damp: 0.80,
+        damp: 0.8,
         gravityRadius: 280,
         gravityMax: -30,
         rowDelay: 0.06,

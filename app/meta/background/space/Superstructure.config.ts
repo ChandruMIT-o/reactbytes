@@ -3,6 +3,7 @@ import { ComponentConfig } from "@/app/registry/ComponentDatabase";
 export const superstructureConfig: ComponentConfig = {
   slug: "superstructure",
   name: "Superstructure Mesh",
+  tags: ["superstructure", "space", "geometric", "grid", "cosmic"],
   category: "background",
   componentPath: "app/meta/background/space/Superstructure.tsx",
   props: [
@@ -31,7 +32,8 @@ export const superstructureConfig: ComponentConfig = {
       min: 100,
       max: 2000,
       step: 50,
-      description: "The radius of the icosahedron cage geometry enclosing the camera.",
+      description:
+        "The radius of the icosahedron cage geometry enclosing the camera.",
     },
     {
       name: "detail",
@@ -40,7 +42,8 @@ export const superstructureConfig: ComponentConfig = {
       min: 2,
       max: 40,
       step: 1,
-      description: "Subdivision detail factor of the icosahedron lattice. Higher numbers increase line resolution.",
+      description:
+        "Subdivision detail factor of the icosahedron lattice. Higher numbers increase line resolution.",
     },
     {
       name: "opacity",
@@ -58,7 +61,8 @@ export const superstructureConfig: ComponentConfig = {
       min: 0.1,
       max: 4.0,
       step: 0.1,
-      description: "Animation speed multiplier of the vertex displacement oscillation.",
+      description:
+        "Animation speed multiplier of the vertex displacement oscillation.",
     },
     {
       name: "enableControls",
@@ -70,7 +74,8 @@ export const superstructureConfig: ComponentConfig = {
       name: "autoRotate",
       type: "boolean",
       default: false,
-      description: "Slowly rotates the camera around the structure center automatically.",
+      description:
+        "Slowly rotates the camera around the structure center automatically.",
     },
   ],
   presets: [

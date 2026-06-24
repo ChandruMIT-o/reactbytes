@@ -4,8 +4,10 @@ export const stackedCardsConfig: ComponentConfig = {
   slug: "stacked-cards",
   name: "Stacked Cards",
   category: "miscellaneous",
+  tags: ["cards", "stack", "3d", "depth", "fan"],
   componentPath: "app/meta/card/StackedCards/StackedCards.tsx",
-  containerClassName: "w-full !h-[500px] !block overflow-y-auto p-8 bg-zinc-950 rounded-3xl border border-white/5 relative custom-scrollbar",
+  containerClassName:
+    "w-full !h-[500px] !block overflow-y-auto p-8 bg-zinc-950 rounded-3xl border border-white/5 relative custom-scrollbar",
   props: [
     {
       name: "textColor",
@@ -172,8 +174,16 @@ export const stackedCardsConfig: ComponentConfig = {
     {
       title: "Inspiration & Tech",
       items: [
-        { name: "GSAP", role: "Animation Engine", url: "https://greensock.com/gsap/" },
-        { name: "ScrollTrigger", role: "Scroll Plugin", url: "https://greensock.com/scrolltrigger/" },
+        {
+          name: "GSAP",
+          role: "Animation Engine",
+          url: "https://greensock.com/gsap/",
+        },
+        {
+          name: "ScrollTrigger",
+          role: "Scroll Plugin",
+          url: "https://greensock.com/scrolltrigger/",
+        },
         { name: "Unsplash", role: "Assets", url: "https://unsplash.com" },
       ],
     },

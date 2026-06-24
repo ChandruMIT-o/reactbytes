@@ -4,6 +4,7 @@ export const kineticTextConfig: ComponentConfig = {
   slug: "kinetic-text",
   name: "Kinetic Ribbon Text",
   category: "text",
+  tags: ["kinetic", "motion", "scroll", "velocity", "physics"],
   componentPath: "app/meta/text/Interactive/KineticText.tsx",
   props: [
     {
@@ -31,7 +32,8 @@ export const kineticTextConfig: ComponentConfig = {
       name: "activeStrokeColor",
       type: "color",
       default: "rgba(0, 245, 255, 0.45)",
-      description: "Color of the ribbon/string when interaction is active (dragging).",
+      description:
+        "Color of the ribbon/string when interaction is active (dragging).",
     },
     {
       name: "strokeColor",

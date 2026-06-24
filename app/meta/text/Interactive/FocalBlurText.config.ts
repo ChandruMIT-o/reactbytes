@@ -4,6 +4,7 @@ export const focalBlurConfig: ComponentConfig = {
   slug: "focal-blur",
   name: "Focal Depth Blur",
   category: "text",
+  tags: ["blur", "focus", "interactive", "mouse", "depth"],
   componentPath: "app/meta/text/Interactive/FocalBlurText.tsx",
   props: [
     {
@@ -19,13 +20,15 @@ export const focalBlurConfig: ComponentConfig = {
       min: 50,
       max: 600,
       step: 10,
-      description: "The radial distance around the cursor where the focus takes effect.",
+      description:
+        "The radial distance around the cursor where the focus takes effect.",
     },
     {
       name: "focusColor",
       type: "color",
       default: "#60a5fa",
-      description: "Hex color for the highlighted text in focus. Pass 'inherit' to disable.",
+      description:
+        "Hex color for the highlighted text in focus. Pass 'inherit' to disable.",
     },
     {
       name: "maxBlur",

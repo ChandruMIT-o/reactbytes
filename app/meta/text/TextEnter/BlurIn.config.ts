@@ -4,13 +4,15 @@ export const blurInConfig: ComponentConfig = {
   slug: "blur-in",
   name: "Blur In",
   category: "text",
+  tags: ["blur", "fade", "entrance", "animation", "reveal"],
   componentPath: "app/meta/text/TextEnter/BlurIn.tsx",
   props: [
     {
       name: "text",
       type: "string",
       default: "All Hail Rameez",
-      description: "The text to be broken down and animated. Handles spaces automatically.",
+      description:
+        "The text to be broken down and animated. Handles spaces automatically.",
     },
     {
       name: "duration",
@@ -19,7 +21,8 @@ export const blurInConfig: ComponentConfig = {
       min: 0.1,
       max: 3,
       step: 0.1,
-      description: "How long each character takes to finish its animation (in seconds).",
+      description:
+        "How long each character takes to finish its animation (in seconds).",
     },
     {
       name: "stagger",

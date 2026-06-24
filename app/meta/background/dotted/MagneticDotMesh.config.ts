@@ -4,6 +4,7 @@ export const magneticDotMeshConfig: ComponentConfig = {
   slug: "magnetic-dots",
   name: "Magnetic Dot Mesh",
   category: "background",
+  tags: ["magnetic", "dots", "mesh", "interactive", "mouse", "grid"],
   componentPath: "app/meta/background/dotted/MagneticDotMesh.tsx",
   props: [
     {
@@ -49,7 +50,8 @@ export const magneticDotMeshConfig: ComponentConfig = {
       min: 0.005,
       max: 0.2,
       step: 0.005,
-      description: "Stiffness of the spring pulling dots back to home positions.",
+      description:
+        "Stiffness of the spring pulling dots back to home positions.",
     },
     {
       name: "damping",

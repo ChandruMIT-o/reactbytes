@@ -4,13 +4,23 @@ export const blurTextConfig: ComponentConfig = {
   slug: "blur-text",
   name: "Blur Text",
   category: "text",
+  tags: [
+    "blur",
+    "animation",
+    "entrance",
+    "hero",
+    "letters",
+    "words",
+    "stagger",
+  ],
   componentPath: "app/meta/text/BlurText/BlurText.tsx",
   npmPackageName: "@reactbytes/blur-text",
   version: "1.0.1",
   peerDependencies: {
-    "framer-motion": "^12.38.0"
+    "framer-motion": "^12.38.0",
   },
-  context_from_dev: "Use this component to animate text with a smooth blur entry effect. It breaks down text into characters or words dynamically. Note: best used for hero headlines and text overlays, not for large bodies of paragraphs.",
+  context_from_dev:
+    "Use this component to animate text with a smooth blur entry effect. It breaks down text into characters or words dynamically. Note: best used for hero headlines and text overlays, not for large bodies of paragraphs.",
   props: [
     {
       name: "text",
@@ -70,7 +80,8 @@ export const blurTextConfig: ComponentConfig = {
       name: "loop",
       type: "boolean",
       default: false,
-      description: "Whether the animation should loop continuously (pulsing effect).",
+      description:
+        "Whether the animation should loop continuously (pulsing effect).",
     },
     {
       name: "blurAmount",
@@ -90,7 +101,8 @@ export const blurTextConfig: ComponentConfig = {
     {
       name: "className",
       type: "string",
-      default: "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-2",
+      default:
+        "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-2",
       description: "Additional wrapper CSS classes.",
     },
   ],
@@ -108,7 +120,8 @@ export const blurTextConfig: ComponentConfig = {
         loop: false,
         blurAmount: 8,
         uppercase: true,
-        className: "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-2",
+        className:
+          "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-2",
       },
     },
     {
@@ -124,7 +137,8 @@ export const blurTextConfig: ComponentConfig = {
         loop: true,
         blurAmount: 20,
         uppercase: true,
-        className: "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-1",
+        className:
+          "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-rb-accent-1",
       },
     },
     {
@@ -140,7 +154,8 @@ export const blurTextConfig: ComponentConfig = {
         loop: false,
         blurAmount: 40,
         uppercase: true,
-        className: "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-white",
+        className:
+          "text-3xl sm:text-5xl font-bold tracking-[0.1em] sm:tracking-[0.2em] text-white",
       },
     },
   ],

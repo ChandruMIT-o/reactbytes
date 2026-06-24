@@ -4,6 +4,7 @@ export const variableWeightTextConfig: ComponentConfig = {
   slug: "variable-weight",
   name: "Variable Weight",
   category: "text",
+  tags: ["weight", "font", "variable", "typography", "animation"],
   componentPath: "app/meta/text/TextEnter/VariableWeightText.tsx",
   props: [
     {

@@ -4,6 +4,7 @@ export const bubbleGradientConfig: ComponentConfig = {
   slug: "bubble-gradient",
   name: "Bubble Gradient",
   category: "background",
+  tags: ["bubble", "gradient", "color", "fluid", "soft"],
   componentPath: "app/meta/background/gradient/BubbleGradient.tsx",
   props: [
     {
@@ -22,7 +23,8 @@ export const bubbleGradientConfig: ComponentConfig = {
       name: "bubbleColors",
       type: "string",
       default: "#F6F7F8, #CDD2D8, #9AA2AD, #5B6470, #262C33",
-      description: "Five comma-separated bubble colors. Keeps grayscale by default.",
+      description:
+        "Five comma-separated bubble colors. Keeps grayscale by default.",
     },
     {
       name: "interactiveColor",
@@ -55,7 +57,8 @@ export const bubbleGradientConfig: ComponentConfig = {
       min: 10,
       max: 80,
       step: 2,
-      description: "Additional blur applied after the goo filter for a softer cloud effect.",
+      description:
+        "Additional blur applied after the goo filter for a softer cloud effect.",
     },
     {
       name: "gooBlur",
@@ -64,7 +67,8 @@ export const bubbleGradientConfig: ComponentConfig = {
       min: 4,
       max: 20,
       step: 1,
-      description: "Blur amount inside the SVG goo filter before the bubbles merge.",
+      description:
+        "Blur amount inside the SVG goo filter before the bubbles merge.",
     },
     {
       name: "gooStrength",
@@ -73,7 +77,8 @@ export const bubbleGradientConfig: ComponentConfig = {
       min: 8,
       max: 28,
       step: 1,
-      description: "Controls how aggressively overlapping bubbles fuse together.",
+      description:
+        "Controls how aggressively overlapping bubbles fuse together.",
     },
     {
       name: "gooOffset",
@@ -112,7 +117,8 @@ export const bubbleGradientConfig: ComponentConfig = {
       min: 0.02,
       max: 0.3,
       step: 0.01,
-      description: "Follow smoothing for the interactive bubble. Lower feels floatier.",
+      description:
+        "Follow smoothing for the interactive bubble. Lower feels floatier.",
     },
     {
       name: "bubbleOpacity",

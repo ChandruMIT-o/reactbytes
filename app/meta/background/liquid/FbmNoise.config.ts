@@ -4,13 +4,15 @@ export const fbmNoiseConfig: ComponentConfig = {
   slug: "fbm-noise",
   name: "FBM Vector Shader",
   category: "background",
+  tags: ["fbm", "fractal", "noise", "terrain", "organic"],
   componentPath: "app/meta/background/liquid/FbmNoise.tsx",
   props: [
     {
       name: "complex",
       type: "boolean",
       default: false,
-      description: "Enables layered multi-octave FBM noise calculations for detailed fluid details.",
+      description:
+        "Enables layered multi-octave FBM noise calculations for detailed fluid details.",
     },
     {
       name: "paused",
@@ -43,7 +45,8 @@ export const fbmNoiseConfig: ComponentConfig = {
       min: 0.0,
       max: 3.0,
       step: 0.05,
-      description: "Pointer warp impact strength scaling dynamic coordinate offsets.",
+      description:
+        "Pointer warp impact strength scaling dynamic coordinate offsets.",
     },
     {
       name: "brightness",
@@ -61,7 +64,8 @@ export const fbmNoiseConfig: ComponentConfig = {
       min: 1000,
       max: 100000,
       step: 1,
-      description: "Seed coordinate offset for the random generator algorithms.",
+      description:
+        "Seed coordinate offset for the random generator algorithms.",
     },
     {
       name: "colorR",

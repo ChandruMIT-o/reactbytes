@@ -4,6 +4,7 @@ export const rippleConfig: ComponentConfig = {
   slug: "ripple",
   name: "Interactive Ripple",
   category: "background",
+  tags: ["ripple", "wave", "interactive", "mouse", "water", "click"],
   componentPath: "app/meta/background/wave/Ripples/Ripple.tsx",
   props: [
     {
@@ -13,7 +14,8 @@ export const rippleConfig: ComponentConfig = {
       min: 0.5,
       max: 4.0,
       step: 0.05,
-      description: "Zoom level of the ripple waves. Lower value results in visually larger wave patterns.",
+      description:
+        "Zoom level of the ripple waves. Lower value results in visually larger wave patterns.",
     },
     {
       name: "speed",
@@ -31,7 +33,8 @@ export const rippleConfig: ComponentConfig = {
       min: 5.0,
       max: 60.0,
       step: 1.0,
-      description: "Frequency / density of the interactive line threads in the wave mesh.",
+      description:
+        "Frequency / density of the interactive line threads in the wave mesh.",
     },
     {
       name: "brightness",
@@ -40,7 +43,8 @@ export const rippleConfig: ComponentConfig = {
       min: 0.5,
       max: 4.0,
       step: 0.1,
-      description: "Brightness / luminance multiplier of the shader output color.",
+      description:
+        "Brightness / luminance multiplier of the shader output color.",
     },
     {
       name: "mouseInfluence",
@@ -49,13 +53,15 @@ export const rippleConfig: ComponentConfig = {
       min: 0.0,
       max: 2.5,
       step: 0.05,
-      description: "Distortion and wave-bending force relative to mouse movement.",
+      description:
+        "Distortion and wave-bending force relative to mouse movement.",
     },
     {
       name: "clickToSpike",
       type: "boolean",
       default: true,
-      description: "Enables temporary high-intensity ripple shockwaves when clicking on the canvas.",
+      description:
+        "Enables temporary high-intensity ripple shockwaves when clicking on the canvas.",
     },
     {
       name: "colorBase",

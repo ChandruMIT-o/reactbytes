@@ -4,6 +4,7 @@ export const helixTextConfig: ComponentConfig = {
   slug: "helix-text",
   name: "Helix Text",
   category: "text",
+  tags: ["helix", "spiral", "3d", "rotation", "scroll"],
   componentPath: "app/meta/text/HelixText/HelixText.tsx",
   props: [
     {
@@ -28,7 +29,8 @@ export const helixTextConfig: ComponentConfig = {
       min: 0.1,
       max: 3.0,
       step: 0.05,
-      description: "Multiplier for rotational acceleration applied by mouse swipe speed.",
+      description:
+        "Multiplier for rotational acceleration applied by mouse swipe speed.",
     },
     {
       name: "influenceRadius",
@@ -44,7 +46,7 @@ export const helixTextConfig: ComponentConfig = {
       type: "number",
       default: 0.05,
       min: 0.02,
-      max: 0.30,
+      max: 0.3,
       step: 0.01,
       description: "Rotational home-base spring stiffness constant.",
     },
@@ -52,7 +54,7 @@ export const helixTextConfig: ComponentConfig = {
       name: "damping",
       type: "number",
       default: 0.81,
-      min: 0.50,
+      min: 0.5,
       max: 0.99,
       step: 0.01,
       description: "Rotational damping ratio.",
@@ -110,7 +112,7 @@ export const helixTextConfig: ComponentConfig = {
         torqueForce: 0.4,
         influenceRadius: 60,
         stiffness: 0.15,
-        damping: 0.70,
+        damping: 0.7,
       },
     },
   ],

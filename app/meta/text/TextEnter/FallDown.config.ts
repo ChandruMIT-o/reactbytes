@@ -4,6 +4,7 @@ export const fallDownConfig: ComponentConfig = {
   slug: "fall-down",
   name: "Fall Down",
   category: "text",
+  tags: ["fall", "drop", "entrance", "animation", "gravity", "stagger"],
   componentPath: "app/meta/text/TextEnter/FallDown.tsx",
   props: [
     {

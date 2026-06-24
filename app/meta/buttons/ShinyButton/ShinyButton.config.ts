@@ -4,14 +4,17 @@ export const shinyButtonConfig: ComponentConfig = {
   slug: "shiny-button",
   name: "Shiny CTA",
   category: "miscellaneous",
+  tags: ["button", "shiny", "cta", "gradient", "hover", "gleam"],
   componentPath: "app/meta/buttons/ShinyButton/ShinyButton.tsx",
   npmPackageName: "@reactbytes/shiny-cta",
   version: "1.0.0",
   peerDependencies: {
-    "framer-motion": "^12.38.0"
+    "framer-motion": "^12.38.0",
   },
-  context_from_dev: "A sleek, glowing call-to-action button featuring animated gradients rotating around its border. Requires modern CSS support for CSS.registerProperty. Best used for critical action items such as signups or waitlist forms.",
-  containerClassName: "w-full min-h-[400px] flex items-center justify-center p-12 bg-black rounded-[32px] border border-white/5 relative overflow-hidden group",
+  context_from_dev:
+    "A sleek, glowing call-to-action button featuring animated gradients rotating around its border. Requires modern CSS support for CSS.registerProperty. Best used for critical action items such as signups or waitlist forms.",
+  containerClassName:
+    "w-full min-h-[400px] flex items-center justify-center p-12 bg-black rounded-[32px] border border-white/5 relative overflow-hidden group",
   props: [
     {
       name: "text",
@@ -38,7 +41,8 @@ export const shinyButtonConfig: ComponentConfig = {
       name: "highlightSubtleColor",
       type: "color",
       default: "#8484ff",
-      description: "Secondary color used for high-intensity highlights on hover.",
+      description:
+        "Secondary color used for high-intensity highlights on hover.",
     },
     {
       name: "baseColor",

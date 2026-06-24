@@ -5,28 +5,44 @@ const DEFAULT_ITEMS = [
   {
     id: "2",
     type: "image" as const,
-    content: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+    content:
+      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
     title: "NEURAL NET",
     subtitle: "v2.0.4",
   },
-  { id: "3", type: "card" as const, content: "BRUTAL", title: "INTERFACE", coords: [45, 92] as [number, number] },
+  {
+    id: "3",
+    type: "card" as const,
+    content: "BRUTAL",
+    title: "INTERFACE",
+    coords: [45, 92] as [number, number],
+  },
   { id: "4", type: "text" as const, content: "DESIGN" },
   {
     id: "5",
     type: "image" as const,
-    content: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
+    content:
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop",
     title: "CYBER CORE",
     subtitle: "Online",
   },
-  { id: "6", type: "card" as const, content: "MOTION", title: "DYNAMICS", coords: [12, 33] as [number, number] },
+  {
+    id: "6",
+    type: "card" as const,
+    content: "MOTION",
+    title: "DYNAMICS",
+    coords: [12, 33] as [number, number],
+  },
 ];
 
 export const voidCarouselConfig: ComponentConfig = {
   slug: "void-carousel",
   name: "Void Carousel",
   category: "carousel",
+  tags: ["carousel", "void", "dark", "dramatic", "transition"],
   componentPath: "app/meta/carousel/VoidCarousel/VoidCarousel.tsx",
-  containerClassName: "h-[500px] w-full rounded-[18px] border border-rb-neutral-4/50 overflow-hidden relative isolate bg-black flex flex-col !p-0",
+  containerClassName:
+    "h-[500px] w-full rounded-[18px] border border-rb-neutral-4/50 overflow-hidden relative isolate bg-black flex flex-col !p-0",
   staticProps: {
     items: DEFAULT_ITEMS,
     enableNoise: false,

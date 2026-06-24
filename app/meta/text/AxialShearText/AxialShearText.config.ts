@@ -4,13 +4,15 @@ export const axialShearTextConfig: ComponentConfig = {
   slug: "axial-shear-text",
   name: "Axial Shear Text",
   category: "text",
+  tags: ["shear", "skew", "3d", "distort", "glitch"],
   componentPath: "app/meta/text/AxialShearText/AxialShearText.tsx",
   props: [
     {
       name: "text",
       type: "string",
       default: "SHEAR",
-      description: "The hidden text string to mount onto the shear line matrix.",
+      description:
+        "The hidden text string to mount onto the shear line matrix.",
     },
     {
       name: "fontSize",
@@ -19,7 +21,8 @@ export const axialShearTextConfig: ComponentConfig = {
       min: 40,
       max: 140,
       step: 5,
-      description: "Font scale in pixels (handles absolute container footprint bounds).",
+      description:
+        "Font scale in pixels (handles absolute container footprint bounds).",
     },
     {
       name: "maxShearOffset",
@@ -37,14 +40,15 @@ export const axialShearTextConfig: ComponentConfig = {
       min: 40,
       max: 200,
       step: 5,
-      description: "Proximity trigger radius surrounding the cursor position (in pixels).",
+      description:
+        "Proximity trigger radius surrounding the cursor position (in pixels).",
     },
     {
       name: "stiffness",
       type: "number",
       default: 0.07,
       min: 0.01,
-      max: 0.30,
+      max: 0.3,
       step: 0.01,
       description: "Hooke's spring calculation stiffness profile.",
     },
@@ -52,7 +56,7 @@ export const axialShearTextConfig: ComponentConfig = {
       name: "damping",
       type: "number",
       default: 0.75,
-      min: 0.50,
+      min: 0.5,
       max: 0.99,
       step: 0.01,
       description: "Kinetic damping factor to settle vertical slide motion.",
@@ -67,7 +71,8 @@ export const axialShearTextConfig: ComponentConfig = {
       name: "shearColor",
       type: "color",
       default: "rgba(14, 165, 233, 0.5)",
-      description: "Accent color of the interior alignment tracks and micro-telemetry scales.",
+      description:
+        "Accent color of the interior alignment tracks and micro-telemetry scales.",
     },
   ],
   presets: [

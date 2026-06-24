@@ -4,10 +4,12 @@ export const magneticTextConfig: ComponentConfig = {
   slug: "magnetic-text",
   name: "Magnetic Repel",
   category: "text",
+  tags: ["magnetic", "repel", "interactive", "mouse", "physics"],
   componentPath: "app/meta/text/Interactive/MagneticText.tsx",
   npmPackageName: "@reactbytes/magnetic-repel",
   version: "1.0.0",
-  context_from_dev: "Applies physics-based repulsion force on letters as the user moves their cursor nearby. Supports touch events. Performance optimization: uses inline style transform updates rather than React state changes during cursor movement to prevent render bottlenecks.",
+  context_from_dev:
+    "Applies physics-based repulsion force on letters as the user moves their cursor nearby. Supports touch events. Performance optimization: uses inline style transform updates rather than React state changes during cursor movement to prevent render bottlenecks.",
   props: [
     {
       name: "text",

@@ -4,6 +4,7 @@ export const metallicTwirlConfig: ComponentConfig = {
   slug: "metallic-twirl",
   name: "Metallic Twirl",
   category: "background",
+  tags: ["metallic", "twirl", "chrome", "shine", "swirl"],
   componentPath: "app/meta/background/metallic/MetallicTwirl.tsx",
   props: [
     {
@@ -13,7 +14,8 @@ export const metallicTwirlConfig: ComponentConfig = {
       min: 0.01,
       max: 2.0,
       step: 0.01,
-      description: "Controls the temporal flow of the shader and overall speed of the rotation.",
+      description:
+        "Controls the temporal flow of the shader and overall speed of the rotation.",
     },
     {
       name: "zoom",
@@ -22,7 +24,8 @@ export const metallicTwirlConfig: ComponentConfig = {
       min: 1.0,
       max: 40.0,
       step: 1.0,
-      description: "Sets the coordinate space scale, effectively zooming in or out of the pattern.",
+      description:
+        "Sets the coordinate space scale, effectively zooming in or out of the pattern.",
     },
     {
       name: "symmetry",
@@ -31,7 +34,8 @@ export const metallicTwirlConfig: ComponentConfig = {
       min: 2.0,
       max: 50.0,
       step: 1.0,
-      description: "Determines the number of folds or rotational repetitions in the kaleidoscope effect.",
+      description:
+        "Determines the number of folds or rotational repetitions in the kaleidoscope effect.",
     },
     {
       name: "amplitude",
@@ -40,7 +44,8 @@ export const metallicTwirlConfig: ComponentConfig = {
       min: 0.1,
       max: 5.0,
       step: 0.1,
-      description: "The intensity/amplitude multiplier used when mapping the calculated color back to the palette.",
+      description:
+        "The intensity/amplitude multiplier used when mapping the calculated color back to the palette.",
     },
   ],
   presets: [

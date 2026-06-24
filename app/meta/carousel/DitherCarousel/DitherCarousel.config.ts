@@ -4,8 +4,10 @@ export const ditherCarouselConfig: ComponentConfig = {
   slug: "dither-carousel",
   name: "Dither Carousel",
   category: "carousel",
+  tags: ["carousel", "dither", "pixel", "retro", "transition"],
   componentPath: "app/meta/carousel/DitherCarousel/DitherCarousel.tsx",
-  containerClassName: "w-full relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-8 min-h-[480px] bg-black !p-0",
+  containerClassName:
+    "w-full relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-8 min-h-[480px] bg-black !p-0",
   props: [
     {
       name: "autoPlay",
@@ -20,7 +22,8 @@ export const ditherCarouselConfig: ComponentConfig = {
       min: 1500,
       max: 10000,
       step: 500,
-      description: "Time delay (in milliseconds) between slide rotations in autoplay mode.",
+      description:
+        "Time delay (in milliseconds) between slide rotations in autoplay mode.",
     },
     {
       name: "ditherResolution",
@@ -57,7 +60,8 @@ export const ditherCarouselConfig: ComponentConfig = {
       min: 500,
       max: 6000,
       step: 250,
-      description: "Duration of the radial sweep dither transition (in milliseconds).",
+      description:
+        "Duration of the radial sweep dither transition (in milliseconds).",
     },
   ],
   presets: [

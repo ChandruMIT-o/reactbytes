@@ -4,6 +4,7 @@ export const blackHoleConfig: ComponentConfig = {
   slug: "black-hole",
   name: "Spacetime Black Hole",
   category: "background",
+  tags: ["black hole", "space", "gravity", "vortex", "particles"],
   componentPath: "app/meta/background/space/BlackHole.tsx",
   props: [
     {
@@ -13,7 +14,8 @@ export const blackHoleConfig: ComponentConfig = {
       min: 0.1,
       max: 3.0,
       step: 0.1,
-      description: "Speed of the particle acceleration and funnel space-mesh grid rotation (0.1 to 3.0).",
+      description:
+        "Speed of the particle acceleration and funnel space-mesh grid rotation (0.1 to 3.0).",
     },
     {
       name: "depth",
@@ -22,7 +24,8 @@ export const blackHoleConfig: ComponentConfig = {
       min: 0.4,
       max: 2.0,
       step: 0.1,
-      description: "Scale of the core spacetime depth coordinate funnel (0.4 to 2.0).",
+      description:
+        "Scale of the core spacetime depth coordinate funnel (0.4 to 2.0).",
     },
     {
       name: "gridDensity",
@@ -31,7 +34,8 @@ export const blackHoleConfig: ComponentConfig = {
       min: 20,
       max: 140,
       step: 5,
-      description: "Number of slices/density of the radial space grid line curves (20 to 140).",
+      description:
+        "Number of slices/density of the radial space grid line curves (20 to 140).",
     },
     {
       name: "particleFlux",
@@ -40,7 +44,8 @@ export const blackHoleConfig: ComponentConfig = {
       min: 30,
       max: 220,
       step: 10,
-      description: "Number of active orbiting plasma accretion particles to render (30 to 220).",
+      description:
+        "Number of active orbiting plasma accretion particles to render (30 to 220).",
     },
     {
       name: "mouseParallax",
@@ -49,7 +54,8 @@ export const blackHoleConfig: ComponentConfig = {
       min: 0.0,
       max: 3.0,
       step: 0.1,
-      description: "Scale factor for interactive viewport center point displacement on hover (0.0 to 3.0).",
+      description:
+        "Scale factor for interactive viewport center point displacement on hover (0.0 to 3.0).",
     },
     {
       name: "colorPreset",
@@ -61,19 +67,22 @@ export const blackHoleConfig: ComponentConfig = {
         { id: "matrix", label: "Cyber Lattice (Neon Green)" },
         { id: "quasar", label: "Deep Quasar (Steel Blue)" },
       ],
-      description: "Spectral chromatic color scheme preset for accretion particles and gravitational lensing auras.",
+      description:
+        "Spectral chromatic color scheme preset for accretion particles and gravitational lensing auras.",
     },
     {
       name: "soundEnabled",
       type: "boolean",
       default: false,
-      description: "Toggles a continuous space-hum synthesized audio hum using Web Audio API low-frequency oscillators.",
+      description:
+        "Toggles a continuous space-hum synthesized audio hum using Web Audio API low-frequency oscillators.",
     },
     {
       name: "hyperdriveActive",
       type: "boolean",
       default: false,
-      description: "Initiates speed warp: boosts velocity metrics and applies an elongated elliptical stretch shader to orbiting stream entities.",
+      description:
+        "Initiates speed warp: boosts velocity metrics and applies an elongated elliptical stretch shader to orbiting stream entities.",
     },
   ],
   presets: [

@@ -4,8 +4,10 @@ export const rotaryCarouselConfig: ComponentConfig = {
   slug: "rotary-carousel",
   name: "Rotary Dial Carousel",
   category: "carousel",
+  tags: ["carousel", "rotary", "spin", "wheel", "3d"],
   componentPath: "app/meta/carousel/RotaryCarousel/RotaryCarousel.tsx",
-  containerClassName: "w-full min-h-[520px] flex items-center justify-center relative bg-black/80 border border-white/5 rounded-2xl overflow-hidden !p-6",
+  containerClassName:
+    "w-full min-h-[520px] flex items-center justify-center relative bg-black/80 border border-white/5 rounded-2xl overflow-hidden !p-6",
   props: [
     {
       name: "ringDiameter",
@@ -23,7 +25,8 @@ export const rotaryCarouselConfig: ComponentConfig = {
       min: 0.08,
       max: 0.45,
       step: 0.02,
-      description: "Snappy mechanical spring tension coefficient (0.05 to 0.50).",
+      description:
+        "Snappy mechanical spring tension coefficient (0.05 to 0.50).",
     },
     {
       name: "springDamping",
@@ -32,7 +35,8 @@ export const rotaryCarouselConfig: ComponentConfig = {
       min: 0.15,
       max: 0.65,
       step: 0.02,
-      description: "Snap settlement dampening friction coefficient (0.10 to 0.70).",
+      description:
+        "Snap settlement dampening friction coefficient (0.10 to 0.70).",
     },
     {
       name: "visualizerLines",
@@ -41,7 +45,8 @@ export const rotaryCarouselConfig: ComponentConfig = {
       min: 60,
       max: 360,
       step: 10,
-      description: "Density of visualizer radial line bars (number of bars plotted).",
+      description:
+        "Density of visualizer radial line bars (number of bars plotted).",
     },
     {
       name: "visualizerAmp",
@@ -59,7 +64,8 @@ export const rotaryCarouselConfig: ComponentConfig = {
       min: 0.5,
       max: 3.0,
       step: 0.1,
-      description: "Angular glow flare spread of visualizer bars around tracker handle.",
+      description:
+        "Angular glow flare spread of visualizer bars around tracker handle.",
     },
     {
       name: "autoPlaySpeed",
@@ -79,7 +85,8 @@ export const rotaryCarouselConfig: ComponentConfig = {
         { id: "ambient", label: "Ambient" },
         { id: "silent", label: "Silent" },
       ],
-      description: "Visualizer logic mode that drives the heights calculation formula.",
+      description:
+        "Visualizer logic mode that drives the heights calculation formula.",
     },
     {
       name: "secondaryColor",
@@ -103,7 +110,8 @@ export const rotaryCarouselConfig: ComponentConfig = {
       name: "enableSynth",
       type: "boolean",
       default: false,
-      description: "Whether the interactive FM tone synthesizer is enabled on dial jog.",
+      description:
+        "Whether the interactive FM tone synthesizer is enabled on dial jog.",
     },
   ],
   presets: [
@@ -129,7 +137,7 @@ export const rotaryCarouselConfig: ComponentConfig = {
       id: "cyan",
       label: "Quantum Cyan",
       config: {
-        springTension: 0.30,
+        springTension: 0.3,
         springDamping: 0.45,
         ringDiameter: 380,
         visualizerLines: 300,
@@ -148,7 +156,7 @@ export const rotaryCarouselConfig: ComponentConfig = {
       label: "Deep Amethyst",
       config: {
         springTension: 0.18,
-        springDamping: 0.30,
+        springDamping: 0.3,
         ringDiameter: 340,
         visualizerLines: 180,
         visualizerAmp: 0.9,

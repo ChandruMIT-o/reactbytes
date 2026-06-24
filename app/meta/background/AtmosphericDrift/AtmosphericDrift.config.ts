@@ -4,6 +4,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
   slug: "atmospheric-drift",
   name: "Atmospheric Drift",
   category: "background",
+  tags: ["drift", "particles", "atmosphere", "floating", "ambient"],
   componentPath: "app/meta/background/AtmosphericDrift/AtmosphericDrift.tsx",
   props: [
     {
@@ -42,7 +43,8 @@ export const atmosphericDriftConfig: ComponentConfig = {
       name: "audioEnabled",
       type: "boolean",
       default: false,
-      description: "Triggers pink noise ambient wind sound synthesis mapped to flow speed.",
+      description:
+        "Triggers pink noise ambient wind sound synthesis mapped to flow speed.",
     },
     {
       name: "particleCount",
@@ -66,7 +68,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
       name: "trailPersistence",
       type: "number",
       default: 0.94,
-      min: 0.80,
+      min: 0.8,
       max: 0.99,
       step: 0.01,
       description: "Retention rate of line drawing trails on FBO texture.",

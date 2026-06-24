@@ -4,8 +4,10 @@ export const pillTabbedSectionConfig: ComponentConfig = {
   slug: "pill-tabbed-section",
   name: "Pill Tabbed Section",
   category: "miscellaneous",
+  tags: ["tabs", "pill", "navigation", "sections", "toggle"],
   componentPath: "app/meta/tabbed/PillTabbedSection/PillTabbedSection.tsx",
-  containerClassName: "w-full min-h-[500px] !h-auto flex items-center justify-center p-8 bg-black rounded-[32px] border border-white/5 relative overflow-hidden",
+  containerClassName:
+    "w-full min-h-[500px] !h-auto flex items-center justify-center p-8 bg-black rounded-[32px] border border-white/5 relative overflow-hidden",
   props: [
     {
       name: "defaultTab",
