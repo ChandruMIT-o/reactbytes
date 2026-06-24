@@ -95,9 +95,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
     // 1. Generate Static Positions for Items and Stars
     const itemData = useMemo(() => {
         return items.map((item, i) => {
-            // Create a spiral/random tunnel layout
-            const angle = (i / itemCount) * Math.PI * 4;
-            const radius = 250 + Math.random() * 250;
             return {
                 ...item,
                 x: (Math.random() - 0.5) * (typeof window !== 'undefined' ? window.innerWidth : 1000) * 0.7,
@@ -137,7 +134,7 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
         const handleTouchMove = (e: TouchEvent) => {
             const touchY = e.touches[0].clientY;
             const deltaY = touchStartY - touchY;
-            engine.current.targetScroll += deltaY * 2.5; // Touch sensitivity multiplier
+            engine.current.targetScroll += deltaY * 2.5;
             touchStartY = touchY;
             markInteraction();
         };
@@ -172,34 +169,26 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
         const renderLoop = () => {
             const state = engine.current;
 
-            // Calculate Lerped Scroll
             const diff = state.targetScroll - state.currentScroll;
             state.currentScroll += diff * lerpFactor;
 
-            // Calculate Velocity
             const rawVel = diff * lerpFactor;
             state.velocity += (rawVel - state.velocity) * 0.1;
 
             // --- SNAPPING LOGIC ---
             if (enableSnap && !state.isInteracting && Math.abs(state.velocity) < 2.0 && Math.abs(diff) < 15) {
-                // Find nearest valid scroll position (where an item is exactly at Z=0)
                 const snapInterval = zGap / speedFactor;
                 const nearestSnap = Math.round(state.targetScroll / snapInterval) * snapInterval;
-
-                // Snap the target directly. The natural lerp will handle the smooth transition
-                // without causing a recursive stutter loop.
                 state.targetScroll = nearestSnap;
             }
 
             // --- APPLY GLOBAL EFFECTS ---
             if (viewportRef.current) {
-                // Warp effect: Widen perspective based on speed
                 const warp = Math.min(Math.abs(state.velocity) * warpFactor, basePerspective - 100);
                 viewportRef.current.style.perspective = `${basePerspective - warp}px`;
             }
 
             if (worldRef.current) {
-                // Tilt world slightly based on velocity
                 const tilt = state.velocity * 0.05;
                 worldRef.current.style.transform = `rotateX(${-tilt}deg)`;
             }
@@ -212,20 +201,16 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                 if (!el) return;
 
                 let z = item.baseZ + currentDist;
-
-                // Infinite Wrap Logic
                 const offset = z % loopSize;
                 let vizZ = offset;
 
-                // Ensure bounds between deep negative and slightly past focus
                 const forwardLimit = activeZ + 500;
                 if (vizZ > forwardLimit) vizZ -= loopSize;
                 if (vizZ < -loopSize + forwardLimit) vizZ += loopSize;
                 while (vizZ > forwardLimit) vizZ -= loopSize;
 
-                // Opacity Logic (Fade in from distance, fade out near camera/focus)
                 let alpha = 1;
-                const maxDist = -loopSize * 0.75; 
+                const maxDist = -loopSize * 0.75;
 
                 if (vizZ < maxDist) {
                     alpha = 0;
@@ -233,7 +218,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                     alpha = (vizZ - maxDist) / 1500;
                 }
 
-                // Fade out past activeZ
                 if (vizZ > activeZ + 100) {
                     alpha = 1 - (vizZ - (activeZ + 100)) / opacityFade;
                 }
@@ -242,28 +226,23 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                 el.style.opacity = alpha.toString();
 
                 if (alpha > 0) {
-                    // Calculate how close the item is to the focus point (activeZ)
                     const absDist = Math.abs(vizZ - activeZ);
                     let focusFactor = 0;
 
-                    // Create a magnetic "lock zone" where the item straightens out
                     if (enableSnap) {
-                        const lockZone = 80;  
-                        const easeZone = 400; 
+                        const lockZone = 80;
+                        const easeZone = 400;
 
                         if (absDist < lockZone) {
-                            focusFactor = 1; 
+                            focusFactor = 1;
                         } else if (absDist < easeZone) {
                             const progress = 1 - ((absDist - lockZone) / (easeZone - lockZone));
                             focusFactor = progress * progress * (3 - 2 * progress);
                         }
                     }
 
-
-                    // Add subtle floating animation (base wobble)
                     const floatRot = Math.sin(Date.now() * 0.001 + item.baseZ) * 4;
 
-                    // Apply focusFactor: Interpolate towards exact center (0,0) and 0 rotation
                     const currentX = item.x * (1 - focusFactor);
                     const currentY = item.y * (1 - focusFactor);
                     const currentRot = (item.rotZ + floatRot) * (1 - focusFactor);
@@ -273,7 +252,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
             rotateZ(${currentRot}deg)
           `;
 
-                    // If snapped and close to focus, pop it forward slightly
                     if (enableSnap && absDist < 50 && alpha > 0.8) {
                         el.style.zIndex = '100';
                         el.style.filter = 'brightness(1.2)';
@@ -281,7 +259,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                         el.style.zIndex = '1';
                         el.style.filter = 'brightness(1)';
                     }
-
                 }
             });
 
@@ -299,7 +276,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                 if (vizZ < -loopSize + forwardLimit) vizZ += loopSize;
                 while (vizZ > forwardLimit) vizZ -= loopSize;
 
-                // Star Stretch Effect
                 const stretch = Math.max(1, Math.min(1 + Math.abs(state.velocity) * 0.05, 10));
 
                 el.style.transform = `translate3d(${star.x}px, ${star.y}px, ${vizZ}px) scale3d(1, ${stretch}, 1)`;
@@ -361,7 +337,7 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                         </div>
                         <div className="relative z-10 p-6 flex flex-col h-full bg-gradient-to-t from-black/80 via-transparent to-black/40">
                             <div className="font-mono text-xs inline-block px-2 py-1 self-start mb-4 bg-black/50 backdrop-blur-sm" style={{ color: theme.accent, border: `1px solid ${theme.accent}` }}>
-                                IMG_{index.toString().padStart(3, '0')} // Z:{itemData[index].baseZ}
+                                IMG_{index.toString().padStart(3, '0')}
                             </div>
                             <div className="mt-auto">
                                 <h2 className="text-3xl font-black uppercase tracking-tighter leading-none m-0" style={{ color: theme.text }}>
@@ -375,7 +351,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
             );
         }
 
-        // Default 'card' type
         return (
             <div
                 key={`item-${index}`}
@@ -394,7 +369,7 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                     onMouseLeave={(e) => (e.currentTarget.style.borderColor = theme.border)}
                 >
                     <div className="font-mono text-[0.8rem] inline-block px-2 py-1 self-start mb-5" style={{ color: theme.accent, border: `1px solid ${theme.accent}` }}>
-                        0{index} // {(Math.random()).toFixed(4)}
+                        0{index}
                     </div>
                     <h2 className="text-[3rem] leading-[0.85] m-0 uppercase font-black tracking-tight" style={{ color: theme.text }}>
                         {item.content}
@@ -411,7 +386,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
     return (
         <div ref={containerRef} className="w-full h-full overflow-hidden relative font-sans select-none" style={{ background: theme.bg, color: theme.text }}>
 
-            {/* Visual Effects Layers */}
             <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: 'radial-gradient(circle at center, transparent 0%, #000 90%)' }} />
 
             {enableNoise && (
@@ -421,7 +395,6 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                 />
             )}
 
-            {/* 3D Viewport */}
             <div
                 ref={viewportRef}
                 className="absolute inset-0 z-0 overflow-hidden"
@@ -432,10 +405,8 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
                     className="absolute top-1/2 left-1/2 w-full h-full"
                     style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
                 >
-                    {/* Render Items */}
                     {itemData.map((item, i) => renderItem(item, i))}
 
-                    {/* Render Stars */}
                     {starData.map((_, i) => (
                         <div
                             key={`star-${i}`}
@@ -450,95 +421,21 @@ export const BrutalZCarousel: React.FC<BrutalZCarouselProps> = ({
     );
 };
 
-// --- PLAYGROUND CONTROLS APP ---
+// --- IMMERSIVE APP LAYER ---
 export default function App() {
-    const [controls, setControls] = useState({
-        zGap: 800,
-        speedFactor: 3.0,
-        warpFactor: 2.0,
-        basePerspective: 800,
-        lerpFactor: 0.1,
-        activeZ: 0,
-        opacityFade: 400,
-        enableSnap: true,
-        showUI: true,
-    });
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = e.target;
-        setControls(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : parseFloat(value)
-        }));
-    };
-
     return (
         <div className="relative w-full h-screen bg-black">
-            {/* 3D Carousel Instance */}
             <BrutalZCarousel
                 items={DEFAULT_ITEMS}
-                {...controls}
+                zGap={800}
+                speedFactor={3.0}
+                warpFactor={2.0}
+                basePerspective={800}
+                lerpFactor={0.1}
+                activeZ={0}
+                opacityFade={400}
+                enableSnap={true}
             />
-
-            {/* Floating Control UI HUD */}
-            {controls.showUI && (
-                <div className="fixed top-6 right-6 z-50 w-80 bg-black/80 border border-white/20 backdrop-blur-md p-6 font-mono text-sm text-white shadow-2xl rounded-sm">
-                    <div className="flex justify-between items-center mb-6 border-b border-white/20 pb-2">
-                        <h1 className="text-red-500 font-bold tracking-widest uppercase">Engine Controls</h1>
-                        <span className="text-[10px] bg-red-500/20 text-red-500 px-2 py-1">V_2.1</span>
-                    </div>
-
-                    <div className="space-y-5">
-                        <ControlSlider label="Z-Depth Gap" name="zGap" value={controls.zGap} min={300} max={1500} step={50} onChange={handleChange} />
-                        <ControlSlider label="Scroll Multiplier" name="speedFactor" value={controls.speedFactor} min={0.5} max={10} step={0.5} onChange={handleChange} />
-                        <ControlSlider label="Warp Intensity" name="warpFactor" value={controls.warpFactor} min={0} max={5} step={0.1} onChange={handleChange} />
-                        <ControlSlider label="Base Perspective" name="basePerspective" value={controls.basePerspective} min={300} max={1500} step={50} onChange={handleChange} />
-                        <ControlSlider label="Momentum (Lerp)" name="lerpFactor" value={controls.lerpFactor} min={0.01} max={0.3} step={0.01} onChange={handleChange} />
-                        <ControlSlider label="Active Focus Z" name="activeZ" value={controls.activeZ} min={-500} max={500} step={10} onChange={handleChange} />
-                        <ControlSlider label="Opacity Fade Range" name="opacityFade" value={controls.opacityFade} min={100} max={1000} step={10} onChange={handleChange} />
-
-                        <div className="flex items-center justify-between pt-2 border-t border-white/10 mt-4">
-                            <span className="text-gray-400">Magnetic Z-Snap</span>
-                            <label className="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" name="enableSnap" checked={controls.enableSnap} onChange={handleChange} className="sr-only peer" />
-                                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className="mt-8 text-[10px] text-gray-500 text-center uppercase tracking-widest">
-                        Scroll to Navigate Space
-                    </div>
-                </div>
-            )}
-
-            {/* Minimal Toggle Button */}
-            <button
-                onClick={() => setControls(c => ({ ...c, showUI: !c.showUI }))}
-                className="fixed bottom-6 right-6 z-50 bg-black/50 border border-white/20 text-white p-3 font-mono text-xs hover:bg-white hover:text-black transition-colors"
-            >
-                {controls.showUI ? 'HIDE HUD [X]' : 'SHOW HUD [+]'}
-            </button>
         </div>
     );
 }
-
-// UI Helper Component
-const ControlSlider = ({ label, name, value, min, max, step, onChange }: any) => (
-    <div>
-        <div className="flex justify-between text-xs text-gray-400 mb-1">
-            <label>{label}</label>
-            <span className="text-white">{value}</span>
-        </div>
-        <input
-            type="range"
-            name={name}
-            min={min}
-            max={max}
-            step={step}
-            value={value}
-            onChange={onChange}
-            className="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-red-500"
-        />
-    </div>
-);

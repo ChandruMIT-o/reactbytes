@@ -9,6 +9,8 @@ export interface CreditItem {
 	role: string;
 	/** Optional link to their website, GitHub, or license */
 	url?: string;
+	/** Optional explicit avatar URL (falls back to GitHub dp or initials placeholder if empty) */
+	avatar?: string;
 }
 
 export interface CreditSection {
@@ -28,6 +30,29 @@ export interface CreditsProps {
 	/** Optional class to override the container wrapper */
 	className?: string;
 }
+
+// --- Helper for Fallback Initials Avatar ---
+const InitialsAvatar = ({ name }: { name: string }) => {
+	const initials = name
+		.split(" ")
+		.map((n) => n[0])
+		.join("")
+		.toUpperCase()
+		.slice(0, 2);
+
+	return (
+		<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-rb-neutral-4 text-[11px] font-bold tracking-wider text-rb-accent-1 border border-rb-accent-2/10">
+			{initials || "?"}
+		</div>
+	);
+};
+
+// --- Helper to Extract GitHub Username ---
+const getGitHubAvatar = (url?: string): string | null => {
+	if (!url) return null;
+	const match = url.match(/github\.com\/([^/]+)/i);
+	return match ? `https://github.com/${match[1]}.png?size=64` : null;
+};
 
 // --- Component ---
 
@@ -60,17 +85,46 @@ export const Credits: React.FC<CreditsProps> = ({
 						</div>
 
 						{/* Pills Flexbox */}
-						<div className="flex flex-wrap gap-2 px-4">
+						<div className="flex flex-wrap gap-3 px-4">
 							{section.items.map((item, itemIndex) => {
+								// Determine the best display picture option
+								const avatarSrc = item.avatar || getGitHubAvatar(item.url);
+
+								const sharedClasses = "inline-flex items-center gap-3 pl-2 pr-4 py-1.5 rounded-full bg-rb-neutral-3 text-rb-accent-2 border border-rb-neutral-4 text-sm transition-all duration-300 min-w-0 max-w-full group";
+
 								const content = (
-									<div className="flex items-center gap-2">
-										<span className="font-semibold">
-											{item.name}
-										</span>
-										<span className="opacity-40 text-xs font-normal">
-											{item.role}
-										</span>
-									</div>
+									<>
+										{/* Avatar Layer */}
+										{avatarSrc ? (
+											<img
+												src={avatarSrc}
+												alt={`${item.name}'s avatar`}
+												className="h-8 w-8 rounded-full object-cover shrink-0 border border-rb-accent-2/10 bg-rb-neutral-4"
+												loading="lazy"
+												onError={(e) => {
+													// Fallback if image fails to load
+													e.currentTarget.style.display = "none";
+													const sibling = e.currentTarget.nextElementSibling;
+													if (sibling) sibling.classList.remove("hidden");
+												}}
+											/>
+										) : null}
+
+										{/* Fallback structural layout for broken images or missing URLs */}
+										<div className={avatarSrc ? "hidden" : ""}>
+											<InitialsAvatar name={item.name} />
+										</div>
+
+										{/* Details Layout */}
+										<div className="flex flex-col min-w-0 leading-tight">
+											<span className="font-semibold text-rb-accent-1 group-hover:text-inherit truncate">
+												{item.name}
+											</span>
+											<span className="opacity-40 text-[11px] font-normal truncate">
+												{item.role}
+											</span>
+										</div>
+									</>
 								);
 
 								if (item.url) {
@@ -80,7 +134,7 @@ export const Credits: React.FC<CreditsProps> = ({
 											href={item.url}
 											target="_blank"
 											rel="noopener noreferrer"
-											className="px-4 py-2 rounded-full bg-rb-neutral-3 text-rb-accent-2 border border-rb-neutral-4 text-sm transition-all duration-300 hover:bg-rb-accent-1 hover:text-rb-neutral-2 hover:scale-105 active:scale-95"
+											className={`${sharedClasses} hover:bg-rb-accent-1 hover:text-rb-neutral-2 hover:scale-[1.03] active:scale-95 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-rb-accent-1/50`}
 										>
 											{content}
 										</a>
@@ -88,12 +142,9 @@ export const Credits: React.FC<CreditsProps> = ({
 								}
 
 								return (
-									<div
-										key={itemIndex}
-										className="px-4 py-2 rounded-full bg-rb-neutral-3 text-rb-accent-2 border border-rb-neutral-4 text-sm"
-									>
+									<span key={itemIndex} className={sharedClasses}>
 										{content}
-									</div>
+									</span>
 								);
 							})}
 						</div>

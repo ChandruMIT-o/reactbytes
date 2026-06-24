@@ -216,7 +216,8 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 		});
 	};
 
-	const renderPkgSelector = (classNameStyle: string) => {
+	// Added idPrefix parameter to keep layoutIds unique across simultaneous renders
+	const renderPkgSelector = (classNameStyle: string, idPrefix: string) => {
 		if (!showPkgSelector) return null;
 		return (
 			<div className={`bg-rb-neutral-3 p-1.5 pb-0 flex gap-1.5 w-max ${classNameStyle}`}>
@@ -237,7 +238,7 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 
 						{activePkgManager === pkg && (
 							<motion.div
-								layoutId="pkg-active-pill"
+								layoutId={`${idPrefix}-pkg-active-pill`}
 								className="absolute inset-0 bg-rb-accent-1 rounded-full z-0"
 								transition={springConfig}
 							/>
@@ -248,7 +249,7 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 								className="absolute inset-0 rounded-full z-0"
 								variants={{
 									hover: {
-										backgroundColor: "var(--rb-neutral-2)",
+										backgroundColor: "var(--rb-neutral-4)",
 									},
 								}}
 								transition={{ duration: 0.2 }}
@@ -305,7 +306,7 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 				</div>
 
 				{/* Package Manager Tabs (Desktop top position) */}
-				{renderPkgSelector("hidden sm:flex rounded-t-[20px] sm:self-end")}
+				{renderPkgSelector("hidden sm:flex rounded-t-[20px] sm:self-end", "desktop")}
 			</div>
 
 			{/* Main Content Outer Wrapper (Acts as the thick grey border) */}
@@ -372,7 +373,7 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 			</div>
 
 			{/* Package Manager Tabs (Mobile bottom position) */}
-			{renderPkgSelector("flex sm:hidden rounded-b-[20px] mx-auto pb-1.5")}
+			{renderPkgSelector("flex sm:hidden rounded-b-[20px] mx-auto pb-1.5", "mobile")}
 		</div>
 	);
 };

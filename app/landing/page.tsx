@@ -97,7 +97,7 @@ export default function LandingPage() {
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    const sections = ["hero", "features", "marquee", "scroll-marquee", "shader-playground", "specs", "production-ready"];
+    const sections = ["hero", "showcase", "core", "shaders", "specs", "ready"];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -108,7 +108,7 @@ export default function LandingPage() {
 
   // Section-driven background profile morphing
   useEffect(() => {
-    if (activeSection === "shader-playground") {
+    if (activeSection === "shaders") {
       return;
     }
 
@@ -121,7 +121,7 @@ export default function LandingPage() {
         setColorB(1.2);
         setBrightness(1.1);
         break;
-      case "features":
+      case "showcase":
         setSpeed(0.09);
         setScale(3.5);
         setColorR(1.2);
@@ -129,8 +129,7 @@ export default function LandingPage() {
         setColorB(0.2);
         setBrightness(0.9);
         break;
-      case "marquee":
-      case "scroll-marquee":
+      case "core":
         setSpeed(0.07);
         setScale(1.8);
         setColorR(0.2);
@@ -146,7 +145,7 @@ export default function LandingPage() {
         setColorB(0.8);
         setBrightness(1.0);
         break;
-      case "production-ready":
+      case "ready":
         setSpeed(0.06);
         setScale(2.0);
         setColorR(0.3);
@@ -174,11 +173,11 @@ export default function LandingPage() {
 
   const sectionsList = [
     { id: "hero", label: "Hero" },
-    { id: "features", label: "Core Specs" },
-    { id: "marquee", label: "Component Deck" },
-    { id: "shader-playground", label: "Shader Deck" },
+    { id: "showcase", label: "Component Deck" },
+    { id: "core", label: "Core Specs" },
+    { id: "shaders", label: "Shader Deck" },
     { id: "specs", label: "Tech Details" },
-    { id: "production-ready", label: "Ready" },
+    { id: "ready", label: "Ready" },
   ];
 
   return (
@@ -199,17 +198,17 @@ export default function LandingPage() {
           </LazySection>
 
           {/* Showcase — pinned horizontal scroll gallery (no LazySection wrapper — GSAP pin needs direct DOM) */}
-          <div id="marquee">
+          <div id="showcase">
             <InteractiveShowcaseSection />
           </div>
 
           {/* Features — GSAP staggered cards, scroll-driven title, circuit SVG lines */}
-          <LazySection id="features">
+          <LazySection id="core">
             <FeatureDetailsSection />
           </LazySection>
 
           {/* Shader Playground — interactive WebGL controls */}
-          <LazySection id="shader-playground">
+          <LazySection id="shaders">
             <VisualPlaygroundSection
               presets={SHADER_PRESETS}
               activePreset={activePreset}
@@ -235,7 +234,7 @@ export default function LandingPage() {
           </LazySection>
 
           {/* Production-Ready capabilities bento grid showcase */}
-          <LazySection id="production-ready">
+          <LazySection id="ready">
             <BentoShowcaseSection />
           </LazySection>
 

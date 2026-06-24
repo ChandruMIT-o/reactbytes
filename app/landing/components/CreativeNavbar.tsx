@@ -33,11 +33,11 @@ export const CreativeNavbar: React.FC<CreativeNavbarProps> = ({ activeSection })
   };
 
   const navItems = [
-    { id: "features", label: "Core" },
-    { id: "marquee", label: "Showcase" },
-    { id: "shader-playground", label: "Shader Deck" },
+    { id: "showcase", label: "Showcase" },
+    { id: "core", label: "Core" },
+    { id: "shaders", label: "Shaders" },
     { id: "specs", label: "Specs" },
-    { id: "production-ready", label: "Ready" },
+    { id: "ready", label: "Ready" },
   ];
 
   return (
