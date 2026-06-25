@@ -6,6 +6,8 @@ export const liquidNoiseConfig: ComponentConfig = {
   category: "background",
   tags: ["liquid", "noise", "fluid", "organic", "flow"],
   componentPath: "app/meta/background/liquid/LiquidNoise.tsx",
+  showDemoByDefault: true,
+  demoVariant: "text",
   props: [
     {
       name: "colors",

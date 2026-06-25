@@ -6,6 +6,8 @@ export const metallicTwirlConfig: ComponentConfig = {
   category: "background",
   tags: ["metallic", "twirl", "chrome", "shine", "swirl"],
   componentPath: "app/meta/background/metallic/MetallicTwirl.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "speed",

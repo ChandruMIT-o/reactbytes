@@ -6,6 +6,7 @@ export const magneticDotMeshConfig: ComponentConfig = {
   category: "background",
   tags: ["magnetic", "dots", "mesh", "interactive", "mouse", "grid"],
   componentPath: "app/meta/background/dotted/MagneticDotMesh.tsx",
+  showDemoByDefault: true,
   props: [
     {
       name: "gap",

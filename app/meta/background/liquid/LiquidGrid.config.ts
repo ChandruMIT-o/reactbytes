@@ -6,6 +6,8 @@ export const liquidGridConfig: ComponentConfig = {
   category: "background",
   tags: ["liquid", "grid", "ripple", "distort", "mesh"],
   componentPath: "app/meta/background/liquid/LiquidGrid.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "cols",

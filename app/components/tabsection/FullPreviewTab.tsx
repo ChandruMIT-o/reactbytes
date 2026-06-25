@@ -4,6 +4,8 @@ import { X, ChevronRight, ChevronLeft, Play, Search, ArrowLeft, ArrowRight, Moni
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { ComponentRegistry } from "../layout/ComponentRegistry";
+import { DemoToggle } from "../buttongroup/DemoToggle";
+import { DemoContent } from "../layout/DemoContents";
 import { usePathname, useRouter } from "next/navigation";
 
 interface FullPreviewTabProps {
@@ -34,6 +36,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
     const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "phone" | "custom">("desktop");
     const [customWidth, setCustomWidth] = useState<number>(800);
     const [isDragging, setIsDragging] = useState(false);
+    const [showDemo, setShowDemo] = useState(false);
 
     const handleResizeStart = (
         direction: "left" | "right",
@@ -91,21 +94,31 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
         };
     }, [isOpen]);
 
-    if (!mounted) return null;
-
     const registryEntries = Object.values(ComponentRegistry);
     const currentId = pathname.split("/").pop() || "intro";
     const currentIndex = registryEntries.findIndex(item => item.id === currentId);
     const currentItem = registryEntries[currentIndex];
+    const componentConfig = currentItem?.config;
+    const isBackground = componentConfig?.category === "background";
     const prevItem = currentIndex > 0 ? registryEntries[currentIndex - 1] : null;
     const nextItem = currentIndex < registryEntries.length - 1 && currentIndex !== -1 ? registryEntries[currentIndex + 1] : null;
 
-    // Find current category
     const currentCategory = currentItem
         ? (currentItem.category.charAt(0).toUpperCase() + currentItem.category.slice(1))
         : "Component";
 
     const paneWidth = isMobile ? "100vw" : 400;
+
+    // Fixed default fallback to false to keep it off by default
+    useEffect(() => {
+        if (isBackground && componentConfig) {
+            setShowDemo(componentConfig.showDemoByDefault ?? false);
+        } else {
+            setShowDemo(false);
+        }
+    }, [currentId, isBackground, componentConfig]);
+
+    if (!mounted) return null;
 
     const handleNavigate = (id: string) => {
         const targetPath = id === "intro" ? "/?preview=true" : `/${id}?preview=true`;
@@ -136,55 +149,59 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                     <X size={20} className="group-hover:scale-110 transition-transform" />
                                 </button>
 
-                                 <div className="flex flex-col">
+                                <div className="flex flex-col">
                                     <span className="text-[10px] uppercase tracking-widest text-rb-accent-2/40 font-bold">{currentCategory}</span>
                                     <h2 className="text-base md:text-xl font-bold tracking-tight">{currentItem?.label || "Preview"}</h2>
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-3">
-                                {/* Device Switcher */}
-                                <div className="hidden md:flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0 shadow-xl border border-rb-neutral-4">
-                                    <button
-                                        onClick={() => setPreviewMode("desktop")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Desktop View"
-                                    >
-                                        <Monitor size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => setPreviewMode("tablet")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Tablet View"
-                                    >
-                                        <Tablet size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => setPreviewMode("phone")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Mobile View"
-                                    >
-                                        <Smartphone size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => setPreviewMode("custom")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Custom View"
-                                    >
-                                        <MoveHorizontal size={16} />
-                                    </button>
+                                <div className="hidden md:flex items-center gap-2">
+                                    {/* DemoToggle removed from here to clean up header space */}
+
+                                    {/* Device Switcher */}
+                                    <div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0 shadow-xl border border-rb-neutral-4">
+                                        <button
+                                            onClick={() => setPreviewMode("desktop")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Desktop View"
+                                        >
+                                            <Monitor size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => setPreviewMode("tablet")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Tablet View"
+                                        >
+                                            <Tablet size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => setPreviewMode("phone")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Mobile View"
+                                        >
+                                            <Smartphone size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => setPreviewMode("custom")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Custom View"
+                                        >
+                                            <MoveHorizontal size={16} />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 {/* Bookmark Action */}
@@ -200,7 +217,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                         </div>
 
                         {/* Preview Content Container */}
-                        <div 
+                        <div
                             style={{ paddingBottom: isMobile && isPaneOpen ? "50vh" : "0px" }}
                             className={`flex-1 flex items-center justify-center overflow-hidden transition-all duration-500 ${previewMode !== "desktop" ? "bg-rb-neutral-2 canvas-grid w-full h-full" : "w-full h-full"}`}
                         >
@@ -232,8 +249,13 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                                     {previewMode === "custom" ? `custom view (${customWidth}px)` : `${previewMode} view`}
                                                 </div>
                                             )}
-                                            <div className="w-full h-full flex items-center justify-center [&>div]:h-full [&>div]:w-full [&>div]:max-h-none [&>div]:max-w-none">
+                                            <div className="w-full h-full flex items-center justify-center relative [&>div]:h-full [&>div]:w-full [&>div]:max-h-none [&>div]:max-w-none">
                                                 {previewContent}
+                                                {isBackground && showDemo && (
+                                                    <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+                                                        <DemoContent variant={componentConfig?.demoVariant || "hero"} />
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
 
@@ -266,6 +288,13 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                             </AnimatePresence>
                         </div>
 
+                        {/* Absolute positioning for the floating DemoToggle */}
+                        {isBackground && (
+                            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[1100]">
+                                <DemoToggle checked={showDemo} onChange={setShowDemo} />
+                            </div>
+                        )}
+
                         {/* Bottom Navigation Controls */}
                         <div className="absolute bottom-6 left-0 right-0 px-6 flex items-center justify-between z-[1100]">
                             {/* Prev Button Container */}
@@ -281,7 +310,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 )}
                             </div>
 
-                            {/* Center Controls (Header/Presets) - Fixed squish */}
+                            {/* Center Controls (Header/Presets) */}
                             <div className="absolute left-1/2 -translate-x-1/2 flex justify-center items-center pointer-events-auto">
                                 {header && (
                                     <div className="in-full-preview min-w-max w-[350px]">
@@ -314,12 +343,13 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 height: isMobile ? (isPaneOpen ? "50vh" : 0) : "100%"
                             }}
                             transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
-                            className={`border-rb-neutral-4 bg-rb-neutral-2/50 backdrop-blur-xl flex flex-col will-change-[width,height] overflow-hidden
-                                ${isMobile 
-                                    ? 'fixed bottom-0 left-0 right-0 z-[1200] border-t' 
-                                    : 'relative border-l h-full'
+                            className={`flex flex-col will-change-[width,height] overflow-visible
+                                ${isMobile
+                                    ? 'fixed bottom-0 left-0 right-0 z-[1200]'
+                                    : 'relative h-full'
                                 }`}
                         >
+                            {/* The Toggle Button (Now perfectly unclipped because the parent layer is overflow-visible) */}
                             <motion.button
                                 layout
                                 onClick={() => setIsPaneOpen(!isPaneOpen)}
@@ -331,54 +361,58 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                 }}
                                 transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
                                 className={`absolute shadow-2xl z-[1300] transition-colors group p-2.5 rounded-full
-                                    ${isMobile 
-                                        ? 'right-6 top-4 translate-y-0' 
+                ${isMobile
+                                        ? 'right-6 top-4 translate-y-0'
                                         : 'top-1/2 -translate-y-1/2 -left-5'
                                     } 
-                                    ${!isPaneOpen && !isMobile 
-                                        ? 'text-rb-neutral-1 border-rb-accent-1' 
+                ${!isPaneOpen && !isMobile
+                                        ? 'text-rb-neutral-1 border-rb-accent-1'
                                         : 'text-rb-accent-2 hover:bg-rb-neutral-4'
                                     }`}
                                 title={isPaneOpen ? "Collapse Pane" : "Expand Pane"}
                             >
-                                <motion.div
-                                    className="group-hover:scale-110 transition-transform"
-                                >
+                                <motion.div className="group-hover:scale-110 transition-transform">
                                     {isPaneOpen ? (isMobile ? <X size={18} /> : <ChevronRight size={18} />) : <ChevronLeft size={18} />}
                                 </motion.div>
                             </motion.button>
 
-                            <AnimatePresence>
-                                {isPaneOpen && (
-                                    <motion.div
-                                        initial={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, filter: "blur(10px)" }}
-                                        animate={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
-                                        exit={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, filter: "blur(10px)" }}
-                                        transition={{ duration: 0.4, delay: isPaneOpen ? 0.1 : 0 }}
-                                        className="h-full flex flex-col overflow-hidden w-full"
-                                    >
-                                        <div className="p-4 px-6 border-b border-rb-neutral-4 flex items-center justify-between">
-                                            <div className="flex flex-col">
-                                                <h3 className="text-xl font-medium text-rb-accent-1">Props</h3>
+                            {/* New Inner Styled Panel Box: Isolates panel text constraints and carries the panel theme safely */}
+                            <div
+                                className={`w-full h-full flex flex-col overflow-hidden border-rb-neutral-4 bg-rb-neutral-2/50 backdrop-blur-xl
+                ${isMobile ? 'border-t' : 'border-l'}`}
+                            >
+                                <AnimatePresence>
+                                    {isPaneOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, filter: "blur(10px)" }}
+                                            animate={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
+                                            exit={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0, filter: "blur(10px)" }}
+                                            transition={{ duration: 0.4, delay: isPaneOpen ? 0.1 : 0 }}
+                                            className="h-full flex flex-col overflow-hidden w-full"
+                                        >
+                                            <div className="p-4 px-6 border-b border-rb-neutral-4 flex items-center justify-between">
+                                                <div className="flex flex-col">
+                                                    <h3 className="text-xl font-medium text-rb-accent-1">Props</h3>
+                                                </div>
+                                                {onReplay && !isBackground && (
+                                                    <button
+                                                        onClick={onReplay}
+                                                        className="p-2 rounded-full bg-rb-accent-1 text-rb-neutral-1 hover:scale-110 active:scale-95 transition-all shadow-lg group"
+                                                        title="Replay Animation"
+                                                    >
+                                                        <Play size={14} fill="currentColor" className="ml-0.5" />
+                                                    </button>
+                                                )}
                                             </div>
-                                            {onReplay && (
-                                                <button
-                                                    onClick={onReplay}
-                                                    className="p-2 rounded-full bg-rb-accent-1 text-rb-neutral-1 hover:scale-110 active:scale-95 transition-all shadow-lg group"
-                                                    title="Replay Animation"
-                                                >
-                                                    <Play size={14} fill="currentColor" className="ml-0.5" />
-                                                </button>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-rb-neutral-4 hover:scrollbar-thumb-rb-accent-1/20 transition-colors">
-                                            <div className="flex flex-col gap-4">
-                                                {children}
+                                            <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-rb-neutral-4 hover:scrollbar-thumb-rb-accent-1/20 transition-colors">
+                                                <div className="flex flex-col gap-4">
+                                                    {children}
+                                                </div>
                                             </div>
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
                         </motion.div>
                     )}
 

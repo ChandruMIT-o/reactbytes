@@ -6,6 +6,8 @@ export const voidOrbConfig: ComponentConfig = {
   category: "background",
   tags: ["void", "orb", "dark", "energy", "glow", "space"],
   componentPath: "app/meta/background/space/VoidOrb.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "primaryColor",

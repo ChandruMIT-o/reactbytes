@@ -6,6 +6,8 @@ export const atmosphericDriftConfig: ComponentConfig = {
   category: "background",
   tags: ["drift", "particles", "atmosphere", "floating", "ambient"],
   componentPath: "app/meta/background/AtmosphericDrift/AtmosphericDrift.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "preset",

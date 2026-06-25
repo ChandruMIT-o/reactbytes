@@ -6,6 +6,8 @@ export const iridescentGradientConfig: ComponentConfig = {
   category: "background",
   tags: ["iridescent", "gradient", "rainbow", "holographic", "color"],
   componentPath: "app/meta/background/gradient/IridescentGradient.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "title",

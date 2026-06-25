@@ -5,6 +5,8 @@ export const warpSpeedConfig: ComponentConfig = {
   name: "Warp Speed",
   category: "background",
   componentPath: "app/meta/background/space/WarpSpeed/WarpSpeed.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "starCount",

@@ -5,6 +5,8 @@ export const ditherConfig: ComponentConfig = {
   name: "Dither Mesh",
   category: "background",
   componentPath: "app/meta/background/dotted/Dither.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "spacing",

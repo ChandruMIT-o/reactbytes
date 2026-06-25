@@ -6,6 +6,8 @@ export const bubbleGradientConfig: ComponentConfig = {
   category: "background",
   tags: ["bubble", "gradient", "color", "fluid", "soft"],
   componentPath: "app/meta/background/gradient/BubbleGradient.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "backgroundStart",

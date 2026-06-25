@@ -6,6 +6,8 @@ export const stripeFlowConfig: ComponentConfig = {
   category: "background",
   tags: ["stripe", "flow", "lines", "gradient", "motion"],
   componentPath: "app/meta/background/StripeFlow/StripeFlow.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "seed",

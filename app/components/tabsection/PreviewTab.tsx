@@ -15,6 +15,9 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { usePreview } from "../context/PreviewContext";
+import { DemoToggle } from "../buttongroup/DemoToggle";
+import { DemoContent } from "../layout/DemoContents";
+import { ComponentRegistry } from "../layout/ComponentRegistry";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import "prismjs/components/prism-javascript";
@@ -60,11 +63,16 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
   const [isFullPreviewOpen, setIsFullPreviewOpen] = useState(
     searchParams.get("preview") === "true",
   );
+  const [showDemo, setShowDemo] = useState(false);
   const [previewMode, setPreviewMode] = useState<
     "desktop" | "tablet" | "phone" | "custom"
   >("desktop");
   const [customWidth, setCustomWidth] = useState<number>(800);
   const [isDragging, setIsDragging] = useState(false);
+  const currentId = pathname.split("/").pop() || "";
+  const currentItem = Object.values(ComponentRegistry).find((item) => item.id === currentId);
+  const componentConfig = currentItem?.config;
+  const isBackground = componentConfig?.category === "background";
 
   const handleResizeStart = (
     direction: "left" | "right",
@@ -112,6 +120,14 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
     const isPreview = searchParams.get("preview") === "true";
     setIsFullPreviewOpen(isPreview);
   }, [searchParams]);
+
+  useEffect(() => {
+    if (isBackground && componentConfig) {
+      setShowDemo(componentConfig.showDemoByDefault ?? false);
+    } else {
+      setShowDemo(false);
+    }
+  }, [currentId, isBackground, componentConfig]);
 
   const handleOpenFullPreview = () => {
     setIsOpen(true);
@@ -181,54 +197,70 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
           ))}
         </div>
 
-        {/* Right actions: bookmark + preview controls */}
+        {/* Header Actions */}
         <div className="flex items-center gap-1 pr-1.5 shrink-0">
           {activeTab === "preview" ? (
             <>
-              <div className="hidden md:flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0">
-                <button
-                  onClick={() => setPreviewMode("desktop")}
-                  className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop" ? "bg-rb-accent-1 text-rb-neutral-2 font-bold" : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"}`}
-                  title="Desktop View"
-                >
-                  <Monitor size={14} />
-                </button>
-                <button
-                  onClick={() => setPreviewMode("tablet")}
-                  className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet" ? "bg-rb-accent-1 text-rb-neutral-2 font-bold" : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"}`}
-                  title="Tablet View"
-                >
-                  <Tablet size={14} />
-                </button>
-                <button
-                  onClick={() => setPreviewMode("phone")}
-                  className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone" ? "bg-rb-accent-1 text-rb-neutral-2 font-bold" : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"}`}
-                  title="Mobile View"
-                >
-                  <Smartphone size={14} />
-                </button>
-                <button
-                  onClick={() => setPreviewMode("custom")}
-                  className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom" ? "bg-rb-accent-1 text-rb-neutral-2 font-bold" : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"}`}
-                  title="Custom View"
-                >
-                  <MoveHorizontal size={14} />
-                </button>
+              <div className="hidden md:flex items-center gap-2">
+                <div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0">
+                  <button
+                    onClick={() => setPreviewMode("desktop")}
+                    className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
+                      ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                      : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                      }`}
+                    title="Desktop View"
+                  >
+                    <Monitor size={14} />
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode("tablet")}
+                    className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet"
+                      ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                      : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                      }`}
+                    title="Tablet View"
+                  >
+                    <Tablet size={14} />
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode("phone")}
+                    className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone"
+                      ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                      : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                      }`}
+                    title="Mobile View"
+                  >
+                    <Smartphone size={14} />
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode("custom")}
+                    className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom"
+                      ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                      : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                      }`}
+                    title="Custom View"
+                  >
+                    <MoveHorizontal size={14} />
+                  </button>
+                </div>
               </div>
 
-              {/* Bookmark slot — always visible */}
-              {tabsAction && tabsAction}
+              <div className="flex items-center gap-1">
+                {/* Placed bookmark action component injection directly into the header control flow layout */}
+                {tabsAction && tabsAction}
 
-              <button
-                onClick={handleOpenFullPreview}
-                className="p-2.5 flex items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
-                title="Expand Preview"
-              >
-                <Maximize2
-                  size={14}
-                  className="group-hover:scale-110 transition-transform"
-                />
-              </button>
+                <button
+                  onClick={handleOpenFullPreview}
+                  className="p-2.5 flex items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
+                  title="Expand Preview"
+                >
+                  <Maximize2
+                    size={14}
+                    className="group-hover:scale-110 transition-transform"
+                  />
+                </button>
+              </div>
             </>
           ) : (
             <button
@@ -275,15 +307,14 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
                       }
                     >
                       <div
-                        className={`w-full h-full min-h-[360px] flex items-center justify-center relative ${isDragging ? "transition-none" : "transition-all duration-500 ease-in-out"} ${
-                          previewMode === "desktop"
-                            ? "max-w-full"
-                            : previewMode === "tablet"
-                              ? "max-w-[768px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
-                              : previewMode === "phone"
-                                ? "max-w-[375px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
-                                : "bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
-                        }`}
+                        className={`w-full h-full min-h-[360px] flex items-center justify-center relative ${isDragging ? "transition-none" : "transition-all duration-500 ease-in-out"} ${previewMode === "desktop"
+                          ? "max-w-full"
+                          : previewMode === "tablet"
+                            ? "max-w-[768px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+                            : previewMode === "phone"
+                              ? "max-w-[375px] bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+                              : "bg-rb-neutral-1 rounded-2xl border border-white/10 shadow-2xl overflow-hidden"
+                          }`}
                       >
                         {previewMode !== "desktop" && (
                           <div className="absolute top-2 left-1/2 -translate-x-1/2 text-[9px] text-rb-accent-2/20 font-mono tracking-widest uppercase pointer-events-none select-none z-10">
@@ -292,8 +323,13 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
                               : `${previewMode} view`}
                           </div>
                         )}
-                        <div className="w-full h-full flex items-center justify-center">
+                        <div className="w-full h-full flex items-center justify-center relative">
                           {previewContent}
+                          {isBackground && showDemo && (
+                            <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+                              <DemoContent variant={componentConfig?.demoVariant || "hero"} />
+                            </div>
+                          )}
                         </div>
                       </div>
 
@@ -321,7 +357,9 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
                       )}
                     </div>
                   </div>
-                  {onReplay && (
+
+                  {/* Replay Button for standard components stays clean at the bottom of viewport */}
+                  {onReplay && !isBackground && (
                     <button
                       onClick={onReplay}
                       className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 bg-rb-neutral-3 text-rb-accent-2 border border-rb-neutral-4 hover:text-rb-accent-1 hover:bg-rb-neutral-4 rounded-full transition-all duration-300 text-sm font-medium z-10 group"
@@ -335,12 +373,19 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
                       <span>Replay</span>
                     </button>
                   )}
+
+                  {/* DemoToggle absolute positioning for background categories */}
+                  {isBackground && (
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20">
+                      <DemoToggle checked={showDemo} onChange={setShowDemo} />
+                    </div>
+                  )}
                 </>
               ) : activeTab === "usage" ? (
                 <div className="p-5 overflow-auto max-h-[600px] edit-container">
                   <Editor
                     value={usageCode || ""}
-                    onValueChange={() => {}}
+                    onValueChange={() => { }}
                     highlight={(code) =>
                       Prism.highlight(code, Prism.languages.tsx, "tsx")
                     }
@@ -357,7 +402,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
                 <div className="p-5 overflow-auto max-h-[600px] edit-container">
                   <Editor
                     value={codeContent || ""}
-                    onValueChange={() => {}}
+                    onValueChange={() => { }}
                     highlight={(code) =>
                       Prism.highlight(code, Prism.languages.tsx, "tsx")
                     }

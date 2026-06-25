@@ -6,6 +6,8 @@ export const superstructureConfig: ComponentConfig = {
   tags: ["superstructure", "space", "geometric", "grid", "cosmic"],
   category: "background",
   componentPath: "app/meta/background/space/Superstructure.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "startColor",

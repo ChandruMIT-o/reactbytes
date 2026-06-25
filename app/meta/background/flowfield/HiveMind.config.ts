@@ -6,6 +6,8 @@ export const hiveMindConfig: ComponentConfig = {
   category: "background",
   tags: ["hive", "flow", "field", "agents", "particles", "swarm"],
   componentPath: "app/meta/background/flowfield/HiveMind.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "count",

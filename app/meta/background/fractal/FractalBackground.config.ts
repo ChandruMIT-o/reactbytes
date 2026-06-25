@@ -6,6 +6,8 @@ export const fractalBackgroundConfig: ComponentConfig = {
   category: "background",
   tags: ["fractal", "math", "recursive", "pattern", "zoom"],
   componentPath: "app/meta/background/fractal/FractalBackground.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "colorStart",

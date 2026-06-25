@@ -6,6 +6,8 @@ export const dottedVortexConfig: ComponentConfig = {
   category: "background",
   tags: ["dots", "vortex", "spiral", "swirl", "rotation"],
   componentPath: "app/meta/background/dotted/DottedVortex.tsx",
+  showDemoByDefault: true,
+  demoVariant: "text",
   props: [
     {
       name: "isExcited",

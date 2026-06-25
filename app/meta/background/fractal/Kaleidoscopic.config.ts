@@ -6,6 +6,8 @@ export const kaleidoscopicConfig: ComponentConfig = {
   category: "background",
   tags: ["kaleidoscope", "fractal", "mirror", "symmetry", "pattern"],
   componentPath: "app/meta/background/fractal/Kaleidoscopic.tsx",
+  showDemoByDefault: true,
+  demoVariant: "text",
   props: [
     {
       name: "iterations",

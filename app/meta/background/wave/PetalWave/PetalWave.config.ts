@@ -6,6 +6,8 @@ export const petalWaveConfig: ComponentConfig = {
   category: "background",
   tags: ["petal", "wave", "flower", "organic", "rotation"],
   componentPath: "app/meta/background/wave/PetalWave/PetalWave.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "colorStart",

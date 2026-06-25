@@ -109,6 +109,8 @@ export interface ComponentConfig {
   category: "text" | "background" | "carousel" | "miscellaneous" | "cursor";
   tags?: string[];
   componentPath: string;
+  showDemoByDefault?: boolean;
+  demoVariant?: "hero" | "card" | "text" | "minimal";
   props: PropConfig[];
   presets: PresetConfig[];
   credits: CreditsSection[];

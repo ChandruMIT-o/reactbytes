@@ -6,6 +6,8 @@ export const concentricWavesConfig: ComponentConfig = {
   category: "background",
   tags: ["concentric", "waves", "ripple", "rings", "pulse"],
   componentPath: "app/meta/background/wave/ConcentricWaves/ConcentricWaves.tsx",
+  showDemoByDefault: true,
+  demoVariant: "text",
   props: [
     {
       name: "layerCount",

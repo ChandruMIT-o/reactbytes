@@ -6,6 +6,8 @@ export const poissonNoiseConfig: ComponentConfig = {
   category: "background",
   tags: ["poisson", "noise", "scatter", "dots", "distribution"],
   componentPath: "app/meta/background/dotted/PoissonNoise.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "renderMode",
