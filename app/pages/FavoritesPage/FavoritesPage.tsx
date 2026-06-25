@@ -40,8 +40,7 @@ const CATEGORY_GRADIENT: Record<string, string> = {
 
 const ALL_FILTER = { id: "all", label: "All Categories" };
 
-// ─── Test gif map (2 slugs get real gifs, rest fall back to static placeholder) ──
-// Replace these URLs with your actual component preview gifs.
+// ─── Test gif map ────────────────────────────────────────────────────────────
 const PREVIEW_GIFS: Record<string, string> = {
   "blur-text":
     "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExemp0ZTM1czdyaDdmc2M1aTFqcDh3ZGpvYXpvcTh3YjVvbmYzNzdmZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XEEJjydi2u5VhVO4f8/giphy.gif",
@@ -49,7 +48,7 @@ const PREVIEW_GIFS: Record<string, string> = {
     "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2lwdDlkNmludGEwdDNzeWtuczJ6MTRybnd2cGJhZWt5eWJsazEyaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1ZjLRSrAyikUzypJfa/giphy.gif",
 };
 
-// ─── Static placeholder (no gif available) ──────────────────────────────────
+// ─── Static placeholder (Only used if NO gif asset exists at all) ────────────
 function CategoryPlaceholder({
   category,
   name,
@@ -79,17 +78,8 @@ function CategoryPlaceholder({
           ry="120"
           fill={`url(#glow-${category})`}
         />
-        <ellipse
-          cx="40"
-          cy="140"
-          rx="120"
-          ry="90"
-          fill={`url(#glow-${category})`}
-          opacity="0.5"
-        />
       </svg>
 
-      {/* Logo — only shown when no gif is available for this card */}
       <Image
         src="/logo.svg"
         alt={`${name} preview`}
@@ -97,47 +87,6 @@ function CategoryPlaceholder({
         height={26}
         className="opacity-50 relative z-10 select-none pointer-events-none"
       />
-    </div>
-  );
-}
-
-// ─── Placeholder without logo (used when a gif preview exists) ───────────────
-function CategoryPlaceholderNoLogo({ category }: { category: string }) {
-  const color = CATEGORY_GRADIENT[category] ?? "#799996";
-  return (
-    <div className="w-full h-full relative overflow-hidden bg-rb-neutral-1">
-      <svg
-        className="absolute inset-0 w-full h-full"
-        preserveAspectRatio="none"
-        viewBox="0 0 300 160"
-      >
-        <defs>
-          <radialGradient
-            id={`glow-nlogo-${category}`}
-            cx="50%"
-            cy="50%"
-            r="60%"
-          >
-            <stop offset="0%" stopColor={color} stopOpacity="0.2" />
-            <stop offset="100%" stopColor={color} stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <ellipse
-          cx="230"
-          cy="40"
-          rx="160"
-          ry="120"
-          fill={`url(#glow-nlogo-${category})`}
-        />
-        <ellipse
-          cx="40"
-          cy="140"
-          rx="120"
-          ry="90"
-          fill={`url(#glow-nlogo-${category})`}
-          opacity="0.5"
-        />
-      </svg>
     </div>
   );
 }
@@ -152,8 +101,18 @@ interface FavoriteCardProps {
 function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
   const [hovered, setHovered] = useState(false);
   const [tapped, setTapped] = useState(false);
+
   const gifSrc = PREVIEW_GIFS[component.slug] ?? null;
   const showGif = gifSrc && (hovered || tapped);
+
+  // Automatically derive Giphy's static frame URL if it's a giphy link
+  const staticSrc = useMemo(() => {
+    if (!gifSrc) return null;
+    if (gifSrc.includes("giphy.com")) {
+      return gifSrc.replace("/giphy.gif", "/giphy_s.gif");
+    }
+    return gifSrc;
+  }, [gifSrc]);
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -178,49 +137,56 @@ function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
         setHovered(false);
         setTapped(false);
       }}
-      className="group relative flex flex-col rounded-2xl border border-rb-neutral-4/40 bg-rb-neutral-3/50 hover:bg-rb-neutral-3/80 cursor-pointer transition-colors duration-200 overflow-hidden"
+      className="group relative flex flex-col rounded-2xl border border-rb-neutral-3 bg-rb-neutral-3 hover:bg-rb-neutral-4 cursor-pointer transition-colors duration-200 overflow-hidden"
     >
       {/* Preview area */}
       <div className="relative w-full h-40 overflow-hidden bg-rb-neutral-1 border-b border-rb-neutral-4/30 flex-shrink-0">
-        {/* Static placeholder — hide logo when a gif exists */}
-        <div className="absolute inset-0">
-          {gifSrc ? (
-            <CategoryPlaceholderNoLogo category={component.category} />
-          ) : (
+
+        {/* 1. Base Fallback: Only shows if NO gif track exists */}
+        {!gifSrc && (
+          <div className="absolute inset-0">
             <CategoryPlaceholder
               category={component.category}
               name={component.name}
             />
-          )}
-        </div>
-
-        {/* Gif — preloaded, opacity-only crossfade */}
-        {gifSrc && (
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              opacity: showGif ? 1 : 0,
-              transition: "opacity 400ms ease",
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={gifSrc}
-              alt={`${component.name} preview`}
-              className="w-full h-full object-cover"
-              loading="eager"
-              fetchPriority="high"
-            />
-            <div className="absolute inset-0 bg-black/10" />
           </div>
         )}
 
-        {/* Mobile tap-to-preview button — only shown on touch devices when gif exists */}
+        {/* 2. Static GIF Preview Frame (Zero Stretch, Fills zone completely) */}
+        {gifSrc && staticSrc && (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
+            src={staticSrc}
+            alt={`${component.name} preview still`}
+            className="absolute inset-0 block w-full h-full object-cover z-0"
+            loading="lazy"
+          />
+        )}
+
+        {/* 3. Animated GIF Track (Zero Stretch, Cross-fades cleanly on hover) */}
+        <AnimatePresence>
+          {showGif && (
+            <motion.img
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              src={gifSrc}
+              alt={`${component.name} playing preview`}
+              className="absolute inset-0 block w-full h-full object-cover pointer-events-none z-10"
+            />
+          )}
+        </AnimatePresence>
+
+        {/* Subtle Darkening Overlay Layer */}
+        <div className="absolute inset-0 bg-black/5 pointer-events-none z-20" />
+
+        {/* Mobile tap-to-preview button */}
         {gifSrc && !tapped && (
           <button
             type="button"
             onClick={handleTapPreview}
-            className="absolute bottom-2 right-2 z-10 sm:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium tracking-wide backdrop-blur-sm border transition-all duration-200 bg-black/50 border-white/10 text-white/60"
+            className="absolute bottom-2 right-2 z-30 sm:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium tracking-wide backdrop-blur-sm border transition-all duration-200 bg-black/50 border-white/10 text-white/60"
           >
             Tap to preview
           </button>
@@ -231,7 +197,7 @@ function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
           type="button"
           onClick={handleRemove}
           title="Remove from favorites"
-          className="absolute top-2 left-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 p-1.5 rounded-lg bg-black/50 backdrop-blur-sm text-white/60 hover:text-white hover:bg-black/70 z-10"
+          className="absolute top-2 left-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 p-1.5 rounded-lg bg-black/50 backdrop-blur-sm text-white/60 hover:text-white hover:bg-black/70 z-30"
         >
           <Bookmark size={13} fill="currentColor" />
         </button>
@@ -240,10 +206,9 @@ function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
       {/* Card body */}
       <div className="flex flex-col gap-2 p-4">
         <span
-          className={`self-start text-[10px] font-semibold px-2 py-0.5 rounded-full border uppercase tracking-wider ${
-            CATEGORY_COLORS[component.category] ??
+          className={`self-start text-[10px] font-semibold px-2 py-0.5 rounded-full border uppercase tracking-wider ${CATEGORY_COLORS[component.category] ??
             "bg-white/5 text-rb-accent-2/40 border-white/8"
-          }`}
+            }`}
         >
           {CATEGORY_LABEL[component.category] ?? component.category}
         </span>
@@ -256,7 +221,7 @@ function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
             className="text-rb-accent-2/20 group-hover:text-rb-accent-1/60 group-hover:translate-x-0.5 transition-all duration-200 flex-shrink-0"
           />
         </div>
-        <span className="text-[11px] text-rb-accent-2/20 font-mono">
+        <span className="text-[13px] text-rb-accent-2/40 font-mono">
           /{component.slug}
         </span>
       </div>
@@ -275,9 +240,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
       exit={{ opacity: 0 }}
       className="flex flex-col items-center justify-center gap-5 py-24 text-center"
     >
-      {/* Icon — no ring, just the bare icon */}
       <Bookmark size={22} className="text-rb-accent-2/20" />
-
       <div className="flex flex-col gap-1.5">
         <p className="text-rb-accent-2/50 text-[15px] font-medium tracking-tight">
           {filtered ? "No components in this category" : "No favorites yet"}
@@ -373,19 +336,17 @@ export const FavoritesPage = () => {
           id="favorites-filters"
           className="flex items-center justify-between gap-4 px-1"
         >
-          <p className="text-[12px] text-rb-accent-2/25 uppercase tracking-widest font-medium whitespace-nowrap">
-            {filtered.length}{" "}
+          <p className="text-xs text-rb-accent-2/30 uppercase tracking-widest font-medium whitespace-nowrap">
+            <span className="font-bold text-rb-accent-1 mr-1">{filtered.length}</span>
             {filtered.length === 1 ? "component" : "components"}
           </p>
-          <div className="w-52">
-            <DefaultComboBox
-              label="Category"
-              options={categoryOptions}
-              value={activeCategory}
-              onChange={setActiveCategory}
-              dynamicWidth={false}
-            />
-          </div>
+          <DefaultComboBox
+            label="Category"
+            options={categoryOptions}
+            value={activeCategory}
+            onChange={setActiveCategory}
+            dynamicWidth={true}
+          />
         </section>
       )}
 

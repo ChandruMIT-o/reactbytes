@@ -6,6 +6,7 @@ interface PreviewData {
     previewContent: React.ReactNode;
     children?: React.ReactNode;
     header?: React.ReactNode;
+    tabsAction?: React.ReactNode;
     onReplay?: () => void;
 }
 

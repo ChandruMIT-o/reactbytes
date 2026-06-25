@@ -12,6 +12,7 @@ interface FullPreviewTabProps {
     previewContent: React.ReactNode;
     children?: React.ReactNode;
     header?: React.ReactNode;
+    tabsAction?: React.ReactNode;
     onReplay?: () => void;
 }
 
@@ -21,6 +22,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
     previewContent,
     children,
     header,
+    tabsAction,
     onReplay,
 }) => {
     const [isPaneOpen, setIsPaneOpen] = useState(true);
@@ -184,6 +186,9 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                         <MoveHorizontal size={16} />
                                     </button>
                                 </div>
+
+                                {/* Bookmark Action */}
+                                {tabsAction && tabsAction}
 
                                 <button
                                     className="hidden md:block p-3 rounded-full bg-rb-neutral-3/80 backdrop-blur-md text-rb-accent-2 border border-rb-neutral-4 hover:bg-rb-neutral-4 transition-all group shadow-xl"

@@ -105,8 +105,8 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
   };
 
   useEffect(() => {
-    setData({ previewContent, children, header, onReplay });
-  }, [previewContent, children, header, onReplay, setData]);
+    setData({ previewContent, children, header, tabsAction, onReplay });
+  }, [previewContent, children, header, tabsAction, onReplay, setData]);
 
   useEffect(() => {
     const isPreview = searchParams.get("preview") === "true";

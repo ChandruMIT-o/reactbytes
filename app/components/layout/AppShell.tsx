@@ -381,6 +381,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         previewContent={data?.previewContent}
         children={data?.children}
         header={data?.header}
+        tabsAction={data?.tabsAction}
         onReplay={data?.onReplay}
       />
     </div>
