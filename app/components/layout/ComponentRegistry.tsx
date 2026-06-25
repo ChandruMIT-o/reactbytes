@@ -10,7 +10,13 @@ export interface RegistrySection {
 export interface RegistryEntry {
   id: string;
   label: string;
-  category: "general" | "text" | "background" | "carousel" | "miscellaneous" | "cursor";
+  category:
+    | "general"
+    | "text"
+    | "background"
+    | "carousel"
+    | "miscellaneous"
+    | "cursor";
   sections: RegistrySection[];
   component: React.ComponentType<any>;
 }
@@ -33,7 +39,11 @@ const baseRegistry: Record<string, RegistryEntry> = {
       { id: "mission", label: "Our Mission" },
       { id: "principles", label: "Core Principles" },
     ],
-    component: dynamic(() => import("../../pages/IntroductionPage/IntroductionPage").then(mod => mod.IntroductionPage)),
+    component: dynamic(() =>
+      import("../../pages/IntroductionPage/IntroductionPage").then(
+        (mod) => mod.IntroductionPage,
+      ),
+    ),
   },
   install: {
     id: "install",
@@ -44,7 +54,11 @@ const baseRegistry: Record<string, RegistryEntry> = {
       { id: "api-reference", label: "API Reference" },
       { id: "credits", label: "Credits" },
     ],
-    component: dynamic(() => import("../../pages/InstallationPage/InstallationPage").then(mod => mod.InstallationPage)),
+    component: dynamic(() =>
+      import("../../pages/InstallationPage/InstallationPage").then(
+        (mod) => mod.InstallationPage,
+      ),
+    ),
   },
   changelog: {
     id: "changelog",
@@ -55,14 +69,20 @@ const baseRegistry: Record<string, RegistryEntry> = {
       { id: "changelog-filters", label: "Filters" },
       { id: "changelog-timeline", label: "Timeline" },
     ],
-    component: dynamic(() => import("../../pages/ChangelogPage/ChangelogPage").then(mod => mod.ChangelogPage)),
+    component: dynamic(() =>
+      import("../../pages/ChangelogPage/ChangelogPage").then(
+        (mod) => mod.ChangelogPage,
+      ),
+    ),
   },
   admin: {
     id: "admin",
     label: "Admin Dashboard",
     category: "general",
     sections: [],
-    component: dynamic(() => import("../../pages/AdminPage/AdminPage").then(mod => mod.AdminPage)),
+    component: dynamic(() =>
+      import("../../pages/AdminPage/AdminPage").then((mod) => mod.AdminPage),
+    ),
   },
   mcp: {
     id: "mcp",
@@ -73,43 +93,56 @@ const baseRegistry: Record<string, RegistryEntry> = {
       { id: "mcp-setup", label: "Setup" },
       { id: "mcp-usage", label: "Usage" },
     ],
-    component: dynamic(() => import("../../pages/McpPage/McpPage").then(mod => mod.McpPage)),
+    component: dynamic(() =>
+      import("../../pages/McpPage/McpPage").then((mod) => mod.McpPage),
+    ),
   },
+
+  favorites: {
+    id: "favorites",
+    label: "Favorites",
+    category: "general",
+    sections: [
+      { id: "favorites-header", label: "Favorites" },
+      { id: "favorites-grid", label: "Saved" },
+    ],
+    component: dynamic(() =>
+      import("../../pages/FavoritesPage/FavoritesPage").then(
+        (mod) => mod.FavoritesPage,
+      ),
+    ),
+  },
+
   landing: {
     id: "landing",
     label: "Landing Showcase",
     category: "general",
     sections: [],
-    component: dynamic(() => import("../../landing/page").then(mod => mod.default)),
+    component: dynamic(() =>
+      import("../../landing/page").then((mod) => mod.default),
+    ),
   },
 
   // Carousel items
 
-
-
-
-
-
-
-
-
   // Miscellaneous items
 
-
   // Cursors items
-
 };
 
 export const ComponentRegistry: Record<string, RegistryEntry> = {
   ...baseRegistry,
-  ...ComponentDatabase.reduce((acc, comp) => {
-    acc[comp.slug] = {
-      id: comp.slug,
-      label: comp.name,
-      category: comp.category,
-      sections: standardSections(comp.slug),
-      component: () => null,
-    };
-    return acc;
-  }, {} as Record<string, RegistryEntry>),
+  ...ComponentDatabase.reduce(
+    (acc, comp) => {
+      acc[comp.slug] = {
+        id: comp.slug,
+        label: comp.name,
+        category: comp.category,
+        sections: standardSections(comp.slug),
+        component: () => null,
+      };
+      return acc;
+    },
+    {} as Record<string, RegistryEntry>,
+  ),
 };

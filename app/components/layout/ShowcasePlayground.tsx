@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import HeaderText from "@/app/components/textfields/HeaderText";
 import PreviewTab from "@/app/components/tabsection/PreviewTab";
 import InstallationTabs from "@/app/components/tabsection/InstallationTabs";
@@ -12,6 +12,7 @@ import DiscreteSlider2 from "@/app/components/slider/DiscreteSlider2";
 import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { RotateCcw } from "lucide-react";
+import { BookmarkButton } from "@/app/components/buttons/BookmarkButton";
 
 import { ComponentConfig, PropConfig } from "@/app/registry/ComponentDatabase";
 import { ComponentMap } from "@/app/registry/ComponentMap";
@@ -27,7 +28,6 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
 }) => {
   const Component = ComponentMap[dbEntry.slug];
 
-  // Initialize state dynamically for each prop based on database config
   const [propStates, setPropStates] = useState<Record<string, any>>(() => {
     const initial: Record<string, any> = {};
     dbEntry.props.forEach((prop) => {
@@ -43,65 +43,54 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
     const preset = dbEntry.presets.find((p) => p.id === presetId);
     if (preset) {
       setCurrentPreset(presetId);
-      setPropStates((prev) => ({
-        ...prev,
-        ...preset.config,
-      }));
+      setPropStates((prev) => ({ ...prev, ...preset.config }));
       setKey((prev) => prev + 1);
     }
   };
 
-  const handleReplay = () => {
-    setKey((prev) => prev + 1);
-  };
-
-  const handleReset = () => {
-    applyPreset("default");
-  };
-
+  const handleReplay = () => setKey((prev) => prev + 1);
+  const handleReset = () => applyPreset("default");
   const handlePropChange = (name: string, value: any) => {
-    setPropStates((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setPropStates((prev) => ({ ...prev, [name]: value }));
     setKey((prev) => prev + 1);
   };
 
-  // Generate dynamic usage code JSX snippet
   const generateUsageCode = () => {
     const propStrings = dbEntry.props
       .map((prop) => {
         const val = propStates[prop.name];
         if (val === undefined || val === null) return "";
-        
-        // Handle array representation or formatting if needed
-        if (Array.isArray(val)) {
+        if (Array.isArray(val))
           return `  ${prop.name}={['${val.join("', '")}']}`;
-        }
-        
-        if (prop.type === "string" || prop.type === "color") {
+        if (prop.type === "string" || prop.type === "color")
           return `  ${prop.name}="${val}"`;
-        } else if (prop.type === "number" || prop.type === "boolean") {
+        if (prop.type === "number" || prop.type === "boolean")
           return `  ${prop.name}={${val}}`;
-        } else if (prop.type === "select") {
-          return `  ${prop.name}="${val}"`;
-        }
+        if (prop.type === "select") return `  ${prop.name}="${val}"`;
         return "";
       })
       .filter(Boolean)
       .join("\n");
-
     return `<${dbEntry.name.replace(/\s+/g, "")}\n${propStrings}\n/>`;
   };
 
-  // Format loaderProps for API Reference table (PropsTable)
   const loaderProps = [
     {
       title: "API Reference",
       props: dbEntry.props.map((prop) => ({
         name: prop.name,
-        type: prop.type === "select" ? (prop.options ? prop.options.map((o) => `'${o.id}'`).join(" | ") : "string") : prop.type,
-        defaultValue: prop.type === "string" || prop.type === "color" || prop.type === "select" ? `'${prop.default}'` : String(prop.default),
+        type:
+          prop.type === "select"
+            ? prop.options
+              ? prop.options.map((o) => `'${o.id}'`).join(" | ")
+              : "string"
+            : prop.type,
+        defaultValue:
+          prop.type === "string" ||
+          prop.type === "color" ||
+          prop.type === "select"
+            ? `'${prop.default}'`
+            : String(prop.default),
         description: prop.description,
       })),
     },
@@ -109,15 +98,18 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
 
   const usageCode = generateUsageCode();
 
-  // Render controls dynamically based on property type
   const renderControl = (prop: PropConfig) => {
     const val = propStates[prop.name];
+    const label =
+      prop.name.charAt(0).toUpperCase() +
+      prop.name.slice(1).replace(/([A-Z])/g, " $1");
+
     switch (prop.type) {
       case "string":
         return (
           <DefaultTextInput
             key={prop.name}
-            label={prop.name.charAt(0).toUpperCase() + prop.name.slice(1).replace(/([A-Z])/g, " $1")}
+            label={label}
             value={val}
             onChange={(v) => handlePropChange(prop.name, v)}
             placeholder={`Enter ${prop.name}...`}
@@ -127,7 +119,7 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
         return (
           <ToggleComponent
             key={prop.name}
-            label={prop.name.charAt(0).toUpperCase() + prop.name.slice(1).replace(/([A-Z])/g, " $1")}
+            label={label}
             checked={val}
             onChange={(v) => handlePropChange(prop.name, v)}
           />
@@ -136,13 +128,17 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
         return (
           <DiscreteSlider2
             key={prop.name}
-            label={prop.name.charAt(0).toUpperCase() + prop.name.slice(1).replace(/([A-Z])/g, " $1")}
+            label={label}
             min={prop.min ?? 0}
             max={prop.max ?? 100}
             step={prop.step ?? 1}
             value={val}
             onChange={(v) => handlePropChange(prop.name, v)}
-            maxDecimals={prop.step && prop.step < 1 ? String(prop.step).split(".")[1]?.length || 1 : 0}
+            maxDecimals={
+              prop.step && prop.step < 1
+                ? String(prop.step).split(".")[1]?.length || 1
+                : 0
+            }
             showTicks={true}
           />
         );
@@ -150,7 +146,7 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
         return (
           <ColorPicker
             key={prop.name}
-            label={prop.name.charAt(0).toUpperCase() + prop.name.slice(1).replace(/([A-Z])/g, " $1")}
+            label={label}
             value={val}
             onChange={(v) => handlePropChange(prop.name, v)}
           />
@@ -159,7 +155,7 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
         return (
           <DefaultComboBox
             key={prop.name}
-            label={prop.name.charAt(0).toUpperCase() + prop.name.slice(1).replace(/([A-Z])/g, " $1")}
+            label={label}
             options={prop.options || []}
             value={val}
             onChange={(v) => handlePropChange(prop.name, v)}
@@ -171,11 +167,12 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
     }
   };
 
-  // Preview content wrapper layout: handles canvas background bounds & resizing hooks
   const renderPreviewContent = () => {
     if (dbEntry.category === "background") {
       return (
-        <div className={`w-full h-[600px] relative overflow-hidden flex items-center justify-center p-0 rounded-xl border border-rb-neutral-4 ${dbEntry.containerClassName || ""}`}>
+        <div
+          className={`w-full h-[600px] relative overflow-hidden flex items-center justify-center p-0 rounded-xl border border-rb-neutral-4 ${dbEntry.containerClassName || ""}`}
+        >
           <Component
             key={key}
             {...propStates}
@@ -184,15 +181,11 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
         </div>
       );
     }
-
-    // Default container for non-background showcases
     return (
-      <div className={`w-full h-[400px] relative overflow-hidden flex items-center justify-center p-10 ${dbEntry.containerClassName || ""}`}>
-        <Component
-          key={key}
-          {...propStates}
-          {...(dbEntry.staticProps || {})}
-        />
+      <div
+        className={`w-full h-[400px] relative overflow-hidden flex items-center justify-center p-10 ${dbEntry.containerClassName || ""}`}
+      >
+        <Component key={key} {...propStates} {...(dbEntry.staticProps || {})} />
       </div>
     );
   };
@@ -210,8 +203,9 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
           usageCode={usageCode}
           codeContent={codeContent}
           collapsible={true}
+          tabsAction={<BookmarkButton slug={dbEntry.slug} />}
           header={
-            <div className="flex items-center justify-between ">
+            <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <h3 className="text-xs ml-4 font-bold text-rb-accent-1 uppercase">
                   Props
@@ -224,18 +218,16 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
                 onChange={applyPreset}
                 dynamicWidth={true}
               />
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleReset}
-                  className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
-                  title="Reset to Defaults"
-                >
-                  <RotateCcw
-                    size={16}
-                    className="group-hover:rotate-[-90deg] transition-transform duration-500"
-                  />
-                </button>
-              </div>
+              <button
+                onClick={handleReset}
+                className="group p-2.5 rounded-full bg-rb-neutral-3 text-rb-accent-1/40 border border-rb-neutral-4 hover:text-rb-accent-3 transition-all duration-300"
+                title="Reset to Defaults"
+              >
+                <RotateCcw
+                  size={16}
+                  className="group-hover:rotate-[-90deg] transition-transform duration-500"
+                />
+              </button>
             </div>
           }
         >
@@ -246,15 +238,13 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
       <div id="installation-tabs">
         <InstallationTabs
           componentName={dbEntry.npmPackageName || "react-bytes"}
-          extraLibraries={
-            (() => {
-              const libs = [
-                ...Object.keys(dbEntry.dependencies || {}),
-                ...Object.keys(dbEntry.peerDependencies || {}),
-              ];
-              return libs.length > 0 ? libs : undefined;
-            })()
-          }
+          extraLibraries={(() => {
+            const libs = [
+              ...Object.keys(dbEntry.dependencies || {}),
+              ...Object.keys(dbEntry.peerDependencies || {}),
+            ];
+            return libs.length > 0 ? libs : undefined;
+          })()}
         />
       </div>
 
