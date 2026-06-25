@@ -5,6 +5,7 @@ export const registryKeys = [
   "changelog",
   "admin",
   "mcp",
+  "favorites",
 
   // Text items
   "blur-text",
@@ -90,5 +91,5 @@ export const registryKeys = [
   "malakor-singularity",
 
   // Cursors items
-  "follow-cursor"
+  "follow-cursor",
 ];

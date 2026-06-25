@@ -9,7 +9,9 @@ interface LegacyPageRendererProps {
   id: string;
 }
 
-export const LegacyPageRenderer: React.FC<LegacyPageRendererProps> = ({ id }) => {
+export const LegacyPageRenderer: React.FC<LegacyPageRendererProps> = ({
+  id,
+}) => {
   const entry = ComponentRegistry[id];
 
   if (entry) {
