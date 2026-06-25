@@ -5,6 +5,8 @@ export const spaceTimeConfig: ComponentConfig = {
   name: "Spacetime Grid",
   category: "background",
   componentPath: "app/meta/background/topographic/SpaceTime.tsx",
+  showDemoByDefault: true,
+  demoVariant: "text",
   props: [
     {
       name: "loopDuration",

@@ -6,6 +6,8 @@ export const cellularAutomataConfig: ComponentConfig = {
   category: "background",
   tags: ["cellular", "automata", "simulation", "life", "grid", "pattern"],
   componentPath: "app/meta/background/cellular/CellularAutomataBackground.tsx",
+  showDemoByDefault: true,
+  demoVariant: "text",
   props: [
     {
       name: "colorA",

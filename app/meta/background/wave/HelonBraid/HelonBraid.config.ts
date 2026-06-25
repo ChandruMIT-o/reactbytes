@@ -6,6 +6,8 @@ export const helonBraidConfig: ComponentConfig = {
   category: "background",
   tags: ["braid", "wave", "rope", "weave", "ribbon"],
   componentPath: "app/meta/background/wave/HelonBraid/HelonBraid.tsx",
+  showDemoByDefault: true,
+  demoVariant: "text",
   props: [
     {
       name: "spacingX",

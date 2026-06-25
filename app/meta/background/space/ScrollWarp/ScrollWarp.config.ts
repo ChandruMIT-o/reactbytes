@@ -5,6 +5,8 @@ export const scrollWarpConfig: ComponentConfig = {
   name: "Scroll Warp",
   category: "background",
   componentPath: "app/meta/background/space/ScrollWarp/ScrollWarp.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "numStars",

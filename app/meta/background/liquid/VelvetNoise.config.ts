@@ -6,6 +6,8 @@ export const velvetNoiseConfig: ComponentConfig = {
   category: "background",
   tags: ["velvet", "noise", "texture", "soft", "fabric"],
   componentPath: "app/meta/background/liquid/VelvetNoise.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "cells",

@@ -6,6 +6,8 @@ export const rippleConfig: ComponentConfig = {
   category: "background",
   tags: ["ripple", "wave", "interactive", "mouse", "water", "click"],
   componentPath: "app/meta/background/wave/Ripples/Ripple.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "zoom",

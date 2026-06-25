@@ -4,6 +4,8 @@ import { X, ChevronRight, ChevronLeft, Play, Search, ArrowLeft, ArrowRight, Moni
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import { ComponentRegistry } from "../layout/ComponentRegistry";
+import { DemoToggle } from "../buttongroup/DemoToggle";
+import { DemoContent } from "../layout/DemoContents";
 import { usePathname, useRouter } from "next/navigation";
 
 interface FullPreviewTabProps {
@@ -32,6 +34,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
     const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "phone" | "custom">("desktop");
     const [customWidth, setCustomWidth] = useState<number>(800);
     const [isDragging, setIsDragging] = useState(false);
+    const [showDemo, setShowDemo] = useState(false);
 
     const handleResizeStart = (
         direction: "left" | "right",
@@ -89,12 +92,12 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
         };
     }, [isOpen]);
 
-    if (!mounted) return null;
-
     const registryEntries = Object.values(ComponentRegistry);
     const currentId = pathname.split("/").pop() || "intro";
     const currentIndex = registryEntries.findIndex(item => item.id === currentId);
     const currentItem = registryEntries[currentIndex];
+    const componentConfig = currentItem?.config;
+    const isBackground = componentConfig?.category === "background";
     const prevItem = currentIndex > 0 ? registryEntries[currentIndex - 1] : null;
     const nextItem = currentIndex < registryEntries.length - 1 && currentIndex !== -1 ? registryEntries[currentIndex + 1] : null;
 
@@ -104,6 +107,16 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
         : "Component";
 
     const paneWidth = isMobile ? "100vw" : 400;
+
+    useEffect(() => {
+        if (isBackground && componentConfig) {
+            setShowDemo(componentConfig.showDemoByDefault ?? true);
+        } else {
+            setShowDemo(false);
+        }
+    }, [currentId, isBackground, componentConfig]);
+
+    if (!mounted) return null;
 
     const handleNavigate = (id: string) => {
         const targetPath = id === "intro" ? "/?preview=true" : `/${id}?preview=true`;
@@ -141,48 +154,54 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                             </div>
 
                             <div className="flex items-center gap-3">
-                                {/* Device Switcher */}
-                                <div className="hidden md:flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0 shadow-xl border border-rb-neutral-4">
-                                    <button
-                                        onClick={() => setPreviewMode("desktop")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Desktop View"
-                                    >
-                                        <Monitor size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => setPreviewMode("tablet")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Tablet View"
-                                    >
-                                        <Tablet size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => setPreviewMode("phone")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Mobile View"
-                                    >
-                                        <Smartphone size={16} />
-                                    </button>
-                                    <button
-                                        onClick={() => setPreviewMode("custom")}
-                                        className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom"
-                                            ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
-                                            : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
-                                            }`}
-                                        title="Custom View"
-                                    >
-                                        <MoveHorizontal size={16} />
-                                    </button>
+                                <div className="hidden md:flex items-center gap-2">
+                                    {isBackground && (
+                                        <DemoToggle checked={showDemo} onChange={setShowDemo} />
+                                    )}
+
+                                    {/* Device Switcher */}
+                                    <div className="flex items-center gap-0.5 bg-rb-neutral-3/90 backdrop-blur-md p-1 rounded-full shrink-0 shadow-xl border border-rb-neutral-4">
+                                        <button
+                                            onClick={() => setPreviewMode("desktop")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "desktop"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Desktop View"
+                                        >
+                                            <Monitor size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => setPreviewMode("tablet")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "tablet"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Tablet View"
+                                        >
+                                            <Tablet size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => setPreviewMode("phone")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "phone"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Mobile View"
+                                        >
+                                            <Smartphone size={16} />
+                                        </button>
+                                        <button
+                                            onClick={() => setPreviewMode("custom")}
+                                            className={`p-2 rounded-full transition-all duration-300 ${previewMode === "custom"
+                                                ? "bg-rb-accent-1 text-rb-neutral-2 font-bold"
+                                                : "text-rb-accent-2/40 hover:text-rb-accent-2 hover:bg-white/5"
+                                                }`}
+                                            title="Custom View"
+                                        >
+                                            <MoveHorizontal size={16} />
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <button
@@ -227,8 +246,13 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                                     {previewMode === "custom" ? `custom view (${customWidth}px)` : `${previewMode} view`}
                                                 </div>
                                             )}
-                                            <div className="w-full h-full flex items-center justify-center [&>div]:h-full [&>div]:w-full [&>div]:max-h-none [&>div]:max-w-none">
+                                            <div className="w-full h-full flex items-center justify-center relative [&>div]:h-full [&>div]:w-full [&>div]:max-h-none [&>div]:max-w-none">
                                                 {previewContent}
+                                                {isBackground && showDemo && (
+                                                    <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
+                                                        <DemoContent variant={componentConfig?.demoVariant || "hero"} />
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
 
@@ -356,7 +380,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                                             <div className="flex flex-col">
                                                 <h3 className="text-xl font-medium text-rb-accent-1">Props</h3>
                                             </div>
-                                            {onReplay && (
+                                            {onReplay && !isBackground && (
                                                 <button
                                                     onClick={onReplay}
                                                     className="p-2 rounded-full bg-rb-accent-1 text-rb-neutral-1 hover:scale-110 active:scale-95 transition-all shadow-lg group"

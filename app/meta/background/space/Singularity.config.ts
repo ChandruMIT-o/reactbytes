@@ -14,6 +14,8 @@ export const singularityConfig: ComponentConfig = {
     "noise",
     "blackhole"
   ],
+  showDemoByDefault: true,
+  demoVariant: "text",
   componentPath: "app/meta/background/space/Singularity.tsx",
   props: [
     {

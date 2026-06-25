@@ -6,6 +6,8 @@ export const perlinSmokeConfig: ComponentConfig = {
   category: "background",
   tags: ["perlin", "smoke", "noise", "fog", "wisp"],
   componentPath: "app/meta/background/gradient/PerlinSmoke.tsx",
+  showDemoByDefault: true,
+  demoVariant: "hero",
   props: [
     {
       name: "baseColor",

@@ -6,6 +6,8 @@ export const eyeMatrixConfig: ComponentConfig = {
   category: "background",
   tags: ["eye", "matrix", "dots", "grid", "gaze", "pattern"],
   componentPath: "app/meta/background/dotted/EyeMatrix.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "paletteKey",

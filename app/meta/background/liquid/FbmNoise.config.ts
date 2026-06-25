@@ -6,6 +6,8 @@ export const fbmNoiseConfig: ComponentConfig = {
   category: "background",
   tags: ["fbm", "fractal", "noise", "terrain", "organic"],
   componentPath: "app/meta/background/liquid/FbmNoise.tsx",
+  showDemoByDefault: true,
+  demoVariant: "card",
   props: [
     {
       name: "complex",

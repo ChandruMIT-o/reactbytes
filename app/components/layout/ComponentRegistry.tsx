@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import React from "react";
-import { ComponentDatabase } from "../../registry/ComponentDatabase";
+import { ComponentDatabase, type ComponentConfig } from "../../registry/ComponentDatabase";
 
 export interface RegistrySection {
   id: string;
@@ -13,6 +13,7 @@ export interface RegistryEntry {
   category: "general" | "text" | "background" | "carousel" | "miscellaneous" | "cursor";
   sections: RegistrySection[];
   component: React.ComponentType<any>;
+  config?: ComponentConfig;
 }
 
 const standardSections = (id: string) => [
@@ -108,6 +109,7 @@ export const ComponentRegistry: Record<string, RegistryEntry> = {
       label: comp.name,
       category: comp.category,
       sections: standardSections(comp.slug),
+      config: comp,
       component: () => null,
     };
     return acc;
