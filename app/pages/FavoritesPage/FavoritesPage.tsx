@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bookmark, ArrowRight, Search } from "lucide-react";
 import HeaderText from "../../components/textfields/HeaderText";
@@ -11,7 +12,6 @@ import {
   ComponentDatabase,
   ComponentConfig,
 } from "@/app/registry/ComponentDatabase";
-import { ComponentMap } from "@/app/registry/ComponentMap";
 import { useFavoritesContext } from "@/app/components/context/FavoritesContext";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -30,7 +30,117 @@ const CATEGORY_LABEL: Record<string, string> = {
   cursor: "Cursor",
 };
 
+const CATEGORY_GRADIENT: Record<string, string> = {
+  text: "var(--rb-accent-1, #799996)",
+  background: "#a855f7",
+  carousel: "#3b82f6",
+  miscellaneous: "#10b981",
+  cursor: "#f97316",
+};
+
 const ALL_FILTER = { id: "all", label: "All Categories" };
+
+// ─── Test gif map (2 slugs get real gifs, rest fall back to static placeholder) ──
+// Replace these URLs with your actual component preview gifs.
+const PREVIEW_GIFS: Record<string, string> = {
+  "blur-text":
+    "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExemp0ZTM1czdyaDdmc2M1aTFqcDh3ZGpvYXpvcTh3YjVvbmYzNzdmZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XEEJjydi2u5VhVO4f8/giphy.gif",
+  "void-orb":
+    "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2lwdDlkNmludGEwdDNzeWtuczJ6MTRybnd2cGJhZWt5eWJsazEyaiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/1ZjLRSrAyikUzypJfa/giphy.gif",
+};
+
+// ─── Static placeholder (no gif available) ──────────────────────────────────
+function CategoryPlaceholder({
+  category,
+  name,
+}: {
+  category: string;
+  name: string;
+}) {
+  const color = CATEGORY_GRADIENT[category] ?? "#799996";
+
+  return (
+    <div className="w-full h-full relative overflow-hidden flex items-center justify-center bg-rb-neutral-1">
+      <svg
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="none"
+        viewBox="0 0 300 160"
+      >
+        <defs>
+          <radialGradient id={`glow-${category}`} cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <ellipse
+          cx="230"
+          cy="40"
+          rx="160"
+          ry="120"
+          fill={`url(#glow-${category})`}
+        />
+        <ellipse
+          cx="40"
+          cy="140"
+          rx="120"
+          ry="90"
+          fill={`url(#glow-${category})`}
+          opacity="0.5"
+        />
+      </svg>
+
+      {/* Logo — only shown when no gif is available for this card */}
+      <Image
+        src="/logo.svg"
+        alt={`${name} preview`}
+        width={18}
+        height={26}
+        className="opacity-50 relative z-10 select-none pointer-events-none"
+      />
+    </div>
+  );
+}
+
+// ─── Placeholder without logo (used when a gif preview exists) ───────────────
+function CategoryPlaceholderNoLogo({ category }: { category: string }) {
+  const color = CATEGORY_GRADIENT[category] ?? "#799996";
+  return (
+    <div className="w-full h-full relative overflow-hidden bg-rb-neutral-1">
+      <svg
+        className="absolute inset-0 w-full h-full"
+        preserveAspectRatio="none"
+        viewBox="0 0 300 160"
+      >
+        <defs>
+          <radialGradient
+            id={`glow-nlogo-${category}`}
+            cx="50%"
+            cy="50%"
+            r="60%"
+          >
+            <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <ellipse
+          cx="230"
+          cy="40"
+          rx="160"
+          ry="120"
+          fill={`url(#glow-nlogo-${category})`}
+        />
+        <ellipse
+          cx="40"
+          cy="140"
+          rx="120"
+          ry="90"
+          fill={`url(#glow-nlogo-${category})`}
+          opacity="0.5"
+        />
+      </svg>
+    </div>
+  );
+}
 
 // ─── Card ─────────────────────────────────────────────────────────────────────
 interface FavoriteCardProps {
@@ -41,67 +151,19 @@ interface FavoriteCardProps {
 
 function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
   const [hovered, setHovered] = useState(false);
-  const [hoverKey, setHoverKey] = useState(0);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    setIsTouchDevice(window.matchMedia("(hover: none)").matches);
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  const Component = ComponentMap[component.slug];
-
-  const defaultProps = useMemo(() => {
-    const props: Record<string, any> = {};
-    component.props.forEach((p) => {
-      props[p.name] = p.default;
-    });
-    return props;
-  }, [component.props]);
-
-  const isBackground = component.category === "background";
-
-  const handleMouseEnter = () => {
-    if (isTouchDevice) return;
-    setHovered(true);
-    timerRef.current = setTimeout(() => setHoverKey((k) => k + 1), 100);
-  };
-
-  const handleMouseLeave = () => {
-    if (isTouchDevice) return;
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setHovered(false);
-  };
-
-  const handleClick = () => {
-    if (isTouchDevice) {
-      if (!hovered) {
-        setHovered(true);
-        setHoverKey((k) => k + 1);
-        return;
-      }
-      setHovered(false);
-    }
-    onClick();
-  };
+  const [tapped, setTapped] = useState(false);
+  const gifSrc = PREVIEW_GIFS[component.slug] ?? null;
+  const showGif = gifSrc && (hovered || tapped);
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
     onRemove();
   };
 
-  const baseOpacity = isTouchDevice
-    ? isBackground
-      ? 0.4
-      : 0.5
-    : isBackground
-      ? 0.25
-      : 0.35;
-
-  const activeOpacity = isBackground ? 0.5 : 0.6;
+  const handleTapPreview = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setTapped((prev) => !prev);
+  };
 
   return (
     <motion.div
@@ -110,60 +172,58 @@ function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25 }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-      className="group relative flex flex-col rounded-2xl border border-rb-neutral-4/40 bg-rb-neutral-3/30 hover:bg-rb-neutral-3/60 cursor-pointer transition-colors duration-200 overflow-hidden"
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => {
+        setHovered(false);
+        setTapped(false);
+      }}
+      className="group relative flex flex-col rounded-2xl border border-rb-neutral-4/40 bg-rb-neutral-3/50 hover:bg-rb-neutral-3/80 cursor-pointer transition-colors duration-200 overflow-hidden"
     >
       {/* Preview area */}
-      <div className="relative w-full h-40 overflow-hidden bg-rb-neutral-2 border-b border-rb-neutral-4/30 flex-shrink-0">
-        {/* Live component render */}
-        <div
-          className="absolute inset-0 pointer-events-none select-none"
-          style={{
-            transform: isBackground ? "scale(1)" : "scale(0.6)",
-            transformOrigin: "center center",
-            filter: isBackground ? "blur(0px)" : "blur(1.5px)",
-            opacity: hovered ? activeOpacity : baseOpacity,
-            transition: "opacity 0.4s ease",
-          }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={hoverKey}
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              {Component && (
-                <Component
-                  {...defaultProps}
-                  {...(component.staticProps || {})}
-                />
-              )}
-            </motion.div>
-          </AnimatePresence>
+      <div className="relative w-full h-40 overflow-hidden bg-rb-neutral-1 border-b border-rb-neutral-4/30 flex-shrink-0">
+        {/* Static placeholder — hide logo when a gif exists */}
+        <div className="absolute inset-0">
+          {gifSrc ? (
+            <CategoryPlaceholderNoLogo category={component.category} />
+          ) : (
+            <CategoryPlaceholder
+              category={component.category}
+              name={component.name}
+            />
+          )}
         </div>
 
-        {/* Vignette */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 20%, var(--rb-neutral-2, #111) 80%)",
-            opacity: hovered ? 0.4 : isTouchDevice ? 0.6 : 1,
-            transition: "opacity 0.4s ease",
-          }}
-        />
-
-        {/* Tap to preview hint — mobile only */}
-        {isTouchDevice && !hovered && (
-          <div className="absolute inset-0 flex items-end justify-center pb-3 pointer-events-none">
-            <span className="text-[9px] uppercase tracking-widest text-rb-accent-2/30 font-medium">
-              tap to preview
-            </span>
+        {/* Gif — preloaded, opacity-only crossfade */}
+        {gifSrc && (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              opacity: showGif ? 1 : 0,
+              transition: "opacity 400ms ease",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={gifSrc}
+              alt={`${component.name} preview`}
+              className="w-full h-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-black/10" />
           </div>
+        )}
+
+        {/* Mobile tap-to-preview button — only shown on touch devices when gif exists */}
+        {gifSrc && !tapped && (
+          <button
+            type="button"
+            onClick={handleTapPreview}
+            className="absolute bottom-2 right-2 z-10 sm:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium tracking-wide backdrop-blur-sm border transition-all duration-200 bg-black/50 border-white/10 text-white/60"
+          >
+            Tap to preview
+          </button>
         )}
 
         {/* Remove button */}
@@ -215,9 +275,9 @@ function EmptyState({ filtered }: { filtered: boolean }) {
       exit={{ opacity: 0 }}
       className="flex flex-col items-center justify-center gap-5 py-24 text-center"
     >
-      <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-rb-neutral-3 border border-white/6">
-        <Bookmark size={22} className="text-rb-accent-2/20" />
-      </div>
+      {/* Icon — no ring, just the bare icon */}
+      <Bookmark size={22} className="text-rb-accent-2/20" />
+
       <div className="flex flex-col gap-1.5">
         <p className="text-rb-accent-2/50 text-[15px] font-medium tracking-tight">
           {filtered ? "No components in this category" : "No favorites yet"}
