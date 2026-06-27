@@ -7,6 +7,16 @@ export const magneticDotMeshConfig: ComponentConfig = {
   tags: ["magnetic", "dots", "mesh", "interactive", "mouse", "grid"],
   componentPath: "app/meta/background/dotted/MagneticDotMesh.tsx",
   showDemoByDefault: true,
+  npmPackageName: "@reactbytes/magnetic-dots",
+  version: "1.0.0",
+  description: "An interactive, physics-based canvas component featuring a mesh of dots that react to mouse movement and click-triggered shockwaves.",
+  dependencies: {
+    "react-use-measure": "^2.1.1"
+  },
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "gap",
@@ -158,7 +168,17 @@ export const magneticDotMeshConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Visual Reference",
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
+      title: "Inspiration",
       items: [
         {
           name: "JP Belley",

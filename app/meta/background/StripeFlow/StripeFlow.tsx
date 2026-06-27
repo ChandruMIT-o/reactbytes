@@ -25,11 +25,10 @@ const FRAGMENT_SHADER = `
   uniform float u_scale;
   uniform float u_radius;
 
-  // Custom Palette vectors
-  uniform vec3 u_palette_a;
-  uniform vec3 u_palette_b;
-  uniform vec3 u_palette_c;
-  uniform vec3 u_palette_d;
+  // Hex Colors converted to RGB vectors
+  uniform vec3 u_color1;
+  uniform vec3 u_color2;
+  uniform vec3 u_color3;
 
   // Classic Perlin 3D Noise by Stefan Gustavson
   vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
@@ -104,10 +103,6 @@ const FRAGMENT_SHADER = `
       return 2.2 * n_xyz;
   }
 
-  vec3 palette( in float t, in vec3 a, in vec3 b, in vec3 c, in vec3 d ){
-      return a + b * cos( TWO_PI * (c * t + d));
-  }
-
   float map(float value, float a, float b, float c, float d) {
       return c + (d - c) * ((value - a) / (b - a));
   }
@@ -125,101 +120,43 @@ const FRAGMENT_SHADER = `
       // Calculate scalar field intensity based on custom radius factor
       float noiseIntensity = ease(clamp(map(dist, 0., u_radius * min(u_resolution.x, u_resolution.y), 1., 0.), 0., 1.), 5.2);
       
-      // Scalar field calculation directly mimicking reference formula
+      // Scalar field calculation
       float scalarFieldOffset = u_distortion * cnoise(SEED + vec3(u_scale * pos, sin(u_time / 10.))) * noiseIntensity;
       
-      // Phase cycle mapping matching original easing formulation
+      // Phase cycle mapping oscillating between 0.0 and 1.0
       float c = ease(sin(u_time / 2. + TWO_PI * scalarFieldOffset * (abs(sin(u_time / 20.)) + 0.01)) / 2.0 + 0.5, 3.0);
 
-      gl_FragColor = vec4(palette(
-          0.4 + c / 2.0,
-          u_palette_a,
-          u_palette_b,
-          u_palette_c,
-          u_palette_d
-      ), 1.0);
+      // Blend between the three hex colors
+      vec3 color = mix(u_color1, u_color2, smoothstep(0.0, 0.5, c));
+      color = mix(color, u_color3, smoothstep(0.5, 1.0, c));
+
+      gl_FragColor = vec4(color, 1.0);
   }
 `;
 
-interface PalettePreset {
-  name: string;
-  a: [number, number, number];
-  b: [number, number, number];
-  c: [number, number, number];
-  d: [number, number, number];
-}
-
-const PALETTES: Record<string, PalettePreset> = {
-  vapor: {
-    name: "Neo-Mint",
-    a: [0.5, 0.5, 0.5],
-    b: [0.5, 0.5, 0.5],
-    c: [1.0, 1.0, 1.0],
-    d: [0.0, 0.1, 0.2]
-  },
-  sunset: {
-    name: "Copper Glow",
-    a: [0.5, 0.5, 0.5],
-    b: [0.5, 0.5, 0.5],
-    c: [1.0, 1.0, 0.5],
-    d: [0.8, 0.5, 0.3]
-  },
-  slate: {
-    name: "Brutalist Gray",
-    a: [0.5, 0.5, 0.5],
-    b: [0.5, 0.5, 0.5],
-    c: [1.0, 1.0, 1.0],
-    d: [0.0, 0.0, 0.0]
-  },
-  acid: {
-    name: "Indigo Acid",
-    a: [0.8, 0.5, 0.4],
-    b: [0.2, 0.4, 0.2],
-    c: [2.0, 1.0, 1.0],
-    d: [0.0, 0.25, 0.25]
-  },
-  cyberpunk: {
-    name: "Cyberpunk Neon",
-    a: [0.5, 0.5, 0.5],
-    b: [0.5, 0.5, 0.5],
-    c: [2.0, 1.0, 0.0],
-    d: [0.5, 0.2, 0.25]
-  },
-  abyss: {
-    name: "Ocean Abyss",
-    a: [0.2, 0.4, 0.6],
-    b: [0.2, 0.3, 0.4],
-    c: [1.0, 1.0, 1.0],
-    d: [0.0, 0.1, 0.2]
-  },
-  aurora: {
-    name: "Northern Lights",
-    a: [0.2, 0.7, 0.5],
-    b: [0.5, 0.4, 0.5],
-    c: [1.0, 1.0, 1.0],
-    d: [0.0, 0.15, 0.3]
-  }
+// Helper to convert hex to WebGL-friendly RGB (0.0 - 1.0)
+const hexToRgb = (hex: string): [number, number, number] => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? [
+    parseInt(result[1], 16) / 255,
+    parseInt(result[2], 16) / 255,
+    parseInt(result[3], 16) / 255
+  ] : [0, 0, 0];
 };
 
 export interface StripeFlowProps {
-  /** Optional foreground children contents to overlay */
   children?: React.ReactNode;
-  /** Active seed for noise generation */
   seed?: number;
-  /** Active distortion multiplier */
   distortion?: number;
-  /** Active noise scale (density) */
   scale?: number;
-  /** Active vignette radius */
   radius?: number;
-  /** Active flow speed multiplier */
   speed?: number;
-  /** Active color palette name */
-  palette?: "vapor" | "sunset" | "slate" | "acid" | "cyberpunk" | "abyss" | "aurora";
-  /** Pause animation timeline */
   isPaused?: boolean;
-  /** Custom wrapper CSS style classes */
   className?: string;
+  // Intuitive Hex Colors
+  color1?: string;
+  color2?: string;
+  color3?: string;
 }
 
 export const StripeFlow: React.FC<StripeFlowProps> = ({
@@ -229,13 +166,15 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
   scale = 0.008,
   radius = 0.8,
   speed = 1.0,
-  palette = "vapor",
   isPaused = false,
   className = "relative w-full h-[600px] bg-zinc-950 overflow-hidden font-sans select-none rounded-xl border border-neutral-800",
+  // Default neo-mint aesthetic
+  color1 = "#1a2a6c",
+  color2 = "#b21f1f",
+  color3 = "#fdbb2d",
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
-  // Thread references for context synchronization
   const glRef = useRef<WebGLRenderingContext | null>(null);
   const animationFrameIdRef = useRef<number | null>(null);
   const mouseRef = useRef<[number, number]>([0, 0]);
@@ -249,32 +188,28 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
   const startLoopRef = useRef<() => void>(undefined);
 
   const currentParamsRef = useRef({
-    distortion, scale, radius, speed, isPaused, palette, seed
+    distortion, scale, radius, speed, isPaused, seed, color1, color2, color3
   });
 
   useEffect(() => {
     currentParamsRef.current = {
-      distortion, scale, radius, speed, isPaused, palette, seed
+      distortion, scale, radius, speed, isPaused, seed, color1, color2, color3
     };
     if (!isPaused && isVisibleRef.current && startLoopRef.current) {
       startLoopRef.current();
     } else if (drawFrameRef.current) {
       drawFrameRef.current();
     }
-  }, [distortion, scale, radius, speed, isPaused, palette, seed]);
+  }, [distortion, scale, radius, speed, isPaused, seed, color1, color2, color3]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const gl = (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')) as WebGLRenderingContext | null;
-    if (!gl) {
-      console.error("WebGL not supported in your browser.");
-      return;
-    }
+    if (!gl) return;
     glRef.current = gl;
 
-    // Shader builder helper
     const makeShader = (type: number, src: string) => {
       const sh = gl.createShader(type);
       if (!sh) return null;
@@ -304,14 +239,13 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
     }
     gl.useProgram(program);
 
-    // Quad construction coordinates
     const geometry = new Float32Array([
       -1.0, -1.0,
-       1.0, -1.0,
-      -1.0,  1.0,
-      -1.0,  1.0,
-       1.0, -1.0,
-       1.0,  1.0,
+      1.0, -1.0,
+      -1.0, 1.0,
+      -1.0, 1.0,
+      1.0, -1.0,
+      1.0, 1.0,
     ]);
 
     const buffer = gl.createBuffer();
@@ -322,7 +256,6 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
     gl.enableVertexAttribArray(aPosition);
     gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
 
-    // Get location map
     const uLocs = {
       resolution: gl.getUniformLocation(program, "u_resolution"),
       mouse: gl.getUniformLocation(program, "u_mouse"),
@@ -331,47 +264,40 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
       distortion: gl.getUniformLocation(program, "u_distortion"),
       scale: gl.getUniformLocation(program, "u_scale"),
       radius: gl.getUniformLocation(program, "u_radius"),
-      palette_a: gl.getUniformLocation(program, "u_palette_a"),
-      palette_b: gl.getUniformLocation(program, "u_palette_b"),
-      palette_c: gl.getUniformLocation(program, "u_palette_c"),
-      palette_d: gl.getUniformLocation(program, "u_palette_d"),
+      color1: gl.getUniformLocation(program, "u_color1"),
+      color2: gl.getUniformLocation(program, "u_color2"),
+      color3: gl.getUniformLocation(program, "u_color3"),
     };
-
-    const resizeHandler = () => {
-      const container = canvas.parentElement;
-      if (!container) return;
-      
-      const targetWidth = container.clientWidth;
-      const targetHeight = container.clientHeight;
-
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
-      gl.viewport(0, 0, targetWidth, targetHeight);
-      sizeRef.current = { width: targetWidth, height: targetHeight };
-      if (drawFrameRef.current) drawFrameRef.current();
-    };
-
-    resizeHandler();
-    window.addEventListener("resize", resizeHandler);
 
     const container = canvas.parentElement;
     if (!container) return;
 
-    const observer = new IntersectionObserver(([entry]) => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const targetWidth = entry.contentRect.width;
+        const targetHeight = entry.contentRect.height;
+
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+        gl.viewport(0, 0, targetWidth, targetHeight);
+        sizeRef.current = { width: targetWidth, height: targetHeight };
+
+        if (drawFrameRef.current) drawFrameRef.current();
+      }
+    });
+    resizeObserver.observe(container);
+
+    const intersectionObserver = new IntersectionObserver(([entry]) => {
       const visible = entry.isIntersecting;
       const wasVisible = isVisibleRef.current;
       isVisibleRef.current = visible;
 
       if (visible && !wasVisible) {
         const p = currentParamsRef.current;
-        if (!p.isPaused) {
-          if (startLoopRef.current) startLoopRef.current();
-        } else {
-          if (drawFrameRef.current) drawFrameRef.current();
-        }
+        if (!p.isPaused && startLoopRef.current) startLoopRef.current();
       }
     }, { threshold: 0 });
-    observer.observe(container);
+    intersectionObserver.observe(container);
 
     const drawFrame = () => {
       const gl = glRef.current;
@@ -387,11 +313,10 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
       gl.uniform1f(uLocs.scale, p.scale);
       gl.uniform1f(uLocs.radius, p.radius);
 
-      const chosenPalette = PALETTES[p.palette] || PALETTES.vapor;
-      gl.uniform3fv(uLocs.palette_a, new Float32Array(chosenPalette.a));
-      gl.uniform3fv(uLocs.palette_b, new Float32Array(chosenPalette.b));
-      gl.uniform3fv(uLocs.palette_c, new Float32Array(chosenPalette.c));
-      gl.uniform3fv(uLocs.palette_d, new Float32Array(chosenPalette.d));
+      // Map parsed Hex directly into shader
+      gl.uniform3fv(uLocs.color1, new Float32Array(hexToRgb(p.color1)));
+      gl.uniform3fv(uLocs.color2, new Float32Array(hexToRgb(p.color2)));
+      gl.uniform3fv(uLocs.color3, new Float32Array(hexToRgb(p.color3)));
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     };
@@ -401,15 +326,9 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
     const tick = (now: number) => {
       const delta = (now - lastTimeRef.current) / 1000;
       lastTimeRef.current = now;
-
       const p = currentParamsRef.current;
 
-      if (!isVisibleRef.current) {
-        isLoopingRef.current = false;
-        return;
-      }
-
-      if (p.isPaused) {
+      if (!isVisibleRef.current || p.isPaused) {
         drawFrame();
         isLoopingRef.current = false;
         return;
@@ -437,8 +356,8 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
     }
 
     return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", resizeHandler);
+      intersectionObserver.disconnect();
+      resizeObserver.disconnect();
       if (animationFrameIdRef.current) cancelAnimationFrame(animationFrameIdRef.current);
     };
   }, []);
@@ -447,36 +366,27 @@ export const StripeFlow: React.FC<StripeFlowProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    mouseRef.current = [
-      e.clientX - rect.left,
-      e.clientY - rect.top
-    ];
+    mouseRef.current = [e.clientX - rect.left, e.clientY - rect.top];
   };
 
   const onTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
     const canvas = canvasRef.current;
     if (!canvas || e.touches.length === 0) return;
     const rect = canvas.getBoundingClientRect();
-    mouseRef.current = [
-      e.touches[0].clientX - rect.left,
-      e.touches[0].clientY - rect.top
-    ];
+    mouseRef.current = [e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top];
   };
 
   return (
     <div className={className}>
-      {/* CANVAS BACKGROUND CONTAINER */}
       <div className="absolute inset-0 z-0">
         <canvas
           ref={canvasRef}
           onMouseMove={onPointerMove}
           onTouchMove={onTouchMove}
           onTouchStart={onTouchMove}
-          className="absolute inset-0 w-full h-full"
+          className="absolute inset-0 w-full h-full block"
         />
       </div>
-
-      {/* FOREGROUND CONTENT WRAPPER */}
       {children && (
         <div className="relative z-10 w-full h-full pointer-events-none select-none">
           {children}

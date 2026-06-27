@@ -7,6 +7,15 @@ export const ditherConfig: ComponentConfig = {
   componentPath: "app/meta/background/dotted/Dither.tsx",
   showDemoByDefault: true,
   demoVariant: "hero",
+  npmPackageName: "@reactbytes/dither",
+  version: "1.0.0",
+  dependencies: {
+    "gsap": ">=3.12.0",
+  },
+  peerDependencies: {
+    "react": ">=18.0.0"
+  },
+  description: "An optimized, canvas-based Dither animation component using Perlin noise and GSAP for fluid, organic movement.",
   props: [
     {
       name: "spacing",
@@ -135,29 +144,19 @@ export const ditherConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Antigravity",
-          role: "Refactoring & Framework Integration",
-          url: "https://reactbytes.dev",
-        },
-        {
-          name: "React Bytes",
-          role: "Original Showcase Layout",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
     {
-      title: "Open Source Libraries",
+      title: "Libraries",
       items: [
         {
           name: "GSAP",
           role: "Animation Engine",
           url: "https://greensock.com/gsap/",
-        },
-        {
-          name: "Perlin Noise",
-          role: "Organic Math Generation",
-          url: "https://en.wikipedia.org/wiki/Perlin_noise",
         },
       ],
     },

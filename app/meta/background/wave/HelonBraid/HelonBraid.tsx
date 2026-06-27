@@ -2,6 +2,24 @@
 
 import React, { useEffect, useRef } from "react";
 
+const colorToRgba = (color: string, alpha: number) => {
+  if (color.startsWith("#")) {
+    const cleanHex = color.substring(1);
+    let r = 255, g = 255, b = 255;
+    if (cleanHex.length === 3) {
+      r = parseInt(cleanHex[0] + cleanHex[0], 16);
+      g = parseInt(cleanHex[1] + cleanHex[1], 16);
+      b = parseInt(cleanHex[2] + cleanHex[2], 16);
+    } else if (cleanHex.length === 6) {
+      r = parseInt(cleanHex.substring(0, 2), 16);
+      g = parseInt(cleanHex.substring(2, 4), 16);
+      b = parseInt(cleanHex.substring(4, 6), 16);
+    }
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return color;
+};
+
 export interface HelonBraidProps {
   /** X spacing between nodes for hex layout. Defaults to 80. */
   spacingX?: number;
@@ -11,10 +29,16 @@ export interface HelonBraidProps {
   speed?: number;
   /** Energy propagation multiplier on node interaction. Defaults to 12. */
   excitationMultiplier?: number;
-  /** Base hue for colors (0-360 HSL hue). Defaults to 190. */
-  baseHue?: number;
   /** Background color of the canvas. Defaults to "#070a12". */
   backgroundColor?: string;
+  /** Color of structural blueprint layer 1 (outer circles). Defaults to "#ffffff". */
+  blueprintColor1?: string;
+  /** Color of structural blueprint layer 2 (under strands & mid circles). Defaults to "#3b82f6". */
+  blueprintColor2?: string;
+  /** Color of structural blueprint layer 3 (over strands & inner circles). Defaults to "#ec4899". */
+  blueprintColor3?: string;
+  /** Opacity of the structural blueprint lines. Defaults to 0.02. */
+  blueprintOpacity?: number;
   /** Optional custom CSS classes for the container. */
   className?: string;
   /** Optional overlay children. */
@@ -26,8 +50,11 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
   baseRadius = 65,
   speed = 0.05,
   excitationMultiplier = 12,
-  baseHue = 190,
   backgroundColor = "#070a12",
+  blueprintColor1 = "#ffffff",
+  blueprintColor2 = "#3b82f6",
+  blueprintColor3 = "#ec4899",
+  blueprintOpacity = 0.02,
   className = "",
   children,
 }) => {
@@ -35,10 +62,10 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
 
   // Keep a mutable ref of the config so the requestAnimationFrame loop can access 
   // the latest values without needing dependency array re-runs.
-  const configRef = useRef({ spacingX, baseRadius, speed, excitationMultiplier, baseHue, backgroundColor });
+  const configRef = useRef({ spacingX, baseRadius, speed, excitationMultiplier, backgroundColor, blueprintColor1, blueprintColor2, blueprintColor3, blueprintOpacity });
   useEffect(() => {
-    configRef.current = { spacingX, baseRadius, speed, excitationMultiplier, baseHue, backgroundColor };
-  }, [spacingX, baseRadius, speed, excitationMultiplier, baseHue, backgroundColor]);
+    configRef.current = { spacingX, baseRadius, speed, excitationMultiplier, backgroundColor, blueprintColor1, blueprintColor2, blueprintColor3, blueprintOpacity };
+  }, [spacingX, baseRadius, speed, excitationMultiplier, backgroundColor, blueprintColor1, blueprintColor2, blueprintColor3, blueprintOpacity]);
 
   // Signal the engine to rebuild structural dependencies (grid arrays) 
   // without tearing down the whole engine loop.
@@ -129,7 +156,7 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
     };
 
     const getBraidGeom = (nodeA: HelonNode, nodeB: HelonNode, side: 'under'|'over') => {
-      const { baseRadius, speed, excitationMultiplier, baseHue } = configRef.current;
+      const { baseRadius, speed, excitationMultiplier } = configRef.current;
       const midX = (nodeA.x + nodeB.x) / 2;
       const midY = (nodeA.y + nodeB.y) / 2;
       const dx = nodeB.x - nodeA.x;
@@ -146,15 +173,14 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
       const cx = midX + nx * offsetDist * sign;
       const cy = midY + ny * offsetDist * sign;
 
-      const hue = baseHue + (nodeA.charge + nodeB.charge) * 60;
       const alpha = 0.3 + (nodeA.energy + nodeB.energy) * 0.6;
       const width = 2.0 + (nodeA.energy + nodeB.energy) * 2.5;
 
-      return { nodeA, nodeB, cx, cy, hue, alpha, width, side };
+      return { nodeA, nodeB, cx, cy, alpha, width, side };
     };
 
     const drawStrand = (strand: any, maskMode = false) => {
-      const { backgroundColor } = configRef.current;
+      const { backgroundColor, blueprintColor2, blueprintColor3 } = configRef.current;
       ctx.beginPath();
       ctx.moveTo(strand.nodeA.x, strand.nodeA.y);
       ctx.quadraticCurveTo(strand.cx, strand.cy, strand.nodeB.x, strand.nodeB.y);
@@ -164,7 +190,8 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
         ctx.lineWidth = strand.width + 5;
         ctx.stroke();
       } else {
-        ctx.strokeStyle = `hsla(${strand.hue + (strand.side === 'under' ? 30 : 0)}, 85%, ${strand.side === 'under' ? '50%' : '65%'}, ${strand.alpha})`;
+        const baseColor = strand.side === 'under' ? blueprintColor2 : blueprintColor3;
+        ctx.strokeStyle = colorToRgba(baseColor, strand.alpha);
         ctx.lineWidth = strand.width;
         ctx.stroke();
       }
@@ -210,21 +237,41 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
 
       time++;
       
-      const { baseRadius, baseHue, backgroundColor } = configRef.current;
+      const { baseRadius, backgroundColor, blueprintColor1, blueprintColor2, blueprintColor3, blueprintOpacity } = configRef.current;
       ctx.fillStyle = backgroundColor;
       ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
       // 1. Structural blueprint lines
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
+      ctx.save();
       ctx.lineWidth = 1;
       for (let r = 0; r < activeRows; r++) {
         for (let c = 0; c < activeCols; c++) {
           if (!helonGrid[r]?.[c]) continue;
+          const node = helonGrid[r][c];
+
+          // Outer circle (Blueprint Color 1)
+          ctx.strokeStyle = blueprintColor1;
+          ctx.globalAlpha = blueprintOpacity;
           ctx.beginPath();
-          ctx.arc(helonGrid[r][c].x, helonGrid[r][c].y, baseRadius, 0, Math.PI * 2);
+          ctx.arc(node.x, node.y, baseRadius, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Mid circle (Blueprint Color 2)
+          ctx.strokeStyle = blueprintColor2;
+          ctx.globalAlpha = blueprintOpacity * 0.65;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, baseRadius * 0.65, 0, Math.PI * 2);
+          ctx.stroke();
+
+          // Inner circle (Blueprint Color 3)
+          ctx.strokeStyle = blueprintColor3;
+          ctx.globalAlpha = blueprintOpacity * 0.35;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, baseRadius * 0.35, 0, Math.PI * 2);
           ctx.stroke();
         }
       }
+      ctx.restore();
 
       // Gather strands
       let strands: any[] = [];
@@ -261,7 +308,7 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
           }
 
           ctx.fillStyle = backgroundColor;
-          ctx.strokeStyle = `hsla(${baseHue + 5 + node.charge * 60}, 90%, 65%, ${0.4 + node.energy + dMouse})`;
+          ctx.strokeStyle = colorToRgba(blueprintColor3, 0.4 + node.energy + dMouse);
           ctx.lineWidth = 2 + node.energy * 3;
 
           ctx.beginPath();
@@ -270,7 +317,7 @@ export const HelonBraid: React.FC<HelonBraidProps> = ({
           ctx.stroke();
 
           if (Math.abs(node.charge) > 0.1 || node.energy > 0.1) {
-            ctx.fillStyle = `hsla(${baseHue + 5 + node.charge * 30}, 100%, 70%, ${node.energy + 0.3})`;
+            ctx.fillStyle = colorToRgba(blueprintColor2, node.energy + 0.3);
             ctx.beginPath();
             ctx.arc(node.x, node.y, 2.5 + node.energy, 0, Math.PI * 2);
             ctx.fill();

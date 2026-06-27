@@ -2,21 +2,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { initializeApp } from "firebase/app";
-import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "firebase/firestore";
 
 // --- CUSTOM FONTS & STYLE OVERRIDES (INJECTED DIRECTLY) ---
-const customStyles = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap');
-  
-  .font-mono-custom {
-    font-family: 'DM Mono', monospace;
-  }
-  .font-sans-custom {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
-  
+const customStyles = `  
   /* Grid Animation */
   @keyframes pulse-grid {
     0%, 100% { opacity: 0.15; }
@@ -328,7 +316,7 @@ export const AtmosphericDrift = React.forwardRef<AtmosphericDriftRef, Atmospheri
     texB: null,
     read: null,
     write: null,
-    systems: [] 
+    systems: []
   });
 
   // Shader Variables and Buffers
@@ -361,7 +349,7 @@ export const AtmosphericDrift = React.forwardRef<AtmosphericDriftRef, Atmospheri
 
   // Controlled Palette Mapping State
   const [currentPalette, setCurrentPalette] = useState<string>(palette || defaultPresetConfig.palette);
-  
+
   // Placement State Tracker: Fallback to local state if not controlled
   const [internalPlacementType, setInternalPlacementType] = useState<"high" | "low">("high");
   const actualPlacementType = nextPlacementType || internalPlacementType;
@@ -836,7 +824,7 @@ export const AtmosphericDrift = React.forwardRef<AtmosphericDriftRef, Atmospheri
     if (fu && fv && fb) {
       fu[index] = u;
       fv[index] = v;
-      
+
       const speedSq = u * u + v * v;
       fb[index] = speedSq < 0.0016 ? 0 : speedSq < 0.0064 ? 1 : speedSq < 0.015 ? 2 : 3;
     }
@@ -868,7 +856,7 @@ export const AtmosphericDrift = React.forwardRef<AtmosphericDriftRef, Atmospheri
     const sState = stateRef.current;
     const gw = sState.gridW;
     const gh = sState.gridH;
-    
+
     const gx = Math.max(0, Math.min(gw - 1, (fx / sState.aspect) * (gw - 1)));
     const gy = Math.max(0, Math.min(gh - 1, fy * (gh - 1)));
 
@@ -948,7 +936,7 @@ export const AtmosphericDrift = React.forwardRef<AtmosphericDriftRef, Atmospheri
         }
         arrays.ages[i] = 0;
         arrays.lifes[i] = 1.15 + Math.random() * 2.75;
-        
+
         arrays.linePositions[vp++] = rx;
         arrays.linePositions[vp++] = ry;
         arrays.linePositions[vp++] = rx;
@@ -1094,7 +1082,7 @@ export const AtmosphericDrift = React.forwardRef<AtmosphericDriftRef, Atmospheri
     const sState = stateRef.current;
     const isHigh = actualPlacementType === "high";
     const spinVal = isHigh ? -1 : 1;
-    
+
     const newId = `Spawn_${Date.now()}`;
     const groupCode = isHigh ? "High" : "Low";
     const countLabel = sState.systems.filter(sys => sys.spin === spinVal).length + 1;

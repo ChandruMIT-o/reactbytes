@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Mouse } from "lucide-react";
 
 export interface WarpSpeedProps {
   /** Number of stars in the field. Defaults to 400. */
@@ -54,7 +53,6 @@ export const WarpSpeed: React.FC<WarpSpeedProps> = ({
   minSize = 0.5,
   maxSize = 3.0,
   showShip = true,
-  showMouseHint = true,
   preventPageScroll = false,
   className = "",
   children,
@@ -277,15 +275,6 @@ export const WarpSpeed: React.FC<WarpSpeedProps> = ({
         ref={canvasRef}
         className="absolute inset-0 block w-full h-full pointer-events-none"
       />
-
-      {showMouseHint && (
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30 z-10">
-          <div className="flex flex-col items-center gap-2">
-            <Mouse size={32} className="animate-pulse" />
-            <p className="text-sm font-medium tracking-widest uppercase">Scroll to Fly</p>
-          </div>
-        </div>
-      )}
 
       {children && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none">

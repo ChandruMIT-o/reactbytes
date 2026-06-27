@@ -10,7 +10,9 @@ import StripeFlow from "@/app/meta/background/StripeFlow/StripeFlow";
 gsap.registerPlugin(ScrollTrigger);
 
 interface StripeConfig {
-  palette: "vapor" | "sunset" | "slate" | "acid" | "cyberpunk" | "abyss" | "aurora";
+  color1: string;
+  color2: string;
+  color3: string;
   speed: number;
   distortion: number;
   scale: number;
@@ -97,7 +99,9 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
           <div className="absolute inset-0 z-0 opacity-0 group-hover:opacity-25 transition-opacity duration-700 pointer-events-none rounded-3xl overflow-hidden">
             {shouldRenderStripeFlow && (
               <StripeFlow
-                palette={stripeConfig.palette}
+                color1={stripeConfig.color1}
+                color2={stripeConfig.color2}
+                color3={stripeConfig.color3}
                 isPaused={!hovered}
                 speed={stripeConfig.speed}
                 distortion={stripeConfig.distortion}
@@ -167,7 +171,10 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Cpu size={22} />,
       title: "GPU Acceleration",
       description: "Not all components are WebGL-based, but all are performance tested and optimized to target 60fps.",
-      stripeConfig: { palette: "vapor" as const, speed: 1.4, distortion: 45, scale: 0.015 },
+      stripeConfig: {
+        color1: "#00f2fe", color2: "#4facfe", color3: "#0052d4", // Vapor/Neo-Mint
+        speed: 1.4, distortion: 45, scale: 0.015
+      },
       stat: "60",
       statLabel: "FPS TARGET",
     },
@@ -175,7 +182,10 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Sliders size={22} />,
       title: "Declarative Control",
       description: "Fully customize layout variables. Set spring physics constants, uniform arrays, scale multipliers, colors, and motion offsets on the fly.",
-      stripeConfig: { palette: "cyberpunk" as const, speed: 1.2, distortion: 60, scale: 0.010 },
+      stripeConfig: {
+        color1: "#fdf497", color2: "#fd5949", color3: "#d6249f", // Cyberpunk
+        speed: 1.2, distortion: 60, scale: 0.010
+      },
       stat: "100%",
       statLabel: "CUSTOMIZABLE",
     },
@@ -183,7 +193,10 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Layers size={22} />,
       title: "Less Overhead",
       description: "Uses only well-known and tested packages like WebGL, Three.js, and framer-motion.",
-      stripeConfig: { palette: "abyss" as const, speed: 0.8, distortion: 50, scale: 0.007 },
+      stripeConfig: {
+        color1: "#0f2027", color2: "#203a43", color3: "#2c5364", // Abyss
+        speed: 0.8, distortion: 50, scale: 0.007
+      },
       stat: "0",
       statLabel: "DEPENDENCIES",
     },
@@ -191,7 +204,10 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Code2 size={22} />,
       title: "Copy & Paste",
       description: "Direct copy-paste is available, along with a CLI, npm packages, and MCP server access for AI-assisted development.",
-      stripeConfig: { palette: "slate" as const, speed: 0.8, distortion: 15, scale: 0.008 },
+      stripeConfig: {
+        color1: "#0a0a0a", color2: "#3f3f3f", color3: "#d4d4d4", // Slate/Brutalist
+        speed: 0.8, distortion: 15, scale: 0.008
+      },
       stat: "1",
       statLabel: "FILE EACH",
     },
@@ -199,7 +215,10 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Palette size={22} />,
       title: "Design System Ready",
       description: "It won't adapt automatically, but you can easily customize styles and colors to match your existing themes.",
-      stripeConfig: { palette: "aurora" as const, speed: 1.1, distortion: 65, scale: 0.009 },
+      stripeConfig: {
+        color1: "#00c9ff", color2: "#92fe9d", color3: "#001f3f", // Aurora
+        speed: 1.1, distortion: 65, scale: 0.009
+      },
       stat: "∞",
       statLabel: "THEMES",
     },
@@ -207,7 +226,10 @@ export const FeatureDetailsSection: React.FC = () => {
       icon: <Zap size={22} />,
       title: "Fully Documented",
       description: "We provide comprehensive developer documentation and context for writing AI prompts to easily customize and use each component.",
-      stripeConfig: { palette: "acid" as const, speed: 1.8, distortion: 60, scale: 0.025 },
+      stripeConfig: {
+        color1: "#ccff00", color2: "#00ff99", color3: "#000000", // Acid
+        speed: 1.8, distortion: 60, scale: 0.025
+      },
       stat: "AI",
       statLabel: "PROMPT READY",
     },
@@ -342,7 +364,8 @@ export const FeatureDetailsSection: React.FC = () => {
 
   return (
     <section ref={sectionRef} id="features" className="w-full px-6 md:px-20 py-32 relative z-20 overflow-hidden">
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes ambientFloat0 {
           0%, 100% { transform: translateY(0px) rotate(0.3deg); }
           50% { transform: translateY(-8px) rotate(-0.3deg); }

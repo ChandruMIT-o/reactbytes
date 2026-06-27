@@ -34,8 +34,10 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 	delay = 0,
 	easing = [0.785, 0.135, 0.15, 0.86],
 	color = "#E8EAF0",
-	containerClassName = "",
-	textClassName = "font-sans font-bold text-5xl",
+	// 1. Added @container to establish the parent bounds
+	containerClassName = "@container",
+	// 2. Swapped static text-5xl for fluid clamp typography
+	textClassName = "font-sans font-bold text-[clamp(1.5rem,8cqw,4rem)] text-center",
 	uppercase = false,
 }) => {
 	const finalFirst = uppercase ? firstWord.toUpperCase() : firstWord;
@@ -117,9 +119,9 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 			className={`relative w-full flex items-center justify-center ${containerClassName}`}
 		>
 			<motion.div
-				className={`flex ${
-					isHorizontal ? "flex-row" : "flex-col"
-				} items-center justify-center ${textClassName} tracking-wider`}
+				// 3. Added flex-wrap for horizontal mobile overflow prevention
+				className={`flex ${isHorizontal ? "flex-row flex-wrap" : "flex-col"
+					} items-center justify-center ${textClassName} tracking-wider`}
 				initial="hidden"
 				animate="visible"
 				variants={{
@@ -135,7 +137,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 					<div className="inline-flex overflow-hidden">
 						<motion.span
 							variants={secondVariants}
-							className="relative z-0 px-2 font-light"
+							className="relative z-0 px-2 font-light break-words"
 							style={{ color }}
 						>
 							{finalSecond}
@@ -145,7 +147,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 
 				<motion.span
 					variants={firstVariants}
-					className="relative z-10 bg-background px-2"
+					className="relative z-10 bg-background px-2 break-words"
 					style={{ color }}
 				>
 					{finalFirst}
@@ -155,7 +157,7 @@ export const RevealUnder: React.FC<RevealUnderProps> = ({
 					<div className="inline-flex overflow-hidden">
 						<motion.span
 							variants={secondVariants}
-							className="relative z-0 px-2 font-light"
+							className="relative z-0 px-2 font-light break-words"
 							style={{ color }}
 						>
 							{finalSecond}

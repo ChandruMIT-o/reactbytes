@@ -52,7 +52,7 @@ export const PropsTable: React.FC<PropsTableProps> = ({
 									<th className="px-6 py-4 font-medium tracking-tight w-[20%]">
 										Type
 									</th>
-									<th className="px-6 py-4 font-medium tracking-tight w-[20%]">
+									<th className="px-6 py-4 font-medium tracking-tight w-[20%] max-w-[200px]">
 										Default
 									</th>
 									<th className="px-6 py-4 font-medium tracking-tight w-[40%]">
@@ -102,9 +102,9 @@ export const PropsTable: React.FC<PropsTableProps> = ({
 												</td>
 
 												{/* Default Value */}
-												<td className="px-6 py-5 align-top">
+												<td className="px-6 py-5 align-top max-w-[200px]">
 													{prop.defaultValue ? (
-														<code className="text-rb-accent-2/40 bg-rb-neutral-3 px-2 py-1 rounded-[6px] text-sm font-mono whitespace-nowrap border border-rb-neutral-4">
+														<code className="text-rb-accent-2/40 bg-rb-neutral-3 px-2 py-1 rounded-[6px] text-sm font-mono break-all border border-rb-neutral-4 inline-block max-w-full">
 															{prop.defaultValue}
 														</code>
 													) : (

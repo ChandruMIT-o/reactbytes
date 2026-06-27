@@ -6,6 +6,13 @@ export const eyeMatrixConfig: ComponentConfig = {
   category: "background",
   tags: ["eye", "matrix", "dots", "grid", "gaze", "pattern"],
   componentPath: "app/meta/background/dotted/EyeMatrix.tsx",
+  npmPackageName: "@reactbytes/eye-matrix",
+  version: "1.0.0",
+  description: "An interactive background grid component of wiggling eyes that follow mouse coordinates with organic blinking, spring physics, and packed layouts.",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0",
+  },
   showDemoByDefault: true,
   demoVariant: "card",
   props: [
@@ -212,17 +219,12 @@ export const eyeMatrixConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Layout Engine",
+      title: "Component Source",
       items: [
         {
-          name: "D3.js (d3-hierarchy)",
-          role: "Siblings packer solver",
-          url: "https://d3js.org/d3-hierarchy/pack",
-        },
-        {
-          name: "Inigo Quilez",
-          role: "Spring-elastic wiggles inspiration",
-          url: "https://iquilezles.org/",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

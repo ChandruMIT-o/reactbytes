@@ -6,6 +6,10 @@ export const poissonNoiseConfig: ComponentConfig = {
   category: "background",
   tags: ["poisson", "noise", "scatter", "dots", "distribution"],
   componentPath: "app/meta/background/dotted/PoissonNoise.tsx",
+  npmPackageName: "@reactbytes/poisson-noise",
+  version: "1.0.0",
+  context_from_dev:
+    "A premium background simulation utilizing a self-contained SimpleNoise2D engine and O(N) spatial hash grid for real-time interactive Poisson-disc particle distribution. Supports mouse attraction, repulsion, and scaling modes.",
   showDemoByDefault: true,
   demoVariant: "hero",
   props: [
@@ -191,24 +195,9 @@ export const poissonNoiseConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Poisson Disc Noise Engine",
-          role: "Visual Simulation",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Library",
-          url: "https://react.dev",
-        },
-        {
-          name: "Canvas API",
-          role: "Rendering Engine",
-          url: "https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

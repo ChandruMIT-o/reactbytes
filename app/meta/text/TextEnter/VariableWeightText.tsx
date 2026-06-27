@@ -37,13 +37,28 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 	easing = "easeInOut",
 	pulse = false,
 	color = "#E8EAF0",
-	containerClassName = "",
-	textClassName = "",
+	// 1. Added @container to establish parent bounds
+	containerClassName = "@container",
+	// 2. Added fluid clamp typography
+	textClassName = "text-[clamp(1.5rem,8cqw,4rem)] text-center",
 	uppercase = false,
 }) => {
-	const letters = useMemo(() => {
+	// 3. Group by words and calculate global index for seamless staggering
+	const words = useMemo(() => {
 		const finalRef = uppercase ? text.toUpperCase() : text;
-		return finalRef.split("");
+		const wordsArray = finalRef.split(" ");
+		let globalIndex = 0;
+
+		return wordsArray.map((word) => {
+			const letters = word.split("").map((char) => {
+				const charObj = { char, index: globalIndex };
+				globalIndex++;
+				return charObj;
+			});
+			// Increment index for the space so stagger timing remains perfectly spaced
+			globalIndex++;
+			return { word, letters };
+		});
 	}, [text, uppercase]);
 
 	const variants = {
@@ -56,7 +71,7 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 			opacity: 1,
 			transition: {
 				duration,
-				delay: i * stagger,
+				delay: i * stagger, // Relies on the global index we calculate
 				ease: easing,
 				repeat: pulse ? Infinity : 0,
 				repeatType: "reverse" as const,
@@ -69,21 +84,34 @@ export const VariableWeightText: React.FC<VariableWeightTextProps> = ({
 			className={`relative w-full flex items-center justify-center ${containerClassName}`}
 		>
 			<div className={`flex flex-wrap justify-center overflow-hidden ${textClassName}`}>
-				{letters.map((char, index) => (
-					<motion.span
-						key={`${index}-${char}`}
-						custom={index}
-						variants={variants}
-						initial="initial"
-						animate="animate"
-						className="inline-block"
-						style={{
-							fontFamily: "var(--font-outfit)",
-							color,
-						}}
-					>
-						{char === " " ? "\u00A0" : char}
-					</motion.span>
+				{words.map((wordObj, wordIndex) => (
+					<React.Fragment key={wordIndex}>
+						{/* 4. Wrap each word in inline-flex and whitespace-nowrap */}
+						<span className="inline-flex whitespace-nowrap">
+							{wordObj.letters.map((letter, charIndex) => (
+								<motion.span
+									key={`${wordIndex}-${charIndex}`}
+									// Pass the global index to the variants via 'custom'
+									custom={letter.index}
+									variants={variants}
+									initial="initial"
+									animate="animate"
+									className="inline-block"
+									style={{
+										fontFamily: "var(--font-outfit)",
+										color,
+									}}
+								>
+									{letter.char}
+								</motion.span>
+							))}
+						</span>
+
+						{/* 5. Render a native space between words so flex-wrap works perfectly */}
+						{wordIndex < words.length - 1 && (
+							<span className="inline-block">&nbsp;</span>
+						)}
+					</React.Fragment>
 				))}
 			</div>
 		</div>

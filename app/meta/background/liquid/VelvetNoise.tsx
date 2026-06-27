@@ -2,10 +2,6 @@
 
 import React, { useEffect, useRef } from "react";
 
-// ==========================================
-// GLSL Shaders (Modified for dynamic Uniforms)
-// ==========================================
-
 const VERTEX_SHADER_SOURCE = `#version 300 es
 in vec3 position;
 in vec2 uv;
@@ -263,8 +259,8 @@ export const VelvetNoise: React.FC<VelvetNoiseProps> = ({
     // Setup full-screen triangle geometry
     const vertices = new Float32Array([
       -1.0, -1.0, 0.0, 0.0, 0.0,
-       3.0, -1.0, 0.0, 2.0, 0.0,
-      -1.0,  3.0, 0.0, 0.0, 2.0,
+      3.0, -1.0, 0.0, 2.0, 0.0,
+      -1.0, 3.0, 0.0, 0.0, 2.0,
     ]);
 
     const vertexArray = gl.createVertexArray();
@@ -304,7 +300,7 @@ export const VelvetNoise: React.FC<VelvetNoiseProps> = ({
       const currentDpr = paramsRef.current.dpr;
       const displayWidth = canvas.clientWidth;
       const displayHeight = canvas.clientHeight;
-      
+
       const targetWidth = Math.floor(displayWidth * currentDpr);
       const targetHeight = Math.floor(displayHeight * currentDpr);
 

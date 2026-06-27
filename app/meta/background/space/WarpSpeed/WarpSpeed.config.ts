@@ -7,6 +7,18 @@ export const warpSpeedConfig: ComponentConfig = {
   componentPath: "app/meta/background/space/WarpSpeed/WarpSpeed.tsx",
   showDemoByDefault: true,
   demoVariant: "hero",
+  // --- NPM Publishing Metadata ---
+  npmPackageName: "@reactbytes/warp-speed",
+  version: "1.0.0",
+  description: "A high-performance, interactive 2D canvas starfield warp effect with smooth scroll-based acceleration.",
+
+  // --- Dependency Management ---
+  // Since there are no external dependencies, these remain empty!
+  dependencies: {},
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "starCount",
@@ -74,14 +86,8 @@ export const warpSpeedConfig: ComponentConfig = {
     {
       name: "showShip",
       type: "boolean",
-      default: true,
+      default: false,
       description: "Whether to render the centered spaceship.",
-    },
-    {
-      name: "showMouseHint",
-      type: "boolean",
-      default: true,
-      description: "Whether to overlay a pulsing 'Scroll to Fly' hint.",
     },
     {
       name: "preventPageScroll",
@@ -102,8 +108,7 @@ export const warpSpeedConfig: ComponentConfig = {
         trailLength: 1.0,
         minSize: 0.5,
         maxSize: 3.0,
-        showShip: true,
-        showMouseHint: true,
+        showShip: false,
         preventPageScroll: false,
       },
     },
@@ -118,8 +123,7 @@ export const warpSpeedConfig: ComponentConfig = {
         trailLength: 0.5,
         minSize: 0.8,
         maxSize: 4.5,
-        showShip: true,
-        showMouseHint: false,
+        showShip: false,
         preventPageScroll: false,
       },
     },
@@ -134,8 +138,7 @@ export const warpSpeedConfig: ComponentConfig = {
         trailLength: 2.0,
         minSize: 0.3,
         maxSize: 2.5,
-        showShip: true,
-        showMouseHint: true,
+        showShip: false,
         preventPageScroll: false,
       },
     },
@@ -151,7 +154,6 @@ export const warpSpeedConfig: ComponentConfig = {
         minSize: 0.2,
         maxSize: 1.5,
         showShip: false,
-        showMouseHint: false,
         preventPageScroll: false,
       },
     },
@@ -161,24 +163,9 @@ export const warpSpeedConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "WarpSpeed Starfield",
-          role: "Creative Developer",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Library",
-          url: "https://react.dev",
-        },
-        {
-          name: "Lucide React",
-          role: "Icons",
-          url: "https://lucide.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

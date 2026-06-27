@@ -8,6 +8,14 @@ export const atmosphericDriftConfig: ComponentConfig = {
   componentPath: "app/meta/background/AtmosphericDrift/AtmosphericDrift.tsx",
   showDemoByDefault: true,
   demoVariant: "hero",
+  npmPackageName: "@reactbytes/atmospheric-drift",
+  version: "1.0.0",
+  description: "An interactive, physics-based canvas component featuring an atmospheric drift animation.",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "preset",
@@ -162,9 +170,9 @@ export const atmosphericDriftConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Styling & UI Assembly",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

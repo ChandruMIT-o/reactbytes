@@ -8,7 +8,23 @@ export const dottedVortexConfig: ComponentConfig = {
   componentPath: "app/meta/background/dotted/DottedVortex.tsx",
   showDemoByDefault: true,
   demoVariant: "text",
+
+  // Automated NPM Publishing Metadata
+  npmPackageName: "@reactbytes/dotted-vortex",
+  version: "1.0.0",
+  description: "An interactive, high-performance canvas background component featuring a responsive point-mesh vortex that scales and twists to reveal a custom underlying image on interaction.",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0",
+  },
+
   props: [
+    {
+      name: "imageSrc",
+      type: "string",
+      default: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
+      description: "The high-resolution background image to dynamically load and reveal.",
+    },
     {
       name: "isExcited",
       type: "boolean",
@@ -49,8 +65,7 @@ export const dottedVortexConfig: ComponentConfig = {
       min: 0.05,
       max: 0.5,
       step: 0.05,
-      description:
-        "The maximum distance of the reveal effect relative to screen width.",
+      description: "The maximum distance of the reveal effect relative to screen width.",
     },
     {
       name: "kineticEnergyMultiplier",
@@ -59,8 +74,7 @@ export const dottedVortexConfig: ComponentConfig = {
       min: 0.1,
       max: 2.0,
       step: 0.1,
-      description:
-        "How intensely the cursor speed injects kinetic energy into dots.",
+      description: "How intensely the cursor speed injects kinetic energy into dots.",
     },
     {
       name: "rippleSpeed",
@@ -183,9 +197,9 @@ export const dottedVortexConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "ReactBytes",
-          role: "Library",
-          url: "#",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

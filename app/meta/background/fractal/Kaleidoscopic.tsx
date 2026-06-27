@@ -18,11 +18,6 @@ export interface KaleidoscopicProps {
     vignetteEnd?: number;
 }
 
-/**
- * Fragment Shader Generator:
- * Iterations is injected directly to unroll the domain folding, 
- * while everything else operates as a uniform for ultra-fast, real-time tweaks.
- */
 const getFragmentShaderSource = (iterations: number) => `
 #ifdef GL_ES
 precision highp float;
@@ -31,7 +26,6 @@ precision highp float;
 uniform vec2 u_resolution;
 uniform float u_time;
 
-// Tweakable Uniforms
 uniform float u_timeMultiplier;
 uniform float u_rotationSpeed;
 uniform float u_scale;
@@ -82,10 +76,6 @@ void main() {
 }
 `;
 
-/**
- * Vertex Shader:
- * A simple pass-through shader for a full-screen quad.
- */
 const vertexShaderSource = `
 attribute vec2 a_position;
 void main() {
@@ -98,7 +88,6 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const propsRef = useRef(props);
 
-    // Keep latest props available for the render loop without triggering effect re-runs
     propsRef.current = props;
 
     useEffect(() => {
@@ -111,7 +100,6 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
             return;
         }
 
-        // --- Shader Compilation Helper ---
         const compileShader = (type: number, source: string) => {
             const shader = gl.createShader(type);
             if (!shader) return null;
@@ -125,7 +113,6 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
             return shader;
         };
 
-        // --- Setup Program ---
         const vertexShader = compileShader(gl.VERTEX_SHADER, vertexShaderSource);
         const fragmentShader = compileShader(gl.FRAGMENT_SHADER, getFragmentShaderSource(props.iterations ?? 4.0));
 
@@ -144,7 +131,6 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
         }
         gl.useProgram(program);
 
-        // --- Setup Geometry (Full Screen Quad) ---
         const vertices = new Float32Array([
             -1, -1,
             1, -1,
@@ -161,7 +147,6 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
         gl.enableVertexAttribArray(positionLoc);
         gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
 
-        // --- Setup Uniform Locations ---
         const locs = {
             resolution: gl.getUniformLocation(program, 'u_resolution'),
             time: gl.getUniformLocation(program, 'u_time'),
@@ -180,21 +165,29 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
             vignetteEnd: gl.getUniformLocation(program, 'u_vignetteEnd'),
         };
 
-        // --- Resize Handler ---
+        // --- Updated Resize Logic ---
         const resize = () => {
             const dpr = window.devicePixelRatio || 1;
-            const width = canvas.clientWidth * dpr;
-            const height = canvas.clientHeight * dpr;
+            // Get sizing directly from the canvas bounding client rect
+            const width = Math.floor(canvas.clientWidth * dpr);
+            const height = Math.floor(canvas.clientHeight * dpr);
 
             if (canvas.width !== width || canvas.height !== height) {
                 canvas.width = width;
                 canvas.height = height;
-                gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+                gl.viewport(0, 0, width, height);
             }
+            // Always ensure uniform matches current drawing buffer size
             gl.uniform2f(locs.resolution, canvas.width, canvas.height);
         };
 
-        window.addEventListener('resize', resize);
+        // Track container modifications via ResizeObserver
+        const resizeObserver = new ResizeObserver(() => {
+            resize();
+        });
+        resizeObserver.observe(canvas);
+
+        // Initial manual call to set dimensions right away
         resize();
 
         // --- Render Loop ---
@@ -205,7 +198,6 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
             const p = propsRef.current;
             const currentTime = (Date.now() - startTime) * 0.001;
 
-            // Update all uniform values seamlessly on every frame based on the React props
             gl.uniform1f(locs.time, currentTime);
             gl.uniform1f(locs.timeMultiplier, p.timeMultiplier ?? 1.0);
             gl.uniform1f(locs.rotationSpeed, p.rotationSpeed ?? 0.05);
@@ -228,14 +220,14 @@ const Kaleidoscopic: React.FC<KaleidoscopicProps> = (props) => {
 
         // --- Cleanup ---
         return () => {
-            window.removeEventListener('resize', resize);
+            resizeObserver.disconnect();
             cancelAnimationFrame(animationFrameId);
             gl.deleteProgram(program);
             gl.deleteShader(vertexShader);
             gl.deleteShader(fragmentShader);
             gl.deleteBuffer(buffer);
         };
-    }, [props.iterations]); // Only rebuild WebGL program if structural loops change
+    }, [props.iterations]);
 
     return (
         <canvas

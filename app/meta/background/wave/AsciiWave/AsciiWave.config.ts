@@ -6,6 +6,14 @@ export const asciiWaveConfig: ComponentConfig = {
   category: "background",
   tags: ["ascii", "wave", "text", "retro", "terminal", "characters"],
   componentPath: "app/meta/background/wave/AsciiWave/AsciiWave.tsx",
+  description: "A wavy ascii background component with customizable characters, colors, and interaction effects.",
+  npmPackageName: "@reactbytes/ascii-wave",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "gap",
@@ -190,11 +198,11 @@ export const asciiWaveConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
-    },
+    }
   ],
 };

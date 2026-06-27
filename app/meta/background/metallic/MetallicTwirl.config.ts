@@ -8,6 +8,15 @@ export const metallicTwirlConfig: ComponentConfig = {
   componentPath: "app/meta/background/metallic/MetallicTwirl.tsx",
   showDemoByDefault: true,
   demoVariant: "card",
+  npmPackageName: "@reactbytes/metallic-twirl",
+  version: "1.0.0",
+  description: "A WebGL2-powered animated background component that renders mesmerizing metallic kaleidoscopic twirls with customizable symmetry, zoom, speed, and color intensity for a dynamic abstract visual effect.",
+  dependencies: {
+  },
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "speed",
@@ -104,12 +113,12 @@ export const metallicTwirlConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Component Origin",
+      title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Implementation",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

@@ -106,6 +106,7 @@ export interface CreditsSection {
 export interface ComponentConfig {
   slug: string;
   name: string;
+  description?: string;
   category: "text" | "background" | "carousel" | "miscellaneous" | "cursor";
   tags?: string[];
   componentPath: string;

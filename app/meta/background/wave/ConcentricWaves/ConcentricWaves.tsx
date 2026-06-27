@@ -11,10 +11,23 @@ export interface ConcentricWavesProps {
   pulseSpeedMultiplier?: number;
   /** How long it takes for the gradient to complete a 360 rotation (in ms) */
   spinDurationMs?: number;
-  /** Tuple of 3 colors for the main thick rings */
-  mainGradientColors?: [string, string, string];
-  /** Tuple of 3 colors for the intermediate thin grayscale rings */
-  midGradientColors?: [string, string, string];
+
+  // --- Individual Main Gradient Colors ---
+  /** First color for the main thick rings gradient (Start) */
+  mainColor1?: string;
+  /** Second color for the main thick rings gradient (Middle) */
+  mainColor2?: string;
+  /** Third color for the main thick rings gradient (End) */
+  mainColor3?: string;
+
+  // --- Individual Intermediate Gradient Colors ---
+  /** First color for the intermediate thin rings gradient (Start) */
+  midColor1?: string;
+  /** Second color for the intermediate thin rings gradient (Middle) */
+  midColor2?: string;
+  /** Third color for the intermediate thin rings gradient (End) */
+  midColor3?: string;
+
   /** Minimum opacity for the main rings during their pulse */
   minOpacity?: number;
   /** Maximum opacity for the main rings during their pulse */
@@ -35,8 +48,12 @@ export const ConcentricWaves: React.FC<ConcentricWavesProps> = ({
   baseRadiusStart = 40,
   pulseSpeedMultiplier = 1,
   spinDurationMs = 2500,
-  mainGradientColors = ['#5ddcff', '#3c67e3', '#4e00c2'],
-  midGradientColors = ['#f3f4f6', '#9ca3af', '#374151'],
+  mainColor1 = '#5ddcff',
+  mainColor2 = '#3c67e3',
+  mainColor3 = '#4e00c2',
+  midColor1 = '#f3f4f6',
+  midColor2 = '#9ca3af',
+  midColor3 = '#374151',
   minOpacity = 0.4,
   maxOpacity = 0.9,
   minThickness = 4,
@@ -45,51 +62,65 @@ export const ConcentricWaves: React.FC<ConcentricWavesProps> = ({
   className = '',
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Track layout boundaries safely across frames
+  const dimensionsRef = useRef({ width: 0, height: 0 });
+
   // Use a ref to keep track of the latest props without restarting the animation loop
   const propsRef = useRef({
     layerCount, ringSpacing, baseRadiusStart, pulseSpeedMultiplier,
-    spinDurationMs, mainGradientColors, midGradientColors, minOpacity,
-    maxOpacity, minThickness, maxThickness, bgColor
+    spinDurationMs, mainColor1, mainColor2, mainColor3,
+    midColor1, midColor2, midColor3, minOpacity, maxOpacity,
+    minThickness, maxThickness, bgColor
   });
 
   // Update the ref whenever props change
   useEffect(() => {
     propsRef.current = {
       layerCount, ringSpacing, baseRadiusStart, pulseSpeedMultiplier,
-      spinDurationMs, mainGradientColors, midGradientColors, minOpacity,
-      maxOpacity, minThickness, maxThickness, bgColor
+      spinDurationMs, mainColor1, mainColor2, mainColor3,
+      midColor1, midColor2, midColor3, minOpacity, maxOpacity,
+      minThickness, maxThickness, bgColor
     };
   }, [
     layerCount, ringSpacing, baseRadiusStart, pulseSpeedMultiplier,
-    spinDurationMs, mainGradientColors, midGradientColors, minOpacity,
-    maxOpacity, minThickness, maxThickness, bgColor
+    spinDurationMs, mainColor1, mainColor2, mainColor3,
+    midColor1, midColor2, midColor3, minOpacity, maxOpacity,
+    minThickness, maxThickness, bgColor
   ]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationFrameId: number;
-    let W: number;
-    let H: number;
 
     const resize = () => {
-      if (!canvas.parentElement) return;
       const dpr = window.devicePixelRatio || 1;
-      W = canvas.parentElement.clientWidth;
-      H = canvas.parentElement.clientHeight;
-      
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
-      canvas.style.width = `${W}px`;
-      canvas.style.height = `${H}px`;
-      
+      const w = Math.floor(container.clientWidth);
+      const h = Math.floor(container.clientHeight);
+
+      dimensionsRef.current = { width: w, height: h };
+
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+
       ctx.scale(dpr, dpr);
     };
+
+    // Track parent size modifications reactively
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+    });
+    resizeObserver.observe(container);
+    resize();
 
     // Helper to draw clean rings
     const drawCircle = (x: number, y: number, r: number, style: string | CanvasGradient, width = 1.5, alpha = 1) => {
@@ -104,15 +135,26 @@ export const ConcentricWaves: React.FC<ConcentricWavesProps> = ({
     };
 
     const loop = (now: number) => {
-      // Destructure current props for this frame
-      const { 
-        layerCount: layers, 
-        ringSpacing, 
-        baseRadiusStart, 
+      const { width: W, height: H } = dimensionsRef.current;
+
+      // Skip framing if container is currently un-rendered or flat
+      if (W === 0 || H === 0) {
+        animationFrameId = requestAnimationFrame(loop);
+        return;
+      }
+
+      const {
+        layerCount: layers,
+        ringSpacing,
+        baseRadiusStart,
         pulseSpeedMultiplier,
         spinDurationMs,
-        mainGradientColors,
-        midGradientColors,
+        mainColor1,
+        mainColor2,
+        mainColor3,
+        midColor1,
+        midColor2,
+        midColor3,
         minOpacity,
         maxOpacity,
         minThickness,
@@ -120,13 +162,7 @@ export const ConcentricWaves: React.FC<ConcentricWavesProps> = ({
         bgColor
       } = propsRef.current;
 
-      // Draw background
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, W, H);
-      
-      // We apply a slight fade for motion blur effect by using rgba version of bgColor if possible,
-      // but standard is just opaque clear. The original code used rgba(5, 8, 15, 0.3) for trail effect.
-      // To keep it simple and configurable, we'll parse the hex and add alpha.
+      // Safe Hex / Named color parser helper for trail alpha
       const hexToRgb = (hex: string) => {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
@@ -135,63 +171,54 @@ export const ConcentricWaves: React.FC<ConcentricWavesProps> = ({
           b: parseInt(result[3], 16)
         } : { r: 5, g: 8, b: 15 };
       };
+
       const rgb = hexToRgb(bgColor);
       ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.3)`;
       ctx.fillRect(0, 0, W, H);
 
-      // Central background pulse
       const t = now * 0.0015 * pulseSpeedMultiplier;
-      
-      // Spin cycle matching the configured duration
       const spinAngle = ((now % spinDurationMs) / spinDurationMs) * Math.PI * 2;
 
       for (let i = 0; i < layers; i++) {
         // --- MAIN THICK RINGS ---
         const baseR = baseRadiusStart + i * ringSpacing;
         const r = baseR + Math.sin(t + i * 0.4) * 20;
-        
-        // Dynamic opacity pulsing within configured bounds
+
         const pulseWave = Math.sin(t * 2 - i * 0.2) * 0.5 + 0.5;
-        const alpha = minOpacity + (pulseWave * (maxOpacity - minOpacity)); 
-        
-        // Scaling width exactly from minThickness to maxThickness
-        const lineWidth = minThickness + (i / Math.max(1, layers - 1)) * (maxThickness - minThickness); 
-        
-        // Rotating linear gradient mapped to each circle's bounds
+        const alpha = minOpacity + (pulseWave * (maxOpacity - minOpacity));
+        const lineWidth = minThickness + (i / Math.max(1, layers - 1)) * (maxThickness - minThickness);
+
         const x0 = W / 2 - Math.cos(spinAngle) * r;
         const y0 = H / 2 - Math.sin(spinAngle) * r;
         const x1 = W / 2 + Math.cos(spinAngle) * r;
         const y1 = H / 2 + Math.sin(spinAngle) * r;
-        
+
         const gradient = ctx.createLinearGradient(x0, y0, x1, y1);
-        gradient.addColorStop(0, mainGradientColors[0]);
-        gradient.addColorStop(0.43, mainGradientColors[1]);
-        gradient.addColorStop(1, mainGradientColors[2]);
-        
+        gradient.addColorStop(0, mainColor1);
+        gradient.addColorStop(0.43, mainColor2);
+        gradient.addColorStop(1, mainColor3);
+
         drawCircle(W / 2, H / 2, r, gradient, lineWidth, alpha);
 
         // --- INTERMEDIATE THIN RINGS ---
-        if (i < layers - 1) { // Draw between this ring and the next one
-          const midBaseR = baseR + (ringSpacing / 2); // Exactly halfway between rings
+        if (i < layers - 1) {
+          const midBaseR = baseR + (ringSpacing / 2);
           const midR = midBaseR + Math.sin(t + (i + 0.5) * 0.4) * 20;
-          
-          // Pulsing opacity exactly from 0 to 1 (slightly faster pulse for variance)
+
           const midPulseWave = Math.sin(t * 2.5 - (i + 0.5) * 0.2) * 0.5 + 0.5;
-          const midAlpha = midPulseWave; 
-          
-          const midLineWidth = 1.5; // Thinner lines stay constant
-          
+          const midAlpha = midPulseWave;
+          const midLineWidth = 1.5;
+
           const midX0 = W / 2 - Math.cos(spinAngle) * midR;
           const midY0 = H / 2 - Math.sin(spinAngle) * midR;
           const midX1 = W / 2 + Math.cos(spinAngle) * midR;
           const midY1 = H / 2 + Math.sin(spinAngle) * midR;
-          
+
           const midGradient = ctx.createLinearGradient(midX0, midY0, midX1, midY1);
-          // Tones for the intermediate rings based on props
-          midGradient.addColorStop(0, midGradientColors[0]);   
-          midGradient.addColorStop(0.43, midGradientColors[1]); 
-          midGradient.addColorStop(1, midGradientColors[2]);    
-          
+          midGradient.addColorStop(0, midColor1);
+          midGradient.addColorStop(0.43, midColor2);
+          midGradient.addColorStop(1, midColor3);
+
           drawCircle(W / 2, H / 2, midR, midGradient, midLineWidth, midAlpha);
         }
       }
@@ -199,23 +226,22 @@ export const ConcentricWaves: React.FC<ConcentricWavesProps> = ({
       animationFrameId = requestAnimationFrame(loop);
     };
 
-    window.addEventListener('resize', resize);
-    
-    // Initial setup
-    resize();
     animationFrameId = requestAnimationFrame(loop);
 
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', resize);
+      resizeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
 
   return (
-    <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ backgroundColor: bgColor }}>
-      <canvas 
-        ref={canvasRef} 
+    <div
+      ref={containerRef}
+      className={`relative w-full h-full overflow-hidden ${className}`}
+      style={{ backgroundColor: bgColor }}
+    >
+      <canvas
+        ref={canvasRef}
         className="block absolute inset-0 w-full h-full"
       />
     </div>

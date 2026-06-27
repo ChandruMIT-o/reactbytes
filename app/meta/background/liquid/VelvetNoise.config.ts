@@ -7,7 +7,15 @@ export const velvetNoiseConfig: ComponentConfig = {
   tags: ["velvet", "noise", "texture", "soft", "fabric"],
   componentPath: "app/meta/background/liquid/VelvetNoise.tsx",
   showDemoByDefault: true,
-  demoVariant: "hero",
+  demoVariant: "card",
+  npmPackageName: "@reactbytes/velvet-noise",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0",
+    "react-dom": "^18.0.0",
+  },
+  description: "A GPU-accelerated WebGL background that generates flowing simplex noise with customizable colors, density, and animation. Designed for immersive hero sections, landing pages, and interactive visual experiences.",
   props: [
     {
       name: "cells",
@@ -32,8 +40,8 @@ export const velvetNoiseConfig: ComponentConfig = {
       type: "number",
       default: 0.5,
       min: 0.0,
-      max: 3.0,
-      step: 0.05,
+      max: 1.0,
+      step: 0.01,
       description: "Speed multiplier for the organic flowing animation.",
     },
     {
@@ -81,9 +89,9 @@ export const velvetNoiseConfig: ComponentConfig = {
       config: {
         cells: 4.0,
         stripes: 40.0,
-        speed: 0.5,
+        speed: 0.1,
         chromatic: 0.1,
-        colorBg: "#121212",
+        colorBg: "#ffffffff",
         colorFg: "#000000",
         isPlaying: true,
         dpr: 1.5,
@@ -95,7 +103,7 @@ export const velvetNoiseConfig: ComponentConfig = {
       config: {
         cells: 8.0,
         stripes: 85.0,
-        speed: 1.1,
+        speed: 0.2,
         chromatic: 0.35,
         colorBg: "#0a0a0a",
         colorFg: "#1e1e1e",
@@ -109,7 +117,7 @@ export const velvetNoiseConfig: ComponentConfig = {
       config: {
         cells: 2.0,
         stripes: 15.0,
-        speed: 0.25,
+        speed: 0.3,
         chromatic: 0.05,
         colorBg: "#1c1c1c",
         colorFg: "#050505",
@@ -123,7 +131,7 @@ export const velvetNoiseConfig: ComponentConfig = {
       config: {
         cells: 14.0,
         stripes: 130.0,
-        speed: 2.0,
+        speed: 0.4,
         chromatic: 0.6,
         colorBg: "#151516",
         colorFg: "#000000",
@@ -193,25 +201,15 @@ export const velvetNoiseConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Ian McEwan, Stefan Gustavson",
-          role: "Simplex 3D Noise GLSL algorithm",
-          url: "https://github.com/stegu/webgl-noise",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
     {
-      title: "Open Source Libraries",
+      title: "Libraries",
       items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
         {
           name: "WebGL2",
           role: "Renderer API",

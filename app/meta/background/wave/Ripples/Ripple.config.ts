@@ -6,6 +6,13 @@ export const rippleConfig: ComponentConfig = {
   category: "background",
   tags: ["ripple", "wave", "interactive", "mouse", "water", "click"],
   componentPath: "app/meta/background/wave/Ripples/Ripple.tsx",
+  npmPackageName: "@reactbytes/ripple",
+  version: "1.0.0",
+  description: "An interactive, high-performance WebGL ripple background component featuring dynamic wave generation, mouse disturbance, and temporary click shockwave spikes.",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0",
+  },
   showDemoByDefault: true,
   demoVariant: "hero",
   props: [
@@ -141,27 +148,12 @@ export const rippleConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Shader Design",
+      title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Component and Preset Author",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "WebGL",
-          role: "Graphics API",
-          url: "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

@@ -185,22 +185,22 @@ export const fractalBackgroundConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Mathematical Foundations",
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
+      title: "References",
       items: [
         {
           name: "Julia Set Explorer",
           role: "Fractal Math",
           url: "https://en.wikipedia.org/wiki/Julia_set",
-        },
-      ],
-    },
-    {
-      title: "Project",
-      items: [
-        {
-          name: "React Bytes",
-          role: "Component Collection",
-          url: "https://reactbytes.dev",
         },
       ],
     },

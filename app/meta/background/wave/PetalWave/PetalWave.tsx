@@ -15,17 +15,25 @@ const SHAPE_PATHS = {
         start: 'M.5,.5 .2,.4 1.3,.4 1.5,.5 1.3,.6 .2,.6',
         end: 'M-.5,.5 .5,-.2 1,-.2 1.5,.5 1,1.2 .5,1.2'
     },
-    star: {
-        start: 'M.5,.5 .5,.48 .52,.5 .5,.52 .48,.5 .5,.48',
-        end: 'M.5,.5 0,-.5 1,0 .5,1.5 0,.5 -.5,-.5'
-    },
+
     diamond: {
         start: 'M.5,.5 .5,.5 .5,.5 .5,.5 .5,.5 .5,.5',
         end: 'M.5,0 1,.5 .5,1 0,.5 .5,0 .5,0'
     },
-    ribbon: {
+
+    hexagon: {
         start: 'M.5,.5 .5,.5 .5,.5 .5,.5 .5,.5 .5,.5',
-        end: 'M.2,0 0.4,.8 .6,-.2 .8,.6 1.0,-.4 1.2,.4'
+        end: 'M.25,.1 .75,.1 1,.5 .75,.9 .25,.9 0,.5'
+    },
+
+    droplet: {
+        start: 'M.5,.5 .5,.5 .5,.5 .5,.5 .5,.5 .5,.5',
+        end: 'M.5,0 .95,.45 .75,1 .5,.85 .25,1 .05,.45'
+    },
+
+    kite: {
+        start: 'M.5,.5 .5,.5 .5,.5 .5,.5 .5,.5 .5,.5',
+        end: 'M.5,0 .95,.45 .65,1 .35,1 .05,.45 .5,0'
     }
 };
 
@@ -37,7 +45,7 @@ export interface PetalWaveProps {
     /** Animation speed multiplier (timeScale) */
     speed?: number;
     /** Dynamic shape variant for the paths */
-    shape?: 'petal' | 'star' | 'diamond' | 'ribbon';
+    shape?: 'petal' | 'diamond' | 'hexagon' | 'droplet' | 'kite';
     /** Where the stagger animation originates */
     staggerFrom?: 'start' | 'end' | 'center' | 'edges' | 'random' | number;
     /** The total staggered animation spread time in seconds */

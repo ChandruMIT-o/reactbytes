@@ -8,6 +8,14 @@ export const hiveMindConfig: ComponentConfig = {
   componentPath: "app/meta/background/flowfield/HiveMind.tsx",
   showDemoByDefault: true,
   demoVariant: "card",
+  description: "A high-performance Canvas-powered animated background component that simulates an organic particle swarm or flow field using 2D Simplex noise. It features dual-color blending, customizable particle density, and alpha-trail decay for a premium generative visual effect.",
+  npmPackageName: "@reactbytes/hive-mind",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
   props: [
     {
       name: "count",
@@ -135,31 +143,21 @@ export const hiveMindConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Neo Hive Mind",
-          role: "Visual Designer",
-          url: "https://codepen.io/iam-noob/pen/zYrjXzY",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
     {
-      title: "Open Source Libraries",
+      title: "Inspiration",
       items: [
         {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Canvas API",
-          role: "Graphics",
-          url: "https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API",
+          name: "Neo Hive Mind",
+          role: "Designer",
+          url: "https://codepen.io/Tibixx",
         },
       ],
-    },
+    }
   ],
 };

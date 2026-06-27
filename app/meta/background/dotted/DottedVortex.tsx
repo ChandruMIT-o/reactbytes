@@ -35,7 +35,7 @@ export interface DottedVortexProps {
   activeDotColor?: string;
   /** The color of the distant, un-scaled dots */
   idleDotColor?: string;
-  
+
   // --- Grid Config ---
   /** The distance between each dot in the grid */
   gridSpacing?: number;
@@ -51,7 +51,7 @@ export interface DottedVortexProps {
   kineticEnergyMultiplier?: number;
   /** The radius expansion speed of click ripples */
   rippleSpeed?: number;
-  
+
   // --- Hover / Excitement Physics ---
   /** The maximum rotation angle when in the excited state */
   twistAngle?: number;
@@ -64,7 +64,6 @@ export interface DottedVortexProps {
   className?: string;
 }
 
-// --- The Reusable Background Component ---
 const DottedVortex: React.FC<DottedVortexProps> = ({
   imageSrc = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop',
   isExcited = false,
@@ -85,25 +84,38 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const imageRef = useRef<HTMLImageElement | null>(null);
 
   // Store props in a ref so the render loop always has the latest values without re-binding
-  const configRef = useRef({ 
-    isExcited, bgColor, activeDotColor, idleDotColor, 
-    cursorFollowSpeed, revealRadiusScale, kineticEnergyMultiplier, 
-    rippleSpeed, twistAngle, apertureSize 
+  const configRef = useRef({
+    isExcited, bgColor, activeDotColor, idleDotColor,
+    cursorFollowSpeed, revealRadiusScale, kineticEnergyMultiplier,
+    rippleSpeed, twistAngle, apertureSize
   });
 
   useEffect(() => {
-    configRef.current = { 
-      isExcited, bgColor, activeDotColor, idleDotColor, 
-      cursorFollowSpeed, revealRadiusScale, kineticEnergyMultiplier, 
-      rippleSpeed, twistAngle, apertureSize 
+    configRef.current = {
+      isExcited, bgColor, activeDotColor, idleDotColor,
+      cursorFollowSpeed, revealRadiusScale, kineticEnergyMultiplier,
+      rippleSpeed, twistAngle, apertureSize
     };
   }, [
-    isExcited, bgColor, activeDotColor, idleDotColor, 
-    cursorFollowSpeed, revealRadiusScale, kineticEnergyMultiplier, 
+    isExcited, bgColor, activeDotColor, idleDotColor,
+    cursorFollowSpeed, revealRadiusScale, kineticEnergyMultiplier,
     rippleSpeed, twistAngle, apertureSize
   ]);
+
+  // Handle image loading reactively without disrupting the physics canvas loop execution
+  useEffect(() => {
+    setIsLoaded(false);
+    const img = new Image();
+    img.src = imageSrc;
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      imageRef.current = img;
+      setIsLoaded(true);
+    };
+  }, [imageSrc]);
 
   // Mouse / Pointer state tracking
   const m = useRef({
@@ -118,10 +130,8 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
   const effectState = useRef({
     ripples: [] as Ripple[],
     lastMouse: { x: 0, y: 0 },
-    currentTwist: 0 
+    currentTwist: 0
   });
-
-  const imageRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -136,20 +146,11 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
     let cw = 0;
     let ch = 0;
 
-    // Load the reveal image
-    const img = new Image();
-    img.src = imageSrc;
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      imageRef.current = img;
-      setIsLoaded(true);
-    };
-
-    // Initialization & Resize handler
+    // Initialization & Element-Driven Resize handler
     const resize = () => {
-      cw = container.clientWidth;
-      ch = container.clientHeight;
-      
+      cw = Math.floor(container.clientWidth);
+      ch = Math.floor(container.clientHeight);
+
       const dpr = window.devicePixelRatio || 1;
       canvas.width = cw * dpr;
       canvas.height = ch * dpr;
@@ -164,7 +165,13 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
       }
     };
 
-    window.addEventListener('resize', resize);
+    // Replace the window listener with a ResizeObserver targeting the true parent container boundary
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+    });
+    resizeObserver.observe(container);
+
+    // Set baseline sizes immediately
     resize();
 
     effectState.current.lastMouse = { x: m.current.tx, y: m.current.ty };
@@ -172,7 +179,7 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
     // The Main Render Loop
     const render = () => {
       const cfg = configRef.current;
-      const time = Date.now() * 0.002; 
+      const time = Date.now() * 0.002;
 
       // Calculate kinetic energy
       const vx = m.current.tx - effectState.current.lastMouse.x;
@@ -191,59 +198,59 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
 
       // Aperture scaling
       if (cfg.isExcited) {
-          const targetRadius = cfg.apertureSize + Math.cos(time * 1.2) * 0.01;
-          m.current.ts = lerp(m.current.ts, targetRadius, 0.08); 
+        const targetRadius = cfg.apertureSize + Math.cos(time * 1.2) * 0.01;
+        m.current.ts = lerp(m.current.ts, targetRadius, 0.08);
       } else {
-          const dist = Math.hypot(m.current.x - m.current.tx, m.current.y - m.current.ty);
-          m.current.ts = cfg.revealRadiusScale + clamp(dist / cw, 0, 1);
+        const dist = Math.hypot(m.current.x - m.current.tx, m.current.y - m.current.ty);
+        m.current.ts = cfg.revealRadiusScale + clamp(dist / cw, 0, 1);
       }
       m.current.s = lerp(m.current.s, m.current.ts, 0.05);
 
       // Update ripples
       effectState.current.ripples.forEach(r => {
-          r.radius += cfg.rippleSpeed;
-          r.life -= 0.015;
+        r.radius += cfg.rippleSpeed;
+        r.life -= 0.015;
       });
       effectState.current.ripples = effectState.current.ripples.filter(r => r.life > 0);
 
-      // Clear
+      // Clear Context
       ctx.clearRect(0, 0, cw, ch);
       ctx.globalCompositeOperation = 'source-over';
       const maxScaleDist = cw * m.current.s;
-      
+
       // Draw grid mask
       for (let i = 0; i < dots.length; i++) {
         const dot = dots[i];
         const d = Math.hypot(dot.x - m.current.x, dot.y - m.current.y);
-        
+
         // Fluid energy
         if (d < 120) {
-            const influence = 1 - (d / 120);
-            dot.energy = lerp(dot.energy, speed * influence * cfg.kineticEnergyMultiplier, 0.1);
+          const influence = 1 - (d / 120);
+          dot.energy = lerp(dot.energy, speed * influence * cfg.kineticEnergyMultiplier, 0.1);
         }
-        dot.energy *= 0.92; 
+        dot.energy *= 0.92;
 
         // Ripple bonus
         let rippleBonus = 0;
         for (const r of effectState.current.ripples) {
-            const distToRipple = Math.abs(Math.hypot(dot.x - r.x, dot.y - r.y) - r.radius);
-            if (distToRipple < 100) {
-                const ease = Math.pow(1 - (distToRipple / 100), 2); 
-                rippleBonus += ease * (r.life / r.maxLife) * 20;
-            }
+          const distToRipple = Math.abs(Math.hypot(dot.x - r.x, dot.y - r.y) - r.radius);
+          if (distToRipple < 100) {
+            const ease = Math.pow(1 - (distToRipple / 100), 2);
+            rippleBonus += ease * (r.life / r.maxLife) * 20;
+          }
         }
 
         // Hypnotic inward flow
         let pulse = 0;
         if (cfg.isExcited) {
-            const maskRadius = maxScaleDist * 2.5;
-            const swirlInfluence = Math.pow(Math.max(0, 1 - d / maskRadius), 1.5);
-            pulse = Math.max(0, Math.sin(-d * 0.06 + time * 4)) * swirlInfluence * 6;
+          const maskRadius = maxScaleDist * 2.5;
+          const swirlInfluence = Math.pow(Math.max(0, 1 - d / maskRadius), 1.5);
+          pulse = Math.max(0, Math.sin(-d * 0.06 + time * 4)) * swirlInfluence * 6;
         }
 
-        const baseScale = (1 - clamp(d / maxScaleDist, 0, 1)) * 25; 
+        const baseScale = (1 - clamp(d / maxScaleDist, 0, 1)) * 25;
         const s = Math.max(0, baseScale + dot.energy + rippleBonus + pulse);
-        
+
         if (s < 0.2 && !cfg.isExcited && dot.energy < 0.1) {
           ctx.fillStyle = cfg.idleDotColor;
           ctx.beginPath();
@@ -254,25 +261,25 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
 
         ctx.fillStyle = cfg.activeDotColor;
         ctx.beginPath();
-        
+
         // Parallax offset
         let px = dot.baseX + lerp(-cw / 20, cw / 20, m.current.x / cw);
         let py = dot.baseY + lerp(-ch / 20, ch / 20, m.current.y / ch);
 
         // Twist Rotation
         if (effectState.current.currentTwist > 0.001) {
-            const maskRadius = maxScaleDist * 2.5;
-            const swirlInfluence = Math.pow(Math.max(0, 1 - d / maskRadius), 1.5);
-            const currentAngle = effectState.current.currentTwist * swirlInfluence;
-            
-            if (currentAngle > 0.001) {
-                const dx = px - m.current.x;
-                const dy = py - m.current.y;
-                const cosA = Math.cos(currentAngle);
-                const sinA = Math.sin(currentAngle);
-                px = m.current.x + dx * cosA - dy * sinA;
-                py = m.current.y + dx * sinA + dy * cosA;
-            }
+          const maskRadius = maxScaleDist * 2.5;
+          const swirlInfluence = Math.pow(Math.max(0, 1 - d / maskRadius), 1.5);
+          const currentAngle = effectState.current.currentTwist * swirlInfluence;
+
+          if (currentAngle > 0.001) {
+            const dx = px - m.current.x;
+            const dy = py - m.current.y;
+            const cosA = Math.cos(currentAngle);
+            const sinA = Math.sin(currentAngle);
+            px = m.current.x + dx * cosA - dy * sinA;
+            py = m.current.y + dx * sinA + dy * cosA;
+          }
         }
 
         ctx.arc(px, py, dot.r * Math.max(0.1, s), 0, Math.PI * 2);
@@ -294,9 +301,9 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
 
         ctx.save();
         if (effectState.current.currentTwist > 0.001) {
-            ctx.translate(m.current.x, m.current.y);
-            ctx.rotate(effectState.current.currentTwist * 0.8); 
-            ctx.translate(-m.current.x, -m.current.y);
+          ctx.translate(m.current.x, m.current.y);
+          ctx.rotate(effectState.current.currentTwist * 0.8);
+          ctx.translate(-m.current.x, -m.current.y);
         }
         ctx.drawImage(img, drawX, drawY, drawW, drawH);
         ctx.restore();
@@ -313,10 +320,10 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
     render();
 
     return () => {
-      window.removeEventListener('resize', resize);
+      resizeObserver.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
-  }, [imageSrc, gridSpacing, baseDotRadius]); // Re-run effect if structural props change
+  }, [gridSpacing, baseDotRadius]); // Only recalculate the engine loops if geometry properties change
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -329,25 +336,25 @@ const DottedVortex: React.FC<DottedVortexProps> = ({
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
     effectState.current.ripples.push({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        radius: 0,
-        life: 1,
-        maxLife: 1
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      radius: 0,
+      life: 1,
+      maxLife: 1
     });
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`relative overflow-hidden ${className}`}
       onPointerMove={handlePointerMove}
       onPointerDown={handlePointerDown}
     >
-      <canvas 
-        ref={canvasRef} 
+      <canvas
+        ref={canvasRef}
         className="absolute inset-0 block w-full h-full"
-        style={{ opacity: isLoaded ? 1 : 0, transition: 'opacity 1s ease-in-out' }}
+        style={{ opacity: isLoaded ? 1 : 0, transition: 'opacity 0.5s ease-in-out' }}
       />
       {/* Foreground UI wrapper */}
       <div className="relative z-10 w-full h-full">

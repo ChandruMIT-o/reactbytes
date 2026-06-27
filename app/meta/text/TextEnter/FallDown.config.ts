@@ -151,6 +151,6 @@ export const fallDownConfig: ComponentConfig = {
     },
   ],
   staticProps: {
-    textClassName: "text-6xl font-bold tracking-tight font-mono",
+    textClassName: "text-[clamp(3rem,10cqw,5rem)] tracking-tighter text-center",
   },
 };

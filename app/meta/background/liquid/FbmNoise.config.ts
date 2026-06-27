@@ -8,6 +8,17 @@ export const fbmNoiseConfig: ComponentConfig = {
   componentPath: "app/meta/background/liquid/FbmNoise.tsx",
   showDemoByDefault: true,
   demoVariant: "card",
+  npmPackageName: "@reactbytes/fbm-noise",
+  version: "1.0.0",
+  dependencies: {
+    three: "^0.128.0",
+  },
+  peerDependencies: {
+    react: "^18.0.0",
+    "react-dom": "^18.0.0",
+  },
+  description:
+    "A procedural fractal Brownian motion (fBm) background powered by GPU shaders and Three.js, featuring animated organic patterns with interactive mouse distortion. Fully customizable with adjustable complexity, color shifts, scale, speed, and brightness for immersive visual effects.",
   props: [
     {
       name: "complex",
@@ -181,17 +192,32 @@ export const fbmNoiseConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Shader Conception",
+      title: "Component Source",
       items: [
         {
-          name: "Inigo Quilez",
-          role: "Noise Algorithms Creator",
-          url: "https://iquilezles.org/",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
+      ],
+    },
+    {
+      title: "Libraries",
+      items: [
         {
           name: "Three.js Contributors",
           role: "WebGL Abstraction Framework",
           url: "https://threejs.org/",
+        },
+      ],
+    },
+    {
+      title: "Inspiration",
+      items: [
+        {
+          name: "Liam Egan",
+          role: "Noise Algorithms Creator",
+          url: "https://codepen.io/shubniggurath",
         },
       ],
     },

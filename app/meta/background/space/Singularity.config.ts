@@ -17,6 +17,15 @@ export const singularityConfig: ComponentConfig = {
   showDemoByDefault: true,
   demoVariant: "text",
   componentPath: "app/meta/background/space/Singularity.tsx",
+  npmPackageName: "@reactbytes/singularity",
+  version: "1.0.0",
+  description: "A premium responsive 3D black hole Schwarzschild singularity background component utilizing Three.js and custom GLSL noise shaders.",
+  dependencies: {
+    three: "^0.184.0",
+  },
+  peerDependencies: {
+    react: "^18.0.0",
+  },
   props: [
     {
       name: "compress",
@@ -142,6 +151,16 @@ export const singularityConfig: ComponentConfig = {
   ],
   credits: [
     {
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
       title: "3D Graphics & Physics",
       items: [
         {
@@ -153,16 +172,6 @@ export const singularityConfig: ComponentConfig = {
           name: "Schwarzschild Metric",
           role: "Physics Inspiration",
           url: "https://en.wikipedia.org/wiki/Schwarzschild_metric",
-        },
-      ],
-    },
-    {
-      title: "Development Team",
-      items: [
-        {
-          name: "React Bytes",
-          role: "Attribution and Licensing",
-          url: "https://reactbytes.dev",
         },
       ],
     },

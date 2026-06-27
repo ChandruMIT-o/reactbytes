@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 
 // Simple Simplex Noise implementation for portability
 const createNoise2D = () => {
@@ -75,31 +75,18 @@ const createNoise2D = () => {
 };
 
 export interface HiveMindProps {
-    /** Number of particles */
     count?: number;
-    /** Scale of the noise field */
     noiseScale?: number;
-    /** Speed of time progression in noise */
     noiseSpeed?: number;
-    /** Velocity multiplier */
     velocity?: number;
-    /** Particle trail decay (alpha of the clear color) */
     opacity?: number;
-    /** Base particle radius multiplier */
     radius?: number;
-    /** Primary particle color */
     color1?: string;
-    /** Secondary particle color */
     color2?: string;
-    /** Background color */
     backgroundColor?: string;
-    /** Whether to use a higher resolution (devicePixelRatio) */
     highRes?: boolean;
-    /** Whether to force overlay text to uppercase */
     uppercase?: boolean;
-    /** Additional CSS classes */
     className?: string;
-    /** Overlay content */
     children?: React.ReactNode;
 }
 
@@ -118,6 +105,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({
     className = "",
     children,
 }) => {
+    const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const particlesRef = useRef<any[]>([]);
     const noiseRef = useRef<any>(null);
@@ -140,7 +128,7 @@ export const HiveMind: React.FC<HiveMindProps> = ({
             const spawnRange = Math.max(w, h);
             this.x = w / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
             this.y = h / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
-            
+
             const random = Math.random();
             this.size = random > 0.8 ? Math.random() * 2 : (random > 0.2 ? Math.random() * 1 : Math.random() * 3);
             this.isColor1 = Math.random() > 0.5;
@@ -151,7 +139,6 @@ export const HiveMind: React.FC<HiveMindProps> = ({
             this.y += noise(this.x / nScale, noiseTime) * vel;
 
             if (this.x < 0 || this.x > this.w || this.y < 0 || this.y > this.h) {
-                // Respawn
                 const spawnRange = Math.max(this.w, this.h);
                 this.x = this.w / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
                 this.y = this.h / 2 + (Math.random() * spawnRange - Math.random() * spawnRange);
@@ -169,37 +156,45 @@ export const HiveMind: React.FC<HiveMindProps> = ({
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        const container = containerRef.current;
+        if (!canvas || !container) return;
 
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
         noiseRef.current = createNoise2D();
 
-        const resize = () => {
-            const width = canvas.clientWidth;
-            const height = canvas.clientHeight;
+        const resize = (width: number, height: number) => {
             canvas.width = width * dpr;
             canvas.height = height * dpr;
             ctx.scale(dpr, dpr);
-            
-            // Re-initialize particles on major resize to avoid weird clustering
+
+            // Re-initialize particles to spread perfectly into the new dimensions
             particlesRef.current = Array.from({ length: count }, () => new Particle(width, height));
-            
+
             ctx.fillStyle = backgroundColor;
             ctx.fillRect(0, 0, width, height);
         };
 
-        resize();
-        window.addEventListener("resize", resize);
+        // Use ResizeObserver instead of window resize event listener
+        const resizeObserver = new ResizeObserver((entries) => {
+            for (let entry of entries) {
+                const { width, height } = entry.contentRect;
+                // Fallback handle if contentRect attributes read as 0
+                const actualWidth = width || container.clientWidth;
+                const actualHeight = height || container.clientHeight;
+                resize(actualWidth, actualHeight);
+            }
+        });
+
+        resizeObserver.observe(container);
 
         const update = () => {
             noiseTimeRef.current += noiseSpeed;
-            
+
             const w = canvas.width / dpr;
             const h = canvas.height / dpr;
 
-            // Trail effect: clear with high transparency
             ctx.globalAlpha = opacity;
             ctx.fillStyle = backgroundColor;
             ctx.fillRect(0, 0, w, h);
@@ -218,13 +213,13 @@ export const HiveMind: React.FC<HiveMindProps> = ({
         update();
 
         return () => {
-            window.removeEventListener("resize", resize);
+            resizeObserver.disconnect();
             cancelAnimationFrame(animationFrameRef.current);
         };
     }, [count, noiseScale, noiseSpeed, velocity, opacity, radius, color1, color2, backgroundColor, dpr]);
 
     return (
-        <div className={`relative isolate w-full h-full overflow-hidden ${className}`}>
+        <div ref={containerRef} className={`relative isolate w-full h-full overflow-hidden ${className}`}>
             <canvas
                 ref={canvasRef}
                 className="absolute inset-0 w-full h-full block"

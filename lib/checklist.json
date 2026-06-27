@@ -14,5 +14,301 @@
     "api": false,
     "credits": false,
     "impact": false
+  },
+  "stripe-flow": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "void-orb": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "warp-speed": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "scroll-warp": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "superstructure": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "dither": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "atmospheric-drift": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "ascii-wave": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "magnetic-dots": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "bubble-gradient": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "cellular-automata": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "fractal-background": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "hive-mind": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "helon-braid": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "perlin-smoke": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "metallic-twirl": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "liquid-noise": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "velvet-noise": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "fbm-noise": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "poisson-noise": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "liquid-grid": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "iridescent-gradient": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "kaleidoscopic": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "dotted-vortex": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "concentric-waves": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "ripple": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "petal-wave": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "eye-matrix": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "singularity": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "spacetime": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "black-hole": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "reveal-under": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "fall-down": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "variable-weight": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "aperture-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "axial-shear-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "tectonic-track-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
   }
 }

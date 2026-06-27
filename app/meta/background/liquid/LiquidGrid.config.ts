@@ -6,27 +6,14 @@ export const liquidGridConfig: ComponentConfig = {
   category: "background",
   tags: ["liquid", "grid", "ripple", "distort", "mesh"],
   componentPath: "app/meta/background/liquid/LiquidGrid.tsx",
+  npmPackageName: "@reactbytes/liquid-grid",
+  version: "1.0.0",
+  context_from_dev:
+    "A dynamic liquid-like dot grid background that automatically computes the grid dimensions based on container sizing. Features gooey render filters, spring-physics dot nodes, cursor interaction, and automatic drop waves.",
   showDemoByDefault: true,
   demoVariant: "card",
   props: [
-    {
-      name: "cols",
-      type: "number",
-      default: 9,
-      min: 3,
-      max: 22,
-      step: 1,
-      description: "Number of columns in the dot grid mesh.",
-    },
-    {
-      name: "rows",
-      type: "number",
-      default: 9,
-      min: 3,
-      max: 22,
-      step: 1,
-      description: "Number of rows in the dot grid mesh.",
-    },
+    // Removed cols and rows so the component always automatically calculates them
     {
       name: "spacing",
       type: "number",
@@ -34,7 +21,7 @@ export const liquidGridConfig: ComponentConfig = {
       min: 20,
       max: 110,
       step: 1,
-      description: "Distance in pixels between adjacent dot grid nodes.",
+      description: "Distance in pixels between dots. Lower values create a denser grid.",
     },
     {
       name: "baseRadius",
@@ -43,8 +30,7 @@ export const liquidGridConfig: ComponentConfig = {
       min: 3,
       max: 35,
       step: 1,
-      description:
-        "Resting size (radius in pixels) of the individual grid dots.",
+      description: "Resting size (radius in pixels) of the individual grid dots.",
     },
     {
       name: "springK",
@@ -80,8 +66,7 @@ export const liquidGridConfig: ComponentConfig = {
       min: -60,
       max: 80,
       step: 2,
-      description:
-        "Max displacement force toward (positive) or away from (negative) cursor.",
+      description: "Max displacement force toward (positive) or away from (negative) cursor.",
     },
     {
       name: "bounceAmp",
@@ -99,8 +84,7 @@ export const liquidGridConfig: ComponentConfig = {
       min: 0.01,
       max: 0.25,
       step: 0.005,
-      description:
-        "Delay in seconds for wave propagation between consecutive rows.",
+      description: "Delay in seconds for wave propagation between consecutive rows.",
     },
     {
       name: "decay",
@@ -136,8 +120,7 @@ export const liquidGridConfig: ComponentConfig = {
       min: 0,
       max: 25,
       step: 1,
-      description:
-        "CSS blur filter radius in pixels, driving the gooey liquid merge effect.",
+      description: "CSS blur filter radius in pixels, driving the gooey liquid merge effect.",
     },
     {
       name: "contrast",
@@ -146,8 +129,7 @@ export const liquidGridConfig: ComponentConfig = {
       min: 1,
       max: 50,
       step: 1,
-      description:
-        "CSS contrast filter threshold applied to sharpen blurred edges.",
+      description: "CSS contrast filter threshold applied to sharpen blurred edges.",
     },
     {
       name: "dotColor",
@@ -171,10 +153,8 @@ export const liquidGridConfig: ComponentConfig = {
   presets: [
     {
       id: "liquid-mercury",
-      label: "🪙 Liquid Mercury",
+      label: "Liquid Mercury",
       config: {
-        cols: 9,
-        rows: 9,
         spacing: 56,
         baseRadius: 12,
         springK: 0.09,
@@ -195,10 +175,8 @@ export const liquidGridConfig: ComponentConfig = {
     },
     {
       id: "molten-lava",
-      label: "🌋 Molten Lava",
+      label: "Molten Lava",
       config: {
-        cols: 10,
-        rows: 10,
         spacing: 50,
         baseRadius: 15,
         springK: 0.05,
@@ -219,10 +197,8 @@ export const liquidGridConfig: ComponentConfig = {
     },
     {
       id: "neon-matrix",
-      label: "🟢 Neon Matrix",
+      label: "Neon Matrix",
       config: {
-        cols: 13,
-        rows: 13,
         spacing: 44,
         baseRadius: 7,
         springK: 0.16,
@@ -243,10 +219,8 @@ export const liquidGridConfig: ComponentConfig = {
     },
     {
       id: "cyber-plastik",
-      label: "💖 Cyber Plastik",
+      label: "Cyber Plastik",
       config: {
-        cols: 8,
-        rows: 8,
         spacing: 68,
         baseRadius: 20,
         springK: 0.07,
@@ -267,10 +241,8 @@ export const liquidGridConfig: ComponentConfig = {
     },
     {
       id: "jellyfish-bloom",
-      label: "🪼 Jellyfish Bloom",
+      label: "Jellyfish Bloom",
       config: {
-        cols: 8,
-        rows: 14,
         spacing: 42,
         baseRadius: 9,
         springK: 0.04,
@@ -295,20 +267,15 @@ export const liquidGridConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Jean-Philippe Belley",
-          role: "Original Creator",
-          url: "https://jeanphilippebelley.com/",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
     {
       title: "Open Source Libraries",
       items: [
-        {
-          name: "React",
-          role: "UI Library",
-          url: "https://react.dev",
-        },
         {
           name: "Canvas API",
           role: "Rendering Engine",

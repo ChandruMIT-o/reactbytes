@@ -6,6 +6,16 @@ export const voidOrbConfig: ComponentConfig = {
   category: "background",
   tags: ["void", "orb", "dark", "energy", "glow", "space"],
   componentPath: "app/meta/background/space/VoidOrb.tsx",
+  description: "A highly optimized, interactive WebGL void orb background component.",
+  npmPackageName: "@reactbytes/void-orb",
+  version: "1.0.0",
+  dependencies: {
+    "three": "^0.150.0"
+  },
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   showDemoByDefault: true,
   demoVariant: "hero",
   props: [
@@ -195,17 +205,22 @@ export const voidOrbConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Component Source & Concept",
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
+      title: "Inspiration",
       items: [
         {
           name: "Filip Zrnzević",
           role: "Digital Artist",
           url: "https://x.com/filipz",
-        },
-        {
-          name: "React Bytes",
-          role: "WebGL Porting",
-          url: "https://reactbytes.dev",
         },
       ],
     },
@@ -216,12 +231,7 @@ export const voidOrbConfig: ComponentConfig = {
           name: "Three.js",
           role: "WebGL Framework",
           url: "https://threejs.org",
-        },
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
+        }
       ],
     },
   ],

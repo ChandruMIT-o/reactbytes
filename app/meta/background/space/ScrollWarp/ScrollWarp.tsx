@@ -12,6 +12,8 @@ export interface ScrollWarpProps {
   /** Color of the stars (hex). Defaults to '#d1ffff'. */
   starColor?: string;
   /** Optional custom styling classes for the container. */
+  bgColor?: string;
+  /** Optional custom styling classes for the container. */
   className?: string;
   /** Overlay children content. */
   children?: React.ReactNode;
@@ -30,13 +32,14 @@ export const ScrollWarp: React.FC<ScrollWarpProps> = ({
   baseTrailLength = 2,
   maxTrailLength = 30,
   starColor = '#d1ffff',
+  bgColor = '#111111',
   className = "",
   children,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const webglRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  
+
   const warpSpeedRef = useRef(0);
   const starsRef = useRef<Star[]>([]);
   const animationFrameRef = useRef<number>(0);
@@ -48,10 +51,10 @@ export const ScrollWarp: React.FC<ScrollWarpProps> = ({
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? {
-          r: parseInt(result[1], 16),
-          g: parseInt(result[2], 16),
-          b: parseInt(result[3], 16),
-        }
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
       : { r: 209, g: 255, b: 255 };
   };
 
@@ -78,7 +81,7 @@ export const ScrollWarp: React.FC<ScrollWarpProps> = ({
 
       const rect = containerRef.current.getBoundingClientRect();
       const parentRect = isWin ? { top: 0 } : (scrollContainer as HTMLElement).getBoundingClientRect();
-      
+
       const containerHeight = isWin ? window.innerHeight : (scrollContainer as HTMLElement).clientHeight;
       const start = rect.top - parentRect.top;
       const totalScroll = rect.height - containerHeight;
@@ -157,16 +160,17 @@ export const ScrollWarp: React.FC<ScrollWarpProps> = ({
       const trailLength = Math.floor(
         baseTrailLength + warpSpeed * (maxTrailLength - baseTrailLength)
       );
-      
+
+      const bgRgb = hexToRgb(bgColor);
       const clearAlpha = 1 - warpSpeed * 0.8;
-      ctx.fillStyle = `rgba(17, 17, 17, ${clearAlpha})`;
+      ctx.fillStyle = `rgba(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}, ${clearAlpha})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const colorRgb = hexToRgb(starColor);
 
       for (let i = 0; i < starsRef.current.length; i++) {
         const star = starsRef.current[i];
-        
+
         const px = (star.x - centerX) * (focalLength / star.z) + centerX;
         const py = (star.y - centerY) * (focalLength / star.z) + centerY;
 
@@ -209,18 +213,18 @@ export const ScrollWarp: React.FC<ScrollWarpProps> = ({
   }, [numStars, baseTrailLength, maxTrailLength, starColor]);
 
   return (
-    <div className={`bg-[#111111] text-white overflow-hidden font-sans relative w-full ${className}`}>
-      <style dangerouslySetInnerHTML={{__html: `
+    <div
+      className={`text-white overflow-hidden font-sans relative w-full ${className}`}
+      style={{ backgroundColor: bgColor }}
+    >      <style dangerouslySetInnerHTML={{
+      __html: `
         .scroll-warp-dust {
           position: absolute;
           top: 0;
           left: 0;
           width: 100%;
           height: 100%;
-          background-image: url("https://img.freepik.com/premium-photo/white-dust-scratches-black-background_279525-2.jpg?w=640");
-          background-size: cover;
-          background-position: center;
-          background-repeat: no-repeat;
+          
           opacity: 0.05;
           mix-blend-mode: screen;
           pointer-events: none;
@@ -229,20 +233,20 @@ export const ScrollWarp: React.FC<ScrollWarpProps> = ({
       `}} />
 
       {/* Main Container - The height determines the scroll duration */}
-      <div 
-        ref={containerRef} 
-        className="relative w-full m-0 z-10" 
+      <div
+        ref={containerRef}
+        className="relative w-full m-0 z-10"
         style={{ height: '500vh' }}
       >
         <div className="scroll-warp-dust"></div>
 
         {/* Fixed WebGL Background within the sticky container */}
-        <div 
+        <div
           ref={webglRef}
           className="sticky top-0 left-0 w-full z-0 overflow-hidden pointer-events-none"
         >
-          <canvas 
-            ref={canvasRef} 
+          <canvas
+            ref={canvasRef}
             className="absolute top-0 left-0 w-full h-full block"
           />
         </div>

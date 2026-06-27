@@ -191,7 +191,7 @@ export const PoissonNoise: React.FC<PoissonNoiseProps> = ({
   const getRadiusField = useCallback((x: number, y: number, time: number) => {
     const { mouse } = stateRef.current;
     const { minRadius: minR, maxRadius: maxR, noiseScale: nScale, mouseInfluence: mInf, mouseRadius: mRad, mouseIntensity: mInt } = propsRef.current;
-    
+
     // Simplex Noise value
     let field = noiseGen.noise(x * nScale, y * nScale) * 0.6;
     // Add wave distortion over time
@@ -241,25 +241,39 @@ export const PoissonNoise: React.FC<PoissonNoiseProps> = ({
     stateRef.current.particles = newParticles;
   }, []);
 
-  // Handle canvas scaling
+  // Handle accurate container canvas scaling via ResizeObserver
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const handleResize = () => {
-      const width = canvas.clientWidth || 1000;
-      const height = canvas.clientHeight || 600;
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      stateRef.current.dimensions = { width, height };
+    const handleResize = (entries: ResizeObserverEntry[]) => {
+      for (const entry of entries) {
+        // Use contentRect or borderBoxSize to get true container dimensions
+        const width = entry.contentRect.width || 1000;
+        const height = entry.contentRect.height || 600;
+        const dpr = window.devicePixelRatio || 1;
+
+        // Sync drawing buffer dimensions directly
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        
+        // Correct the underlying coordinates tracker
+        stateRef.current.dimensions = { width, height };
+      }
     };
 
-    window.addEventListener('resize', handleResize);
-    handleResize();
+    const resizeObserver = new ResizeObserver(handleResize);
+    // Observe the parent container (or the canvas itself if it is absolute inset-0)
+    if (canvas.parentElement) {
+      resizeObserver.observe(canvas.parentElement);
+    } else {
+      resizeObserver.observe(canvas);
+    }
+
+    // Run primary generation seed once
     triggerRegen();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => resizeObserver.disconnect();
   }, [triggerRegen]);
 
   // Continuous animation engine (Flow Dynamics)
@@ -286,7 +300,7 @@ export const PoissonNoise: React.FC<PoissonNoiseProps> = ({
       }
 
       const { time, particles, mouse } = stateRef.current;
-      
+
       const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1;
       const w = canvas.width / dpr;
       const h = canvas.height / dpr;

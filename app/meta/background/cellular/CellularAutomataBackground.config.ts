@@ -8,6 +8,14 @@ export const cellularAutomataConfig: ComponentConfig = {
   componentPath: "app/meta/background/cellular/CellularAutomataBackground.tsx",
   showDemoByDefault: true,
   demoVariant: "text",
+  description: "A high-performance WebGL-powered background component that renders mesmerizing, dynamic Julia set fractals. Features smooth iteration coloring, time-based shifting hue gradients, subtle mouse parallax interaction, and a seamless edge-blend dissolve for an elegant, premium visual canvas.",
+  npmPackageName: "@reactbytes/fractal-background",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "colorA",
@@ -147,6 +155,16 @@ export const cellularAutomataConfig: ComponentConfig = {
   ],
   credits: [
     {
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
       title: "Mathematical Foundations",
       items: [
         {
@@ -158,16 +176,6 @@ export const cellularAutomataConfig: ComponentConfig = {
           name: "Ken Perlin",
           role: "Core Concept",
           url: "https://mrl.cs.nyu.edu/~perlin/",
-        },
-      ],
-    },
-    {
-      title: "Project",
-      items: [
-        {
-          name: "React Bytes",
-          role: "Component Collection",
-          url: "https://reactbytes.dev",
         },
       ],
     },

@@ -140,6 +140,6 @@ export const variableWeightTextConfig: ComponentConfig = {
     },
   ],
   staticProps: {
-    textClassName: "text-7xl tracking-tighter",
+    textClassName: "text-[clamp(2rem,10cqw,5rem)] tracking-tighter text-center",
   },
 };

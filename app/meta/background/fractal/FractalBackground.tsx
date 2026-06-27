@@ -3,23 +3,19 @@
 import React, { useEffect, useRef } from "react";
 
 export interface FractalBackgroundProps {
-    colorStart?: [number, number, number] | string; 
-    colorEnd?: [number, number, number] | string;   
+    colorStart?: [number, number, number] | string;
+    colorEnd?: [number, number, number] | string;
     speed?: number;
     zoom?: number;
     maxIterations?: number;
     morphRange?: number;
     enableParallax?: boolean;
     intensity?: number;
-    /** Whether to force overlay text to uppercase */
     uppercase?: boolean;
     className?: string;
     children?: React.ReactNode;
 }
 
-/**
- * Helper to convert hex string (#RRGGBB) to [r, g, b] (0-1 range)
- */
 const hexToRgb = (hex: string): [number, number, number] => {
     const r = parseInt(hex.slice(1, 3), 16) / 255;
     const g = parseInt(hex.slice(3, 5), 16) / 255;
@@ -27,16 +23,11 @@ const hexToRgb = (hex: string): [number, number, number] => {
     return [r, g, b];
 };
 
-/**
- * A highly optimized, premium WebGL-based fractal background.
- * Features smooth iteration coloring, time-based color shifting,
- * mouse interactivity (parallax), and cinematic effects like vignette and grain.
- */
 export const FractalBackground: React.FC<FractalBackgroundProps> = ({
     colorStart = [0.05, 0.08, 0.15],
     colorEnd = [0.2, 0.4, 0.8],
     speed = 0.15,
-    zoom = 2.8,
+    zoom = 2.8, // Restored to original zoom
     maxIterations = 100,
     morphRange = 0.1,
     enableParallax = true,
@@ -49,7 +40,6 @@ export const FractalBackground: React.FC<FractalBackgroundProps> = ({
     const mousePos = useRef({ x: 0.5, y: 0.5 });
     const targetMousePos = useRef({ x: 0.5, y: 0.5 });
 
-    // Normalize colors
     const rgbStart = typeof colorStart === "string" ? hexToRgb(colorStart) : colorStart;
     const rgbEnd = typeof colorEnd === "string" ? hexToRgb(colorEnd) : colorEnd;
 
@@ -102,6 +92,8 @@ export const FractalBackground: React.FC<FractalBackgroundProps> = ({
 
             void main() {
                 vec2 mouseShift = (u_mouse - 0.5) * 0.08;
+                
+                // --- RESTORED UNSTRETCHED PROPORTIONS ---
                 vec2 uv = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / min(u_resolution.y, u_resolution.x);
                 uv += mouseShift;
                 
@@ -131,18 +123,27 @@ export const FractalBackground: React.FC<FractalBackgroundProps> = ({
                     iter = iter + 1.0 - nu;
                 }
 
-                float m = iter / float(MAX_I);
+                // Clamp m to prevent negative value glitches on certain GPUs
+                float m = clamp(iter / float(MAX_I), 0.0, 1.0);
                 vec3 hueShift = vec3(0.05 * sin(u_time * 0.1), 0.05 * sin(u_time * 0.15 + 1.0), 0.05 * sin(u_time * 0.2 + 2.0));
                 
-                vec3 baseCol = mix(u_colorStart, u_colorEnd, pow(m, 0.75)) + hueShift;
-                baseCol += u_colorEnd * pow(m, 4.0) * 1.5;
+                // Calculate raw background color
+                vec3 bgCol = u_colorStart + hueShift;
+                
+                // Calculate full fractal generation color
+                vec3 fractalCol = mix(u_colorStart, u_colorEnd, pow(m, 0.75)) + hueShift;
+                fractalCol += u_colorEnd * pow(m, 4.0) * 1.5;
                 
                 float trap = pow(max(0.0, 1.0 - minDist), 8.0);
-                baseCol = mix(baseCol, vec3(1.0, 0.9, 0.7), trap * 0.4);
+                fractalCol = mix(fractalCol, vec3(1.0, 0.9, 0.7), trap * 0.4);
+                vec3 totalFractalGlow = fractalCol + vec3(0.05, 0.1, 0.2) * pow(m, 2.0);
                 
-                vec3 finalCol = baseCol + vec3(0.05, 0.1, 0.2) * pow(m, 2.0);
-                float vignette = smoothstep(0.0, 1.0, 1.0 - length(vUv - 0.5) * 1.1);
-                finalCol *= vignette;
+                // --- SMOOTH BOUNDARY DISSOLVE ---
+                // Gradually blends the fractal details into the pure background color 
+                // outward from the center, feathering out the sharp edge completely.
+                float boundaryFade = smoothstep(2.4, 0.3, length(uv));
+                vec3 finalCol = mix(bgCol, totalFractalGlow, boundaryFade);
+                
                 finalCol += (hash(vUv + fract(u_time)) - 0.5) * 0.02;
 
                 gl_FragColor = vec4(finalCol * u_intensity, 1.0);
@@ -223,7 +224,7 @@ export const FractalBackground: React.FC<FractalBackgroundProps> = ({
     return (
         <div className={`relative isolate w-full h-full overflow-hidden bg-[#020408] ${className}`}>
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-transparent via-transparent to-black/20" />
+            <div className="absolute inset-0 pointer-events-none" />
             {children && (
                 <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none ${uppercase ? "uppercase" : ""}`}>
                     {children}
@@ -234,4 +235,3 @@ export const FractalBackground: React.FC<FractalBackgroundProps> = ({
 };
 
 export default FractalBackground;
-

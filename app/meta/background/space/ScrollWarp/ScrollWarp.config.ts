@@ -7,6 +7,17 @@ export const scrollWarpConfig: ComponentConfig = {
   componentPath: "app/meta/background/space/ScrollWarp/ScrollWarp.tsx",
   showDemoByDefault: true,
   demoVariant: "hero",
+  // NPM Publishing Metadata
+  npmPackageName: "@reactbytes/scroll-warp",
+  version: "1.0.0",
+  description: "A high-performance scroll-driven starfield warp effect using the Canvas API.",
+
+  // No external dependencies needed for this canvas logic
+  dependencies: {},
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "numStars",
@@ -41,6 +52,18 @@ export const scrollWarpConfig: ComponentConfig = {
       default: "#d1ffff",
       description: "Color of the stars in HEX format.",
     },
+    {
+      name: "bgColor",
+      type: "color",
+      default: "#111111",
+      description: "Background color of the scene in HEX format.",
+    },
+    {
+      name: "className",
+      type: "string",
+      default: "",
+      description: "Custom styling classes for the container.",
+    },
   ],
   presets: [
     {
@@ -51,6 +74,8 @@ export const scrollWarpConfig: ComponentConfig = {
         baseTrailLength: 2,
         maxTrailLength: 30,
         starColor: "#d1ffff",
+        bgColor: "#111111",
+        className: "",
       },
     },
     {
@@ -61,6 +86,8 @@ export const scrollWarpConfig: ComponentConfig = {
         baseTrailLength: 5,
         maxTrailLength: 100,
         starColor: "#a0e0ff",
+        bgColor: "#000000",
+        className: "",
       },
     },
     {
@@ -71,6 +98,8 @@ export const scrollWarpConfig: ComponentConfig = {
         baseTrailLength: 1,
         maxTrailLength: 45,
         starColor: "#ff5500",
+        bgColor: "#000000",
+        className: "",
       },
     },
     {
@@ -80,18 +109,20 @@ export const scrollWarpConfig: ComponentConfig = {
         numStars: 500,
         baseTrailLength: 1,
         maxTrailLength: 20,
-        starColor: "#ffffff",
+        starColor: "#000000",
+        bgColor: "#ffffff",
+        className: "",
       },
     },
   ],
   credits: [
     {
-      title: "Implementation & Integration",
+      title: "Component Source",
       items: [
         {
-          name: "ReactBytes",
-          role: "Author",
-          url: "https://github.com/ReactBytes",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

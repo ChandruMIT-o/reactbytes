@@ -1,66 +1,79 @@
 import React, { useState } from 'react';
 
 interface IridescentGradientProps {
-    /**
-     * The title text to display in the center.
-     */
-    title?: string;
-    /**
-     * The text for the switch label.
-     */
-    switchText?: string;
-    /**
-     * The color of the stripes (hex or CSS color).
-     */
-    stripeColor?: string;
-    /**
-     * The background color (hex or CSS color).
-     */
-    bgColor?: string;
-    /**
-     * Whether the dark mode is active (controlled).
-     */
-    checked?: boolean;
-    /**
-     * Callback when the switch is toggled.
-     */
-    onCheckedChange?: (checked: boolean) => void;
-    /**
-     * Whether the dark mode is initially active (uncontrolled).
-     */
-    initialChecked?: boolean;
-    /**
-     * Optional className for the container.
-     */
-    className?: string;
+  /**
+   * The title text to display in the center.
+   */
+  title?: string;
+  /**
+   * The text for the switch label.
+   */
+  switchText?: string;
+  /**
+   * The background color (hex or CSS color).
+   */
+  bgColor?: string;
+  /**
+   * Controls the speed of the shifting gradient (e.g., '30s', '60s').
+   */
+  animationDuration?: string;
+  /**
+   * Controls the intensity of the background blur (e.g., '15px', '20px').
+   */
+  blurAmount?: string;
+  /**
+   * Optional explicit override for the background layer opacity (0 to 1).
+   */
+  opacity?: number;
+  /**
+   * Whether the dark mode is active (controlled).
+   */
+  checked?: boolean;
+  /**
+   * Callback when the switch is toggled.
+   */
+  onCheckedChange?: (checked: boolean) => void;
+  /**
+   * Whether the dark mode is initially active (uncontrolled).
+   */
+  initialChecked?: boolean;
+  /**
+   * Optional className for the container.
+   */
+  className?: string;
 }
 
 export default function IridescentGradient({
-    title = "An awesome title",
-    switchText = "switch bg",
-    stripeColor = "#fff",
-    bgColor,
-    checked,
-    onCheckedChange,
-    initialChecked = false,
-    className = ""
+  title = "An awesome title",
+  switchText = "switch bg",
+  bgColor,
+  animationDuration = "60s",
+  blurAmount = "20px",
+  opacity,
+  checked,
+  onCheckedChange,
+  initialChecked = false,
+  className = ""
 }: IridescentGradientProps) {
-    const [internalChecked, setInternalChecked] = useState(initialChecked);
-    
-    const isSwitched = checked !== undefined ? checked : internalChecked;
-    
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newChecked = e.target.checked;
-        if (checked === undefined) {
-            setInternalChecked(newChecked);
-        }
-        onCheckedChange?.(newChecked);
-    };
+  const [internalChecked, setInternalChecked] = useState(initialChecked);
 
-    return (
-        <>
-            <style dangerouslySetInnerHTML={{
-                __html: `
+  const isSwitched = checked !== undefined ? checked : internalChecked;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newChecked = e.target.checked;
+    if (checked === undefined) {
+      setInternalChecked(newChecked);
+    }
+    onCheckedChange?.(newChecked);
+  };
+
+  // Determine fallback opacity based on theme state if no explicit prop is passed
+  const resolvedOpacity = opacity !== undefined ? opacity : (isSwitched ? 0.7 : 1);
+
+  return (
+    <>
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
         /* Houdini custom property for blinking animation */
@@ -98,13 +111,11 @@ export default function IridescentGradient({
         /* Base Variables */
         .custom-wrapper {
           font-family: 'Inter', sans-serif;
-          --stripe-color: ${stripeColor};
+          --stripe-color: ${isSwitched ? '#fff' : '#000'};
           --bg: ${bgColor || (isSwitched ? '#000' : '#fff')};
           --maincolor: var(--bg);
-        }
-
-        .custom-wrapper.is-checked {
-          --stripe-color: #fff; /* White stripes on black background for dark mode */
+          --blur-amount: ${blurAmount};
+          --anim-duration: ${animationDuration};
         }
 
         /* Hero Background Styling & Masking */
@@ -128,9 +139,9 @@ export default function IridescentGradient({
           background-image: var(--stripes), var(--rainbow);
           background-size: 300%, 200%;
           background-position: 50% 50%, 50% 50%;
-          filter: blur(20px) ${isSwitched ? 'saturate(200%) brightness(0.8)' : 'invert(100%)'};
+          filter: blur(var(--blur-amount)) ${isSwitched ? 'saturate(200%) brightness(0.8)' : 'invert(100%)'};
           mask-image: radial-gradient(ellipse at 50% 0%, black 20%, transparent 80%);
-          opacity: ${isSwitched ? '0.7' : '1'};
+          opacity: ${resolvedOpacity};
         }
 
         .hero-bg::after {
@@ -139,7 +150,7 @@ export default function IridescentGradient({
           inset: 0;
           background-image: var(--stripes), var(--rainbow);
           background-size: 200%, 100%;
-          animation: smoothBg 60s linear infinite;
+          animation: smoothBg var(--anim-duration) linear infinite;
           background-attachment: fixed;
           mix-blend-mode: difference;
         }
@@ -207,37 +218,34 @@ export default function IridescentGradient({
         }
       `}} />
 
-            <section className={`custom-wrapper relative w-full h-full min-h-screen bg-[var(--bg)] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isSwitched ? 'is-checked' : ''} ${className}`}>
-                {/* Background Layer */}
-                <div className="hero-bg relative w-full h-full min-h-screen flex items-center justify-center" />
+      <section className={`custom-wrapper relative w-full h-full min-h-screen bg-[var(--bg)] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${className}`}>
+        {/* Background Layer */}
+        <div className="hero-bg relative w-full h-full min-h-screen flex items-center justify-center" />
 
-                {/* Interactive Content Layer */}
-                <div className="content-layer absolute inset-0 w-full h-full flex flex-col items-center justify-center text-center">
-                    <h1 className="h1-scalingSize font-bold tracking-tight m-0" data-text={title}>
-                        {title}
-                    </h1>
+        {/* Interactive Content Layer */}
+        <div className="content-layer absolute inset-0 w-full h-full flex flex-col items-center justify-center text-center">
+          <h1 className="h1-scalingSize font-bold tracking-tight m-0" data-text={title}>
+            {title}
+          </h1>
 
-                    <input
-                        type="checkbox"
-                        id="switch"
-                        className="appearance-none opacity-0 absolute w-0 h-0"
-                        checked={isSwitched}
-                        onChange={handleChange}
-                        aria-label="Toggle Background"
-                    />
-                    <label htmlFor="switch" className="switch-label p-2 flex items-center justify-center mt-4">
-                        <span className="flex items-center gap-2 select-none">
-                            <span className="icon flex items-center justify-center px-[0.35rem] py-[0.25em] border border-dashed leading-none">
-                                →
-                            </span>
-                            {switchText}
-                        </span>
-                    </label>
-                </div>
-            </section>
-        </>
-    );
+          <input
+            type="checkbox"
+            id="switch"
+            className="appearance-none opacity-0 absolute w-0 h-0"
+            checked={isSwitched}
+            onChange={handleChange}
+            aria-label="Toggle Background"
+          />
+          <label htmlFor="switch" className="switch-label p-2 flex items-center justify-center mt-4">
+            <span className="flex items-center gap-2 select-none">
+              <span className="icon flex items-center justify-center px-[0.35rem] py-[0.25em] border border-dashed leading-none">
+                →
+              </span>
+              {switchText}
+            </span>
+          </label>
+        </div>
+      </section>
+    </>
+  );
 }
-
-
-

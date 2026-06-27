@@ -84,8 +84,10 @@ export const ApertureText: React.FC<ApertureTextProps> = ({
 
         canvas.width = totalWidth * dpr;
         canvas.height = totalHeight * dpr;
+
+        // 1. Set ideal layout width, but rely on CSS to clamp it for mobile
         canvas.style.width = `${totalWidth}px`;
-        canvas.style.height = `${totalHeight}px`;
+        canvas.style.height = `auto`; // Allows proportional scaling when squeezed
 
         ctx.scale(dpr, dpr);
         ctx.font = fontStyle;
@@ -138,7 +140,7 @@ export const ApertureText: React.FC<ApertureTextProps> = ({
                 node.plates.forEach((plate) => {
                     if (mouse.active && distance < influenceRadius) {
                         const pressureFactor = (influenceRadius - distance) / influenceRadius;
-                        
+
                         // Inject kinetic energy directly matching the shard's directional rail layout
                         plate.vx += plate.dirX * pressureFactor * expansionForce * 0.25;
                         plate.vy += plate.dirY * pressureFactor * expansionForce * 0.25;
@@ -230,22 +232,30 @@ export const ApertureText: React.FC<ApertureTextProps> = ({
         const canvas = canvasRef.current;
         if (!canvas) return;
         const rect = canvas.getBoundingClientRect();
+        const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+
+        // 2. Calculate the scaling matrix: (Internal Resolution / Visual CSS Resolution)
+        const scaleX = (canvas.width / dpr) / rect.width;
+        const scaleY = (canvas.height / dpr) / rect.height;
+
         mouseRef.current = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
+            // Apply the scale so interactions remain perfect even when rendered tiny on a phone
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY,
             active: true,
         };
     };
 
     return (
-        <div className={`inline-block select-none overflow-visible ${className}`}>
+        <div className={`relative w-full flex items-center justify-center overflow-visible ${className}`}>
             <canvas
                 ref={canvasRef}
                 onPointerMove={handlePointerMove}
                 onPointerLeave={() => {
                     mouseRef.current = { x: -1000, y: -1000, active: false };
                 }}
-                className="block touch-none cursor-cell"
+                // 3. Added max-w-full and h-auto to ensure it shrinks natively inside smaller divs
+                className="max-w-full h-auto block touch-none cursor-cell"
             />
         </div>
     );

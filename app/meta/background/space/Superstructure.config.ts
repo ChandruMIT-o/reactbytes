@@ -8,6 +8,16 @@ export const superstructureConfig: ComponentConfig = {
   componentPath: "app/meta/background/space/Superstructure.tsx",
   showDemoByDefault: true,
   demoVariant: "hero",
+  description: "A highly optimized, interactive icosahedron wireframe cage background component with 2.5D vertex displacement and morphable gradient fields.",
+  npmPackageName: "@reactbytes/superstructure",
+  version: "1.0.0",
+  dependencies: {
+    "three": "^0.150.0"
+  },
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "startColor",
@@ -132,14 +142,14 @@ export const superstructureConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Three.js Examples",
-          role: "Visual Reference & Custom Shaders",
-          url: "https://threejs.org/",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
     {
-      title: "Open Source Libraries",
+      title: "Libraries",
       items: [
         {
           name: "Three.js",

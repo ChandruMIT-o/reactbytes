@@ -3,28 +3,28 @@
 import React, { useEffect, useRef } from 'react';
 
 export interface LiquidGridProps {
-  cols?: number;
-  rows?: number;
+  cols?: number; // Optional override
+  rows?: number; // Optional override
   spacing?: number;
   baseRadius?: number;
   springK?: number;
   damp?: number;
   gravityRadius?: number;
   gravityMax?: number;
-  
+
   // Wave mechanics
   rowDelay?: number;
   bounceAmp?: number;
   decay?: number;
   freq?: number;
   colSpread?: number;
-  
+
   // Aesthetics & Visuals
   blur?: number;
   contrast?: number;
   dotColor?: string;
   bgColor?: string;
-  
+
   // Simulation State
   autoDrops?: boolean;
   className?: string;
@@ -50,8 +50,8 @@ interface Drop {
 }
 
 export const LiquidGrid: React.FC<LiquidGridProps> = ({
-  cols = 9,
-  rows = 9,
+  cols,
+  rows,
   spacing = 56,
   baseRadius = 12,
   springK = 0.09,
@@ -73,10 +73,12 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  
+
   // Keep all configurations in refs for ultra-smooth animation loop access
   const configRef = useRef({
-    cols, rows, spacing, baseRadius, springK, damp,
+    cols: cols || 0,
+    rows: rows || 0,
+    spacing, baseRadius, springK, damp,
     gravityRadius, gravityMax, rowDelay, bounceAmp,
     decay, freq, colSpread, autoDrops, dotColor, bgColor
   });
@@ -84,7 +86,9 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
   // Sync prop changes to ref
   useEffect(() => {
     configRef.current = {
-      cols, rows, spacing, baseRadius, springK, damp,
+      cols: cols || configRef.current.cols,
+      rows: rows || configRef.current.rows,
+      spacing, baseRadius, springK, damp,
       gravityRadius, gravityMax, rowDelay, bounceAmp,
       decay, freq, colSpread, autoDrops, dotColor, bgColor
     };
@@ -94,7 +98,7 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
     decay, freq, colSpread, autoDrops, dotColor, bgColor
   ]);
 
-  // State variables needed in the drawing loop managed in a single ref for speed
+  // State variables managed in a single ref for speed
   const stateRef = useRef<{
     dots: Dot[];
     drops: Drop[];
@@ -109,15 +113,25 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
     nextDropAt: 0.6
   });
 
-  // Build grid coordinates centred inside the container bounds
+  // Build grid coordinates dynamically to fill the container bounds
   const buildGrid = (width: number, height: number) => {
-    const { cols: c, rows: r, spacing: s, baseRadius: br } = configRef.current;
-    const ox = (width - (c - 1) * s) / 2;
-    const oy = (height - (r - 1) * s) / 2;
-    
+    const { spacing: s, baseRadius: br } = configRef.current;
+
+    // Dynamically calculate column and row counts if not explicitly overridden by props
+    const calculatedCols = cols || Math.floor(width / s) + 2;
+    const calculatedRows = rows || Math.floor(height / s) + 2;
+
+    // Keep the loop config up-to-date with dynamic calculations
+    configRef.current.cols = calculatedCols;
+    configRef.current.rows = calculatedRows;
+
+    // Evenly distribute spacing offsets across the container
+    const ox = (width - (calculatedCols - 1) * s) / 2;
+    const oy = (height - (calculatedRows - 1) * s) / 2;
+
     const newDots: Dot[] = [];
-    for (let ri = 0; ri < r; ri++) {
-      for (let ci = 0; ci < c; ci++) {
+    for (let ri = 0; ri < calculatedRows; ri++) {
+      for (let ci = 0; ci < calculatedCols; ci++) {
         const bx = ox + ci * s;
         const by = oy + ri * s;
         newDots.push({
@@ -136,7 +150,7 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
     stateRef.current.dots = newDots;
   };
 
-  // Rebuild grid whenever layout parameters alter
+  // Rebuild grid whenever dynamic layout parameters change
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) {
@@ -147,10 +161,12 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
   // Spawn custom drop ripple at a chosen column
   const triggerDrop = (targetCol?: number) => {
     const activeCols = configRef.current.cols;
-    const chosenCol = targetCol !== undefined 
+    if (activeCols <= 0) return;
+
+    const chosenCol = targetCol !== undefined
       ? Math.max(0, Math.min(activeCols - 1, targetCol))
       : Math.floor(Math.random() * activeCols);
-      
+
     stateRef.current.drops.push({
       col: chosenCol,
       time: stateRef.current.t,
@@ -166,9 +182,8 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
 
     let animationFrameId: number;
 
-    // Physics ticks and render loop
     const loop = () => {
-      const { 
+      const {
         springK: sk, damp: dm, gravityRadius: gr, gravityMax: gm,
         rowDelay: rd, decay: dy, freq: fr, colSpread: cs, autoDrops: ad,
         dotColor: dc, bgColor: bg
@@ -177,7 +192,7 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
       const state = stateRef.current;
       state.t += 0.016;
 
-      // Dynamic resize check to prevent zero dimensions at mount
+      // Dynamic resize check
       const container = containerRef.current;
       if (container) {
         const cw = container.clientWidth;
@@ -185,7 +200,7 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
         if (canvas.width !== cw || canvas.height !== ch) {
           canvas.width = cw;
           canvas.height = ch;
-          buildGrid(cw, ch);
+          buildGrid(cw, ch); // Triggers re-calculation of columns and rows automatically!
         }
       }
 
@@ -195,7 +210,7 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
         state.nextDropAt = state.t + 1.5 + Math.random() * 2.5;
       }
 
-      // Cleanup finished drops to prevent memory leaks
+      // Cleanup finished drops
       state.drops = state.drops.filter(d => (state.t - d.time) < 3.0);
 
       // Compute Physics
@@ -208,16 +223,15 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
         for (const drop of state.drops) {
           const localT = (state.t - drop.time) - d.row * rd;
           if (localT <= 0) continue;
-          
+
           const colDist = Math.abs(d.col - drop.col);
           const lateralFalloff = Math.exp(-(colDist ** 2) * cs);
           if (lateralFalloff < 0.01) continue;
 
-          // Sinusoidal bounce envelope
           targetY += drop.amp * Math.exp(-dy * localT) * Math.sin(fr * localT) * lateralFalloff;
         }
 
-        // Gravity pull/repel towards cursor
+        // Gravity interaction
         if (state.mouse.on) {
           const dx = state.mouse.x - d.bx;
           const dy = state.mouse.y - d.by;
@@ -226,12 +240,9 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
           if (distance < gr && distance > 1) {
             const pullRatio = (1 - distance / gr) ** 2;
             const displacement = pullRatio * gm;
-            
-            // Displace rest points
+
             targetX += (dx / distance) * displacement;
             targetY += (dy / distance) * displacement;
-            
-            // Dynamically scale radius based on pull closeness
             targetR = configRef.current.baseRadius * (1 + pullRatio * 0.25);
           }
         }
@@ -243,8 +254,7 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
         d.vy *= dm;
         d.x += d.vx;
         d.y += d.vy;
-        
-        // Radius interpolation
+
         d.r += (targetR - d.r) * 0.12;
       }
 
@@ -300,23 +310,21 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
     stateRef.current.mouse.on = false;
   };
 
-  // Trigger drop wave on canvas click
   const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
-    
-    // Determine closest column
+
     const { cols: c, spacing: s } = configRef.current;
     const ox = (canvas.width - (c - 1) * s) / 2;
     const targetCol = Math.round((clickX - ox) / s);
-    
+
     triggerDrop(targetCol);
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className={`relative w-full h-full overflow-hidden cursor-crosshair ${className}`}
       onMouseMove={handleMouseMove}
@@ -329,8 +337,8 @@ export const LiquidGrid: React.FC<LiquidGridProps> = ({
         backgroundColor: bgColor,
       }}
     >
-      <canvas 
-        ref={canvasRef} 
+      <canvas
+        ref={canvasRef}
         className="absolute inset-0 w-full h-full block"
       />
       {children && (

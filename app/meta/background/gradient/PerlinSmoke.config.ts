@@ -8,6 +8,15 @@ export const perlinSmokeConfig: ComponentConfig = {
   componentPath: "app/meta/background/gradient/PerlinSmoke.tsx",
   showDemoByDefault: true,
   demoVariant: "hero",
+  npmPackageName: "@reactbytes/perlin-smoke",
+  version: "1.0.0",
+  description: "A high fidelity smoke like effect that uses Perlin noise to create a smooth, flowing gradient background.",
+  dependencies: {
+  },
+  peerDependencies: {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "baseColor",
@@ -115,9 +124,9 @@ export const perlinSmokeConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

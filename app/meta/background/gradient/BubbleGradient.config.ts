@@ -8,6 +8,14 @@ export const bubbleGradientConfig: ComponentConfig = {
   componentPath: "app/meta/background/gradient/BubbleGradient.tsx",
   showDemoByDefault: true,
   demoVariant: "card",
+  description: "A highly customizable animated gradient background component that blends soft, gooey moving color bubbles with an interactive cursor-following glow to create a fluid, immersive visual effect.",
+  npmPackageName: "@reactbytes/bubble-gradient",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   props: [
     {
       name: "backgroundStart",
@@ -262,22 +270,22 @@ export const bubbleGradientConfig: ComponentConfig = {
   ],
   credits: [
     {
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
       title: "Visual Direction",
       items: [
         {
           name: "Gooey Bubble Gradient",
           role: "Reference Style",
           url: "https://css-tricks.com/gooey-effect/",
-        },
-      ],
-    },
-    {
-      title: "Project",
-      items: [
-        {
-          name: "React Bytes",
-          role: "Component Collection",
-          url: "https://reactbytes.dev",
         },
       ],
     },

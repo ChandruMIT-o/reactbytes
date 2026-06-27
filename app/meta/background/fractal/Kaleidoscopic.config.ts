@@ -8,6 +8,16 @@ export const kaleidoscopicConfig: ComponentConfig = {
   componentPath: "app/meta/background/fractal/Kaleidoscopic.tsx",
   showDemoByDefault: true,
   demoVariant: "text",
+
+  // Automated NPM Publishing Metadata
+  npmPackageName: "@reactbytes/kaleidoscopic",
+  version: "1.0.0",
+  description: "A highly customizable, high-performance responsive WebGL kaleidoscopic fractal background component.",
+  dependencies: {},
+  peerDependencies: {
+    react: "^18.0.0"
+  },
+
   props: [
     {
       name: "iterations",
@@ -132,12 +142,12 @@ export const kaleidoscopicConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Inspiration",
+      title: "Component Source",
       items: [
         {
-          name: "Kishimisu",
-          role: "Shader Artist",
-          url: "https://www.youtube.com/watch?v=f4s1h2YETNY",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
