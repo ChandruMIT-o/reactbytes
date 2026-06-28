@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export interface MagneticTextProps {
 	/** The text to animate */
@@ -17,6 +18,17 @@ export interface MagneticTextProps {
 	color?: string;
 	/** Whether to force uppercase text */
 	uppercase?: boolean;
+	/** Enable initial enter animation */
+	enterAnimation?: boolean;
+
+	/** Initial blur amount */
+	initialBlur?: number;
+
+	/** Enter animation duration */
+	enterDuration?: number;
+
+	/** Delay between letters */
+	enterStagger?: number;
 }
 
 export const MagneticText: React.FC<MagneticTextProps> = ({
@@ -27,6 +39,10 @@ export const MagneticText: React.FC<MagneticTextProps> = ({
 	hoverColor = "#c084fc",
 	color = "#FFFFFF",
 	uppercase = false,
+	enterAnimation = true,
+initialBlur = 12,
+enterDuration = 0.5,
+enterStagger = 0.04,
 }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const lettersRef = useRef<(HTMLSpanElement | null)[]>([]);
@@ -97,16 +113,37 @@ export const MagneticText: React.FC<MagneticTextProps> = ({
 			className={`flex flex-wrap cursor-default touch-none ${textClassName}`}
 		>
 			{displayText.split("").map((char, i) => (
-				<span
-					key={i}
-					ref={(el) => {
-						lettersRef.current[i] = el;
-					}}
-					style={{ color }}
-					className="inline-block transition-all duration-300 ease-out origin-center"
-				>
+				<motion.span
+						key={i}
+						ref={(el) => {
+							lettersRef.current[i] = el;
+						}}
+						style={{ color }}
+						className="inline-block transition-all duration-300 ease-out origin-center"
+						initial={{
+							opacity: 0,
+							x: Math.random() * 40 - 20,
+							y: Math.random() * 40 - 20,
+							scale: 0.7,
+							rotate: Math.random() * 30 - 15,
+						}}
+						animate={{
+							opacity: 1,
+							x: 0,
+							y: 0,
+							scale: 1,
+							rotate: 0,
+						}}
+						transition={{
+							duration: 0.7,
+							delay: i * enterStagger,
+							type: "spring",
+							stiffness: 180,
+							damping: 15,
+						}}
+					>
 					{char === " " ? "\u00A0" : char}
-				</span>
+				</motion.span>
 			))}
 		</div>
 	);

@@ -9,7 +9,6 @@ import { focalBlurConfig } from "../meta/text/Interactive/FocalBlurText.config";
 import { granularTextConfig } from "../meta/text/Interactive/GranularText.config";
 import { magneticTextConfig } from "../meta/text/Interactive/MagneticText.config";
 import { shatterTextConfig } from "../meta/text/Interactive/ShatterText.config";
-import { waveTextConfig } from "../meta/text/Interactive/WaveText.config";
 import { gooeyMorphConfig } from "../meta/text/Morph/GooeyMorph.config";
 import { swarmTextConfig } from "../meta/text/SwarmText/SwarmText.config";
 import { scrambleRevealConfig } from "../meta/text/TextEnter/ScrambleReveal.config";
@@ -137,7 +136,6 @@ export const ComponentDatabase: ComponentConfig[] = [
   granularTextConfig,
   magneticTextConfig,
   shatterTextConfig,
-  waveTextConfig,
   gooeyMorphConfig,
   swarmTextConfig,
   scrambleRevealConfig,

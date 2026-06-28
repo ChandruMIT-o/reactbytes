@@ -59,6 +59,39 @@ export const magneticTextConfig: ComponentConfig = {
       default: "text-5xl font-bold",
       description: "Tailwind classes for text styling.",
     },
+    {
+  name: "enterAnimation",
+  type: "boolean",
+  default: true,
+  description: "Play staggered enter animation."
+},
+{
+  name: "initialBlur",
+  type: "number",
+  default: 12,
+  min: 0,
+  max: 40,
+  step: 1,
+  description: "Initial blur amount."
+},
+{
+  name: "enterDuration",
+  type: "number",
+  default: 0.5,
+  min: 0.1,
+  max: 3,
+  step: 0.1,
+  description: "Enter animation duration."
+},
+{
+  name: "enterStagger",
+  type: "number",
+  default: 0.04,
+  min: 0,
+  max: 0.2,
+  step: 0.01,
+  description: "Delay between letters."
+},
   ],
   presets: [
     {

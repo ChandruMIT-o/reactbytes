@@ -6,7 +6,6 @@ export const navItems = [
             { id: "fall-down", label: "Fall Down" },
             { id: "reveal-under", label: "Reveal Under" },
             { id: "variable-weight", label: "Variable Weight" },
-            { id: "wave-text", label: "Proximity Ripple" },
             { id: "focal-blur", label: "Focal Blur" },
             { id: "magnetic-text", label: "Magnetic Repel" },
             { id: "shatter-text", label: "Cinematic Shatter" },

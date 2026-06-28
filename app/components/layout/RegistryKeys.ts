@@ -12,7 +12,6 @@ export const registryKeys = [
   "fall-down",
   "reveal-under",
   "variable-weight",
-  "wave-text",
   "focal-blur",
   "magnetic-text",
   "shatter-text",
