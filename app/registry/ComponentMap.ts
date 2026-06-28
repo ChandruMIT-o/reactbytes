@@ -15,7 +15,6 @@ export const ComponentMap: Record<string, React.ComponentType<any>> = {
   "granular-text": dynamic(() => import("../meta/text/Interactive/GranularText")),
   "magnetic-text": dynamic(() => import("../meta/text/Interactive/MagneticText")),
   "shatter-text": dynamic(() => import("../meta/text/Interactive/ShatterText")),
-  "wave-text": dynamic(() => import("../meta/text/Interactive/WaveText")),
   "gooey-morph": dynamic(() => import("../meta/text/Morph/GooeyMorph")),
   "swarm-text": dynamic(() => import("../meta/text/SwarmText/SwarmText")),
   "scramble-reveal": dynamic(() => import("../meta/text/TextEnter/ScrambleReveal")),
