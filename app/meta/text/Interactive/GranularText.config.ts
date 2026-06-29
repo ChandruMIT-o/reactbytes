@@ -5,6 +5,8 @@ export const granularTextConfig: ComponentConfig = {
   name: "Granular Sand Text",
   category: "text",
   componentPath: "app/meta/text/Interactive/GranularText.tsx",
+  npmPackageName: "@reactbytes/granular-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -128,19 +130,9 @@ export const granularTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

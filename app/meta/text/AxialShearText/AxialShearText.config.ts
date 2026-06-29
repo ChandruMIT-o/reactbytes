@@ -6,6 +6,8 @@ export const axialShearTextConfig: ComponentConfig = {
   category: "text",
   tags: ["shear", "skew", "3d", "distort", "glitch"],
   componentPath: "app/meta/text/AxialShearText/AxialShearText.tsx",
+  npmPackageName: "@reactbytes/axial-shear-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -124,22 +126,12 @@ export const axialShearTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Author",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-      ],
-    },
+    }
   ],
   staticProps: {},
 };

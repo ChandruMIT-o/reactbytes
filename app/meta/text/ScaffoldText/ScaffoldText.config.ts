@@ -6,6 +6,8 @@ export const scaffoldTextConfig: ComponentConfig = {
   category: "text",
   tags: ["scaffold", "build", "construct", "skeleton", "reveal"],
   componentPath: "app/meta/text/ScaffoldText/ScaffoldText.tsx",
+  npmPackageName: "@reactbytes/scaffold-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -110,19 +112,9 @@ export const scaffoldTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Author",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

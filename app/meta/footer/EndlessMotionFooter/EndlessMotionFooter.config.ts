@@ -6,6 +6,16 @@ export const endlessMotionFooterConfig: ComponentConfig = {
   category: "miscellaneous",
   tags: ["footer", "marquee", "motion", "infinite", "scroll"],
   componentPath: "app/meta/footer/EndlessMotionFooter/EndlessMotionFooter.tsx",
+  npmPackageName: "@reactbytes/endless-motion-footer",
+  version: "1.0.0",
+  dependencies: {
+    gsap: "^3.15.0",
+    lenis: "^1.3.23",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "w-full h-[400px] relative overflow-hidden flex items-center justify-center rounded-xl border border-white/5 bg-[#0b84ff] shadow-xl",
   props: [
@@ -146,7 +156,33 @@ export const endlessMotionFooterConfig: ComponentConfig = {
       },
     },
   ],
-  credits: [],
+  credits: [
+    {
+      title: "Libraries",
+      items: [
+        {
+          name: "GSAP",
+          role: "Animation Engine",
+          url: "https://gsap.com/",
+        },
+        {
+          name: "Lenis",
+          role: "Smooth Scroll Engine",
+          url: "https://lenis.darkroom.engineering/",
+        },
+      ],
+    },
+    {
+      title: "Project Author",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
+        },
+      ],
+    },
+  ],
   staticProps: {
     className: "absolute inset-0 w-full h-full z-0",
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface HelixNode {
     char: string;
@@ -36,7 +36,7 @@ export const HelixText: React.FC<HelixTextProps> = ({
     text = "ROTOR",
     fontSize = 90,
     color = "#ffffff",
-    techColor = "rgba(245, 158, 11, 0.45)", // Industrial instrumentation amber
+    techColor = "rgba(245, 158, 11, 0.45)",
     torqueForce = 0.55,
     influenceRadius = 70,
     stiffness = 0.05,
@@ -48,6 +48,9 @@ export const HelixText: React.FC<HelixTextProps> = ({
     const mouseRef = useRef({ x: -1000, y: -1000, vx: 0, active: false });
     const prevMouseXRef = useRef(-1000);
     const animationFrameId = useRef<number | null>(null);
+
+    // Track original pixel metrics across fluid viewport updates
+    const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
 
     const paddingX = fontSize * 0.5;
     const paddingY = fontSize * 0.4;
@@ -61,7 +64,6 @@ export const HelixText: React.FC<HelixTextProps> = ({
         const fontStyle = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
         ctx.font = fontStyle;
 
-        // Metric scan pass to lock container constraints tightly around characters
         const characters = text.split("");
         let currentXAccumulator = 0;
         const metrics = characters.map((char) => {
@@ -75,10 +77,11 @@ export const HelixText: React.FC<HelixTextProps> = ({
         const totalHeight = fontSize + paddingY * 2;
         const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
 
+        // Sync calculations to component state
+        setDimensions({ width: totalWidth, height: totalHeight });
+
         canvas.width = totalWidth * dpr;
         canvas.height = totalHeight * dpr;
-        canvas.style.width = `${totalWidth}px`;
-        canvas.style.height = `${totalHeight}px`;
 
         ctx.scale(dpr, dpr);
         ctx.font = fontStyle;
@@ -87,7 +90,6 @@ export const HelixText: React.FC<HelixTextProps> = ({
 
         const centerY = totalHeight / 2;
 
-        // Mount character nodes to independent rotation axle pivots
         nodesRef.current = metrics.map((m) => ({
             char: m.char,
             centerX: paddingX + m.startX + m.width / 2,
@@ -109,12 +111,10 @@ export const HelixText: React.FC<HelixTextProps> = ({
             const width = canvas.width / dpr;
             const height = canvas.height / dpr;
 
-            // Wipe local canvas cleanly maintaining transparent background flow
             ctx.clearRect(0, 0, width, height);
 
             const mouse = mouseRef.current;
-            
-            // Extract instant horizontal sweep speed
+
             if (mouse.active && prevMouseXRef.current !== -1000) {
                 mouse.vx = (mouse.x - prevMouseXRef.current) * torqueForce;
             } else {
@@ -129,45 +129,36 @@ export const HelixText: React.FC<HelixTextProps> = ({
                 const dy = mouse.y - node.centerY;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                // 1. ROTATIONAL KINETICS ENGINE
                 if (mouse.active && distance < influenceRadius) {
                     const dynamicProximity = (influenceRadius - distance) / influenceRadius;
-                    
-                    // Inject spin torque based on pointer velocity and entry trajectory angle
                     node.vAngle += mouse.vx * dynamicProximity * 0.08;
                 }
 
-                // Torsional Hooke's return spring formula pulling angle back to 0 (equilibrium)
                 const springReturnForce = (0 - node.angle) * stiffness;
-                
+
                 node.vAngle = (node.vAngle + springReturnForce) * damping;
                 node.angle += node.vAngle;
 
-                // 2. INDUSTRIAL HARDWARE GRAPHICS RENDERING PASSTHROUGH
                 const halfFontH = fontSize * 0.45;
                 const isSpinning = Math.abs(node.angle) > 0.01;
 
-                // Draw technical chassis wireframes when dynamic activity is detected
                 if (isSpinning) {
                     ctx.save();
                     ctx.strokeStyle = techColor;
                     ctx.lineWidth = 0.7;
-                    
-                    // Draw central rotor spindle core axle line
+
                     ctx.beginPath();
                     ctx.moveTo(node.centerX, node.centerY - halfFontH - 8);
                     ctx.lineTo(node.centerX, node.centerY + halfFontH + 8);
                     ctx.stroke();
 
-                    // Upper and Lower structural alignment bracket ticks
                     ctx.beginPath();
                     ctx.moveTo(node.centerX - 6, node.centerY - halfFontH - 8);
                     ctx.lineTo(node.centerX + 6, node.centerY - halfFontH - 8);
                     ctx.moveTo(node.centerX - 6, node.centerY + halfFontH + 8);
                     ctx.lineTo(node.centerX + 6, node.centerY + halfFontH + 8);
                     ctx.stroke();
-                    
-                    // Continuous angular ticker reading displaying spatial values
+
                     if (Math.abs(node.angle) > 0.4) {
                         ctx.fillStyle = techColor;
                         ctx.font = `600 9px monospace`;
@@ -177,27 +168,22 @@ export const HelixText: React.FC<HelixTextProps> = ({
                     ctx.restore();
                 }
 
-                // Core Transformation Matrix Projection
                 ctx.save();
                 ctx.font = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
 
-                // Map 2D coordinate adjustments to simulate 3D horizontal compression aspect ratios
                 const cosScale = Math.cos(node.angle);
-                
-                ctx.translate(node.centerX, node.centerY);
-                ctx.scale(cosScale, 1); // Compress width matrix dynamically to replicate profile views
 
-                // Dynamic occlusion logic: determine if front-face or hidden back-face wireframe is rendering
+                ctx.translate(node.centerX, node.centerY);
+                ctx.scale(cosScale, 1);
+
                 const isFrontFace = Math.cos(node.angle) > 0;
 
                 if (isFrontFace) {
-                    // Render solid standard typography layout face
                     ctx.fillStyle = color;
                     ctx.fillText(node.char, 0, 0);
                 } else {
-                    // Node is facing away: render mechanical skeletal silhouette stroke paths instead
                     ctx.strokeStyle = techColor;
                     ctx.lineWidth = 1;
                     ctx.strokeText(node.char, 0, 0);
@@ -219,22 +205,34 @@ export const HelixText: React.FC<HelixTextProps> = ({
         const canvas = canvasRef.current;
         if (!canvas) return;
         const rect = canvas.getBoundingClientRect();
-        mouseRef.current.x = e.clientX - rect.left;
-        mouseRef.current.y = e.clientY - rect.top;
+
+        // Map pointer offsets correctly based on the active scale metrics
+        const scaleX = dimensions.width / rect.width;
+        const scaleY = dimensions.height / rect.height;
+
+        mouseRef.current.x = (e.clientX - rect.left) * scaleX;
+        mouseRef.current.y = (e.clientY - rect.top) * scaleY;
         mouseRef.current.active = true;
     };
 
     return (
-        <div className={`inline-block select-none overflow-visible ${className}`}>
-            <canvas
-                ref={canvasRef}
-                onPointerMove={handlePointerMove}
-                onPointerLeave={() => {
-                    mouseRef.current.active = false;
-                    prevMouseXRef.current = -1000;
-                }}
-                className="block touch-none cursor-ew-resize"
-            />
+        <div className="w-full @container flex justify-center text-center">
+            <div className={`flex w-full items-center justify-center text-center select-none overflow-visible ${className}`}>
+                <canvas
+                    ref={canvasRef}
+                    onPointerMove={handlePointerMove}
+                    onPointerLeave={() => {
+                        mouseRef.current.active = false;
+                        prevMouseXRef.current = -1000;
+                    }}
+                    style={{
+                        width: "100%",
+                        maxWidth: `${dimensions.width}px`,
+                        height: "auto",
+                    }}
+                    className="block touch-none cursor-ew-resize mx-auto"
+                />
+            </div>
         </div>
     );
 };

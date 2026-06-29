@@ -85,6 +85,13 @@ export const interlockingMarqueeConfig: ComponentConfig = {
   category: "carousel",
   tags: ["marquee", "scroll", "ticker", "infinite", "loop", "text"],
   componentPath: "app/meta/marquee/InterlockingMarquee/InterlockingMarquee.tsx",
+  npmPackageName: "@reactbytes/interlocking-marquee",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "relative overflow-hidden flex flex-col items-center justify-center bg-[#060010] !p-0 !h-[400px]",
   staticProps: {
@@ -160,47 +167,12 @@ export const interlockingMarqueeConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Component Source",
-      items: [
-        {
-          name: "ReactBytes",
-          role: "Library",
-          url: "https://github.com/ChandruMIT-o/reactbytes",
-        },
-        {
-          name: "Magic UI",
-          role: "Inspiration",
-          url: "https://magicui.design",
-        },
-      ],
-    },
-    {
       title: "Project Author",
       items: [
         {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

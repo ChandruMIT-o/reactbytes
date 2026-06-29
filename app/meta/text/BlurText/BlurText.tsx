@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from "react";
+"use client";
+
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 
 export interface BlurTextProps {
@@ -41,6 +43,37 @@ export interface BlurTextProps {
 	animationStyle?: "blur-text" | "blur-in";
 }
 
+interface BlurInRendererProps {
+	text: string;
+	duration: number;
+	stagger: number;
+	easing: any;
+	initialBlur: number;
+	endOpacity: number;
+	color: string;
+	uppercase: boolean;
+	className?: string;
+}
+
+interface WordLetter {
+	char: string;
+	index: number;
+}
+
+interface WordGroup {
+	word: string;
+	letters: WordLetter[];
+}
+
+interface WordElement {
+	text: string;
+	index: number;
+}
+
+interface LetterElement {
+	letters: { char: string; index: number }[];
+}
+
 const BlurInRenderer = ({
 	text,
 	duration,
@@ -51,49 +84,64 @@ const BlurInRenderer = ({
 	color,
 	uppercase,
 	className,
-}: any) => {
-	const letters = (uppercase ? text.toUpperCase() : text).split("");
+}: BlurInRendererProps) => {
+	const words = useMemo<WordGroup[]>(() => {
+		const displayText = uppercase ? text.toUpperCase() : text;
+		const wordsArray = displayText.split(" ");
+		let globalIndex = 0;
+
+		return wordsArray.map((word: string) => {
+			const letters = word.split("").map((char) => {
+				const charObj = { char, index: globalIndex };
+				globalIndex++;
+				return charObj;
+			});
+			globalIndex++;
+			return { word, letters };
+		});
+	}, [text, uppercase]);
 
 	return (
-		<motion.div
-			className={`flex flex-wrap justify-center ${className ?? ""}`}
-			initial="hidden"
-			animate="visible"
-			variants={{
-				visible: {
-					transition: {
-						staggerChildren: stagger,
-					},
-				},
-			}}
-		>
-			{letters.map((char: string, index: number) => (
-				<motion.span
-					key={`${index}-${char}`}
-					variants={{
-						hidden: {
-							opacity: 0,
-							filter: `blur(${initialBlur}px)`,
-						},
-						visible: {
-							opacity: endOpacity,
-							filter: "blur(0px)",
-						},
-					}}
-					transition={{
-						duration,
-						ease: easing,
-					}}
-					className="inline-block"
-					style={{
-						whiteSpace: "pre",
-						color,
-					}}
-				>
-					{char === " " ? "\u00A0" : char}
-				</motion.span>
-			))}
-		</motion.div>
+		<div className="w-full @container">
+			<motion.div
+				className={`flex flex-wrap justify-center items-center ${className ?? ""}`}
+				initial="hidden"
+				animate="visible"
+			>
+				{words.map((wordObj, wordIndex) => (
+					<span
+						key={wordIndex}
+						className="inline-flex whitespace-nowrap"
+						style={{ marginRight: wordIndex < words.length - 1 ? "0.25em" : "0" }}
+					>
+						{wordObj.letters.map((letter) => (
+							<motion.span
+								key={`${wordIndex}-${letter.index}`}
+								variants={{
+									hidden: {
+										opacity: 0,
+										filter: `blur(${initialBlur}px)`,
+									},
+									visible: {
+										opacity: endOpacity,
+										filter: "blur(0px)",
+										transition: {
+											duration,
+											ease: easing,
+											delay: letter.index * stagger,
+										},
+									},
+								}}
+								className="inline-block"
+								style={{ color }}
+							>
+								{letter.char}
+							</motion.span>
+						))}
+					</span>
+				))}
+			</motion.div>
+		</div>
 	);
 };
 
@@ -101,7 +149,8 @@ export const BlurText: React.FC<BlurTextProps> = ({
 	text = "",
 	delay = 0,
 	stagger = 0.05,
-	className = "",
+	// Removed @container from here so it doesn't self-conflict
+	className = "text-[clamp(1.5rem,8cqw,4rem)] text-center",
 	animateBy = "letters",
 	direction = "top",
 	duration = 0.5,
@@ -118,134 +167,209 @@ export const BlurText: React.FC<BlurTextProps> = ({
 	animationStyle = "blur-in",
 	uppercase = false,
 }) => {
-	const displayText = uppercase ? text.toUpperCase() : text;
-	const elements = animateBy === "words" ? displayText.split(" ") : displayText.split("");
 	const [inView, setInView] = useState(false);
 	const ref = useRef<HTMLParagraphElement>(null);
 	const animatedCount = useRef(0);
 	const blurValue = initialBlur ?? blurAmount;
 	const shouldAnimate = triggerOnView ? inView : true;
-	
-	// Use intersection observer to trigger animation
-	useEffect(() => {
-	if (!triggerOnView) {
-		setInView(true);
-		return;
-	}
 
-	const observer = new IntersectionObserver(
-		([entry]) => {
-			if (entry.isIntersecting) {
-				setInView(true);
-				if (ref.current) {
-					observer.unobserve(ref.current);
-				}
+	const parsedElements = useMemo<(WordElement | LetterElement)[]>(() => {
+		const displayText = uppercase ? text.toUpperCase() : text;
+		const wordsArray = displayText.split(" ");
+		let globalIndex = 0;
+
+		return wordsArray.map((word) => {
+			if (animateBy === "words") {
+				const wordObj: WordElement = { text: word, index: globalIndex };
+				globalIndex++;
+				return wordObj;
+			} else {
+				const letters = word.split("").map((char) => {
+					const charObj = { char, index: globalIndex };
+					globalIndex++;
+					return charObj;
+				});
+				globalIndex++;
+				const letterObj: LetterElement = { letters };
+				return letterObj;
 			}
-		},
-		{ threshold, rootMargin }
-	);
+		});
+	}, [text, uppercase, animateBy]);
 
-	if (ref.current) {
-		observer.observe(ref.current);
-	}
+	const totalAnimatedElements = useMemo(() => {
+		if (animateBy === "words") return parsedElements.length;
+		return parsedElements.reduce((acc, curr) => {
+			if ("letters" in curr) {
+				return acc + curr.letters.length;
+			}
+			return acc;
+		}, 0);
+	}, [parsedElements, animateBy]);
 
-	return () => observer.disconnect();
-}, [threshold, rootMargin, triggerOnView]);
+	useEffect(() => {
+		if (!triggerOnView) {
+			setInView(true);
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				if (entry.isIntersecting) {
+					setInView(true);
+					if (ref.current) {
+						observer.unobserve(ref.current);
+					}
+				}
+			},
+			{ threshold, rootMargin }
+		);
+
+		if (ref.current) {
+			observer.observe(ref.current);
+		}
+
+		return () => observer.disconnect();
+	}, [threshold, rootMargin, triggerOnView]);
 
 	const getVariants = () => {
 		const yOffset = direction === "top" ? -40 : direction === "bottom" ? 40 : 0;
-
 		return {
 			hidden: {
-    			filter: `blur(${blurValue}px)`,
-    			opacity: 0,
-    			y: yOffset,
+				filter: `blur(${blurValue}px)`,
+				opacity: 0,
+				y: yOffset,
 			},
 			visible: {
-    			filter: "blur(0px)",
-    			opacity: endOpacity,
-    			y: 0,
+				filter: "blur(0px)",
+				opacity: endOpacity,
+				y: 0,
 			},
 		};
 	};
 
 	const variants = getVariants();
-    
+
 	if (animationStyle === "blur-in") {
-	return (
-		<BlurInRenderer
-			text={text}
-			duration={duration}
-			stagger={stagger}
-			easing={easing}
-			initialBlur={blurValue}
-			endOpacity={endOpacity}
-			color={color}
-			uppercase={uppercase}
-			className={className}
-		/>
-	);
-}
+		return (
+			<BlurInRenderer
+				text={text}
+				duration={duration}
+				stagger={stagger}
+				easing={easing}
+				initialBlur={blurValue}
+				endOpacity={endOpacity}
+				color={color}
+				uppercase={uppercase}
+				className={className}
+			/>
+		);
+	}
+
+	const handleAnimationComplete = () => {
+		if (!loop) {
+			animatedCount.current += 1;
+			if (animatedCount.current === totalAnimatedElements && onAnimationComplete) {
+				onAnimationComplete();
+			}
+		}
+	};
 
 	return (
-		<p
-			ref={ref}
-			className={`flex flex-wrap items-center justify-center ${className}`}
-		>
-			{elements.map((el, i) => (
-				<motion.span
-					key={i}
-					initial="hidden"
-					animate={
-						shouldAnimate
-							? loop
-								? {
-										filter: ["blur(0px)", `blur(${blurValue}px)`, "blur(0px)"],
-										opacity: [1, 0.5, 1],
-										y: 0,
-								  }
-								: "visible"
-							: "hidden"
-					}
-					variants={variants}
+		<div className="w-full @container">
+			<p
+				ref={ref}
+				className={`flex flex-wrap items-center justify-center ${className}`}
+			>
+				{parsedElements.map((item, i) => {
+					const isLast = i === parsedElements.length - 1;
 
-					transition={
-						(loop
-							? {
+					if ("text" in item) {
+						return (
+							<motion.span
+								key={i}
+								initial="hidden"
+								animate={
+									shouldAnimate
+										? loop
+											? {
+												filter: ["blur(0px)", `blur(${blurValue}px)`, "blur(0px)"],
+												opacity: [1, 0.5, 1],
+												y: 0,
+											}
+											: "visible"
+										: "hidden"
+								}
+								variants={variants}
+								transition={(loop ? {
 									duration: duration * 2,
 									repeat: Infinity,
-									delay: delay + i * stagger,
+									delay: delay + item.index * stagger,
 									ease: "easeInOut",
-							  }
-							: {
-									delay: delay + i * stagger,
+								} : {
+									delay: delay + item.index * stagger,
 									duration: duration,
 									ease: easing,
 									type: "spring",
 									damping: 12,
 									stiffness: 100,
-							  }) as any
+								}) as any}
+								onAnimationComplete={handleAnimationComplete}
+								className="inline-block whitespace-nowrap"
+								style={{ color, marginRight: isLast ? "0" : "0.25em" }}
+							>
+								{item.text}
+							</motion.span>
+						);
+					} else {
+						return (
+							<span
+								key={i}
+								className="inline-flex whitespace-nowrap"
+								style={{ marginRight: isLast ? "0" : "0.25em" }}
+							>
+								{item.letters.map((letter) => (
+									<motion.span
+										key={letter.index}
+										initial="hidden"
+										animate={
+											shouldAnimate
+												? loop
+													? {
+														filter: ["blur(0px)", `blur(${blurValue}px)`, "blur(0px)"],
+														opacity: [1, 0.5, 1],
+														y: 0,
+													}
+													: "visible"
+												: "hidden"
+										}
+										variants={variants}
+										transition={(loop ? {
+											duration: duration * 2,
+											repeat: Infinity,
+											delay: delay + letter.index * stagger,
+											ease: "easeInOut",
+										} : {
+											delay: delay + letter.index * stagger,
+											duration: duration,
+											ease: easing,
+											type: "spring",
+											damping: 12,
+											stiffness: 100,
+										}) as any}
+										onAnimationComplete={handleAnimationComplete}
+										className="inline-block"
+										style={{ color }}
+									>
+										{letter.char}
+									</motion.span>
+								))}
+							</span>
+						);
 					}
-					onAnimationComplete={() => {
-						if (!loop) {
-							animatedCount.current += 1;
-							if (animatedCount.current === elements.length && onAnimationComplete) {
-								onAnimationComplete();
-							}
-						}
-					}}
-					className="inline-block"
-					style={{whiteSpace: "pre",color,}}
-				>
-					{el === " " ? "\u00A0" : el}
-					{animateBy === "words" && i < elements.length - 1 && "\u00A0"}
-				</motion.span>
-			))}
-		</p>
+				})}
+			</p>
+		</div>
 	);
 };
 
-
-
 export default BlurText;
-

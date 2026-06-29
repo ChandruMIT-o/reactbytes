@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ShellLayer {
     x: number;         // Current relative spatial X
@@ -43,8 +43,8 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
     text = "PHASE",
     fontSize = 95,
     coreColor = "#ffffff",
-    inertialColor = "rgba(129, 140, 248, 0.5)", // Structural slate indigo
-    tensionColor = "rgba(6, 182, 212, 0.4)",    // High-frequency telemetry cyan
+    inertialColor = "rgba(129, 140, 248, 0.5)",
+    tensionColor = "rgba(6, 182, 212, 0.4)",
     impactForce = 1.3,
     influenceRadius = 80,
     className = "",
@@ -54,6 +54,9 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
     const mouseRef = useRef({ x: -1000, y: -1000, vx: 0, vy: 0, active: false });
     const prevMouseRef = useRef({ x: -1000, y: -1000 });
     const animationFrameId = useRef<number | null>(null);
+
+    // Dynamic scale tracking state context
+    const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
 
     const paddingX = fontSize * 0.5;
     const paddingY = fontSize * 0.4;
@@ -67,7 +70,6 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
         const fontStyle = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
         ctx.font = fontStyle;
 
-        // Perform strict text dimension analysis to bound canvas frame exactly to contents
         const characters = text.split("");
         let accumulatedX = 0;
         const metrics = characters.map((char) => {
@@ -81,10 +83,11 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
         const totalHeight = fontSize + paddingY * 2;
         const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
 
+        // Establish core metric bounds inside react state
+        setDimensions({ width: totalWidth, height: totalHeight });
+
         canvas.width = totalWidth * dpr;
         canvas.height = totalHeight * dpr;
-        canvas.style.width = `${totalWidth}px`;
-        canvas.style.height = `${totalHeight}px`;
 
         ctx.scale(dpr, dpr);
         ctx.font = fontStyle;
@@ -93,7 +96,6 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
 
         const centerY = totalHeight / 2;
 
-        // Construct character arrays initialized with 3 fully decoupled physical layers
         nodesRef.current = metrics.map((m) => {
             const nodeCenterX = paddingX + m.startX + m.width / 2;
             return {
@@ -102,11 +104,8 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
                 centerY: centerY,
                 width: m.width,
                 layers: [
-                    // Layer 0: Core (Fast snap-back, low tracking deflection)
                     { x: 0, y: 0, vx: 0, vy: 0, massFactor: 0.3, stiffness: 0.09, damping: 0.72 },
-                    // Layer 1: Inertial (Heavy mass, massive tracking latency)
                     { x: 0, y: 0, vx: 0, vy: 0, massFactor: 1.1, stiffness: 0.04, damping: 0.84 },
-                    // Layer 2: Tension (Hyper-light, massive orbital displacement envelope)
                     { x: 0, y: 0, vx: 0, vy: 0, massFactor: 2.4, stiffness: 0.06, damping: 0.78 },
                 ],
             };
@@ -124,12 +123,10 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
             const width = canvas.width / dpr;
             const height = canvas.height / dpr;
 
-            // Isolate local frame changes cleanly over a native transparent background
             ctx.clearRect(0, 0, width, height);
 
             const mouse = mouseRef.current;
-            
-            // Extract kinetic displacement vector from tracking updates
+
             if (mouse.active && prevMouseRef.current.x !== -1000) {
                 mouse.vx = (mouse.x - prevMouseRef.current.x) * 0.4;
                 mouse.vy = (mouse.y - prevMouseRef.current.y) * 0.4;
@@ -147,21 +144,16 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
                 const dy = mouse.y - node.centerY;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                // 1. CHRONOGRAPHIC SYSTEM PHYSICS KINETICS
-                node.layers.forEach((layer, idx) => {
+                node.layers.forEach((layer) => {
                     if (mouse.active && distance < influenceRadius) {
                         const proximityFactor = (influenceRadius - distance) / influenceRadius;
                         const angle = Math.atan2(dy, dx);
-
-                        // Differentiate repulsion velocity metrics based on layer identity
                         const forceEnvelope = proximityFactor * impactForce * layer.massFactor;
-                        
-                        // Push layers outward while blending pointer cross-velocities
+
                         layer.vx += Math.cos(angle) * forceEnvelope * 1.5 + mouse.vx * 0.15;
                         layer.vy += Math.sin(angle) * forceEnvelope * 1.5 + mouse.vy * 0.15;
                     }
 
-                    // Hooke's Vector Spring equations governing return profiles
                     const springForceX = (0 - layer.x) * layer.stiffness;
                     const springForceY = (0 - layer.y) * layer.stiffness;
 
@@ -172,12 +164,10 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
                     layer.y += layer.vy;
                 });
 
-                // Short references to layer positions for clean rendering offsets
-                const cL = node.layers[0]; // Core
-                const iL = node.layers[1]; // Inertial
-                const tL = node.layers[2]; // Tension
+                const cL = node.layers[0];
+                const iL = node.layers[1];
+                const tL = node.layers[2];
 
-                // 2. TECH WIREFRAME TRUSS RENDERING PASS
                 const combinedVariance = Math.sqrt(
                     (tL.x - cL.x) * (tL.x - cL.x) + (tL.y - cL.y) * (tL.y - cL.y)
                 );
@@ -187,36 +177,32 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
                     ctx.strokeStyle = tensionColor;
                     ctx.lineWidth = 0.6;
 
-                    // Geometric connection links drawing a physical lattice between layer vertices
                     ctx.beginPath();
                     ctx.moveTo(node.centerX + cL.x, node.centerY + cL.y);
                     ctx.lineTo(node.centerX + iL.x, node.centerY + iL.y);
                     ctx.lineTo(node.centerX + tL.x, node.centerY + tL.y);
                     ctx.stroke();
 
-                    // Micro-Telemetry Data Readout
                     if (combinedVariance > 18) {
                         ctx.fillStyle = tensionColor;
                         ctx.font = `500 8px monospace`;
                         ctx.textAlign = "left";
-                        
+
                         const varianceString = `Δ:${combinedVariance.toFixed(1)}`;
                         ctx.fillText(
-                            varianceString, 
-                            node.centerX + tL.x + (node.width / 2) - 4, 
+                            varianceString,
+                            node.centerX + tL.x + (node.width / 2) - 4,
                             node.centerY + tL.y - (fontSize * 0.3)
                         );
                     }
                     ctx.restore();
                 }
 
-                // 3. TYPOGRAPHY HULL RENDERING PASS
                 ctx.save();
                 ctx.font = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
 
-                // Step A: Draw Outer Tension Hull (Light wireframe dash)
                 ctx.save();
                 ctx.strokeStyle = tensionColor;
                 ctx.lineWidth = 1;
@@ -224,14 +210,12 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
                 ctx.strokeText(node.char, node.centerX + tL.x, node.centerY + tL.y);
                 ctx.restore();
 
-                // Step B: Draw Middle Inertial Hull (Translucent outline)
                 ctx.save();
                 ctx.strokeStyle = inertialColor;
                 ctx.lineWidth = 1.5;
                 ctx.strokeText(node.char, node.centerX + iL.x, node.centerY + iL.y);
                 ctx.restore();
 
-                // Step C: Draw Core Hull (Solid base typography face)
                 ctx.fillStyle = coreColor;
                 ctx.fillText(node.char, node.centerX + cL.x, node.centerY + cL.y);
 
@@ -251,22 +235,34 @@ export const PhaseShellText: React.FC<PhaseShellTextProps> = ({
         const canvas = canvasRef.current;
         if (!canvas) return;
         const rect = canvas.getBoundingClientRect();
-        mouseRef.current.x = e.clientX - rect.left;
-        mouseRef.current.y = e.clientY - rect.top;
+
+        // Compute scale shifts dynamically across fluid layouts
+        const scaleX = dimensions.width / rect.width;
+        const scaleY = dimensions.height / rect.height;
+
+        mouseRef.current.x = (e.clientX - rect.left) * scaleX;
+        mouseRef.current.y = (e.clientY - rect.top) * scaleY;
         mouseRef.current.active = true;
     };
 
     return (
-        <div className={`inline-block select-none overflow-visible ${className}`}>
-            <canvas
-                ref={canvasRef}
-                onPointerMove={handlePointerMove}
-                onPointerLeave={() => {
-                    mouseRef.current.active = false;
-                    prevMouseRef.current = { x: -1000, y: -1000 };
-                }}
-                className="block touch-none cursor-none"
-            />
+        <div className="w-full @container flex justify-center text-center">
+            <div className={`flex w-full items-center justify-center text-center select-none overflow-visible ${className}`}>
+                <canvas
+                    ref={canvasRef}
+                    onPointerMove={handlePointerMove}
+                    onPointerLeave={() => {
+                        mouseRef.current.active = false;
+                        prevMouseRef.current = { x: -1000, y: -1000 };
+                    }}
+                    style={{
+                        width: "100%",
+                        maxWidth: `${dimensions.width}px`,
+                        height: "auto",
+                    }}
+                    className="block touch-none cursor-none mx-auto"
+                />
+            </div>
         </div>
     );
 };

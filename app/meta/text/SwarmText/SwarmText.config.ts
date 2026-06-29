@@ -6,19 +6,14 @@ export const swarmTextConfig: ComponentConfig = {
   category: "text",
   tags: ["swarm", "particles", "scatter", "assemble", "chaos"],
   componentPath: "app/meta/text/SwarmText/SwarmText.tsx",
+  npmPackageName: "@reactbytes/swarm-text",
+  version: "1.0.0",
   props: [
     {
       name: "texts",
       type: "string",
       default: "Developer, Designer, Philosopher, Physicist",
       description: "Array of words to rotate/morph through (comma-separated).",
-    },
-    {
-      name: "prefix",
-      type: "string",
-      default: "I am a",
-      description:
-        "Static prefix text displayed in front of the dynamic words.",
     },
     {
       name: "delay",
@@ -109,12 +104,6 @@ export const swarmTextConfig: ComponentConfig = {
       default: "#E8EAF0",
       description: "Hex or CSS color for the text particles.",
     },
-    {
-      name: "prefixColor",
-      type: "color",
-      default: "#9CA3AF",
-      description: "Hex or CSS color for the prefix text.",
-    },
   ],
   presets: [
     {
@@ -122,10 +111,8 @@ export const swarmTextConfig: ComponentConfig = {
       label: "Default Swarm",
       config: {
         texts: "Developer, Designer, Philosopher, Physicist",
-        prefix: "I am a",
         fontSize: 48,
         textColor: "#E8EAF0",
-        prefixColor: "#9CA3AF",
         friction: 0.85,
         springStiffness: 0.08,
         particleSize: 1.8,
@@ -140,10 +127,8 @@ export const swarmTextConfig: ComponentConfig = {
       label: "Cyberpunk Terminal",
       config: {
         texts: "ONLINE, ENCRYPTED, SECURE, SYSTEM",
-        prefix: "Status:",
         fontSize: 40,
         textColor: "#10B981",
-        prefixColor: "#6B7280",
         friction: 0.8,
         springStiffness: 0.12,
         particleSize: 2.2,
@@ -158,10 +143,8 @@ export const swarmTextConfig: ComponentConfig = {
       label: "Warm Sunset",
       config: {
         texts: "Innovate, Inspire, Create, Connect",
-        prefix: "Time to",
         fontSize: 44,
         textColor: "#F59E0B",
-        prefixColor: "#EF4444",
         friction: 0.88,
         springStiffness: 0.06,
         particleSize: 1.5,
@@ -176,10 +159,8 @@ export const swarmTextConfig: ComponentConfig = {
       label: "Cosmic Nebula",
       config: {
         texts: "Space, Time, Quantum, Gravity",
-        prefix: "Solving",
         fontSize: 52,
         textColor: "#8B5CF6",
-        prefixColor: "#EC4899",
         friction: 0.92,
         springStiffness: 0.04,
         particleSize: 1.2,
@@ -195,34 +176,11 @@ export const swarmTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Techs",
-      items: [
-        {
-          name: "React",
-          role: "UI Library",
-          url: "https://react.dev",
-        },
-        {
-          name: "HTML5 Canvas",
-          role: "Rendering API",
-          url: "https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API",
-        },
-        {
-          name: "Tailwind CSS",
-          role: "Styling",
-          url: "https://tailwindcss.com",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
-  staticProps: {
-    prefixClassName: "text-xl font-medium md:text-2xl",
-  },
 };

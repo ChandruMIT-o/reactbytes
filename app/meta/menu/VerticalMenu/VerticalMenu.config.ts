@@ -6,6 +6,15 @@ export const verticalMenuConfig: ComponentConfig = {
   category: "miscellaneous",
   tags: ["menu", "vertical", "navigation", "sidebar", "list"],
   componentPath: "app/meta/menu/VerticalMenu/VerticalMenu.tsx",
+  npmPackageName: "@reactbytes/vertical-menu",
+  version: "1.0.0",
+  dependencies: {
+    "framer-motion": "^12.38.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "w-full min-h-[450px] !h-auto relative overflow-hidden flex items-center justify-end pr-12 group bg-[#060010] rounded-[18px] border border-white/5",
   props: [
@@ -104,17 +113,22 @@ export const verticalMenuConfig: ComponentConfig = {
   },
   credits: [
     {
-      title: "Open Source Libraries",
+      title: "Libraries",
       items: [
         {
           name: "Framer Motion",
           role: "Animations",
           url: "https://www.framer.com/motion/",
         },
+      ],
+    },
+    {
+      title: "Project Author",
+      items: [
         {
-          name: "Lucide React",
-          role: "Icons",
-          url: "https://lucide.dev/",
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
         },
       ],
     },

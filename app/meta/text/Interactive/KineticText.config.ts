@@ -6,6 +6,8 @@ export const kineticTextConfig: ComponentConfig = {
   category: "text",
   tags: ["kinetic", "motion", "scroll", "velocity", "physics"],
   componentPath: "app/meta/text/Interactive/KineticText.tsx",
+  npmPackageName: "@reactbytes/kinetic-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -82,27 +84,14 @@ export const kineticTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Google DeepMind Team",
-          role: "Developer",
-          url: "https://deepmind.google",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
-  staticProps: {},
+  staticProps: {
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
+  },
 };

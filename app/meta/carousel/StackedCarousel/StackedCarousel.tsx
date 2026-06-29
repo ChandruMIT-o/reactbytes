@@ -53,25 +53,42 @@ export default function StackedCarousel({
 }: StackedCarouselProps) {
     const [active, setActive] = useState(0);
     const [progress, setProgress] = useState(0);
+    const [containerWidth, setContainerWidth] = useState(0);
+
+    const containerRef = useRef<HTMLDivElement>(null);
     const rafRef = useRef<number | null>(null);
 
-    // Generate random configuration for the gooey blobs only once on mount
-    // so the animations don't reset or jitter during the 60fps re-renders.
+    // Track the actual container element's width instead of the window/viewport screen size
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+            if (!entries || entries.length === 0) return;
+            setContainerWidth(entries[0].contentRect.width);
+        });
+
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    // Determine layout dynamically based on parent container width (break at 640px container width)
+    const isNarrow = containerWidth < 640;
+
     const randomBlobs = useMemo(() => {
         return items.map(() =>
             Array.from({ length: 4 }).map((_, i) => {
-                const baseCx = i * 28 + 8; // Spread out across the ~100px width
-                const r = 12 + Math.random() * 8; // Random radius between 12 and 20
+                const baseCx = i * 28 + 8;
+                const r = 12 + Math.random() * 8;
                 const moveX = 10 + Math.random() * 10;
                 const moveY = 6 + Math.random() * 8;
                 return {
                     id: i,
                     r,
                     baseCx,
-                    durX: `${(2.5 + Math.random() * 2).toFixed(2)}s`, // Random speed 2.5s - 4.5s
-                    durY: `${(2 + Math.random() * 2).toFixed(2)}s`,   // Random speed 2s - 4s
-                    valX: `${baseCx}; ${baseCx + moveX}; ${baseCx - moveX / 2}; ${baseCx}`, // Random horizontal wandering
-                    valY: `0; -${moveY}; ${moveY / 3}; 0`, // Random vertical splashing
+                    durX: `${(2.5 + Math.random() * 2).toFixed(2)}s`,
+                    durY: `${(2 + Math.random() * 2).toFixed(2)}s`,
+                    valX: `${baseCx}; ${baseCx + moveX}; ${baseCx - moveX / 2}; ${baseCx}`,
+                    valY: `0; -${moveY}; ${moveY / 3}; 0`,
                 };
             })
         );
@@ -104,15 +121,17 @@ export default function StackedCarousel({
     }, [active, autoRotateInterval, rotate]);
 
     return (
-        <div className={`flex flex-col items-center justify-center w-full h-full font-sans ${className}`}>
-
+        <div
+            ref={containerRef}
+            className={`flex flex-col items-center justify-center w-full h-full font-sans px-4 ${className}`}
+        >
             {/* Main Stack Container */}
             <div
                 onClick={rotate}
-                className="relative w-full max-w-[800px] h-[480px] md:h-[400px] cursor-pointer group perspective-1000"
+                className="relative w-full max-w-[850px] cursor-pointer group perspective-1000 mt-6"
+                style={{ height: isNarrow ? "480px" : "400px" }}
             >
                 {items.map((card, i) => {
-                    // Circular offset calculation for a "centered" stack
                     let offset = i - active;
                     if (offset > items.length / 2) offset -= items.length;
                     if (offset < -items.length / 2) offset += items.length;
@@ -123,33 +142,34 @@ export default function StackedCarousel({
                     return (
                         <div
                             key={card.id}
-                            className="absolute inset-0 w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border select-none flex flex-col md:flex-row p-8 md:p-10 gap-8 md:gap-12"
+                            className={`absolute inset-0 w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border select-none flex ${isNarrow ? "flex-col p-6 gap-4" : "flex-row p-10 gap-12"
+                                }`}
                             style={{
-                                transform: `translateY(${offset * -24}px) scale(${1 - absOffset * 0.04})`,
+                                transform: `translateY(${offset * -16}px) scale(${1 - absOffset * 0.04})`,
                                 opacity: 1 - absOffset * 0.35,
-                                zIndex: 10 - absOffset + (offset > 0 ? 0.1 : 0), // Subtle bias for stable stacking
+                                zIndex: 10 - absOffset + (offset > 0 ? 0.1 : 0),
                                 backgroundColor: cardBgColor,
                                 borderColor: cardBorderColor,
                                 transition: "all 600ms cubic-bezier(0.34, 1.15, 0.64, 1)",
                             }}
                         >
                             {/* SVG Wavy, Gooey Random Liquid Number */}
-                            <div className="absolute top-6 left-8 md:top-8 md:left-10 w-[100px] h-[80px] md:w-[130px] md:h-[100px] pointer-events-none select-none">
+                            <div
+                                className={`absolute pointer-events-none select-none z-20 ${isNarrow ? "top-6 left-6 w-[80px] h-[60px]" : "top-8 left-10 w-[130px] h-[100px]"
+                                    }`}
+                            >
                                 <svg viewBox="0 0 100 80" className="w-full h-full overflow-visible font-sans">
                                     <defs>
                                         <clipPath id={`clip-${card.id}`}>
                                             <text x="0" y="72" fontSize="76" fontWeight="900" letterSpacing="-0.05em">0{i + 1}</text>
                                         </clipPath>
-
                                         <filter id={`goo-${card.id}`}>
                                             <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
-                                            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 15 -5" result="goo" />
+                                            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0   0 1 0 0 0   0 0 1 0 0   0 0 0 15 -5" result="goo" />
                                         </filter>
-
                                         <filter id={`soften-${card.id}`}>
                                             <feGaussianBlur stdDeviation="1.5" />
                                         </filter>
-
                                         <mask id={`liquid-mask-${card.id}`}>
                                             <g filter={`url(#goo-${card.id})`}>
                                                 <g style={{ transform: `translateY(${100 - (isActive ? progress : 0) * 1.1}px)` }}>
@@ -164,34 +184,30 @@ export default function StackedCarousel({
                                             </g>
                                         </mask>
                                     </defs>
-
                                     <text x="0" y="72" fontSize="76" fontWeight="900" letterSpacing="-0.05em" fill="rgba(255,255,255,0.04)">
                                         0{i + 1}
                                     </text>
-
                                     <g clipPath={`url(#clip-${card.id})`} filter={`url(#soften-${card.id})`}>
-                                        <rect
-                                            x="-10"
-                                            y="-20"
-                                            width="120"
-                                            height="120"
-                                            fill={liquidColor}
-                                            mask={`url(#liquid-mask-${card.id})`}
-                                        />
+                                        <rect x="-10" y="-20" width="120" height="120" fill={liquidColor} mask={`url(#liquid-mask-${card.id})`} />
                                     </g>
                                 </svg>
                             </div>
 
-                            <div className="flex-1 flex flex-col justify-end relative z-10 mt-16 md:mt-0">
-                                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white mb-3">
+                            {/* Text Section */}
+                            <div className={`flex-1 flex flex-col justify-end relative z-10 ${isNarrow ? "pt-12" : "justify-center pt-0"}`}>
+                                <h2 className={`font-bold tracking-tight text-white mb-2 ${isNarrow ? "text-xl" : "text-3xl"}`}>
                                     {card.title}
                                 </h2>
-                                <p className="text-sm md:text-base text-zinc-400 leading-relaxed max-w-[280px]">
+                                <p className={`text-zinc-400 leading-relaxed ${isNarrow ? "text-sm" : "text-base max-w-[280px]"}`}>
                                     {card.content}
                                 </p>
                             </div>
 
-                            <div className="flex-[1.2] relative w-full h-full min-h-[180px] bg-[#1a1a1c] rounded-2xl border border-white/[0.05] p-2 flex items-center justify-center overflow-hidden shadow-inner">
+                            {/* Image Section */}
+                            <div
+                                className={`relative bg-[#1a1a1c] rounded-2xl border border-white/[0.05] p-2 flex items-center justify-center overflow-hidden shadow-inner shrink-0 ${isNarrow ? "w-full h-[180px]" : "h-full flex-[1.2]"
+                                    }`}
+                            >
                                 <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/10 to-transparent pointer-events-none z-10" />
                                 <img
                                     src={card.image}
@@ -204,13 +220,13 @@ export default function StackedCarousel({
                 })}
             </div>
 
+            {/* Pagination Controls */}
             {showPagination && (
-                <div className="flex items-center gap-2 mt-12 md:mt-16">
+                <div className={`flex items-center gap-2 ${isNarrow ? "mt-8" : "mt-16"}`}>
                     {items.map((_, i) => (
                         <div
                             key={i}
-                            className={`h-1.5 rounded-full transition-all duration-500 cubic-bezier(0.34, 1.15, 0.64, 1) ${i === active ? "w-8" : "w-2"
-                                }`}
+                            className={`h-1.5 rounded-full transition-all duration-500 cubic-bezier(0.34, 1.15, 0.64, 1) ${i === active ? "w-8" : "w-2"}`}
                             style={{
                                 backgroundColor: i === active ? activeDotColor : inactiveDotColor,
                             }}
@@ -218,7 +234,6 @@ export default function StackedCarousel({
                     ))}
                 </div>
             )}
-
         </div>
     );
-}
+}

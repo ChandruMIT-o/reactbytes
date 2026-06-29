@@ -6,6 +6,11 @@ export const elasticRevealConfig: ComponentConfig = {
   category: "text",
   tags: ["elastic", "spring", "hover", "reveal", "bounce"],
   componentPath: "app/meta/text/Hover/ElasticReveal.tsx",
+  npmPackageName: "@reactbytes/elastic-reveal",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   props: [
     {
       name: "text",
@@ -121,39 +126,14 @@ export const elasticRevealConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Modern Hover Effects",
-          role: "Visual Concept",
-          url: "https://codepen.io/georgedoescode/pen/MWvbejz",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animations",
-          url: "https://www.framer.com/motion/",
-        },
-        {
-          name: "Tailwind CSS",
-          role: "Styling",
-          url: "https://tailwindcss.com",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
   staticProps: {
-    textClassName: "text-5xl md:text-7xl font-bold font-sans tracking-tighter",
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
   },
 };

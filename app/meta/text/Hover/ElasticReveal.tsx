@@ -1,42 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion, Variants } from "framer-motion";
 
 export interface ElasticRevealProps {
-	/** The text to display */
 	text: string;
-	/** Duration of the animation per letter in seconds */
 	duration?: number;
-	/** Delay between each character's animation in seconds */
 	stagger?: number;
-	/** Direction of the reveal: 'up' or 'down' */
 	direction?: "up" | "down";
-	/** Base color for the text (hex) */
 	baseColor?: string;
-	/** Hover color for the text (hex) */
 	hoverColor?: string;
-	/** Additional wrapper CSS classes */
 	className?: string;
-	/** Additional text container CSS classes */
 	textClassName?: string;
-	/** Link URL if the component should act as a link */
 	href?: string;
-	/** Whether to force uppercase text */
 	uppercase?: boolean;
-	/** Dictates which letter starts the animation: 'left', 'right', 'center', or 'hover' */
 	animateFrom?: "left" | "right" | "center" | "hover";
 }
 
 export const ElasticReveal: React.FC<ElasticRevealProps> = ({
-	text = "REACTBYTES",
+	text = "REACT BYTES",
 	duration = 0.6,
 	stagger = 0.02,
 	direction = "up",
 	baseColor = "#60a5fa",
 	hoverColor = "#FFFFFF",
 	className = "",
-	textClassName = "text-5xl md:text-7xl font-bold font-sans tracking-tighter",
+	// Swapped from 8vw to 8cqw for bulletproof container scaling
+	textClassName = "text-[clamp(1.5rem,8cqw,5rem)] font-bold font-sans tracking-tighter text-center",
 	href,
 	uppercase = false,
 	animateFrom = "left",
@@ -44,8 +34,23 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 	const [isHovered, setIsHovered] = useState(false);
 	const [originIndex, setOriginIndex] = useState<number | null>(null);
 
-	const displayText = uppercase ? text.toUpperCase() : text;
-	const letters = displayText.split("");
+	const words = useMemo(() => {
+		const finalRef = uppercase ? text.toUpperCase() : text;
+		const wordsArray = finalRef.split(" ");
+		let globalIndex = 0;
+
+		return wordsArray.map((word) => {
+			const letters = word.split("").map((char) => {
+				const charObj = { char, index: globalIndex };
+				globalIndex++;
+				return charObj;
+			});
+			globalIndex++;
+			return { word, letters };
+		});
+	}, [text, uppercase]);
+
+	const totalChars = text.length;
 	const yOffset = direction === "up" ? "-100%" : "100%";
 
 	const containerVariants = {
@@ -58,9 +63,9 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 		hover: (i: number) => {
 			let delay = i * stagger;
 			if (animateFrom === "right") {
-				delay = (letters.length - 1 - i) * stagger;
+				delay = (totalChars - 1 - i) * stagger;
 			} else if (animateFrom === "center") {
-				delay = Math.abs(i - (letters.length - 1) / 2) * stagger;
+				delay = Math.abs(i - (totalChars - 1) / 2) * stagger;
 			} else if (animateFrom === "hover" && originIndex !== null) {
 				delay = Math.abs(i - originIndex) * stagger;
 			}
@@ -95,39 +100,61 @@ export const ElasticReveal: React.FC<ElasticRevealProps> = ({
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={handleMouseLeave}
 			variants={containerVariants}
-			className={`relative inline-flex overflow-hidden cursor-pointer select-none leading-[0.8] ${className}`}
+			// Replaced inline-flex with flex w-full to prevent compressed boundaries
+			className={`relative flex w-full flex-col items-center justify-center cursor-pointer select-none leading-none ${className}`}
 		>
-			<span className="sr-only">{displayText}</span>
-			<div className={`flex ${textClassName}`} aria-hidden="true">
-				{letters.map((char, i) => (
-					<motion.span
-						key={i}
-						custom={i}
-						variants={letterVariants}
-						onMouseEnter={() => handleMouseEnter(i)}
-						className="relative inline-block whitespace-pre"
-					>
-						<span style={{ color: baseColor }}>{char}</span>
+			<span className="sr-only">{text}</span>
+			<div className={`flex flex-wrap justify-center w-full gap-y-2 ${textClassName}`} aria-hidden="true">
+				{words.map((wordObj, wordIndex) => {
+					const isLast = wordIndex === words.length - 1;
+					return (
 						<span
-							className="absolute top-0 left-0"
-							style={{
-								color: hoverColor,
-								transform: `translateY(${direction === "up" ? "100%" : "-100%"})`
-							}}
+							key={wordIndex}
+							className="inline-flex whitespace-nowrap"
+							style={{ marginRight: isLast ? "0" : "0.25em" }}
 						>
-							{char}
+							{wordObj.letters.map((letter) => (
+								<span
+									key={letter.index}
+									className="relative inline-block overflow-hidden align-bottom"
+								>
+									<motion.span
+										custom={letter.index}
+										variants={letterVariants}
+										onMouseEnter={() => handleMouseEnter(letter.index)}
+										className="relative inline-block whitespace-pre"
+									>
+										<span style={{ color: baseColor }}>{letter.char}</span>
+										<span
+											className="absolute top-0 left-0"
+											style={{
+												color: hoverColor,
+												transform: `translateY(${direction === "up" ? "100%" : "-100%"})`
+											}}
+										>
+											{letter.char}
+										</span>
+									</motion.span>
+								</span>
+							))}
 						</span>
-					</motion.span>
-				))}
+					);
+				})}
 			</div>
 		</motion.div>
 	);
 
 	if (href) {
-		return <a href={href} className="no-underline">{Content}</a>;
+		return (
+			<div className="w-full @container">
+				<a href={href} className="no-underline block w-full">
+					{Content}
+				</a>
+			</div>
+		);
 	}
 
-	return Content;
+	return <div className="w-full @container">{Content}</div>;
 };
 
 export default ElasticReveal;

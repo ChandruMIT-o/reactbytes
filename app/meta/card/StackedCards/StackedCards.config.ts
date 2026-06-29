@@ -6,6 +6,13 @@ export const stackedCardsConfig: ComponentConfig = {
   category: "miscellaneous",
   tags: ["cards", "stack", "3d", "depth", "fan"],
   componentPath: "app/meta/card/StackedCards/StackedCards.tsx",
+  npmPackageName: "@reactbytes/stacked-cards",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "w-full !h-[500px] !block overflow-y-auto p-8 bg-zinc-950 rounded-3xl border border-white/5 relative custom-scrollbar",
   props: [
@@ -172,6 +179,16 @@ export const stackedCardsConfig: ComponentConfig = {
   },
   credits: [
     {
+      title: "Project Author",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
+        },
+      ],
+    },
+    {
       title: "Inspiration & Tech",
       items: [
         {
@@ -179,12 +196,6 @@ export const stackedCardsConfig: ComponentConfig = {
           role: "Animation Engine",
           url: "https://greensock.com/gsap/",
         },
-        {
-          name: "ScrollTrigger",
-          role: "Scroll Plugin",
-          url: "https://greensock.com/scrolltrigger/",
-        },
-        { name: "Unsplash", role: "Assets", url: "https://unsplash.com" },
       ],
     },
   ],

@@ -6,6 +6,13 @@ export const fractalBackgroundConfig: ComponentConfig = {
   category: "background",
   tags: ["fractal", "math", "recursive", "pattern", "zoom"],
   componentPath: "app/meta/background/fractal/FractalBackground.tsx",
+  npmPackageName: "@reactbytes/fractal-background",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   showDemoByDefault: true,
   demoVariant: "hero",
   props: [
@@ -185,12 +192,12 @@ export const fractalBackgroundConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Component Source",
+      title: "Project Author",
       items: [
         {
           name: "ChandruMIT-o",
-          role: "Design & Development",
-          url: "https://github.com/ChandruMIT-o/",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
         },
       ],
     },

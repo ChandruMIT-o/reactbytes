@@ -6,6 +6,13 @@ export const stackedCarouselConfig: ComponentConfig = {
   category: "carousel",
   tags: ["carousel", "stacked", "deck", "cards", "3d"],
   componentPath: "app/meta/carousel/StackedCarousel/StackedCarousel.tsx",
+  npmPackageName: "@reactbytes/stacked-carousel",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName: "min-h-[500px] !h-auto !p-0",
   props: [
     {
@@ -68,42 +75,12 @@ export const stackedCarouselConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Inspiration",
-      items: [
-        {
-          name: "Apple iPad Pro",
-          role: "Design Reference",
-          url: "https://www.apple.com/ipad-pro/",
-        },
-      ],
-    },
-    {
       title: "Project Author",
       items: [
         {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

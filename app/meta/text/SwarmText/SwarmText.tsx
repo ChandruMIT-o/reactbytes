@@ -5,8 +5,6 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 export interface SwarmTextProps {
   /** Array of words to rotate through or comma-separated string */
   texts?: string[] | string;
-  /** Static prefix text that sits in front of the animated words */
-  prefix?: string;
   /** Delay in milliseconds between text switches */
   delay?: number;
   /** Font size in pixels */
@@ -15,8 +13,6 @@ export interface SwarmTextProps {
   fontFamily?: string;
   /** Color of the particles */
   textColor?: string;
-  /** Color of the static prefix text */
-  prefixColor?: string;
   /** Damping/friction for spring physics (0.5 to 0.99) */
   friction?: number;
   /** Spring stiffness/strength (0.01 to 0.5) */
@@ -31,8 +27,6 @@ export interface SwarmTextProps {
   mouseRepel?: boolean;
   /** Additional container CSS class names */
   containerClassName?: string;
-  /** Additional prefix text CSS class names */
-  prefixClassName?: string;
   /** Additional canvas CSS class names */
   canvasClassName?: string;
   /** Particle density step size (lower = more particles, e.g. 2, 3, 4) */
@@ -48,8 +42,8 @@ class Particle {
   y: number;
   vx: number;
   vy: number;
-  tx: number; // target x
-  ty: number; // target y
+  tx: number;
+  ty: number;
   startX: number;
   startY: number;
   endX: number;
@@ -96,13 +90,11 @@ class Particle {
     let ax = (this.tx - this.x) * spring;
     let ay = (this.ty - this.y) * spring;
 
-    // Fluid wave flow noise
     const flowX = Math.sin(this.y * 0.04 + time * 1.5) * 0.15;
     const flowY = Math.cos(this.x * 0.04 + time * 1.5) * 0.15;
     ax += flowX;
     ay += flowY;
 
-    // Mouse Repel Force
     if (mouseActive) {
       const dx = this.x - mouseX;
       const dy = this.y - mouseY;
@@ -111,33 +103,29 @@ class Particle {
         const force = (repelRadius - dist) / repelRadius;
         const dirX = dist > 0 ? dx / dist : 0;
         const dirY = dist > 0 ? dy / dist : 0;
-        
+
         ax += dirX * force * repelStrength;
         ay += dirY * force * repelStrength;
       }
     }
 
-    // Physics integration
     this.vx = (this.vx + ax) * friction;
     this.vy = (this.vy + ay) * friction;
     this.x += this.vx;
     this.y += this.vy;
 
-    // Shimmer/twinkle alpha. Active particles remain mostly visible (twinkle between 0.65 and 1.0)
-    // while idle particles shimmer deeper (twinkle between 0.25 and 0.8) to look like background nebula dust.
     const baseAlpha = this.active ? 0.95 : 0.25;
     const minTwinkle = this.active ? 0.65 : 0.25;
     const twinkleRange = this.active ? 0.35 : 0.55;
     const twinkle = minTwinkle + twinkleRange * Math.sin(time * 5.0 + this.id * Math.PI * 20.0);
     this.alpha += (twinkle * baseAlpha - this.alpha) * 0.1;
 
-    // Procedural color shimmer (iridescence) derived from base color
     const match = textColor.replace("#", "").match(/.{1,2}/g);
     if (match) {
       const rBase = parseInt(match[0], 16);
       const gBase = parseInt(match[1], 16);
       const bBase = parseInt(match[2], 16);
-      
+
       const wave = Math.sin(time * 3.0 + this.id * Math.PI * 4.0);
       const r = Math.min(255, Math.max(0, rBase + wave * 25));
       const g = Math.min(255, Math.max(0, gBase + wave * 15));
@@ -150,13 +138,11 @@ class Particle {
     ctx.fillStyle = this.color;
     ctx.globalAlpha = Math.max(0, Math.min(1, this.alpha));
     ctx.beginPath();
-    
-    // Calculate distance to current target to determine bloom size scaling
+
     const dx = this.tx - this.x;
     const dy = this.ty - this.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
-    
-    // Bloom up to 1.7x when settled close to target, keeping it small and sharp when in flight
+
     const bloom = this.active ? 1.0 + 0.7 * Math.max(0, 1.0 - dist / 20.0) : 1.0;
     const renderSize = this.size * bloom;
 
@@ -165,19 +151,16 @@ class Particle {
   }
 }
 
-// Cubic ease-in-out helper
 const cubicInOut = (t: number) => {
   return t < 0.5 ? 4.0 * t * t * t : 1.0 - Math.pow(-2.0 * t + 2.0, 3.0) / 2.0;
 };
 
 export const SwarmText: React.FC<SwarmTextProps> = ({
   texts = ["Developer", "Designer", "Philosopher", "Physicist"],
-  prefix = "I am a",
   delay = 3000,
   fontSize = 48,
   fontFamily = "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   textColor = "#E8EAF0",
-  prefixColor = "#9CA3AF",
   friction = 0.85,
   springStiffness = 0.08,
   particleSize = 1.8,
@@ -185,7 +168,6 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
   repelStrength = 4.0,
   mouseRepel = true,
   containerClassName = "",
-  prefixClassName = "text-xl font-medium md:text-2xl",
   canvasClassName = "",
   step = 3,
   morphSpeed = 0.8,
@@ -200,12 +182,10 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     return list || [];
   }, [texts]);
 
-  // References to keep animation loop stable and prevent effect restarts on word swaps
   const currentTextIdxRef = useRef(currentTextIdx);
   const textsRef = useRef(processedTexts);
   const mouseRef = useRef({ x: 0, y: 0, active: false });
 
-  // Update refs on changes
   useEffect(() => {
     currentTextIdxRef.current = currentTextIdx;
   }, [currentTextIdx]);
@@ -214,7 +194,6 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     textsRef.current = processedTexts;
   }, [processedTexts]);
 
-  // Update canvas dimensions based on dynamic texts
   useEffect(() => {
     if (typeof window === "undefined" || !processedTexts.length) return;
 
@@ -222,9 +201,9 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     const tempCanvas = document.createElement("canvas");
     const tempCtx = tempCanvas.getContext("2d");
     if (!tempCtx) return;
-    
+
     tempCtx.font = fontStr;
-    
+
     let maxWidth = 100;
     processedTexts.forEach((text) => {
       const width = tempCtx.measureText(text).width;
@@ -234,12 +213,11 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     });
 
     setDims({
-      width: Math.ceil(maxWidth + 60), // added extra padding for breathe push boundaries
+      width: Math.ceil(maxWidth + 60),
       height: Math.ceil(fontSize * 1.6),
     });
   }, [processedTexts, fontSize, fontFamily]);
 
-  // Word swapping loop
   useEffect(() => {
     if (processedTexts.length <= 1) return;
 
@@ -250,7 +228,6 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     return () => clearInterval(interval);
   }, [processedTexts, delay]);
 
-  // Stable Core Particle System Hook
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -261,14 +238,12 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     const dpr = window.devicePixelRatio || 1;
     const { width, height } = dims;
 
-    // Apply high-DPI scaling
     canvas.width = width * dpr;
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
 
     const particles: Particle[] = [];
 
-    // Offscreen canvas to render text and scan pixels
     const offscreenCanvas = document.createElement("canvas");
     const offscreenCtx = offscreenCanvas.getContext("2d");
     if (!offscreenCtx) return;
@@ -282,8 +257,6 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
       offscreenCtx.font = `bold ${fontSize}px ${fontFamily}`;
       offscreenCtx.textAlign = "left";
       offscreenCtx.textBaseline = "middle";
-      
-      // Draw text horizontally centered with padding
       offscreenCtx.fillText(text, 20, height / 2);
 
       const imgData = offscreenCtx.getImageData(0, 0, width, height);
@@ -302,11 +275,10 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
       return targets;
     };
 
-    // Transition tracking states inside the single stable loop
     let activeTextIdx = -1;
     let morphProgress = 1.0;
     let isTransitioning = false;
-    
+
     const cx = width / 2;
     const cy = height / 2;
 
@@ -314,21 +286,18 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
     let lastTime = performance.now();
     let time = 0;
 
-    // Animation Loop
     const tick = (now: number) => {
-      const deltaTime = Math.min((now - lastTime) / 1000, 0.1); // cap to 100ms to avoid skips
+      const deltaTime = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
       time += deltaTime;
 
       const currentIdx = currentTextIdxRef.current;
       const currentTexts = textsRef.current;
 
-      // Word change detection inside render tick
       if (currentIdx !== activeTextIdx && currentTexts.length > 0) {
         activeTextIdx = currentIdx;
         const newTargets = getTargetsForText(currentTexts[activeTextIdx] || "");
 
-        // Make sure we have enough particles
         while (particles.length < newTargets.length) {
           const rx = Math.random() * width;
           const ry = Math.random() * height;
@@ -336,18 +305,16 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
           particles.push(new Particle(rx, ry, textColor, size, particles.length / 500));
         }
 
-        // Shuffle new targets mapping for a beautiful chaotic swarm morphing look
         const targetIndices = Array.from({ length: newTargets.length }, (_, i) => i);
         for (let i = targetIndices.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [targetIndices[i], targetIndices[j]] = [targetIndices[j], targetIndices[i]];
         }
 
-        // Record start/end target matrices for all particles
         particles.forEach((p, idx) => {
           p.startX = p.x;
           p.startY = p.y;
-          p.id = idx / Math.max(1, newTargets.length); // normalized ID for twinkling sine offset
+          p.id = idx / Math.max(1, newTargets.length);
 
           if (idx < newTargets.length) {
             const targetIdx = targetIndices[idx];
@@ -358,7 +325,6 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
           } else {
             p.active = false;
             p.targetAlpha = 0.15;
-            // Float extra particles in a circle around the text
             const angle = p.randomOffset + Math.random() * Math.PI * 2;
             const radius = (width * 0.3) + p.randomOffset * 0.5;
             p.endX = cx + Math.cos(angle) * radius;
@@ -366,12 +332,10 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
           }
         });
 
-        // Trigger morph progress
         morphProgress = 0;
         isTransitioning = true;
       }
 
-      // Update morph transition progress
       if (isTransitioning) {
         morphProgress += deltaTime * morphSpeed;
         if (morphProgress >= 1.0) {
@@ -381,43 +345,30 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
       }
 
       ctx.clearRect(0, 0, width, height);
-
-      // Additive composition creates high-intensity glowing overlap clusters (looks like Three.js additive points)
       ctx.globalCompositeOperation = "lighter";
 
       const mouse = mouseRef.current;
       const eased = cubicInOut(morphProgress);
-      
-      // uMorphProgress sine breathe push (explosion) outwards during morph
       const breatheStrength = Math.sin(morphProgress * Math.PI) * (fontSize * breatheIntensity);
-
-      // Auto rotation rock angle (float like waves)
       const autoRock = Math.sin(time * 0.7) * 0.03;
 
-      // Mouse camera tilt parallax offsets
       const mouseTiltX = mouse.active ? (mouse.x - cx) / cx : 0;
       const mouseTiltY = mouse.active ? (mouse.y - cy) / cy : 0;
 
-      // Combine rotation vectors
-      const rotAngle = autoRock + mouseTiltX * 0.12;
-      const cosA = Math.cos(rotAngle);
-      const sinA = Math.sin(rotAngle);
+      const cosA = Math.cos(autoRock + mouseTiltX * 0.12);
+      const sinA = Math.sin(autoRock + mouseTiltX * 0.12);
 
       particles.forEach((p) => {
-        // Linear path morphing to target positions
         const baseTx = p.startX + (p.endX - p.startX) * eased;
         const baseTy = p.startY + (p.endY - p.startY) * eased;
 
-        // Apply automatic and mouse-tilted rotational transform around the center of the canvas
         const rx = baseTx - cx;
         const ry = baseTy - cy;
         let tx = cx + (rx * cosA - ry * sinA);
         let ty = cy + (rx * sinA + ry * cosA);
 
-        // Apply mouse-Y pitch compression to simulate 3D projection
         ty = cy + (ty - cy) * (1.0 - Math.abs(mouseTiltY) * 0.15) + mouseTiltY * 8;
 
-        // Apply shader morph uMorphProgress sine breathe explosion push
         if (p.active) {
           const dx = tx - cx;
           const dy = ty - cy;
@@ -429,7 +380,6 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
         p.tx = tx;
         p.ty = ty;
 
-        // Update physics and color shimmer
         p.update(
           springStiffness,
           friction,
@@ -441,7 +391,7 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
           textColor,
           time
         );
-        
+
         p.draw(ctx);
       });
 
@@ -450,12 +400,13 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
 
     animationId = requestAnimationFrame(tick);
 
-    // Mouse event handlers
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
+      const scaleX = width / rect.width;
+      const scaleY = height / rect.height;
       mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
         active: true,
       };
     };
@@ -464,13 +415,14 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
       mouseRef.current.active = false;
     };
 
-    // Touch support
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         const rect = canvas.getBoundingClientRect();
+        const scaleX = width / rect.width;
+        const scaleY = height / rect.height;
         mouseRef.current = {
-          x: e.touches[0].clientX - rect.left,
-          y: e.touches[0].clientY - rect.top,
+          x: (e.touches[0].clientX - rect.left) * scaleX,
+          y: (e.touches[0].clientY - rect.top) * scaleY,
           active: true,
         };
       }
@@ -495,25 +447,20 @@ export const SwarmText: React.FC<SwarmTextProps> = ({
   }, [dims, fontSize, fontFamily, textColor, friction, springStiffness, particleSize, repelRadius, repelStrength, mouseRepel, step, morphSpeed, breatheIntensity]);
 
   return (
-    <div
-      className={`flex flex-wrap items-center justify-center gap-x-2 gap-y-1 select-none ${containerClassName}`}
-    >
-      {prefix && (
-        <span
-          className={`${prefixClassName} whitespace-nowrap`}
-          style={{ color: prefixColor }}
-        >
-          {prefix}
-        </span>
-      )}
-      <canvas
-        ref={canvasRef}
-        style={{
-          width: `${dims.width}px`,
-          height: `${dims.height}px`,
-        }}
-        className={`block cursor-default ${canvasClassName}`}
-      />
+    <div className="w-full @container flex justify-center text-center">
+      <div
+        className={`flex w-full flex-wrap items-center justify-center text-center select-none ${containerClassName}`}
+      >
+        <canvas
+          ref={canvasRef}
+          style={{
+            width: "100%",
+            maxWidth: `${dims.width}px`,
+            height: "auto",
+          }}
+          className={`block cursor-default mx-auto ${canvasClassName}`}
+        />
+      </div>
     </div>
   );
 };

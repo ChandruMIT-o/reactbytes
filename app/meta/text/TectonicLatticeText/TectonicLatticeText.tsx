@@ -55,7 +55,13 @@ export interface TectonicLatticeTextProps {
 }
 
 // ==========================================
-// 2. CORE PHYSICS ENGINE COMPONENT
+// 2. CONSTANTS (VIRTUAL RESOLUTION)
+// ==========================================
+const V_WIDTH = 1200;
+const V_HEIGHT = 300;
+
+// ==========================================
+// 3. CORE PHYSICS ENGINE COMPONENT
 // ==========================================
 
 export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
@@ -107,33 +113,48 @@ export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
     bgColor, wireframeDash, blockSize, blockPadding
   ]);
 
-  const generateLattice = (width: number, height: number, word: string) => {
-    if (width <= 0 || height <= 0) return;
-
+  // Generates lattice targeting fixed virtual constraints to prevent text splits
+  const generateLattice = (word: string) => {
     const offscreen = document.createElement("canvas");
-    offscreen.width = width;
-    offscreen.height = height;
+    offscreen.width = V_WIDTH;
+    offscreen.height = V_HEIGHT;
     const oCtx = offscreen.getContext("2d");
     if (!oCtx) return;
 
-    const responsiveFontSize = width < 640 ? 46 : 110;
-    oCtx.font = `${fontWeight} ${responsiveFontSize}px "${fontFamily}", -apple-system, sans-serif`;
+    let fontSize = 150; // Crisp base font size for virtual boundaries
+    oCtx.font = `${fontWeight} ${fontSize}px "${fontFamily}", -apple-system, sans-serif`;
+
+    const letters = word.split("");
+
+    const computeTotalWidth = (fSize: number) => {
+      oCtx.font = `${fontWeight} ${fSize}px "${fontFamily}", -apple-system, sans-serif`;
+      let total = 0;
+      letters.forEach((char) => {
+        total += oCtx.measureText(char).width;
+      });
+      return total + tracking * (letters.length - 1);
+    };
+
+    let totalWidth = computeTotalWidth(fontSize);
+    const maxAllowedWidth = V_WIDTH * 0.92; // 8% edge-safety padding
+
+    // Automatic downscaling loop inside the virtual window
+    while (totalWidth > maxAllowedWidth && fontSize > 12) {
+      fontSize -= 2;
+      totalWidth = computeTotalWidth(fontSize);
+    }
+
+    oCtx.font = `${fontWeight} ${fontSize}px "${fontFamily}", -apple-system, sans-serif`;
     oCtx.textAlign = "center";
     oCtx.textBaseline = "middle";
 
-    const letters = word.split("");
-    let totalWidth = 0;
-    const metrics = letters.map((char) => {
-      const w = oCtx.measureText(char).width;
-      totalWidth += w;
-      return { char, width: w };
-    });
+    const metrics = letters.map((char) => ({
+      char,
+      width: oCtx.measureText(char).width,
+    }));
 
-    const responsiveTracking = width < 640 ? Math.floor(tracking * 0.5) : tracking;
-    totalWidth += responsiveTracking * (letters.length - 1);
-
-    let currentX = width / 2 - totalWidth / 2;
-    const centerY = height / 2;
+    let currentX = V_WIDTH / 2 - totalWidth / 2;
+    const centerY = V_HEIGHT / 2;
 
     const blocks: TectonicBlock[] = [];
     const layoutMeta: LetterLayout[] = [];
@@ -142,21 +163,21 @@ export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
       const charCenterX = currentX + m.width / 2;
       layoutMeta.push({ char: m.char, cx: charCenterX, cy: centerY });
 
-      oCtx.clearRect(0, 0, width, height);
+      oCtx.clearRect(0, 0, V_WIDTH, V_HEIGHT);
       oCtx.fillStyle = "#ffffff";
       oCtx.fillText(m.char, charCenterX, centerY);
 
-      const imgData = oCtx.getImageData(0, 0, width, height);
+      const imgData = oCtx.getImageData(0, 0, V_WIDTH, V_HEIGHT);
       const data = imgData.data;
 
-      for (let y = 0; y < height; y += blockSize) {
-        for (let x = 0; x < width; x += blockSize) {
+      for (let y = 0; y < V_HEIGHT; y += blockSize) {
+        for (let x = 0; x < V_WIDTH; x += blockSize) {
           const sampleX = Math.floor(x + blockSize / 2);
           const sampleY = Math.floor(y + blockSize / 2);
 
-          if (sampleX >= width || sampleY >= height) continue;
+          if (sampleX >= V_WIDTH || sampleY >= V_HEIGHT) continue;
 
-          const alphaIdx = (sampleY * width + sampleX) * 4 + 3;
+          const alphaIdx = (sampleY * V_WIDTH + sampleX) * 4 + 3;
 
           if (data[alphaIdx] > 120) {
             const dx = sampleX - charCenterX;
@@ -199,13 +220,19 @@ export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
           }
         }
       }
-      currentX += m.width + responsiveTracking;
+      currentX += m.width + tracking;
     });
 
     layoutMetaRef.current = layoutMeta;
     blocksRef.current = blocks;
   };
 
+  // Lifecycle A: Generate lattice structure based strictly on content dependencies
+  useEffect(() => {
+    generateLattice(text);
+  }, [text, blockSize, blockPadding, railMode, fontFamily, fontWeight, tracking]);
+
+  // Lifecycle B: Manage element layout viewport tracking
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -214,29 +241,24 @@ export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
       const parent = canvas.parentElement;
       if (parent) {
         const width = parent.clientWidth;
-        const height = parent.clientHeight;
+        // Lock aspect ratio dimensions context strictly to the virtual setup map
+        const height = width * (V_HEIGHT / V_WIDTH);
+
         widthRef.current = width;
         heightRef.current = height;
 
         const dpr = window.devicePixelRatio || 1;
         canvas.width = width * dpr;
         canvas.height = height * dpr;
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
-
-        const ctx = canvas.getContext("2d");
-        if (ctx) {
-          ctx.scale(dpr, dpr);
-          generateLattice(width, height, text);
-        }
       }
     };
 
     resize();
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
-  }, [text, blockSize, blockPadding, railMode, fontFamily, fontWeight, tracking]);
+  }, []);
 
+  // Lifecycle C: Render Draw Loop
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -253,14 +275,22 @@ export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
       }
 
       const cfg = settingsRef.current;
-
-      ctx.fillStyle = cfg.bgColor;
-      ctx.fillRect(0, 0, width, height);
-
       const mouse = mouseRef.current;
       const blocks = blocksRef.current;
 
-      // Compute Physics Matrix
+      // Clear the canvas draw layers
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.save();
+      // Apply uniform scaling translation across High-DPR screens
+      const dpr = window.devicePixelRatio || 1;
+      ctx.scale((width / V_WIDTH) * dpr, (height / V_HEIGHT) * dpr);
+
+      // Render backgrounds across fixed scaling boxes
+      ctx.fillStyle = cfg.bgColor;
+      ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
+
+      // Compute Physics Matrix (Evaluated natively in virtual space units)
       blocks.forEach((b) => {
         const mdx = b.x - mouse.x;
         const mdy = b.y - mouse.y;
@@ -331,6 +361,7 @@ export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
         ctx.restore();
       });
 
+      ctx.restore();
       animationFrameId.current = requestAnimationFrame(loop);
     };
 
@@ -346,25 +377,35 @@ export const TectonicLatticeText: React.FC<TectonicLatticeTextProps> = ({
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
+
+    // Normalization mapping across strict virtual coordinates bounds
     mouseRef.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
+      x: ((e.clientX - rect.left) / rect.width) * V_WIDTH,
+      y: ((e.clientY - rect.top) / rect.height) * V_HEIGHT,
       active: true,
     };
   };
 
   return (
-    <div className={`relative w-full h-full select-none ${className}`}>
-      <canvas
-        ref={canvasRef}
-        onPointerMove={handlePointerMove}
-        onPointerLeave={() => {
-          mouseRef.current.active = false;
-          mouseRef.current.x = -2000;
-          mouseRef.current.y = -2000;
-        }}
-        className="w-full h-full touch-none cursor-crosshair"
-      />
+    <div className="w-full flex justify-center items-center">
+      <div className={`relative w-full select-none ${className}`}>
+        <canvas
+          ref={canvasRef}
+          onPointerMove={handlePointerMove}
+          onPointerLeave={() => {
+            mouseRef.current.active = false;
+            mouseRef.current.x = -2000;
+            mouseRef.current.y = -2000;
+          }}
+          style={{
+            width: "100%",
+            height: "auto",
+            aspectRatio: `${V_WIDTH} / ${V_HEIGHT}`,
+            display: "block",
+          }}
+          className="touch-none cursor-crosshair mx-auto"
+        />
+      </div>
     </div>
   );
 };

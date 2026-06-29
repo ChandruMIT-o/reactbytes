@@ -262,24 +262,14 @@ export const blurTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
         {
-          name: "Framer Motion",
-          role: "Animation",
-          url: "https://framer.com/motion",
+          name: "Vinu Priya V",
+          role: "Enhancement",
+          url: "https://github.com/vinu-2486",
         },
       ],
     },

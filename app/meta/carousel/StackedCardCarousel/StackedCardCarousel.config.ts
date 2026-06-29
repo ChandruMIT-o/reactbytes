@@ -7,6 +7,16 @@ export const stackedCardCarouselConfig: ComponentConfig = {
   tags: ["carousel", "cards", "stack", "slide", "3d"],
   componentPath:
     "app/meta/carousel/StackedCardCarousel/StackedCardCarousel.tsx",
+  npmPackageName: "@reactbytes/stacked-card-carousel",
+  version: "1.0.0",
+  dependencies: {
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.7.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "rounded-3xl border border-white/5 bg-zinc-950 min-h-[600px] !h-auto !p-0",
   props: [
@@ -73,17 +83,17 @@ export const stackedCardCarouselConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Design Inspiration",
+      title: "Libraries",
       items: [
         {
           name: "Framer Motion",
           role: "Animation Library",
-          url: "https://www.framer.com/motion/",
+          url: "https://framer.com/motion",
         },
         {
-          name: "Unsplash",
-          role: "Photography",
-          url: "https://unsplash.com/",
+          name: "Lucide React",
+          role: "Icon System",
+          url: "https://lucide.dev/",
         },
       ],
     },
@@ -94,26 +104,6 @@ export const stackedCardCarouselConfig: ComponentConfig = {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

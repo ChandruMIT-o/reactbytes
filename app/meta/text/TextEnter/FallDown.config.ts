@@ -6,6 +6,11 @@ export const fallDownConfig: ComponentConfig = {
   category: "text",
   tags: ["fall", "drop", "entrance", "animation", "gravity", "stagger"],
   componentPath: "app/meta/text/TextEnter/FallDown.tsx",
+  npmPackageName: "@reactbytes/fall-down",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   props: [
     {
       name: "text",
@@ -118,37 +123,22 @@ export const fallDownConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "JP Belley",
-          role: "Visual Designer",
-          url: "https://jeanphilippebelley.com/",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
     {
-      title: "Open Source Libraries",
+      title: "Inspiration",
       items: [
         {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animations",
-          url: "https://www.framer.com/motion/",
-        },
-        {
-          name: "Tailwind CSS",
-          role: "Styling",
-          url: "https://tailwindcss.com",
+          name: "JP Belley",
+          role: "Visual Designer",
+          url: "https://jeanphilippebelley.com/",
         },
       ],
-    },
+    }
   ],
   staticProps: {
     textClassName: "text-[clamp(3rem,10cqw,5rem)] tracking-tighter text-center",

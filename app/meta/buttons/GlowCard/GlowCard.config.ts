@@ -6,6 +6,13 @@ export const glowCardConfig: ComponentConfig = {
   category: "miscellaneous",
   tags: ["glow", "card", "shadow", "hover", "light", "gradient"],
   componentPath: "app/meta/buttons/GlowCard/GlowCard.tsx",
+  npmPackageName: "@reactbytes/glow-card",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "w-full min-h-[500px] !h-auto flex items-center justify-center p-8 bg-[#020005] rounded-[32px] border border-white/5 relative overflow-hidden",
   props: [
@@ -157,6 +164,16 @@ export const glowCardConfig: ComponentConfig = {
     },
   ],
   credits: [
+    {
+      title: "Project Author",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
+        },
+      ],
+    },
     {
       title: "Inspiration",
       items: [

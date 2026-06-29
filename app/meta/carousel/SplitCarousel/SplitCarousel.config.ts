@@ -6,6 +6,13 @@ export const splitCarouselConfig: ComponentConfig = {
   category: "carousel",
   tags: ["carousel", "split", "reveal", "panels", "slide"],
   componentPath: "app/meta/carousel/SplitCarousel/SplitCarousel.tsx",
+  npmPackageName: "@reactbytes/split-carousel",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "rounded-2xl border border-white/5 bg-black min-h-[500px] !h-auto !p-0",
   props: [
@@ -85,42 +92,12 @@ export const splitCarouselConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Inspiration & Assets",
-      items: [
-        {
-          name: "Yudiz Solutions",
-          role: "Original Design Concept",
-          url: "https://www.yudiz.com/",
-        },
-      ],
-    },
-    {
       title: "Project Author",
       items: [
         {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

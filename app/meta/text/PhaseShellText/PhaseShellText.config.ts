@@ -6,6 +6,8 @@ export const phaseShellTextConfig: ComponentConfig = {
   category: "text",
   tags: ["phase", "shell", "outline", "stroke", "reveal"],
   componentPath: "app/meta/text/PhaseShellText/PhaseShellText.tsx",
+  npmPackageName: "@reactbytes/phase-shell-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -107,22 +109,14 @@ export const phaseShellTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Author",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
-  staticProps: {},
+  staticProps: {
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
+  },
 };

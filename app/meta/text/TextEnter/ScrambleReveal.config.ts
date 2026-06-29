@@ -6,6 +6,11 @@ export const scrambleRevealConfig: ComponentConfig = {
   category: "text",
   tags: ["scramble", "glitch", "reveal", "matrix", "random", "chars"],
   componentPath: "app/meta/text/TextEnter/ScrambleReveal.tsx",
+  npmPackageName: "@reactbytes/scramble-reveal",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   props: [
     {
       name: "text",
@@ -105,34 +110,14 @@ export const scrambleRevealConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "GSAP Scramble CSS",
-          role: "Animation Concept",
-          url: "https://codepen.io/osublake/pen/XWwjYmO",
-        },
-        {
-          name: "React Bytes",
-          role: "Implementation",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "Framer Motion",
-          role: "Animations",
-          url: "https://www.framer.com/motion/",
-        },
-        {
-          name: "React",
-          role: "UI Library",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
   staticProps: {
-    textClassName: "text-6xl md:text-9xl font-bold font-mono leading-[0.75]",
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
   },
 };

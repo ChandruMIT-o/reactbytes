@@ -64,10 +64,26 @@ export default function StackedCards({
     footerText = '',
 }: StackedCardsProps) {
     const [engineLoaded, setEngineLoaded] = useState(false);
+    const [containerWidth, setContainerWidth] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const cardsRef = useRef<(HTMLLIElement | null)[]>([]);
 
-    // 1. Dynamic Script Injection
+    // 1. Monitor real parent element container size limits
+    useEffect(() => {
+        if (!containerRef.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+            if (!entries || entries.length === 0) return;
+            setContainerWidth(entries[0].contentRect.width);
+        });
+
+        observer.observe(containerRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    const isNarrow = containerWidth < 640;
+
+    // 2. Dynamic Script Injection
     useEffect(() => {
         const loadScript = (src: string) => {
             return new Promise((resolve, reject) => {
@@ -97,11 +113,10 @@ export default function StackedCards({
         initEngine();
     }, []);
 
-    // 2. Initialize Animations
+    // 3. Initialize Animations
     useEffect(() => {
         if (!engineLoaded || !window.gsap || !window.ScrollTrigger) return;
 
-        // If a scroller was explicitly requested but hasn't been provided yet, wait for it
         if (scroller === undefined && scroller !== null) {
             return;
         }
@@ -110,7 +125,6 @@ export default function StackedCards({
         const ScrollTrigger = window.ScrollTrigger;
         gsap.registerPlugin(ScrollTrigger);
 
-        // Auto-detect scroll parent if scroller is not explicitly passed
         let activeScroller: HTMLElement | Window = window;
         if (scroller) {
             if (typeof scroller === 'string') {
@@ -132,10 +146,8 @@ export default function StackedCards({
         }
 
         const ctx = gsap.context(() => {
-            // Intro fade-in
             gsap.to(containerRef.current, { opacity: 1, duration: 1.2, ease: 'power3.out' });
 
-            // Organic Stacking Animation
             cardsRef.current.forEach((card, i) => {
                 if (!card) return;
                 const content = card.querySelector('.card-content');
@@ -143,7 +155,6 @@ export default function StackedCards({
 
                 if (i === cardsRef.current.length - 1) return;
 
-                // Alternate rotation for a messy, organic pile effect
                 const rotateDir = i % 2 === 0 ? rotationStrength : -rotationStrength;
 
                 gsap.to(content, {
@@ -186,7 +197,7 @@ export default function StackedCards({
         <div
             ref={containerRef}
             className={`font-sans opacity-0 transition-opacity duration-1000 relative selection:bg-current selection:text-black ${className}`}
-            style={{ 
+            style={{
                 color: textColor,
                 ['--selection-bg' as any]: accentColor,
                 ['--selection-text' as any]: '#000000'
@@ -213,14 +224,15 @@ export default function StackedCards({
                         className="sticky w-full"
                         style={{
                             top: stickyTop,
-                            height: cardHeight,
+                            height: isNarrow ? '460px' : cardHeight,
                             minHeight: '300px',
                             perspective: '1500px',
                             paddingTop: `${index * 1}rem`,
                         }}
                     >
                         <div
-                            className="card-content w-full h-full flex flex-col md:flex-row overflow-hidden shadow-2xl transition-shadow duration-500"
+                            className={`card-content w-full h-full flex overflow-hidden shadow-2xl transition-shadow duration-500 ${isNarrow ? "flex-col p-6 gap-2" : "flex-row p-0 gap-0"
+                                }`}
                             style={{
                                 backgroundColor: card.bg,
                                 color: card.text,
@@ -231,29 +243,32 @@ export default function StackedCards({
                         >
                             {/* Left Pane: Numbers & Vertical Text */}
                             <div
-                                className="w-full md:w-1/4 p-6 md:p-8 flex flex-row md:flex-col justify-between items-start md:items-center"
+                                className={`flex justify-between ${isNarrow
+                                        ? "w-full flex-row items-center border-b border-black/5 pb-2 shrink-0"
+                                        : "w-1/4 p-8 flex-col items-center"
+                                    }`}
                             >
-                                <span className="text-4xl md:text-6xl font-black tracking-tighter leading-none opacity-90">
+                                <span className={`font-black tracking-tighter leading-none opacity-90 ${isNarrow ? "text-3xl" : "text-6xl"}`}>
                                     {card.num}
                                 </span>
 
-                                <span className="text-xs md:text-sm tracking-[0.4em] uppercase font-bold md:-rotate-180 md:[writing-mode:vertical-rl] opacity-50">
+                                <span className={`tracking-[0.4em] uppercase font-bold opacity-50 ${isNarrow ? "text-[10px]" : "text-sm -rotate-180 [writing-mode:vertical-rl]"}`}>
                                     {card.label}
                                 </span>
                             </div>
 
                             {/* Right Pane: Content */}
-                            <div className="w-full md:w-3/4 p-6 md:p-12 lg:p-16 flex flex-col justify-center relative">
+                            <div className={`flex flex-col justify-center relative ${isNarrow ? "w-full p-2 pt-4 flex-1" : "w-3/4 p-12 lg:p-16"}`}>
                                 <div className="absolute right-0 bottom-0 w-48 h-48 rounded-full mix-blend-overlay opacity-20 pointer-events-none blur-3xl transform translate-x-1/3 translate-y-1/3" style={{ backgroundColor: card.text }} />
 
-                                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 tracking-tight leading-[1.1] relative z-10">
+                                <h2 className={`font-bold tracking-tight leading-[1.1] relative z-10 ${isNarrow ? "text-xl mb-3" : "text-2xl md:text-4xl lg:text-5xl mb-6"}`}>
                                     {card.title}
                                 </h2>
-                                <p className="text-sm md:text-lg max-w-xl leading-relaxed opacity-80 font-medium relative z-10">
+                                <p className={`leading-relaxed opacity-80 font-medium relative z-10 ${isNarrow ? "text-xs line-clamp-4" : "text-sm md:text-lg max-w-xl"}`}>
                                     {card.desc}
                                 </p>
 
-                                <div className="mt-8 flex items-center gap-3 cursor-pointer group relative z-10 w-max">
+                                <div className={`flex items-center gap-3 cursor-pointer group relative z-10 w-max ${isNarrow ? "mt-4" : "mt-8"}`}>
                                     <span className="text-xs font-bold uppercase tracking-widest group-hover:pr-2 transition-all">Explore</span>
                                     <div className="w-6 h-[1.5px] bg-current transform origin-left group-hover:scale-x-150 transition-transform" />
                                 </div>

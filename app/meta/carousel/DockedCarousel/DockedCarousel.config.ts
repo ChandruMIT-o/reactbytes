@@ -6,6 +6,15 @@ export const dockedCarouselConfig: ComponentConfig = {
   category: "carousel",
   tags: ["carousel", "docked", "scroll", "dock", "slide"],
   componentPath: "app/meta/carousel/DockedCarousel/DockedCarousel.tsx",
+  npmPackageName: "@reactbytes/docked-carousel",
+  version: "1.0.0",
+  dependencies: {
+    "framer-motion": "^12.38.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "rounded-[32px] border border-white/5 bg-black shadow-2xl min-h-[500px] !h-auto !p-0",
   props: [
@@ -207,11 +216,6 @@ export const dockedCarouselConfig: ComponentConfig = {
           url: "https://www.framer.com/motion/",
           role: "Animation Engine",
         },
-        {
-          name: "Lucide React",
-          url: "https://lucide.dev/",
-          role: "Icon System",
-        },
       ],
     },
     {
@@ -221,26 +225,6 @@ export const dockedCarouselConfig: ComponentConfig = {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

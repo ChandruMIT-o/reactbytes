@@ -79,7 +79,7 @@ export const TectonicTrackText: React.FC<TectonicTrackTextProps> = ({
                 scale = targetFitWidth / baseTextWidth;
             }
             currentScaleRef.current = scale;
-            
+
             const activeFontSize = Math.max(12, fontSize * scale);
             currentFontSizeRef.current = activeFontSize;
 

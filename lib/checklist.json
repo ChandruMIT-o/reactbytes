@@ -1,19 +1,19 @@
 {
   "shatter-text": {
-    "props": false,
-    "presets": false,
-    "installation": false,
-    "api": false,
-    "credits": false,
-    "impact": false
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
   },
   "blur-text": {
-    "props": false,
-    "presets": false,
-    "installation": false,
-    "api": false,
-    "credits": false,
-    "impact": false
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
   },
   "stripe-flow": {
     "props": true,
@@ -304,6 +304,126 @@
     "impact": true
   },
   "tectonic-track-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "elastic-reveal": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "focal-blur": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "granular-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "magnetic-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "gooey-morph": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "swarm-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "scramble-reveal": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "scaffold-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "phase-shell-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "stratum-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "helix-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "tectonic-lattice-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "kinetic-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "keyboard-text": {
+    "props": true,
+    "presets": true,
+    "installation": true,
+    "api": true,
+    "credits": true,
+    "impact": true
+  },
+  "volumetric-text": {
     "props": true,
     "presets": true,
     "installation": true,

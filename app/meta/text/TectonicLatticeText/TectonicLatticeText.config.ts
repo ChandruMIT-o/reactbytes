@@ -6,6 +6,8 @@ export const tectonicLatticeTextConfig: ComponentConfig = {
   category: "text",
   tags: ["tectonic", "lattice", "grid", "fracture", "shift"],
   componentPath: "app/meta/text/TectonicLatticeText/TectonicLatticeText.tsx",
+  npmPackageName: "@reactbytes/tectonic-lattice-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -202,22 +204,14 @@ export const tectonicLatticeTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Author",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
-  staticProps: {},
+  staticProps: {
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
+  },
 };

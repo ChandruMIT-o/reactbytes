@@ -176,70 +176,70 @@ const createContentTexture = async (content: string, size: number): Promise<THRE
   canvas.width = 1024;
   canvas.height = 1024;
   const ctx = canvas.getContext("2d")!;
-  
+
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, 1024, 1024);
-  
+
   const text = content.trim();
-  
+
   // If the string is an SVG, draw it using an Image Blob
   if (text.startsWith("<svg") && text.endsWith("</svg>")) {
-     return new Promise((resolve) => {
-         const img = new Image();
-         let svgStr = text;
-         if (!svgStr.includes("xmlns=")) {
-            svgStr = svgStr.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
-         }
-         const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
-         const url = URL.createObjectURL(blob);
-         
-         img.onload = () => {
-            const scaleFactor = size / 500;
-            const maxDim = Math.max(img.width, img.height);
-            const fitScale = maxDim > 0 ? (1024 / maxDim) * scaleFactor : 1;
-            
-            const w = img.width * fitScale;
-            const h = img.height * fitScale;
-            ctx.drawImage(img, 512 - w / 2, 512 - h / 2, w, h);
-            URL.revokeObjectURL(url);
-            
-            const tex = new THREE.CanvasTexture(canvas);
-            tex.wrapS = THREE.ClampToEdgeWrapping;
-            tex.wrapT = THREE.ClampToEdgeWrapping;
-            tex.minFilter = THREE.LinearFilter;
-            resolve(tex);
-         };
-         img.onerror = () => {
-            ctx.fillStyle = "white";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.font = "bold 100px sans-serif";
-            ctx.fillText("SVG Error", 512, 512);
-            resolve(new THREE.CanvasTexture(canvas));
-         };
-         img.src = url;
-     });
+    return new Promise((resolve) => {
+      const img = new Image();
+      let svgStr = text;
+      if (!svgStr.includes("xmlns=")) {
+        svgStr = svgStr.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"');
+      }
+      const blob = new Blob([svgStr], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+
+      img.onload = () => {
+        const scaleFactor = size / 500;
+        const maxDim = Math.max(img.width, img.height);
+        const fitScale = maxDim > 0 ? (1024 / maxDim) * scaleFactor : 1;
+
+        const w = img.width * fitScale;
+        const h = img.height * fitScale;
+        ctx.drawImage(img, 512 - w / 2, 512 - h / 2, w, h);
+        URL.revokeObjectURL(url);
+
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.wrapS = THREE.ClampToEdgeWrapping;
+        tex.wrapT = THREE.ClampToEdgeWrapping;
+        tex.minFilter = THREE.LinearFilter;
+        resolve(tex);
+      };
+      img.onerror = () => {
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "bold 100px sans-serif";
+        ctx.fillText("SVG Error", 512, 512);
+        resolve(new THREE.CanvasTexture(canvas));
+      };
+      img.src = url;
+    });
   }
-  
+
   // Fallback: draw as standard text
   ctx.fillStyle = "white";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
-  
+
   // Start with the requested font size
   let fontSize = size;
   ctx.font = "bold " + fontSize + "px system-ui, sans-serif";
   let textWidth = ctx.measureText(text).width;
-  
+
   // If the text exceeds the maximum safe width, scale font size down to fit and prevent clipping
   const maxWidth = 900;
   if (textWidth > maxWidth) {
     fontSize = Math.floor(fontSize * (maxWidth / textWidth));
     ctx.font = "bold " + fontSize + "px system-ui, sans-serif";
   }
-  
+
   ctx.fillText(text, 512, 512);
-  
+
   const tex = new THREE.CanvasTexture(canvas);
   tex.wrapS = THREE.ClampToEdgeWrapping;
   tex.wrapT = THREE.ClampToEdgeWrapping;
@@ -306,7 +306,7 @@ export const VolumetricText: React.FC<VolumetricTextProps> = ({
   className = "",
 }) => {
   const mountRef = useRef<HTMLDivElement>(null);
-  
+
   // Use refs to feed data cleanly into the animation loop without stale closures
   const propsRef = useRef({
     addNoise,
@@ -408,7 +408,7 @@ export const VolumetricText: React.FC<VolumetricTextProps> = ({
       fragmentShader: getFragmentShader(samples, octaves),
     });
     materialRef.current = material;
-    
+
     const mesh = new THREE.Mesh(geometry, material);
     meshRef.current = mesh;
     scene.add(mesh);
@@ -416,7 +416,7 @@ export const VolumetricText: React.FC<VolumetricTextProps> = ({
     // TEXTURE LOADING
     const loader = new THREE.TextureLoader();
     loader.setCrossOrigin("anonymous");
-    
+
     let noiseTexture: THREE.Texture | null = null;
     loader.load("https://s3-us-west-2.amazonaws.com/s.cdpn.io/982762/noise.png", (noiseTex) => {
       noiseTex.wrapS = THREE.RepeatWrapping;
@@ -443,7 +443,7 @@ export const VolumetricText: React.FC<VolumetricTextProps> = ({
       const ratio = rect.height / rect.width;
       const x = (e.clientX - rect.left - rect.width / 2) / rect.width / ratio;
       const y = (e.clientY - rect.top - rect.height / 2) / rect.height * -1;
-      
+
       uniformsRef.current.u_mouse.value.set(x, y);
       uniformsRef.current.u_mousemoved.value = true;
     };
@@ -455,7 +455,7 @@ export const VolumetricText: React.FC<VolumetricTextProps> = ({
 
     const renderLoop = (time: number) => {
       animationFrameId = requestAnimationFrame(renderLoop);
-      
+
       // Dynamic Resizing Check
       const width = container.clientWidth || 1;
       const height = container.clientHeight || 1;
@@ -513,7 +513,7 @@ export const VolumetricText: React.FC<VolumetricTextProps> = ({
       uniformsRef.current.u_text500.value = tex;
       if (oldTex) oldTex.dispose();
     });
-    
+
     return () => {
       active = false;
     };
@@ -522,22 +522,22 @@ export const VolumetricText: React.FC<VolumetricTextProps> = ({
   // Handle Shader Material Recompilation (only needed when constants change)
   useEffect(() => {
     if (!materialRef.current || !meshRef.current) return;
-    
+
     const newMaterial = new THREE.ShaderMaterial({
       uniforms: uniformsRef.current,
       vertexShader: VERTEX_SHADER,
       fragmentShader: getFragmentShader(samples, octaves),
     });
-    
+
     meshRef.current.material = newMaterial;
     materialRef.current.dispose();
     materialRef.current = newMaterial;
   }, [samples, octaves]);
 
   return (
-    <div 
-      ref={mountRef} 
-      className={`relative touch-none ${className}`} 
+    <div
+      ref={mountRef}
+      className={`relative touch-none ${className}`}
     />
   );
 };

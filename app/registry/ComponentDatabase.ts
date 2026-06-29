@@ -56,7 +56,7 @@ import { dockedCarouselConfig } from "../meta/carousel/DockedCarousel/DockedCaro
 import { stackedCarouselConfig } from "../meta/carousel/StackedCarousel/StackedCarousel.config";
 import { stackedCardCarouselConfig } from "../meta/carousel/StackedCardCarousel/StackedCardCarousel.config";
 import { voidCarouselConfig } from "../meta/carousel/VoidCarousel/VoidCarousel.config";
-import { rotaryCarouselConfig } from "../meta/carousel/RotaryCarousel/RotaryCarousel.config";
+import { ribbonCarouselConfig } from "../meta/carousel/RibbonCarousel/RibbonCarousel.config";
 import { morphCarouselConfig } from "../meta/carousel/MorphCarousel/MorphCarousel.config";
 import { splitCarouselConfig } from "../meta/carousel/SplitCarousel/SplitCarousel.config";
 import { listCarouselConfig } from "../meta/carousel/ListCarousel/ListCarousel.config";
@@ -183,7 +183,7 @@ export const ComponentDatabase: ComponentConfig[] = [
   stackedCarouselConfig,
   stackedCardCarouselConfig,
   voidCarouselConfig,
-  rotaryCarouselConfig,
+  ribbonCarouselConfig,
   morphCarouselConfig,
   splitCarouselConfig,
   listCarouselConfig,

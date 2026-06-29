@@ -6,6 +6,16 @@ export const morphCarouselConfig: ComponentConfig = {
   category: "carousel",
   tags: ["carousel", "morph", "shape", "transition", "fluid"],
   componentPath: "app/meta/carousel/MorphCarousel/MorphCarousel.tsx",
+  npmPackageName: "@reactbytes/morph-carousel",
+  version: "1.0.0",
+  dependencies: {
+    "framer-motion": "^12.38.0",
+    "lucide-react": "^1.7.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName: "!p-0 !h-auto w-full max-w-5xl",
   props: [
     {
@@ -85,21 +95,16 @@ export const morphCarouselConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Tech Stack",
+      title: "Libraries",
       items: [
         {
-          name: "WebGL 2.0",
-          role: "Rendering Engine",
-          url: "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API",
-        },
-        {
           name: "Framer Motion",
-          role: "Animations",
-          url: "https://www.framer.com/motion/",
+          role: "Animation Library",
+          url: "https://framer.com/motion",
         },
         {
           name: "Lucide React",
-          role: "Icons",
+          role: "Icon System",
           url: "https://lucide.dev/",
         },
       ],
@@ -111,26 +116,6 @@ export const morphCarouselConfig: ComponentConfig = {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

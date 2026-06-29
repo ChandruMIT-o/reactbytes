@@ -8,8 +8,12 @@ export const shinyButtonConfig: ComponentConfig = {
   componentPath: "app/meta/buttons/ShinyButton/ShinyButton.tsx",
   npmPackageName: "@reactbytes/shiny-cta",
   version: "1.0.0",
-  peerDependencies: {
+  dependencies: {
     "framer-motion": "^12.38.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
   },
   context_from_dev:
     "A sleek, glowing call-to-action button featuring animated gradients rotating around its border. Requires modern CSS support for CSS.registerProperty. Best used for critical action items such as signups or waitlist forms.",
@@ -120,6 +124,26 @@ export const shinyButtonConfig: ComponentConfig = {
     },
   ],
   credits: [
+    {
+      title: "Libraries",
+      items: [
+        {
+          name: "Framer Motion",
+          role: "Animation Library",
+          url: "https://framer.com/motion",
+        },
+      ],
+    },
+    {
+      title: "Project Author",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
+        },
+      ],
+    },
     {
       title: "Inspiration",
       items: [

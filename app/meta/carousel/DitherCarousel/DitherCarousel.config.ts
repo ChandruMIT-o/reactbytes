@@ -6,6 +6,15 @@ export const ditherCarouselConfig: ComponentConfig = {
   category: "carousel",
   tags: ["carousel", "dither", "pixel", "retro", "transition"],
   componentPath: "app/meta/carousel/DitherCarousel/DitherCarousel.tsx",
+  npmPackageName: "@reactbytes/dither-carousel",
+  version: "1.0.0",
+  dependencies: {
+    "lucide-react": "^1.7.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "w-full relative overflow-hidden flex flex-col items-center justify-center p-4 md:p-8 min-h-[480px] bg-black !p-0",
   props: [
@@ -123,32 +132,12 @@ export const ditherCarouselConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Component Source",
+      title: "Libraries",
       items: [
         {
-          name: "Antigravity",
-          role: "Design & Retro Rendering Logic",
-          url: "https://reactbytes.dev",
-        },
-        {
-          name: "React Bytes",
-          role: "Component Ecosystem",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Retro Graphics & Algorithms",
-      items: [
-        {
-          name: "Ordered Dithering (Bayer Matrix)",
-          role: "Pixel Quantization & Half-tone Math",
-          url: "https://en.wikipedia.org/wiki/Ordered_dithering",
-        },
-        {
-          name: "WebGL 2 and Canvas double-buffering",
-          role: "Sweep wave particle engines",
-          url: "https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API",
+          name: "Lucide React",
+          role: "Icon System",
+          url: "https://lucide.dev/",
         },
       ],
     },
@@ -159,26 +148,6 @@ export const ditherCarouselConfig: ComponentConfig = {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

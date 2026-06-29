@@ -41,6 +41,13 @@ export const voidCarouselConfig: ComponentConfig = {
   category: "carousel",
   tags: ["carousel", "void", "dark", "dramatic", "transition"],
   componentPath: "app/meta/carousel/VoidCarousel/VoidCarousel.tsx",
+  npmPackageName: "@reactbytes/void-carousel",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "h-[500px] w-full rounded-[18px] border border-rb-neutral-4/50 overflow-hidden relative isolate bg-black flex flex-col !p-0",
   staticProps: {
@@ -192,42 +199,12 @@ export const voidCarouselConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Developer",
-      items: [
-        {
-          name: "React Bytes",
-          role: "Component Creation",
-          url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
       title: "Project Author",
       items: [
         {
           name: "ChandruMIT-o",
           role: "Creator & Lead Designer",
           url: "https://github.com/ChandruMIT-o",
-        },
-      ],
-    },
-    {
-      title: "Core Stack",
-      items: [
-        {
-          name: "Next.js 16",
-          role: "Framework",
-          url: "https://nextjs.org",
-        },
-        {
-          name: "Tailwind CSS v4",
-          role: "Styling Engine",
-          url: "https://tailwindcss.com",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animation Library",
-          url: "https://framer.com/motion",
         },
       ],
     },

@@ -28,7 +28,8 @@ export const GooeyMorph: React.FC<GooeyMorphProps> = ({
 	morphSpeed = 1,
 	color = "#E8EAF0",
 	className = "",
-	textClassName = "text-4xl md:text-6xl font-bold font-sans tracking-tighter",
+	// Swapped to fluid container query units to natively scale with the parent container
+	textClassName = "text-[clamp(1.5rem,8cqw,4rem)] font-bold font-sans tracking-tighter",
 	yOffset = 20,
 	uppercase = false,
 }) => {
@@ -46,69 +47,71 @@ export const GooeyMorph: React.FC<GooeyMorphProps> = ({
 		return () => clearInterval(interval);
 	}, [processedWords.length, duration]);
 
-	// Unique ID for the filter to avoid conflicts
-	const filterId = useMemo(() => `gooey-morph-${Math.random().toString(36).substr(2, 9)}`, []);
+	// Unique ID for the filter to avoid cross-component configuration conflicts
+	const filterId = useMemo(() => `gooey-morph-${Math.random().toString(36).substring(2, 11)}`, []);
 
 	return (
-		<div className={`relative flex items-center justify-center ${className}`}>
-			{/* SVG Filter Definition */}
-			<svg className="absolute w-0 h-0 invisible pointer-events-none">
-				<defs>
-					<filter id={filterId}>
-						<feColorMatrix
-							in="SourceGraphic"
-							type="matrix"
-							values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9"
-							result="goo"
-						/>
-						<feComposite in="SourceGraphic" in2="goo" operator="atop" />
-					</filter>
-				</defs>
-			</svg>
+		<div className="w-full @container">
+			{/* Hardcoded w-full, justify-center, and text-center to lock structural positioning */}
+			<div className={`relative flex w-full items-center justify-center text-center ${className}`}>
+				{/* SVG Filter Definition */}
+				<svg className="absolute w-0 h-0 invisible pointer-events-none">
+					<defs>
+						<filter id={filterId}>
+							<feColorMatrix
+								in="SourceGraphic"
+								type="matrix"
+								values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 25 -9"
+								result="goo"
+							/>
+							<feComposite in="SourceGraphic" in2="goo" operator="atop" />
+						</filter>
+					</defs>
+				</svg>
 
-			<div
-				style={{ filter: `url(#${filterId})` }}
-				className="relative flex items-center justify-center overflow-visible"
-			>
-				<AnimatePresence initial={false}>
-					<motion.span
-						key={index}
-						initial={{
-							opacity: 0,
-							scale: 0.8,
-							filter: "blur(20px)",
-							y: yOffset,
-							letterSpacing: "-0.1em"
-						}}
-						animate={{
-							opacity: 1,
-							scale: 1,
-							filter: "blur(0px)",
-							y: 0,
-							letterSpacing: "0em"
-						}}
-						exit={{
-							opacity: 0,
-							scale: 1.2,
-							filter: "blur(20px)",
-							y: -yOffset,
-							letterSpacing: "0.1em",
-							position: "absolute"
-						}}
-						transition={{
-							duration: morphSpeed,
-							ease: [0.34, 1.56, 0.64, 1], // Custom bouncy ease for organic feel
-						}}
-						style={{ color }}
-						className={`inline-block whitespace-nowrap ${textClassName}`}
-					>
-						{processedWords[index]}
-					</motion.span>
-				</AnimatePresence>
+				<div
+					style={{ filter: `url(#${filterId})` }}
+					className="relative flex w-full items-center justify-center text-center overflow-visible"
+				>
+					<AnimatePresence initial={false}>
+						<motion.span
+							key={index}
+							initial={{
+								opacity: 0,
+								scale: 0.8,
+								filter: "blur(20px)",
+								y: yOffset,
+								letterSpacing: "-0.1em"
+							}}
+							animate={{
+								opacity: 1,
+								scale: 1,
+								filter: "blur(0px)",
+								y: 0,
+								letterSpacing: "0em"
+							}}
+							exit={{
+								opacity: 0,
+								scale: 1.2,
+								filter: "blur(20px)",
+								y: -yOffset,
+								letterSpacing: "0.1em",
+								position: "absolute"
+							}}
+							transition={{
+								duration: morphSpeed,
+								ease: [0.34, 1.56, 0.64, 1], // Custom bouncy ease for organic layout morphing
+							}}
+							style={{ color }}
+							className={`inline-block whitespace-nowrap text-center ${textClassName}`}
+						>
+							{processedWords[index]}
+						</motion.span>
+					</AnimatePresence>
+				</div>
 			</div>
 		</div>
 	);
 };
-
 
 export default GooeyMorph;

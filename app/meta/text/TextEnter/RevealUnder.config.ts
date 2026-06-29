@@ -6,6 +6,12 @@ export const revealUnderConfig: ComponentConfig = {
   category: "text",
   tags: ["reveal", "clip", "entrance", "underline", "wipe"],
   componentPath: "app/meta/text/TextEnter/RevealUnder.tsx",
+  npmPackageName: "@reactbytes/reveal-under",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
+
   props: [
     {
       name: "firstWord",
@@ -96,37 +102,12 @@ export const revealUnderConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "JP Belley",
-          role: "Visual Designer",
-          url: "https://jeanphilippebelley.com/",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animations",
-          url: "https://www.framer.com/motion/",
-        },
-        {
-          name: "Tailwind CSS",
-          role: "Styling",
-          url: "https://tailwindcss.com",
-        },
-      ],
-    },
+    }
   ],
   staticProps: {
     textClassName: "text-6xl font-bold tracking-tight font-mono",

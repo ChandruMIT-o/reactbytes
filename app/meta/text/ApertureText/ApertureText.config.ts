@@ -6,6 +6,8 @@ export const apertureTextConfig: ComponentConfig = {
   category: "text",
   tags: ["aperture", "iris", "camera", "reveal", "circle"],
   componentPath: "app/meta/text/ApertureText/ApertureText.tsx",
+  npmPackageName: "@reactbytes/aperture-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -124,22 +126,12 @@ export const apertureTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Author",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-      ],
-    },
+    }
   ],
   staticProps: {},
 };

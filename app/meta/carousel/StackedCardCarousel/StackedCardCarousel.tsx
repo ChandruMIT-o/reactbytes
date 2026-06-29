@@ -216,7 +216,7 @@ const Card = ({ item, index, totalCards, scrollXProgress, bgTransform }: CardPro
             {/* --------------------------------- */}
 
             {/* Elegant Sliding Number (Optimized for performance) */}
-            <motion.div 
+            <motion.div
                 style={{ opacity: op }}
                 className="absolute top-6 left-6 w-[120px] h-[100px] pointer-events-none select-none z-30"
             >
@@ -399,29 +399,6 @@ export default function CardStackApp({
                 <div className="flex items-center gap-2 text-white/60 text-xs tracking-wider uppercase font-medium bg-black/20 px-4 py-2 rounded-full pointer-events-none">
                     <Mouse size={14} className="opacity-70" />
                     <span>Swipe or Scroll horizontally</span>
-                </div>
-            </div>
-
-            {/* Explainer / Info Widget */}
-            <div className="absolute right-6 top-6 z-40 pointer-events-auto">
-                <div className={`relative overflow-hidden rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 transition-all duration-500 ease-out flex flex-col items-end ${showInfo ? "w-80 p-6 shadow-2xl" : "w-12 h-12 p-0 cursor-pointer hover:bg-black/80"
-                    }`}>
-                    <button
-                        onClick={() => setShowInfo(!showInfo)}
-                        className={`absolute top-0 right-0 h-12 w-12 flex items-center justify-center text-white/70 hover:text-white transition-colors`}
-                    >
-                        {showInfo ? <X size={20} /> : <Info size={20} />}
-                    </button>
-
-                    <div className={`w-full text-white/80 transition-opacity duration-300 ${showInfo ? "opacity-100" : "opacity-0 hidden"}`}>
-                        <h4 className="text-white font-medium mb-3 pr-8">React & Framer Motion Port</h4>
-                        <p className="text-sm font-mono text-white/60 mb-4 leading-relaxed">
-                            This completely bypasses experimental CSS <code className="bg-white/10 px-1 py-0.5 rounded text-white/80">scroll-timeline</code> and <code className="bg-white/10 px-1 py-0.5 rounded text-white/80">scroll-snap</code> limitations.
-                        </p>
-                        <p className="text-sm font-mono text-white/60 leading-relaxed">
-                            It calculates pure 3D space curves based on scroll progression, making it fully cross-browser compatible (Firefox/Safari ready).
-                        </p>
-                    </div>
                 </div>
             </div>
         </motion.main>

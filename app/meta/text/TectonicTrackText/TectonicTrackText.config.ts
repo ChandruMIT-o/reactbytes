@@ -6,6 +6,8 @@ export const tectonicTrackTextConfig: ComponentConfig = {
   category: "text",
   tags: ["tectonic", "track", "slide", "mechanical", "reveal"],
   componentPath: "app/meta/text/TectonicTrackText/TectonicTrackText.tsx",
+  npmPackageName: "@reactbytes/tectonic-track-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -133,19 +135,9 @@ export const tectonicTrackTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Author",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

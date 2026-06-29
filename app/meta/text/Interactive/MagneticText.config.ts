@@ -6,6 +6,9 @@ export const magneticTextConfig: ComponentConfig = {
   category: "text",
   tags: ["magnetic", "repel", "interactive", "mouse", "physics"],
   componentPath: "app/meta/text/Interactive/MagneticText.tsx",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   npmPackageName: "@reactbytes/magnetic-repel",
   version: "1.0.0",
   context_from_dev:
@@ -60,38 +63,38 @@ export const magneticTextConfig: ComponentConfig = {
       description: "Tailwind classes for text styling.",
     },
     {
-  name: "enterAnimation",
-  type: "boolean",
-  default: true,
-  description: "Play staggered enter animation."
-},
-{
-  name: "initialBlur",
-  type: "number",
-  default: 12,
-  min: 0,
-  max: 40,
-  step: 1,
-  description: "Initial blur amount."
-},
-{
-  name: "enterDuration",
-  type: "number",
-  default: 0.5,
-  min: 0.1,
-  max: 3,
-  step: 0.1,
-  description: "Enter animation duration."
-},
-{
-  name: "enterStagger",
-  type: "number",
-  default: 0.04,
-  min: 0,
-  max: 0.2,
-  step: 0.01,
-  description: "Delay between letters."
-},
+      name: "enterAnimation",
+      type: "boolean",
+      default: true,
+      description: "Play staggered enter animation."
+    },
+    {
+      name: "initialBlur",
+      type: "number",
+      default: 12,
+      min: 0,
+      max: 40,
+      step: 1,
+      description: "Initial blur amount."
+    },
+    {
+      name: "enterDuration",
+      type: "number",
+      default: 0.5,
+      min: 0.1,
+      max: 3,
+      step: 0.1,
+      description: "Enter animation duration."
+    },
+    {
+      name: "enterStagger",
+      type: "number",
+      default: 0.04,
+      min: 0,
+      max: 0.2,
+      step: 0.01,
+      description: "Delay between letters."
+    },
   ],
   presets: [
     {
@@ -126,27 +129,14 @@ export const magneticTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Tailwind CSS",
-          role: "Styling",
-          url: "https://tailwindcss.com",
-        },
-      ],
-    },
+    }
   ],
-  staticProps: {},
+  staticProps: {
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
+  },
 };

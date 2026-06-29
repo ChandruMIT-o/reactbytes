@@ -6,6 +6,8 @@ export const shatterTextConfig: ComponentConfig = {
   category: "text",
   tags: ["shatter", "break", "cinematic", "particles", "explode"],
   componentPath: "app/meta/text/Interactive/ShatterText.tsx",
+  npmPackageName: "@reactbytes/shatter-text",
+  version: "1.0.0",
   props: [
     {
       name: "text",
@@ -71,27 +73,14 @@ export const shatterTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Tailwind CSS",
-          role: "Styling",
-          url: "https://tailwindcss.com",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
-  staticProps: {},
+  staticProps: {
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
+  },
 };

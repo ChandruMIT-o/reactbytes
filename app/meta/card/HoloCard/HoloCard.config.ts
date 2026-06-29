@@ -6,6 +6,15 @@ export const holoCardConfig: ComponentConfig = {
   category: "miscellaneous",
   tags: ["holographic", "card", "tilt", "iridescent", "3d", "hover"],
   componentPath: "app/meta/card/HoloCard/HoloCard.tsx",
+  npmPackageName: "@reactbytes/holo-card",
+  version: "1.0.0",
+  dependencies: {
+    "lucide-react": "^1.7.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "w-full min-h-[500px] !h-auto flex items-center justify-center bg-[#060010] rounded-[18px] border border-white/5 p-12 overflow-hidden",
   props: [
@@ -144,17 +153,32 @@ export const holoCardConfig: ComponentConfig = {
   ],
   credits: [
     {
+      title: "Libraries",
+      items: [
+        {
+          name: "Lucide React",
+          role: "Icon System",
+          url: "https://lucide.dev/",
+        },
+      ],
+    },
+    {
+      title: "Project Author",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
+        },
+      ],
+    },
+    {
       title: "Inspiration",
       items: [
         {
           name: "Simey",
           role: "Original CSS Holo Logic",
           url: "https://codepen.io/simeydotme/pen/PrQKgo",
-        },
-        {
-          name: "Lucide React",
-          role: "Icons",
-          url: "https://lucide.dev/",
         },
       ],
     },

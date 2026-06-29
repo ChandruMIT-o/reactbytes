@@ -6,6 +6,11 @@ export const variableWeightTextConfig: ComponentConfig = {
   category: "text",
   tags: ["weight", "font", "variable", "typography", "animation"],
   componentPath: "app/meta/text/TextEnter/VariableWeightText.tsx",
+  npmPackageName: "@reactbytes/variable-weight",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   props: [
     {
       name: "text",
@@ -114,7 +119,17 @@ export const variableWeightTextConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Novel Concept",
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
+      title: "Inspiration",
       items: [
         {
           name: "Variable Fonts API",
@@ -122,22 +137,7 @@ export const variableWeightTextConfig: ComponentConfig = {
           url: "https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_fonts_guide",
         },
       ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animations",
-          url: "https://www.framer.com/motion/",
-        },
-      ],
-    },
+    }
   ],
   staticProps: {
     textClassName: "text-[clamp(2rem,10cqw,5rem)] tracking-tighter text-center",

@@ -6,6 +6,11 @@ export const keyboardTextConfig: ComponentConfig = {
   category: "text",
   tags: ["keyboard", "typing", "keys", "mechanical", "click"],
   componentPath: "app/meta/text/keyboard/KeyboardText.tsx",
+  npmPackageName: "@reactbytes/keyboard-text",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   props: [
     {
       name: "text",
@@ -70,7 +75,17 @@ export const keyboardTextConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Concept Origin",
+      title: "Component Source",
+      items: [
+        {
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
+        },
+      ],
+    },
+    {
+      title: "Inspiration",
       items: [
         {
           name: "Juxtopposed",
@@ -78,22 +93,7 @@ export const keyboardTextConfig: ComponentConfig = {
           url: "https://x.com/juxtopposed/status/1691908961086378042?s=20",
         },
       ],
-    },
-    {
-      title: "Implementation Utilities",
-      items: [
-        {
-          name: "Framer Motion",
-          role: "Animation Layout",
-          url: "https://www.framer.com/motion/",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
+    }
   ],
   staticProps: {
     className:

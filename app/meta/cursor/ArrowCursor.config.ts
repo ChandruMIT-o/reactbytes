@@ -6,6 +6,13 @@ export const arrowCursorConfig: ComponentConfig = {
   category: "cursor",
   tags: ["cursor", "arrow", "custom", "pointer", "mouse"],
   componentPath: "app/meta/cursor/ArrowCursor.tsx",
+  npmPackageName: "@reactbytes/follow-cursor",
+  version: "1.0.0",
+  dependencies: {},
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   props: [
     {
       name: "color",
@@ -51,12 +58,12 @@ export const arrowCursorConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Inspiration",
+      title: "Project Author",
       items: [
         {
-          name: "React Bits",
-          role: "Original Implementation",
-          url: "https://reactbits.dev",
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
         },
       ],
     },

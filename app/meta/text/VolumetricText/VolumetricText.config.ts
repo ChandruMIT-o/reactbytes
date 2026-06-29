@@ -6,6 +6,11 @@ export const volumetricTextConfig: ComponentConfig = {
   category: "text",
   tags: ["volumetric", "3d", "depth", "shadow", "extrude"],
   componentPath: "app/meta/text/VolumetricText/VolumetricText.tsx",
+  npmPackageName: "@reactbytes/volumetric-text",
+  version: "1.0.0",
+  peerDependencies: {
+    "three": "^0.184.0"
+  },
   props: [
     {
       name: "text",
@@ -231,29 +236,9 @@ export const volumetricTextConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "WebGL God Rays",
-          role: "Visual Reference & Shader",
-          url: "https://codepen.io/soju/pen/wvvMMrP",
-        },
-        {
-          name: "Three.js",
-          role: "3D Rendering Library",
-          url: "https://threejs.org/",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Three.js",
-          role: "WebGL abstraction",
-          url: "https://threejs.org",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },

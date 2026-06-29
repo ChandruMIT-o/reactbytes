@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ScaffoldNode {
     char: string;
@@ -40,7 +40,7 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
     animationState = "enter",
     fontSize = 80,
     color = "#ffffff",
-    scaffoldColor = "rgba(14, 165, 233, 0.4)", // Cybernetic telemetry blue
+    scaffoldColor = "rgba(14, 165, 233, 0.4)",
     transitionSpeed = 0.04,
     influenceRadius = 65,
     className = "",
@@ -49,6 +49,9 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
     const nodesRef = useRef<ScaffoldNode[]>([]);
     const mouseRef = useRef({ x: -1000, y: -1000, active: false });
     const animationFrameId = useRef<number | null>(null);
+
+    // Added a state matrix to retain derived container targets across fluid screen adjustments
+    const [dimensions, setDimensions] = useState({ width: 1, height: 1 });
 
     const paddingX = fontSize * 0.6;
     const paddingY = fontSize * 0.5;
@@ -62,7 +65,6 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
         const fontStyle = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
         ctx.font = fontStyle;
 
-        // Bounding metric analysis sweep to frame text width specs perfectly
         const characters = text.split("");
         let currentXOffset = 0;
         const metrics = characters.map((char) => {
@@ -76,10 +78,11 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
         const totalHeight = fontSize + paddingY * 2;
         const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
 
+        // Set state to update structural max-widths dynamically
+        setDimensions({ width: totalWidth, height: totalHeight });
+
         canvas.width = totalWidth * dpr;
         canvas.height = totalHeight * dpr;
-        canvas.style.width = `${totalWidth}px`;
-        canvas.style.height = `${totalHeight}px`;
 
         ctx.scale(dpr, dpr);
         ctx.font = fontStyle;
@@ -89,7 +92,6 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
         const centerY = totalHeight / 2;
         const count = characters.length;
 
-        // Map layout nodes and inject staggered timeline delays
         nodesRef.current = metrics.map((m, index) => {
             const nodeCenterX = paddingX + m.startX + m.width / 2;
             return {
@@ -101,10 +103,9 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
                 y: 0,
                 vx: 0,
                 vy: 0,
-                // If developer mounts component directly as stable, set timeline to 1 immediately
                 progress: animationState === "stable" ? 1 : 0,
-                enterDelay: index * 6,         // Left-to-right cascade entrance
-                exitDelay: (count - 1 - index) * 5, // Right-to-left cascade exit
+                enterDelay: index * 6,
+                exitDelay: (count - 1 - index) * 5,
             };
         });
     }, [text, fontSize, paddingX, paddingY, animationState]);
@@ -123,30 +124,26 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
             const width = canvas.width / dpr;
             const height = canvas.height / dpr;
 
-            // Isolate layout clears to support native transparent background layouts
             ctx.clearRect(0, 0, width, height);
 
             const mouse = mouseRef.current;
             const nodes = nodesRef.current;
 
             nodes.forEach((node) => {
-                // 1. LIFECYCLE STATE MANAGEMENT DRIVER
                 let targetProgress = node.progress;
-                
+
                 if (animationState === "enter" || animationState === "stable") {
                     if (frameCounter >= node.enterDelay) {
-                        targetProgress = 1; // Pull timeline toward fully completed assembly
+                        targetProgress = 1;
                     }
                 } else if (animationState === "exit") {
                     if (frameCounter >= node.exitDelay) {
-                        targetProgress = 0; // Force collapse downward toward exited void
+                        targetProgress = 0;
                     }
                 }
 
-                // Smoothly process progress values via timeline interpolation hooks
                 node.progress += (targetProgress - node.progress) * transitionSpeed;
 
-                // 2. KINETIC MOUSE INTERACTION PASS (Only active when node structural assembly is stable)
                 const dx = mouse.x - (node.centerX + node.x);
                 const dy = mouse.y - (node.centerY + node.y);
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -155,12 +152,10 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
                     const structuralStrain = (influenceRadius - distance) / influenceRadius;
                     const strainAngle = Math.atan2(dy, dx);
 
-                    // Magnetic cursor repulsion pull
                     node.vx -= Math.cos(strainAngle) * structuralStrain * 1.8;
                     node.vy -= Math.sin(strainAngle) * structuralStrain * 1.8;
                 }
 
-                // Industrial spring relaxation constants returning node back to true design coordinates
                 const stiffness = 0.07;
                 const damping = 0.78;
                 const springX = (0 - node.x) * stiffness;
@@ -172,15 +167,13 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
                 node.x += node.vx;
                 node.y += node.vy;
 
-                // 3. GRAPHICS ENGINEERING & RENDERING RASTER PASS
-                if (node.progress < 0.005) return; // Skip rendering unformed modules
+                if (node.progress < 0.005) return;
 
                 const renderX = node.centerX + node.x;
                 const renderY = node.centerY + node.y;
                 const halfW = node.width / 2 + 6;
                 const halfH = fontSize / 2 + 6;
 
-                // VISUAL ELEMENT A: Vertical Architecture Alignment Guide Wires
                 ctx.save();
                 ctx.strokeStyle = scaffoldColor;
                 ctx.globalAlpha = node.progress * 0.35;
@@ -191,18 +184,14 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
                 ctx.stroke();
                 ctx.restore();
 
-                // VISUAL ELEMENT B: Structural Scaffolding Bracket Framing
                 ctx.save();
                 ctx.strokeStyle = scaffoldColor;
                 ctx.lineWidth = 0.8;
-                // Fade and scale frame box elements proportional to internal lifecycle metrics
                 ctx.globalAlpha = node.progress;
-                
-                // Animate bracket scaling widths outward from center alignment points
+
                 const currentBoxW = halfW * node.progress;
                 ctx.strokeRect(renderX - currentBoxW, renderY - halfH, currentBoxW * 2, halfH * 2);
 
-                // Tiny crosshair registration dots on frame intersections
                 if (node.progress > 0.9) {
                     ctx.fillStyle = scaffoldColor;
                     ctx.fillRect(renderX - halfW - 2, renderY - 2, 4, 4);
@@ -210,19 +199,16 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
                 }
                 ctx.restore();
 
-                // VISUAL ELEMENT C: Masked Slotted Solid Typography Engine
                 ctx.save();
                 ctx.font = `900 ${fontSize}px "Space Grotesk", -apple-system, sans-serif`;
                 ctx.textBaseline = "middle";
                 ctx.textAlign = "center";
 
-                // Construct a tight vector bounding mask window that expands based on timeline progress
                 ctx.beginPath();
                 const clipHeight = (halfH * 2) * node.progress;
                 ctx.rect(renderX - halfW - 5, renderY - halfH, halfW * 2 + 10, clipHeight);
                 ctx.clip();
 
-                // Slide typography faces upward through the active window frame
                 ctx.fillStyle = color;
                 const slideOffsetY = (fontSize * 0.8) * (1 - node.progress);
                 ctx.fillText(node.char, renderX, renderY + slideOffsetY);
@@ -243,23 +229,35 @@ export const ScaffoldText: React.FC<ScaffoldTextProps> = ({
         const canvas = canvasRef.current;
         if (!canvas) return;
         const rect = canvas.getBoundingClientRect();
+
+        // Normalize screen coordinates back into internal render coordinate spaces
+        const scaleX = dimensions.width / rect.width;
+        const scaleY = dimensions.height / rect.height;
+
         mouseRef.current = {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY,
             active: true,
         };
     };
 
     return (
-        <div className={`inline-block select-none overflow-visible ${className}`}>
-            <canvas
-                ref={canvasRef}
-                onPointerMove={handlePointerMove}
-                onPointerLeave={() => {
-                    mouseRef.current = { x: -1000, y: -1000, active: false };
-                }}
-                className="block touch-none cursor-crosshair"
-            />
+        <div className="w-full @container flex justify-center text-center">
+            <div className={`flex w-full items-center justify-center text-center select-none overflow-visible ${className}`}>
+                <canvas
+                    ref={canvasRef}
+                    onPointerMove={handlePointerMove}
+                    onPointerLeave={() => {
+                        mouseRef.current = { x: -1000, y: -1000, active: false };
+                    }}
+                    style={{
+                        width: "100%",
+                        maxWidth: `${dimensions.width}px`,
+                        height: "auto",
+                    }}
+                    className="block touch-none cursor-crosshair mx-auto"
+                />
+            </div>
         </div>
     );
 };

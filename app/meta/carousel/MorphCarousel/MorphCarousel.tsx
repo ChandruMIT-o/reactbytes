@@ -153,9 +153,6 @@ const createTexture = (gl: WebGL2RenderingContext, img: HTMLImageElement): WebGL
 	return tex;
 };
 
-/**
- * --- COMPONENT ---
- */
 const getOffset = (idx: number, current: number, length: number) => {
 	let diff = idx - current;
 	if (diff > length / 2) diff -= length;
@@ -163,6 +160,9 @@ const getOffset = (idx: number, current: number, length: number) => {
 	return diff;
 };
 
+/**
+ * --- COMPONENT ---
+ */
 export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 	items = MOCK_ITEMS,
 	distortion = 1.0,
@@ -186,6 +186,10 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 	const aspectsRef = useRef<number[]>([]);
 	const uniformsRef = useRef<Record<string, WebGLUniformLocation | null>>({});
 
+	// Mobile Swipe State Coordinates
+	const touchStartX = useRef<number | null>(null);
+	const touchEndX = useRef<number | null>(null);
+
 	const stateRef = useRef({
 		from: 0,
 		to: 0,
@@ -203,14 +207,38 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 		setActiveIndex(prev => (prev - 1 + items.length) % items.length);
 	}, [items.length]);
 
-	// Autoplay
+	// Native Touch Gesture Handling
+	const handleTouchStart = (e: React.TouchEvent) => {
+		touchStartX.current = e.targetTouches[0].clientX;
+	};
+
+	const handleTouchMove = (e: React.TouchEvent) => {
+		touchEndX.current = e.targetTouches[0].clientX;
+	};
+
+	const handleTouchEnd = () => {
+		if (!touchStartX.current || !touchEndX.current) return;
+		const diff = touchStartX.current - touchEndX.current;
+		const swipeThreshold = 50; // Minimum drag configuration in pixels
+
+		if (diff > swipeThreshold) {
+			next();
+		} else if (diff < -swipeThreshold) {
+			prev();
+		}
+
+		touchStartX.current = null;
+		touchEndX.current = null;
+	};
+
+	// Autoplay Engine Lifecycle
 	useEffect(() => {
 		if (!isPlaying || isLoading) return;
 		const timer = setInterval(next, interval);
 		return () => clearInterval(timer);
 	}, [isPlaying, interval, next, isLoading, activeIndex]);
 
-	// WebGL Initialization
+	// WebGL Initialization Context Architecture
 	useEffect(() => {
 		const canvas = canvasRef.current;
 		if (!canvas || items.length === 0) return;
@@ -261,16 +289,13 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 			const state = stateRef.current;
 			if (!gl || !canvas) return;
 
-			// Handle transition progression with Quintic Easing
 			if (state.startTime !== null) {
 				const elapsed = time - state.startTime;
 				const t = Math.min(elapsed / transitionDuration, 1.0);
-				// Quintic easing
 				state.progress = t < 0.5 ? 16 * t ** 5 : 1 - Math.pow(-2 * t + 2, 5) / 2;
 				if (t >= 1.0) state.startTime = null;
 			}
 
-			// Resize
 			const dpr = window.devicePixelRatio || 1;
 			const w = Math.round(canvas.clientWidth * dpr);
 			const h = Math.round(canvas.clientHeight * dpr);
@@ -313,7 +338,7 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 		};
 	}, [items, transitionDuration, scale, distortion]);
 
-	// Sync index changes to WebGL state
+	// Synchronize Active Slide Changes
 	useEffect(() => {
 		if (isLoading) return;
 		const state = stateRef.current;
@@ -327,27 +352,35 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 	}, [activeIndex, isLoading]);
 
 	return (
-		<div className={`relative w-full h-[600px] bg-black overflow-hidden group select-none rounded-3xl shadow-2xl flex ${className}`}>
-			{/* Background Canvas */}
-			<canvas ref={canvasRef} className="absolute inset-0 w-full h-full block touch-none z-0" />
+		<div
+			onTouchStart={handleTouchStart}
+			onTouchMove={handleTouchMove}
+			onTouchEnd={handleTouchEnd}
+			className={`relative w-full h-[520px] md:h-[600px] bg-black overflow-hidden group select-none rounded-2xl md:rounded-3xl shadow-2xl flex flex-col md:flex-row ${className}`}
+		>
+			{/* Background Canvas: Allowed touch-pan-y so vertical scrolling works outside horizontal swiping */}
+			<canvas ref={canvasRef} className="absolute inset-0 w-full h-full block touch-pan-y z-0" />
 
-			{/* Depth Overlay */}
-			<div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-r from-black/80 via-black/10 to-transparent" />
+			{/* Depth Overlay: Adaptive vertical-to-horizontal gradient layout masks */}
+			<div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-t from-black/95 via-black/50 to-black/20 md:bg-gradient-to-r md:from-black/80 md:via-black/10 md:to-transparent" />
 
-			{/* Loading State */}
+			{/* Loading Infrastructure */}
 			{isLoading && (
-				<div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
+				<div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50">
 					<div className="flex flex-col items-center gap-4">
 						<div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin" />
-						<p className="text-white/60 font-medium tracking-widest text-sm uppercase">Loading Visuals</p>
+						<p className="text-white/60 font-medium tracking-widest text-xs uppercase">Loading Visuals</p>
 					</div>
 				</div>
 			)}
 
-			{/* Content Layer (Accordion Menu) */}
+			{/* Content Layer (Accordion Menu Overlay Setup) */}
 			{!isLoading && (
-				<div className="absolute left-10 top-1/2 -translate-y-1/2 z-20 w-full max-w-sm pointer-events-auto" style={{ perspective: "1000px" }}>
-					<div className="flex flex-col gap-2 w-full">
+				<div
+					className="absolute left-5 right-5 bottom-24 md:bottom-auto md:top-1/2 md:-translate-y-1/2 md:left-10 z-20 w-auto md:w-full md:max-w-sm pointer-events-auto"
+					style={{ perspective: "1000px" }}
+				>
+					<div className="flex flex-col gap-1 md:gap-2 w-full">
 						<AnimatePresence mode="popLayout">
 							{items
 								.map((item, idx) => ({ item, idx, offset: getOffset(idx, activeIndex, items.length) }))
@@ -359,32 +392,32 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 										<motion.div
 											key={idx}
 											layout
-											initial={{ opacity: 0, y: offset * 50 }}
+											initial={{ opacity: 0, y: offset * 30 }}
 											animate={{
 												opacity: isActive ? 1 : 0.3,
 												y: 0,
-												scale: isActive ? 1 : 0.85,
+												scale: isActive ? 1 : 0.9,
 												zIndex: isActive ? 10 : 5
 											}}
-											exit={{ opacity: 0, y: offset * -50 }}
+											exit={{ opacity: 0, y: offset * -30 }}
 											transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
 											onClick={() => setActiveIndex(idx)}
-											className="group/item flex flex-col cursor-pointer origin-left py-3"
+											className="group/item flex flex-col cursor-pointer origin-left py-2 md:py-3"
 										>
-											<div className="flex items-start gap-6">
-												{/* Number & Progress Line */}
+											<div className="flex items-start gap-4 md:gap-6">
+												{/* Number & Progress Meter Block */}
 												<div className="flex flex-col items-center mt-1">
-													<span className={`font-mono text-xs tracking-widest transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/40 group-hover/item:text-white/70'}`}>
+													<span className={`font-mono text-[10px] md:text-xs tracking-widest transition-colors duration-500 ${isActive ? 'text-white' : 'text-white/40 group-hover/item:text-white/70'}`}>
 														{String(idx + 1).padStart(2, '0')}
 													</span>
-													<div className="w-[2px] h-full min-h-[32px] bg-white/10 mt-3 relative overflow-hidden rounded-full">
+													<div className="w-[2px] h-full min-h-[24px] md:min-h-[32px] bg-white/10 mt-2 md:mt-3 relative overflow-hidden rounded-full">
 														{isActive && isPlaying && (
 															<motion.div
 																key={`progress-${idx}`}
 																initial={{ height: 0 }}
 																animate={{ height: "100%" }}
 																transition={{ duration: interval / 1000, ease: "linear" }}
-																className="absolute top-0 left-0 w-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
+																className="absolute top-0 left-0 w-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)]"
 															/>
 														)}
 														{isActive && !isPlaying && (
@@ -393,9 +426,9 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 													</div>
 												</div>
 
-												{/* Text & Accordion Content */}
-												<div className="flex flex-col pb-4 w-full">
-													<h2 className={`text-xl md:text-2xl font-bold uppercase tracking-wide transition-all duration-500 ${isActive ? 'text-white translate-x-2' : 'text-white/50 group-hover/item:text-white/80'}`}>
+												{/* Typography Header & Subtext Panel */}
+												<div className="flex flex-col pb-2 md:pb-4 w-full">
+													<h2 className={`text-lg md:text-2xl font-bold uppercase tracking-wide transition-all duration-500 ${isActive ? 'text-white translate-x-1 md:translate-x-2' : 'text-white/50 group-hover/item:text-white/80'}`}>
 														{item.title}
 													</h2>
 
@@ -403,14 +436,14 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 														{isActive && (
 															<motion.div
 																initial={{ height: 0, opacity: 0, marginTop: 0 }}
-																animate={{ height: 'auto', opacity: 1, marginTop: 12 }}
+																animate={{ height: 'auto', opacity: 1, marginTop: 8 }}
 																exit={{ height: 0, opacity: 0, marginTop: 0 }}
 																transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
 																className="overflow-hidden"
 															>
-																<div className="flex flex-col gap-4 pl-4 border-l-2 border-white/10 ml-2">
+																<div className="flex flex-col gap-3 pl-3 border-l border-white/20 ml-1">
 																	{showCaptions && (
-																		<p className="text-white/70 text-sm leading-relaxed font-light">
+																		<p className="text-white/70 text-xs md:text-sm leading-relaxed font-light line-clamp-3 md:line-clamp-none">
 																			{item.description}
 																		</p>
 																	)}
@@ -421,38 +454,38 @@ export const MorphCarousel: React.FC<MorphCarouselProps> = ({
 												</div>
 											</div>
 										</motion.div>
-									)
+									);
 								})}
 						</AnimatePresence>
 					</div>
 				</div>
 			)}
 
-			{/* Floating Controls Island */}
+			{/* Floating Navigation Controls Floating Pill */}
 			{showNav && (
-				<div className="absolute bottom-8 right-8 z-30 flex items-center gap-1 p-1.5 rounded-full bg-black/20 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+				<div className="absolute bottom-5 right-5 md:bottom-8 md:right-8 z-30 flex items-center gap-0.5 p-1 rounded-full bg-black/40 backdrop-blur-2xl border border-white/10 shadow-2xl overflow-hidden opacity-100 md:opacity-0 md:group-hover:opacity-100 md:translate-y-4 md:group-hover:translate-y-0 transition-all duration-500">
 					<button
 						onClick={prev}
-						className="p-3 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
+						className="p-2.5 md:p-3 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
 						aria-label="Previous"
 					>
-						<ChevronLeft size={22} strokeWidth={1.5} />
+						<ChevronLeft size={18} strokeWidth={1.5} />
 					</button>
-					<div className="w-[1px] h-6 bg-white/10" />
+					<div className="w-[1px] h-5 bg-white/10" />
 					<button
 						onClick={() => setIsPlaying(!isPlaying)}
-						className="p-3 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
+						className="p-2.5 md:p-3 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
 						aria-label="Play/Pause"
 					>
-						{isPlaying ? <Pause size={20} strokeWidth={1.5} /> : <Play size={20} strokeWidth={1.5} className="ml-0.5" />}
+						{isPlaying ? <Pause size={16} strokeWidth={1.5} /> : <Play size={16} strokeWidth={1.5} className="ml-0.5" />}
 					</button>
-					<div className="w-[1px] h-6 bg-white/10" />
+					<div className="w-[1px] h-5 bg-white/10" />
 					<button
 						onClick={next}
-						className="p-3 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
+						className="p-2.5 md:p-3 rounded-full text-white/70 hover:text-white hover:bg-white/10 transition-all duration-300"
 						aria-label="Next"
 					>
-						<ChevronRight size={22} strokeWidth={1.5} />
+						<ChevronRight size={18} strokeWidth={1.5} />
 					</button>
 				</div>
 			)}

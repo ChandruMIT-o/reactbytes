@@ -6,6 +6,15 @@ export const standardAccordionConfig: ComponentConfig = {
   category: "miscellaneous",
   tags: ["accordion", "faq", "collapse", "expand", "sections"],
   componentPath: "app/meta/misc/StandardAccordion/StandardAccordion.tsx",
+  npmPackageName: "@reactbytes/standard-accordion",
+  version: "1.0.0",
+  dependencies: {
+    "framer-motion": "^12.38.0",
+  },
+  peerDependencies: {
+    react: "^19.0.0",
+    "react-dom": "^19.0.0",
+  },
   containerClassName:
     "w-full min-h-[550px] !h-auto flex items-center justify-center p-8 rounded-[32px] border border-white/5 bg-[#030008] shadow-2xl relative overflow-hidden",
   props: [
@@ -185,22 +194,22 @@ export const standardAccordionConfig: ComponentConfig = {
   ],
   credits: [
     {
-      title: "Inspiration",
+      title: "Libraries",
       items: [
         {
-          name: "Build Your Own Craft",
-          role: "Design Concept",
-          url: "https://buildyourowncraft.com",
+          name: "Framer Motion",
+          role: "Animation Library",
+          url: "https://framer.com/motion",
         },
       ],
     },
     {
-      title: "Project",
+      title: "Project Author",
       items: [
         {
-          name: "React Bytes",
-          role: "Component Collection",
-          url: "https://reactbytes.dev",
+          name: "ChandruMIT-o",
+          role: "Creator & Lead Designer",
+          url: "https://github.com/ChandruMIT-o",
         },
       ],
     },

@@ -6,6 +6,11 @@ export const gooeyMorphConfig: ComponentConfig = {
   category: "text",
   tags: ["gooey", "morph", "liquid", "transition", "blob"],
   componentPath: "app/meta/text/Morph/GooeyMorph.tsx",
+  npmPackageName: "@reactbytes/gooey-morph",
+  version: "1.0.0",
+  peerDependencies: {
+    "framer-motion": "^12.38.0"
+  },
   props: [
     {
       name: "words",
@@ -96,39 +101,14 @@ export const gooeyMorphConfig: ComponentConfig = {
       title: "Component Source",
       items: [
         {
-          name: "Creative Designs",
-          role: "Visual Designer",
-          url: "https://codepen.io/lmgonzalves/pen/XWwjYmO",
-        },
-        {
-          name: "React Bytes",
-          role: "Collection",
-          url: "https://reactbytes.dev",
-        },
-      ],
-    },
-    {
-      title: "Open Source Libraries",
-      items: [
-        {
-          name: "React",
-          role: "UI Framework",
-          url: "https://react.dev",
-        },
-        {
-          name: "Framer Motion",
-          role: "Animations",
-          url: "https://www.framer.com/motion/",
-        },
-        {
-          name: "Tailwind CSS",
-          role: "Styling",
-          url: "https://tailwindcss.com",
+          name: "ChandruMIT-o",
+          role: "Design & Development",
+          url: "https://github.com/ChandruMIT-o/",
         },
       ],
     },
   ],
   staticProps: {
-    textClassName: "text-4xl md:text-6xl font-bold font-sans tracking-tighter",
+    textClassName: "text-[clamp(2.5rem,8cqw,4.5rem)] font-bold font-sans tracking-tighter text-center",
   },
 };
