@@ -4,12 +4,14 @@ import { Copy, Check } from "lucide-react";
 import { motion } from "framer-motion";
 import { createLayout, stagger, random } from "animejs";
 import { flushSync } from "react-dom";
+import { logInteractionEvent } from "@/lib/analytics";
 
 export interface InstallationTabsProps {
 	cliCommand?: string;
 	manualCommand?: string;
 	componentName?: string;
 	extraLibraries?: string[];
+	componentSlug?: string;
 }
 
 interface Token {
@@ -62,6 +64,7 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 	manualCommand,
 	componentName,
 	extraLibraries,
+	componentSlug,
 }) => {
 	const [activeTab, setActiveTab] = useState<"CLI" | "Manual">("CLI");
 	const [activePkgManager, setActivePkgManager] = useState<"pnpm" | "npm" | "yarn" | "bun">("pnpm");
@@ -189,6 +192,7 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 			navigator.clipboard.writeText(text);
 			setCopied(true);
 			setTimeout(() => setCopied(false), 2000);
+			logInteractionEvent(componentSlug || derivedComponentName || "unknown", "copy_install");
 		}
 	};
 

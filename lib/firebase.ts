@@ -14,14 +14,25 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+const hasConfig = !!firebaseConfig.apiKey && firebaseConfig.apiKey !== "your-api-key";
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
+// Initialize Firebase safely
+let app: any;
+let auth: any;
+let db: any;
+let storage: any;
+let analytics: any = null;
 
-// Initialize Analytics lazily (client-side only)
-const analytics = typeof window !== "undefined" ? isSupported().then((supported) => supported ? getAnalytics(app) : null) : null;
+if (hasConfig) {
+  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
+  analytics = typeof window !== "undefined" ? isSupported().then((supported) => supported ? getAnalytics(app) : null) : null;
+} else {
+  if (typeof window !== "undefined") {
+    console.warn("Firebase configuration credentials are not configured in your environment. Analytics, Auth, and Dashboard features will be inactive.");
+  }
+}
 
 export { app, auth, db, storage, analytics };

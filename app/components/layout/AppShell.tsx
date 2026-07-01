@@ -16,6 +16,7 @@ import HeaderChaosBackground from "./HeaderChaosBackground";
 import { ComponentRegistry } from "./ComponentRegistry";
 import LogoMorphLoading from "./LogoMorphLoading";
 import BallWaveLoader from "./BallWaveLoader";
+import { logPageView } from "@/lib/analytics";
 
 import {
   generalItems,
@@ -59,6 +60,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       document.documentElement.classList.remove("intro-loading");
     }
   }, [showLoading]);
+
+  React.useEffect(() => {
+    if (pathname) {
+      logPageView(pathname);
+    }
+  }, [pathname]);
 
   const activeItem = pathname === "/" ? "intro" : pathname.slice(1);
   const { isOpen, setIsOpen, data } = usePreview();

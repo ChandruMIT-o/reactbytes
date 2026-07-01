@@ -237,6 +237,7 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
 
       <div id="installation-tabs">
         <InstallationTabs
+          componentSlug={dbEntry.slug}
           componentName={dbEntry.npmPackageName || "react-bytes"}
           extraLibraries={(() => {
             const libs = [

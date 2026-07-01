@@ -18,6 +18,7 @@ import { usePreview } from "../context/PreviewContext";
 import { DemoToggle } from "../buttongroup/DemoToggle";
 import { DemoContent } from "../layout/DemoContents";
 import { ComponentRegistry } from "../layout/ComponentRegistry";
+import { logInteractionEvent } from "@/lib/analytics";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
 import "prismjs/components/prism-javascript";
@@ -142,6 +143,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
       navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      logInteractionEvent(currentId, "copy_code");
     }
   };
 
