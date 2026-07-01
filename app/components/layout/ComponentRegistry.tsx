@@ -114,6 +114,21 @@ const baseRegistry: Record<string, RegistryEntry> = {
     ),
   },
 
+  components: {
+    id: "components",
+    label: "Components",
+    category: "general",
+    sections: [
+      { id: "components-header", label: "Components" },
+      { id: "components-grid", label: "All" },
+    ],
+    component: dynamic(() =>
+      import("../../pages/ComponentsPage/ComponentsPage").then(
+        (mod) => mod.ComponentsPage,
+      ),
+    ),
+  },
+
   landing: {
     id: "landing",
     label: "Landing Showcase",

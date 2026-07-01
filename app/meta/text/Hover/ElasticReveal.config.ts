@@ -15,13 +15,13 @@ export const elasticRevealConfig: ComponentConfig = {
     {
       name: "text",
       type: "string",
-      default: "REACTBYTES",
+      default: "LETTER BY LETTER",
       description: "The text context to animate.",
     },
     {
       name: "duration",
       type: "number",
-      default: 0.6,
+      default: 0.1,
       min: 0.1,
       max: 2,
       step: 0.1,
@@ -30,7 +30,7 @@ export const elasticRevealConfig: ComponentConfig = {
     {
       name: "stagger",
       type: "number",
-      default: 0.02,
+      default: 0.06,
       min: 0,
       max: 0.2,
       step: 0.01,
@@ -49,13 +49,13 @@ export const elasticRevealConfig: ComponentConfig = {
     {
       name: "baseColor",
       type: "color",
-      default: "#60a5fa",
+      default: "#e1e1e1",
       description: "The initial color of the text.",
     },
     {
       name: "hoverColor",
       type: "color",
-      default: "#FFFFFF",
+      default: "#34d399",
       description: "The color of the text when revealed on hover.",
     },
     {
@@ -67,7 +67,7 @@ export const elasticRevealConfig: ComponentConfig = {
     {
       name: "animateFrom",
       type: "select",
-      default: "left",
+      default: "hover",
       options: [
         { id: "left", label: "Left to Right" },
         { id: "right", label: "Right to Left" },
@@ -80,6 +80,20 @@ export const elasticRevealConfig: ComponentConfig = {
   presets: [
     {
       id: "default",
+      label: "Wavy",
+      config: {
+        text: "LETTER BY LETTER",
+        duration: 0.1,
+        stagger: 0.06,
+        direction: "up",
+        baseColor: "#e1e1e1",
+        hoverColor: "#34d399",
+        uppercase: true,
+        animateFrom: "hover",
+      },
+    },
+    {
+      id: "classic",
       label: "Classic Roll",
       config: {
         text: "REACTBYTES",
@@ -104,20 +118,6 @@ export const elasticRevealConfig: ComponentConfig = {
         hoverColor: "#FFFFFF",
         uppercase: true,
         animateFrom: "center",
-      },
-    },
-    {
-      id: "rapid",
-      label: "Rapid Kick",
-      config: {
-        text: "GO FAST",
-        duration: 0.3,
-        stagger: 0.01,
-        direction: "up",
-        baseColor: "#9ca3af",
-        hoverColor: "#34d399",
-        uppercase: true,
-        animateFrom: "hover",
       },
     },
   ],

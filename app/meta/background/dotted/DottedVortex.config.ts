@@ -22,7 +22,7 @@ export const dottedVortexConfig: ComponentConfig = {
     {
       name: "imageSrc",
       type: "string",
-      default: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
+      default: "https://images.unsplash.com/photo-1614851099511-773084f6911d?q=80&w=2564&auto=format&fit=crop",
       description: "The high-resolution background image to dynamically load and reveal.",
     },
     {

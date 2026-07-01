@@ -183,7 +183,7 @@ export default function LogoMorphLoading({ onComplete }: LogoMorphLoadingProps) 
 
   return (
     <div
-      className={`fixed inset-0 flex flex-col items-center justify-center bg-[#060010] select-none overflow-hidden z-[9999] transition-all duration-700 ease-in-out ${isFadingOut ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'
+      className={`fixed inset-0 flex flex-col items-center justify-center gap-8 bg-[#060010] select-none overflow-hidden z-[9999] transition-all duration-700 ease-in-out ${isFadingOut ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'
         }`}
     >
       <div className="relative flex flex-col items-center justify-center w-70 h-70">
@@ -198,7 +198,7 @@ export default function LogoMorphLoading({ onComplete }: LogoMorphLoadingProps) 
         </svg>
       </div>
 
-      <div className="absolute bottom-50 w-full flex items-center justify-center pointer-events-none">
+      <div className="w-full flex items-center justify-center pointer-events-none">
         <RevealUnder
           firstWord="React"
           secondWord="Bytes"

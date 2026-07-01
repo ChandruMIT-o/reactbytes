@@ -34,7 +34,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  if (pathname === "/landing") {
+  if (pathname === "/landing" || (pathname && pathname.startsWith("/capture/"))) {
     return <>{children}</>;
   }
 
@@ -49,9 +49,16 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const handleIntroComplete = React.useCallback(() => {
     if (typeof window !== "undefined") {
       sessionStorage.setItem(INTRO_PLAYED_KEY, "1");
+      document.documentElement.classList.remove("intro-loading");
     }
     setShowLoading(false);
   }, []);
+
+  React.useEffect(() => {
+    if (!showLoading && typeof window !== "undefined") {
+      document.documentElement.classList.remove("intro-loading");
+    }
+  }, [showLoading]);
 
   const activeItem = pathname === "/" ? "intro" : pathname.slice(1);
   const { isOpen, setIsOpen, data } = usePreview();
@@ -146,7 +153,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         }}
         onMouseDown={() => setIsHeaderPressed(true)}
         onMouseUp={() => setIsHeaderPressed(false)}
-        className="relative flex items-center justify-between w-full px-4 md:px-8 py-3 md:py-4 border-b border-white/5 bg-background/80 backdrop-blur-md z-50 flex-shrink-0 overflow-hidden cursor-pointer active:scale-[0.99] transition-transform duration-200 select-none"
+        className="relative flex items-center justify-between w-full px-4 md:px-8 py-3 md:py-4 border-b border-white/5 bg-background/80 backdrop-blur-md z-50 flex-shrink-0 cursor-pointer active:scale-[0.99] transition-transform duration-200 select-none"
       >
         <HeaderChaosBackground
           isHovered={isHeaderHovered}
@@ -166,7 +173,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             </button>
             <div
               className="flex items-center gap-2 group cursor-pointer"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/landing")}
             >
               <div className="relative">
                 <div className="absolute inset-0 bg-rb-accent-1/20 blur-lg rounded-full group-hover:bg-rb-accent-1/40 transition-colors" />
@@ -195,8 +202,13 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2 flex-shrink-0 pointer-events-auto">
             <SearchDialog />
             <div className="hidden md:flex items-center gap-2">
-              <ToggleSwitch />
-              <GitHubStarButton starCount={134} username="ChandruMIT-o" />
+              <ToggleSwitch tooltipPosition="bottom" />
+              <GitHubStarButton
+                starCount={134}
+                username="ChandruMIT-o"
+                repo="reactbytes"
+                onClick={() => window.open("https://github.com/ChandruMIT-o/reactbytes", "_blank")}
+              />
             </div>
           </div>
         </div>
@@ -301,10 +313,15 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
           {/* Fixed Mobile Footer */}
           <div className="md:hidden flex items-center justify-between px-[18px] py-4 border-t border-white/5 bg-rb-neutral-2 flex-shrink-0">
-            <GitHubStarButton starCount={134} username="ChandruMIT-o" />
+            <GitHubStarButton
+              starCount={134}
+              username="ChandruMIT-o"
+              repo="reactbytes"
+              onClick={() => window.open("https://github.com/ChandruMIT-o/reactbytes", "_blank")}
+            />
             <div className="flex items-center gap-2">
               <div className="w-px h-4 bg-white/10" />
-              <ToggleSwitch />
+              <ToggleSwitch tooltipPosition="top" />
             </div>
           </div>
         </aside>

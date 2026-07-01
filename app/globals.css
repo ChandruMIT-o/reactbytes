@@ -233,3 +233,11 @@ body {
 		transform: translateX(-12px);
 	}
 }
+
+/* Avoid page flash before hydration when loading screen is active */
+html.intro-loading header,
+html.intro-loading main,
+html.intro-loading aside {
+	opacity: 0 !important;
+	pointer-events: none !important;
+}

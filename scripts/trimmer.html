@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro MP4 Trimmer</title>
+    <style>
+        :root {
+            --bg-base: #09090b;
+            --bg-surface: #18181b;
+            --bg-elevated: #27272a;
+            --border: #3f3f46;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --accent-glow: rgba(99, 102, 241, 0.3);
+            --danger: #ef4444;
+            --danger-hover: rgba(239, 68, 68, 0.15);
+            --text-main: #f4f4f5;
+            --text-muted: #a1a1aa;
+            --radius-lg: 12px;
+            --radius-md: 8px;
+            --radius-sm: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-surface);
+            z-index: 10;
+        }
+
+        header h1 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .badge {
+            background: var(--bg-elevated);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem;
+            width: 100%;
+        }
+
+        .upload-container {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 600px;
+            min-height: 300px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-surface);
+        }
+
+        .upload-container:hover,
+        .upload-container.dragover {
+            border-color: var(--accent);
+            background: rgba(99, 102, 241, 0.05);
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .editor-container {
+            display: none;
+            width: 100%;
+            max-width: 1600px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            flex-direction: column;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            background: #000;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 280px);
+            min-height: 400px;
+            overflow: hidden;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* --- Crop UI Elements --- */
+        #cropContainer {
+            position: absolute;
+            display: none;
+            /* Hidden by default */
+            pointer-events: none;
+            /* Let clicks pass through if not interacting with crop box */
+        }
+
+        #cropBox {
+            position: absolute;
+            border: 3px solid #fff;
+            box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.8), 0 0 0 9999px rgba(0, 0, 0, 0.6);
+            cursor: move;
+            pointer-events: auto;
+            touch-action: none;
+        }
+
+        .crop-handle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: var(--accent);
+            border: 2px solid #fff;
+            bottom: -6px;
+            right: -6px;
+            cursor: nwse-resize;
+            box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8);
+        }
+
+        .toolbar {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border);
+            background: var(--bg-surface);
+        }
+
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .time-display {
+            font-family: monospace;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            background: var(--bg-elevated);
+            padding: 0.4rem 0.8rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .time-display span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        button {
+            background: var(--bg-elevated);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 0.65rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: var(--border);
+        }
+
+        button.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 4px 14px var(--accent-glow);
+        }
+
+        button.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        button.crop-btn {
+            background: var(--bg-elevated);
+            border: 2px solid var(--border);
+            transition: all 0.1s ease;
+        }
+
+        button.crop-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: #fff;
+            box-shadow: 3px 3px 0 #000;
+            transform: translate(-1px, -1px);
+        }
+
+        button.danger-icon {
+            color: var(--danger);
+            border-color: transparent;
+            background: transparent;
+            padding: 0.65rem;
+        }
+
+        button.danger-icon:hover {
+            background: var(--danger-hover);
+            border-color: var(--danger);
+        }
+
+        .btn-icon {
+            padding: 0.65rem;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            justify-content: center;
+        }
+
+        .timeline {
+            position: relative;
+            height: 56px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .timeline-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            overflow: hidden;
+        }
+
+        .timeline-selection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(99, 102, 241, 0.15);
+            border-top: 2px solid var(--accent);
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .trim-handle {
+            position: absolute;
+            top: 0;
+            width: 14px;
+            height: 100%;
+            background: var(--accent);
+            cursor: ew-resize;
+            border-radius: var(--radius-sm);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .trim-handle::after {
+            content: '';
+            width: 2px;
+            height: 20px;
+            background: white;
+            border-radius: 1px;
+        }
+
+        .trim-handle.left {
+            left: 0;
+            transform: translateX(-50%);
+        }
+
+        .trim-handle.right {
+            left: 100%;
+            transform: translateX(-50%);
+        }
+
+        .playhead {
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #fff;
+            z-index: 20;
+            pointer-events: none;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        }
+
+        .playhead::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(9, 9, 11, 0.85);
+            backdrop-filter: blur(8px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Pro MP4 Trimmer</h1>
+        <span class="badge">Local Processing</span>
+    </header>
+
+    <main>
+        <label class="upload-container" id="dropzone">
+            <input type="file" id="fileInput" accept="video/mp4" style="display: none;" />
+            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+            <h2 style="margin-bottom: 0.5rem; font-weight: 500;">Drop an MP4 here</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">or click to browse files</p>
+        </label>
+
+        <div class="editor-container" id="editor">
+            <div class="video-wrapper" id="videoWrapper">
+                <video id="video" playsinline></video>
+
+                <div id="cropContainer">
+                    <div id="cropBox">
+                        <div class="crop-handle" id="cropHandle"></div>
+                    </div>
+                </div>
+
+                <div class="overlay" id="processingOverlay">
+                    <div class="spinner"></div>
+                    <h3 id="overlayText">Trimming Video...</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 8px;">Recording stream locally
+                    </p>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <div class="controls-row">
+                    <div class="action-group">
+                        <button class="btn-icon" id="playBtn">
+                            <svg id="iconPlay" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20"
+                                height="20">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <svg id="iconPause" style="display: none;" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24" width="20" height="20">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </button>
+                        <div class="time-display">
+                            <span id="currentTimeDisplay">00:00.0</span> / <span id="durationDisplay">00:00.0</span>
+                        </div>
+                    </div>
+
+                    <div class="action-group">
+                        <button class="crop-btn" id="toggleCropBtn">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4">
+                                </path>
+                            </svg>
+                            Crop
+                        </button>
+                        <button class="danger-icon" id="deleteBtn" title="Remove Video">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                        </button>
+                        <button class="primary" id="exportBtn">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Export Selection
+                        </button>
+                    </div>
+                </div>
+
+                <div class="timeline" id="timeline">
+                    <div class="timeline-track">
+                        <div class="timeline-selection" id="selection"></div>
+                    </div>
+                    <div class="trim-handle left" id="handleLeft"></div>
+                    <div class="trim-handle right" id="handleRight"></div>
+                    <div class="playhead" id="playhead"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const dropzone = document.getElementById('dropzone');
+        const editor = document.getElementById('editor');
+        const video = document.getElementById('video');
+        const videoWrapper = document.getElementById('videoWrapper');
+
+        // UI Elements
+        const playBtn = document.getElementById('playBtn');
+        const iconPlay = document.getElementById('iconPlay');
+        const iconPause = document.getElementById('iconPause');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const durationDisplay = document.getElementById('durationDisplay');
+        const exportBtn = document.getElementById('exportBtn');
+        const deleteBtn = document.getElementById('deleteBtn');
+        const toggleCropBtn = document.getElementById('toggleCropBtn');
+        const processingOverlay = document.getElementById('processingOverlay');
+        const overlayText = document.getElementById('overlayText');
+
+        // Timeline Elements
+        const timeline = document.getElementById('timeline');
+        const selection = document.getElementById('selection');
+        const handleLeft = document.getElementById('handleLeft');
+        const handleRight = document.getElementById('handleRight');
+        const playhead = document.getElementById('playhead');
+
+        // Crop Elements
+        const cropContainer = document.getElementById('cropContainer');
+        const cropBox = document.getElementById('cropBox');
+        const cropHandle = document.getElementById('cropHandle');
+
+        let duration = 0;
+        let trimStart = 0;
+        let trimEnd = 0;
+        let isDragging = null;
+        let currentUrl = null;
+        let originalFileName = 'video';
+        let animationFrameId = null;
+
+        // Crop State
+        let cropEnabled = false;
+        let cropX = 0, cropY = 0, cropW = 0, cropH = 0;
+        let containerW = 0, containerH = 0;
+        let videoAspectRatio = 1;
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+            const ms = Math.floor((seconds % 1) * 10).toString();
+            return `${m}:${s}.${ms}`;
+        }
+
+        function handleFile(file) {
+            if (!file || !file.type.includes('mp4')) {
+                alert('Please select a valid MP4 file.');
+                return;
+            }
+            originalFileName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+            if (currentUrl) URL.revokeObjectURL(currentUrl);
+            currentUrl = URL.createObjectURL(file);
+            video.src = currentUrl;
+            dropzone.style.display = 'none';
+            editor.style.display = 'flex';
+        }
+
+        fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+        dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+        dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('dragover');
+            handleFile(e.dataTransfer.files[0]);
+        });
+
+        deleteBtn.addEventListener('click', () => {
+            video.pause();
+            video.src = '';
+            if (currentUrl) URL.revokeObjectURL(currentUrl);
+            currentUrl = null;
+            fileInput.value = '';
+            editor.style.display = 'none';
+            dropzone.style.display = 'flex';
+            cropEnabled = false;
+            cropContainer.style.display = 'none';
+            toggleCropBtn.classList.remove('active');
+        });
+
+        video.addEventListener('loadedmetadata', () => {
+            duration = video.duration;
+            trimStart = 0;
+            trimEnd = duration;
+            durationDisplay.textContent = formatTime(duration);
+            videoAspectRatio = video.videoWidth / video.videoHeight;
+            updateTimelineUI();
+            calibrateCropContainer();
+        });
+
+        video.addEventListener('timeupdate', () => {
+            const current = video.currentTime;
+            currentTimeDisplay.innerHTML = `<span>${formatTime(current)}</span>`;
+            const percent = (current / duration) * 100;
+            playhead.style.left = `${percent}%`;
+
+            if (current >= trimEnd && !processingOverlay.style.display.includes('flex')) {
+                video.pause();
+                video.currentTime = trimStart;
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+            }
+        });
+
+        playBtn.addEventListener('click', () => {
+            if (video.paused) {
+                if (video.currentTime >= trimEnd) video.currentTime = trimStart;
+                video.play();
+                iconPlay.style.display = 'none';
+                iconPause.style.display = 'block';
+            } else {
+                video.pause();
+                iconPlay.style.display = 'block';
+                iconPause.style.display = 'none';
+            }
+        });
+
+        function updateTimelineUI() {
+            const startPercent = (trimStart / duration) * 100;
+            const endPercent = (trimEnd / duration) * 100;
+            handleLeft.style.left = `${startPercent}%`;
+            handleRight.style.left = `${endPercent}%`;
+            selection.style.left = `${startPercent}%`;
+            selection.style.width = `${endPercent - startPercent}%`;
+        }
+
+        function getMousePercent(e) {
+            const rect = timeline.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            x = Math.max(0, Math.min(x, rect.width));
+            return x / rect.width;
+        }
+
+        timeline.addEventListener('mousedown', (e) => {
+            if (e.target === handleLeft) isDragging = 'left';
+            else if (e.target === handleRight) isDragging = 'right';
+            else {
+                const p = getMousePercent(e);
+                const time = p * duration;
+                if (time >= trimStart && time <= trimEnd) video.currentTime = time;
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const p = getMousePercent(e);
+            const time = p * duration;
+
+            if (isDragging === 'left') {
+                trimStart = Math.min(time, trimEnd - 0.5);
+                video.currentTime = trimStart;
+            } else if (isDragging === 'right') {
+                trimEnd = Math.max(time, trimStart + 0.5);
+                video.currentTime = trimEnd;
+            }
+            updateTimelineUI();
+        });
+
+        window.addEventListener('mouseup', () => { isDragging = null; });
+
+        // --- Crop Logic ---
+        function calibrateCropContainer() {
+            const wrapperW = videoWrapper.clientWidth;
+            const wrapperH = videoWrapper.clientHeight;
+            const wrapperRatio = wrapperW / wrapperH;
+
+            // Map container exactly to the letterboxed video rendering
+            if (wrapperRatio > videoAspectRatio) {
+                containerH = wrapperH;
+                containerW = containerH * videoAspectRatio;
+            } else {
+                containerW = wrapperW;
+                containerH = containerW / videoAspectRatio;
+            }
+
+            cropContainer.style.width = `${containerW}px`;
+            cropContainer.style.height = `${containerH}px`;
+
+            // Initialize crop box to 80% scale centered
+            cropW = containerW * 0.8;
+            cropH = cropW / videoAspectRatio;
+            cropX = (containerW - cropW) / 2;
+            cropY = (containerH - cropH) / 2;
+
+            applyCropStyles();
+        }
+
+        window.addEventListener('resize', () => {
+            if (video.src) calibrateCropContainer();
+        });
+
+        function applyCropStyles() {
+            cropBox.style.left = `${cropX}px`;
+            cropBox.style.top = `${cropY}px`;
+            cropBox.style.width = `${cropW}px`;
+            cropBox.style.height = `${cropH}px`;
+        }
+
+        toggleCropBtn.addEventListener('click', () => {
+            cropEnabled = !cropEnabled;
+            if (cropEnabled) {
+                calibrateCropContainer();
+                cropContainer.style.display = 'block';
+                toggleCropBtn.classList.add('active');
+            } else {
+                cropContainer.style.display = 'none';
+                toggleCropBtn.classList.remove('active');
+            }
+        });
+
+        // Crop Drag & Resize Handlers
+        let dragAction = null;
+        let startMX, startMY, startCX, startCY, startCW, startCH;
+
+        cropBox.addEventListener('mousedown', (e) => {
+            if (e.target === cropHandle) {
+                dragAction = 'resize';
+            } else {
+                dragAction = 'move';
+            }
+            startMX = e.clientX;
+            startMY = e.clientY;
+            startCX = cropX;
+            startCY = cropY;
+            startCW = cropW;
+            startCH = cropH;
+            e.stopPropagation();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!dragAction) return;
+
+            const dx = e.clientX - startMX;
+            const dy = e.clientY - startMY;
+
+            if (dragAction === 'move') {
+                cropX = Math.max(0, Math.min(startCX + dx, containerW - cropW));
+                cropY = Math.max(0, Math.min(startCY + dy, containerH - cropH));
+            }
+            else if (dragAction === 'resize') {
+                // Resize while locking to native video aspect ratio
+                let newW = startCW + dx;
+                let newH = newW / videoAspectRatio;
+
+                // Boundary checks
+                if (startCX + newW > containerW) {
+                    newW = containerW - startCX;
+                    newH = newW / videoAspectRatio;
+                }
+                if (startCY + newH > containerH) {
+                    newH = containerH - startCY;
+                    newW = newH * videoAspectRatio;
+                }
+
+                // Enforce minimum size
+                if (newW >= 50) {
+                    cropW = newW;
+                    cropH = newH;
+                }
+            }
+            applyCropStyles();
+        });
+
+        window.addEventListener('mouseup', () => { dragAction = null; });
+
+        // --- Export Logic ---
+        exportBtn.addEventListener('click', async () => {
+            processingOverlay.style.display = 'flex';
+            overlayText.textContent = "Preparing stream...";
+            video.pause();
+
+            let streamToRecord;
+
+            if (cropEnabled) {
+                // Canvas-based cropping pipeline
+                const scale = video.videoWidth / containerW;
+                const sourceX = cropX * scale;
+                const sourceY = cropY * scale;
+                const sourceW = cropW * scale;
+                const sourceH = cropH * scale;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = sourceW;
+                canvas.height = sourceH;
+                const ctx = canvas.getContext('2d');
+
+                function drawFrame() {
+                    ctx.drawImage(video, sourceX, sourceY, sourceW, sourceH, 0, 0, canvas.width, canvas.height);
+                    animationFrameId = requestAnimationFrame(drawFrame);
+                }
+                drawFrame();
+
+                const canvasStream = canvas.captureStream(30);
+
+                // Merge video audio tracks into canvas stream if available
+                let audioTracks = [];
+                try {
+                    const videoStream = video.captureStream ? video.captureStream() : video.mozCaptureStream();
+                    audioTracks = videoStream.getAudioTracks();
+                } catch (e) { }
+
+                if (audioTracks.length > 0) {
+                    streamToRecord = new MediaStream([...canvasStream.getVideoTracks(), ...audioTracks]);
+                } else {
+                    streamToRecord = canvasStream;
+                }
+            } else {
+                // Standard uncropped pipeline
+                streamToRecord = video.captureStream ? video.captureStream() : video.mozCaptureStream();
+            }
+
+            let mimeType = 'video/webm;codecs=vp8,opus';
+            if (MediaRecorder.isTypeSupported('video/mp4')) {
+                mimeType = 'video/mp4';
+            }
+
+            const recorder = new MediaRecorder(streamToRecord, { mimeType });
+            const chunks = [];
+
+            recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+            recorder.onstop = () => {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+
+                const blob = new Blob(chunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const extension = mimeType.includes('mp4') ? '.mp4' : '.webm';
+
+                let fileName = originalFileName;
+
+                a.download = fileName + extension;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                processingOverlay.style.display = 'none';
+                video.muted = false;
+            };
+
+            video.currentTime = trimStart;
+            video.muted = true;
+            overlayText.textContent = "Recording... Keep tab open.";
+
+            await video.play();
+            recorder.start();
+
+            const checkTime = setInterval(() => {
+                if (video.currentTime >= trimEnd) {
+                    clearInterval(checkTime);
+                    recorder.stop();
+                    video.pause();
+                }
+            }, 50);
+        });
+    </script>
+</body>
+
+</html>

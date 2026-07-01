@@ -65,7 +65,7 @@ export const ditherConfig: ComponentConfig = {
     {
       name: "colorLight",
       type: "color",
-      default: "#2299ee",
+      default: "#ffffff",
       description: "The primary color representing the inner glowing core of the dots.",
     },
     {
@@ -91,7 +91,7 @@ export const ditherConfig: ComponentConfig = {
         intensity: 7,
         duration: 2,
         stagger: 4,
-        colorLight: "#2299ee",
+        colorLight: "#ffffff",
         colorDark: "#0022aa",
         colorBg: "#000055",
       },

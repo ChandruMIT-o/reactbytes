@@ -103,19 +103,6 @@ export const iridescentGradientConfig: ComponentConfig = {
         checked: true,
       },
     },
-    {
-      id: "ghostly-mist",
-      label: "Ghostly Mist",
-      config: {
-        title: "Subtle Textures",
-        switchText: "Reveal",
-        bgColor: "",
-        animationDuration: "90s",
-        blurAmount: "30px",
-        opacity: 0.3,              // Very faint background presence
-        checked: false,            // Defaulting to light mode variant
-      },
-    },
   ],
   credits: [
     {

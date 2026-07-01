@@ -160,7 +160,7 @@ export const asciiWaveConfig: ComponentConfig = {
       id: "dense",
       label: "Dense Matrix",
       config: {
-        gap: 20,
+        gap: 80,
         radiusVmin: 20,
         speedIn: 0.7,
         speedOut: 0.8,

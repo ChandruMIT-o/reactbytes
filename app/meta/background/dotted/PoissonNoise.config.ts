@@ -74,7 +74,7 @@ export const poissonNoiseConfig: ComponentConfig = {
     {
       name: "maxParticles",
       type: "number",
-      default: 800,
+      default: 300,
       min: 200,
       max: 1200,
       step: 50,
@@ -146,7 +146,7 @@ export const poissonNoiseConfig: ComponentConfig = {
         noiseScale: 0.003,
         noiseStrength: 2.5,
         driftSpeed: 0.02,
-        maxParticles: 800,
+        maxParticles: 300,
         mouseInfluence: "attract",
         mouseRadius: 220,
         mouseIntensity: 1.2,

@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 interface HeaderChaosBackgroundProps {
 	isHovered: boolean;
 	isPressed: boolean;
+	flippedX?: boolean;
+	flippedY?: boolean;
 }
 
 const vertexShaderSource = `
@@ -144,7 +146,7 @@ const config = {
 	pressedTap: 2.5,
 };
 
-export default function HeaderChaosBackground({ isHovered, isPressed }: HeaderChaosBackgroundProps) {
+export default function HeaderChaosBackground({ isHovered, isPressed, flippedX, flippedY }: HeaderChaosBackgroundProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const requestRef = useRef<number>(0);
 	const startTimeRef = useRef<number>(Date.now());
@@ -322,6 +324,9 @@ export default function HeaderChaosBackground({ isHovered, isPressed }: HeaderCh
 			animate={{ opacity: isHovered ? 1 : 0 }}
 			transition={{ duration: 0.8, ease: "easeInOut" }}
 			className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
+			style={{
+				transform: `${flippedX ? "scaleX(-1)" : ""} ${flippedY ? "scaleY(-1)" : ""}`.trim() || undefined,
+			}}
 		>
 			<canvas
 				ref={canvasRef}

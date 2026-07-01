@@ -154,7 +154,7 @@ export const Credits: React.FC<CreditsProps> = ({
 
 			{/* Minimal Footer */}
 			<div className="mt-12 pl-4 text-[10px] uppercase tracking-widest text-rb-accent-2/20">
-				© {new Date().getFullYear()} React Bytes · Built for performance
+				© {new Date().getFullYear()} React Bytes Beta · Built for performance
 			</div>
 		</div>
 	);

@@ -137,7 +137,7 @@ export const volumetricTextConfig: ComponentConfig = {
     {
       name: "bgColor",
       type: "color",
-      default: "#004040",
+      default: "#000000",
       description: "Hex code for the background scene color.",
     },
   ],
@@ -156,7 +156,7 @@ export const volumetricTextConfig: ComponentConfig = {
         lightStrength: 3.5,
         lightColor: "#ffff66",
         falloffColor: "#00ccff",
-        bgColor: "#004040",
+        bgColor: "#000000",
         falloff: 0.5,
         density: 0.98,
         weight: 0.25,

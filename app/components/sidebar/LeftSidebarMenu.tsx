@@ -39,8 +39,10 @@ export default function LeftSidebarMenu({
 	const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
-	const activeIndex = items.findIndex((item) => item.id === activeItem);
-	const hoverIndex = items.findIndex((item) => item.id === hoveredItemId);
+	const filteredItems = items.filter((item) => item.id !== "admin");
+
+	const activeIndex = filteredItems.findIndex((item) => item.id === activeItem);
+	const hoverIndex = filteredItems.findIndex((item) => item.id === hoveredItemId);
 
 	// Spring configurations for premium feel
 	const springConfig = {
@@ -293,7 +295,7 @@ export default function LeftSidebarMenu({
 						)}
 					</AnimatePresence>
 					{/* LAYER 3: Navigation Buttons */}
-					{items.map((item, index) => {
+					{filteredItems.map((item, index) => {
 						const isActive = activeItem === item.id;
 						const isHovered = hoveredItemId === item.id;
 
@@ -324,7 +326,7 @@ export default function LeftSidebarMenu({
 									transition={{
 										...springConfig,
 										delay: isCollapsed
-											? (items.length - index - 1) * 0.015
+											? (filteredItems.length - index - 1) * 0.015
 											: index * 0.025,
 										opacity: { duration: 0.2 },
 									}}

@@ -21,7 +21,7 @@ export const metallicTwirlConfig: ComponentConfig = {
     {
       name: "speed",
       type: "number",
-      default: 0.2,
+      default: 0.25,
       min: 0.01,
       max: 2.0,
       step: 0.01,
@@ -31,7 +31,7 @@ export const metallicTwirlConfig: ComponentConfig = {
     {
       name: "zoom",
       type: "number",
-      default: 15.0,
+      default: 40,
       min: 1.0,
       max: 40.0,
       step: 1.0,
@@ -41,7 +41,7 @@ export const metallicTwirlConfig: ComponentConfig = {
     {
       name: "symmetry",
       type: "number",
-      default: 18.0,
+      default: 50,
       min: 2.0,
       max: 50.0,
       step: 1.0,
@@ -51,7 +51,7 @@ export const metallicTwirlConfig: ComponentConfig = {
     {
       name: "amplitude",
       type: "number",
-      default: 1.9,
+      default: 1,
       min: 0.1,
       max: 5.0,
       step: 0.1,
@@ -60,6 +60,16 @@ export const metallicTwirlConfig: ComponentConfig = {
     },
   ],
   presets: [
+    {
+      id: "liquid-prism",
+      label: "Liquid Prism",
+      config: {
+        speed: 0.25,
+        zoom: 40,
+        symmetry: 50,
+        amplitude: 1,
+      },
+    },
     {
       id: "classic",
       label: "Classic Metallic",
@@ -98,16 +108,6 @@ export const metallicTwirlConfig: ComponentConfig = {
         zoom: 30.0,
         symmetry: 36.0,
         amplitude: 2.2,
-      },
-    },
-    {
-      id: "liquid-prism",
-      label: "Liquid Prism",
-      config: {
-        speed: 0.4,
-        zoom: 10.0,
-        symmetry: 8.0,
-        amplitude: 0.8,
       },
     },
   ],

@@ -20,7 +20,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
     {
       name: "preset",
       type: "select",
-      default: "mistral",
+      default: "storm",
       options: [
         { id: "mistral", label: "Mistral Surge" },
         { id: "sirocco", label: "Sirocco Dust" },
@@ -33,7 +33,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
     {
       name: "palette",
       type: "select",
-      default: "midnight",
+      default: "volcanic",
       options: [
         { id: "midnight", label: "Midnight Blue" },
         { id: "aurora", label: "Aurora Green" },
@@ -59,7 +59,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
     {
       name: "particleCount",
       type: "number",
-      default: 15000,
+      default: 22000,
       min: 4000,
       max: 25000,
       step: 1000,
@@ -68,7 +68,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
     {
       name: "flowSpeed",
       type: "number",
-      default: 3.1,
+      default: 3.8,
       min: 0.5,
       max: 5.0,
       step: 0.1,
@@ -77,7 +77,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
     {
       name: "trailPersistence",
       type: "number",
-      default: 0.94,
+      default: 0.88,
       min: 0.8,
       max: 0.99,
       step: 0.01,
@@ -86,7 +86,7 @@ export const atmosphericDriftConfig: ComponentConfig = {
     {
       name: "windWobble",
       type: "number",
-      default: 0.024,
+      default: 0.035,
       min: 0.0,
       max: 0.08,
       step: 0.002,
@@ -96,7 +96,21 @@ export const atmosphericDriftConfig: ComponentConfig = {
   presets: [
     {
       id: "default",
-      label: "Mistral Surge (Default)",
+      label: "Winter Gale",
+      config: {
+        preset: "storm",
+        palette: "volcanic",
+        showGrid: true,
+        audioEnabled: false,
+        particleCount: 22000,
+        flowSpeed: 3.8,
+        trailPersistence: 0.88,
+        windWobble: 0.035,
+      },
+    },
+    {
+      id: "storm",
+      label: "Mistral Surge",
       config: {
         preset: "mistral",
         palette: "midnight",
@@ -134,20 +148,6 @@ export const atmosphericDriftConfig: ComponentConfig = {
         flowSpeed: 1.8,
         trailPersistence: 0.96,
         windWobble: 0.012,
-      },
-    },
-    {
-      id: "storm",
-      label: "Winter Gale",
-      config: {
-        preset: "storm",
-        palette: "volcanic",
-        showGrid: true,
-        audioEnabled: true,
-        particleCount: 22000,
-        flowSpeed: 3.8,
-        trailPersistence: 0.88,
-        windWobble: 0.035,
       },
     },
     {

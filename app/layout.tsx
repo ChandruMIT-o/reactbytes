@@ -36,6 +36,19 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (window.location.pathname !== '/landing' && !sessionStorage.getItem('rb-intro-played')) {
+                  document.documentElement.classList.add('intro-loading');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <Suspense fallback={null}>
           <PreviewProvider>

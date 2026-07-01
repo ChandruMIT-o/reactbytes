@@ -21,7 +21,7 @@ export const gooeyMorphConfig: ComponentConfig = {
     {
       name: "duration",
       type: "number",
-      default: 3,
+      default: 2,
       min: 1,
       max: 10,
       step: 0.5,
@@ -30,7 +30,7 @@ export const gooeyMorphConfig: ComponentConfig = {
     {
       name: "morphSpeed",
       type: "number",
-      default: 1,
+      default: 2,
       min: 0.1,
       max: 3,
       step: 0.1,
@@ -39,7 +39,7 @@ export const gooeyMorphConfig: ComponentConfig = {
     {
       name: "yOffset",
       type: "number",
-      default: 20,
+      default: 100,
       min: 0,
       max: 100,
       step: 1,
@@ -64,10 +64,10 @@ export const gooeyMorphConfig: ComponentConfig = {
       label: "Default Style",
       config: {
         words: "CREATE, DESIGN, DEVELOP",
-        duration: 3,
-        morphSpeed: 1,
-        color: "#34d399",
-        yOffset: 20,
+        duration: 2,
+        morphSpeed: 2,
+        color: "#ffffff",
+        yOffset: 100,
         uppercase: true,
       },
     },
@@ -82,19 +82,7 @@ export const gooeyMorphConfig: ComponentConfig = {
         yOffset: 30,
         uppercase: true,
       },
-    },
-    {
-      id: "slow-vibes",
-      label: "Slow Vibes",
-      config: {
-        words: "BREATHE, RELAX, CREATE",
-        duration: 5,
-        morphSpeed: 2,
-        color: "#c084fc",
-        yOffset: 10,
-        uppercase: true,
-      },
-    },
+    }
   ],
   credits: [
     {

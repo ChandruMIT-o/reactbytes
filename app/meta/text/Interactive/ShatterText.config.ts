@@ -61,7 +61,7 @@ export const shatterTextConfig: ComponentConfig = {
       label: "Explosive Scatter",
       config: {
         text: "SUPERNOVA",
-        scatterFactor: 800,
+        scatterFactor: 1500,
         color: "#f43f5e",
         uppercase: true,
         textClassName: "text-6xl tracking-widest font-black uppercase",

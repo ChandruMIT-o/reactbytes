@@ -30,7 +30,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "compress",
       type: "number",
-      default: 1.0,
+      default: 2.5,
       min: 0.2,
       max: 2.5,
       step: 0.05,
@@ -40,7 +40,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "morph",
       type: "number",
-      default: 0.1,
+      default: 0.0,
       min: 0.0,
       max: 10.0,
       step: 0.1,
@@ -50,7 +50,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "intensity",
       type: "number",
-      default: 1.0,
+      default: 5,
       min: 0.1,
       max: 5.0,
       step: 0.1,
@@ -60,7 +60,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "orbitScale",
       type: "number",
-      default: 1.0,
+      default: 0.1,
       min: 0.1,
       max: 6.0,
       step: 0.1,
@@ -70,7 +70,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "rotateSpeed",
       type: "number",
-      default: 0.4,
+      default: 1.8,
       min: 0.0,
       max: 5.0,
       step: 0.1,
@@ -80,7 +80,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "camDist",
       type: "number",
-      default: 80,
+      default: 68,
       min: 25,
       max: 180,
       step: 1,
@@ -90,7 +90,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "camPhi",
       type: "number",
-      default: 1.2,
+      default: 0.15,
       min: 0.15,
       max: 1.52,
       step: 0.05,
@@ -100,7 +100,7 @@ export const singularityConfig: ComponentConfig = {
     {
       name: "colorBase",
       type: "color",
-      default: "#00f2ff",
+      default: "#ff0040",
       description:
         "Base color used to tint the gravitational lens and emission jets.",
     },
@@ -108,6 +108,20 @@ export const singularityConfig: ComponentConfig = {
   presets: [
     {
       id: "default",
+      label: "Relativistic Collapse",
+      config: {
+        morph: 0.0,
+        compress: 2.5,
+        intensity: 5,
+        orbitScale: 0.1,
+        rotateSpeed: 1.8,
+        colorBase: "#ff0040",
+        camDist: 68,
+        camPhi: 0.15,
+      },
+    },
+    {
+      id: "stable",
       label: "Stable Singularity",
       config: {
         morph: 0.1,
@@ -132,20 +146,6 @@ export const singularityConfig: ComponentConfig = {
         colorBase: "#ff9900",
         camDist: 95,
         camPhi: 1.35,
-      },
-    },
-    {
-      id: "collapse",
-      label: "Relativistic Collapse",
-      config: {
-        morph: 0.8,
-        compress: 0.38,
-        intensity: 3.5,
-        orbitScale: 4.5,
-        rotateSpeed: 4.0,
-        colorBase: "#ff0040",
-        camDist: 55,
-        camPhi: 1.5,
       },
     },
   ],

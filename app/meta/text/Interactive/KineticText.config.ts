@@ -31,6 +31,12 @@ export const kineticTextConfig: ComponentConfig = {
       description: "Foreground color of the letters.",
     },
     {
+      name: "bgColor",
+      type: "color",
+      default: "#000000",
+      description: "Background color of the canvas.",
+    },
+    {
       name: "activeStrokeColor",
       type: "color",
       default: "rgba(0, 245, 255, 0.45)",
@@ -43,6 +49,12 @@ export const kineticTextConfig: ComponentConfig = {
       default: "rgba(255, 255, 255, 0.08)",
       description: "Color of the ribbon/string when not active.",
     },
+    {
+      name: "activeCrosshairColor",
+      type: "color",
+      default: "rgba(255, 0, 110, 0.25)",
+      description: "Color of the resting home-base crosshair indicator.",
+    },
   ],
   presets: [
     {
@@ -51,8 +63,10 @@ export const kineticTextConfig: ComponentConfig = {
       config: {
         text: "KINETIC",
         color: "#ffffff",
+        bgColor: "#000000",
         activeStrokeColor: "rgba(0, 245, 255, 0.45)",
         strokeColor: "rgba(255, 255, 255, 0.08)",
+        activeCrosshairColor: "rgba(255, 0, 110, 0.25)",
         staggerDelay: 80,
       },
     },
@@ -62,8 +76,10 @@ export const kineticTextConfig: ComponentConfig = {
       config: {
         text: "MATRIX",
         color: "#00ff66",
+        bgColor: "#000800",
         activeStrokeColor: "rgba(0, 255, 102, 0.5)",
         strokeColor: "rgba(0, 50, 20, 0.15)",
+        activeCrosshairColor: "rgba(0, 255, 102, 0.3)",
         staggerDelay: 50,
       },
     },
@@ -73,8 +89,10 @@ export const kineticTextConfig: ComponentConfig = {
       config: {
         text: "CYBER",
         color: "#ffe600",
+        bgColor: "#0f0015",
         activeStrokeColor: "rgba(255, 0, 110, 0.6)",
         strokeColor: "rgba(255, 230, 0, 0.05)",
+        activeCrosshairColor: "rgba(0, 245, 255, 0.35)",
         staggerDelay: 120,
       },
     },

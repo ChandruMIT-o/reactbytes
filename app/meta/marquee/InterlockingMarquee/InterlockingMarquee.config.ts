@@ -151,7 +151,7 @@ export const interlockingMarqueeConfig: ComponentConfig = {
         duration: 10000,
         reverse: true,
         pauseOnHover: true,
-        variant: "classic",
+        variant: "curvy",
       },
     },
     {
@@ -161,7 +161,7 @@ export const interlockingMarqueeConfig: ComponentConfig = {
         duration: 20000,
         reverse: false,
         pauseOnHover: false,
-        variant: "classic",
+        variant: "wave",
       },
     },
   ],

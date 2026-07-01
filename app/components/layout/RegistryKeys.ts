@@ -6,6 +6,7 @@ export const registryKeys = [
   "admin",
   "mcp",
   "favorites",
+  "components",
 
   // Text items
   "blur-text",

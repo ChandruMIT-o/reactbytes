@@ -107,7 +107,7 @@ export interface EndlessMotionFooterProps {
 
 export const EndlessMotionFooter: React.FC<EndlessMotionFooterProps> = ({
   text = "Endless Motion",
-  bgColor = "#0b84ff",
+  bgColor = "#000000",
   textColor = "#e8e5d8",
   minScale = 0.5,
   lineCount = 5,

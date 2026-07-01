@@ -18,18 +18,18 @@ export interface ElasticRevealProps {
 }
 
 export const ElasticReveal: React.FC<ElasticRevealProps> = ({
-	text = "REACT BYTES",
-	duration = 0.6,
-	stagger = 0.02,
+	text = "LETTER BY LETTER",
+	duration = 0.1,
+	stagger = 0.06,
 	direction = "up",
-	baseColor = "#60a5fa",
-	hoverColor = "#FFFFFF",
+	baseColor = "#e1e1e1",
+	hoverColor = "#34d399",
 	className = "",
 	// Swapped from 8vw to 8cqw for bulletproof container scaling
 	textClassName = "text-[clamp(1.5rem,8cqw,5rem)] font-bold font-sans tracking-tighter text-center",
 	href,
-	uppercase = false,
-	animateFrom = "left",
+	uppercase = true,
+	animateFrom = "hover",
 }) => {
 	const [isHovered, setIsHovered] = useState(false);
 	const [originIndex, setOriginIndex] = useState<number | null>(null);

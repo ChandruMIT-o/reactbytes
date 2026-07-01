@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -99,29 +99,58 @@ interface FavoriteCardProps {
 }
 
 function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
-  const [hovered, setHovered] = useState(false);
-  const [tapped, setTapped] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isInView, setIsInView] = useState(false);
+  const [isNearScreen, setIsNearScreen] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
-  const gifSrc = PREVIEW_GIFS[component.slug] ?? null;
-  const showGif = gifSrc && (hovered || tapped);
+  const videoSrc = `/previews/videos/${component.slug}.mp4`;
 
-  // Automatically derive Giphy's static frame URL if it's a giphy link
-  const staticSrc = useMemo(() => {
-    if (!gifSrc) return null;
-    if (gifSrc.includes("giphy.com")) {
-      return gifSrc.replace("/giphy.gif", "/giphy_s.gif");
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const nearObserver = new IntersectionObserver(
+      ([entry]) => {
+        setIsNearScreen(entry.isIntersecting);
+      },
+      { rootMargin: "300px" }
+    );
+
+    const viewObserver = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    nearObserver.observe(el);
+    viewObserver.observe(el);
+
+    return () => {
+      nearObserver.disconnect();
+      viewObserver.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || videoError) return;
+
+    if (isInView) {
+      video.play().catch((err) => {
+        // Autoplay might be blocked or file not found
+        console.warn(`Autoplay failed for ${component.slug}:`, err);
+      });
+    } else {
+      video.pause();
     }
-    return gifSrc;
-  }, [gifSrc]);
+  }, [isInView, component.slug, videoError]);
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation();
     onRemove();
-  };
-
-  const handleTapPreview = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setTapped((prev) => !prev);
   };
 
   return (
@@ -132,65 +161,36 @@ function FavoriteCard({ component, onRemove, onClick }: FavoriteCardProps) {
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25 }}
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => {
-        setHovered(false);
-        setTapped(false);
-      }}
       className="group relative flex flex-col rounded-2xl border border-rb-neutral-3 bg-rb-neutral-3 hover:bg-rb-neutral-4 cursor-pointer transition-colors duration-200 overflow-hidden"
     >
       {/* Preview area */}
-      <div className="relative w-full h-40 overflow-hidden bg-rb-neutral-1 border-b border-rb-neutral-4/30 flex-shrink-0">
-
-        {/* 1. Base Fallback: Only shows if NO gif track exists */}
-        {!gifSrc && (
+      <div
+        ref={containerRef}
+        className="relative w-full h-40 overflow-hidden bg-rb-neutral-1 border-b border-rb-neutral-4/30 flex-shrink-0 flex items-center justify-center"
+      >
+        {videoError || !isNearScreen ? (
           <div className="absolute inset-0">
             <CategoryPlaceholder
               category={component.category}
               name={component.name}
             />
           </div>
-        )}
-
-        {/* 2. Static GIF Preview Frame (Zero Stretch, Fills zone completely) */}
-        {gifSrc && staticSrc && (
-          /* eslint-disable-next-line @next/next/no-img-element */
-          <img
-            src={staticSrc}
-            alt={`${component.name} preview still`}
-            className="absolute inset-0 block w-full h-full object-cover z-0"
-            loading="lazy"
+        ) : (
+          <video
+            ref={videoRef}
+            src={videoSrc}
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onError={() => setVideoError(true)}
+            className="w-full h-full object-cover z-10"
+            style={{ display: videoError ? "none" : "block" }}
           />
         )}
 
-        {/* 3. Animated GIF Track (Zero Stretch, Cross-fades cleanly on hover) */}
-        <AnimatePresence>
-          {showGif && (
-            <motion.img
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              src={gifSrc}
-              alt={`${component.name} playing preview`}
-              className="absolute inset-0 block w-full h-full object-cover pointer-events-none z-10"
-            />
-          )}
-        </AnimatePresence>
-
         {/* Subtle Darkening Overlay Layer */}
         <div className="absolute inset-0 bg-black/5 pointer-events-none z-20" />
-
-        {/* Mobile tap-to-preview button */}
-        {gifSrc && !tapped && (
-          <button
-            type="button"
-            onClick={handleTapPreview}
-            className="absolute bottom-2 right-2 z-30 sm:hidden flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium tracking-wide backdrop-blur-sm border transition-all duration-200 bg-black/50 border-white/10 text-white/60"
-          >
-            Tap to preview
-          </button>
-        )}
 
         {/* Remove button */}
         <button

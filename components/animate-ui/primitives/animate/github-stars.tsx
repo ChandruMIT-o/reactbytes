@@ -63,7 +63,7 @@ function GithubStars({
 
   const [stars, setStars] = React.useState(value ?? 0);
   const [currentStars, setCurrentStars] = React.useState(0);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(value === undefined);
   const isCompleted = React.useMemo(
     () => currentStars === stars,
     [currentStars, stars],
@@ -72,22 +72,34 @@ function GithubStars({
   const Component = asChild ? Slot : motion.div;
 
   React.useEffect(() => {
-    if (value !== undefined && username && repo) return;
+    if (!username || !repo) {
+      setIsLoading(false);
+      return;
+    }
     if (!isInView) {
-      setStars(0);
-      setIsLoading(true);
+      if (value === undefined) {
+        setStars(0);
+        setIsLoading(true);
+      }
       return;
     }
 
     const timeout = setTimeout(() => {
       fetch(`https://api.github.com/repos/${username}/${repo}`)
-        .then((response) => response.json())
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`GitHub API returned status ${response.status}`);
+          }
+          return response.json();
+        })
         .then((data) => {
           if (data && typeof data.stargazers_count === 'number') {
             setStars(data.stargazers_count);
           }
         })
-        .catch(console.error)
+        .catch((error) => {
+          console.warn(`[GithubStars] Failed to fetch stars for ${username}/${repo}:`, error);
+        })
         .finally(() => setIsLoading(false));
     }, delay);
 

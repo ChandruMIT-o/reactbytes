@@ -7,7 +7,7 @@ export const endlessMotionFooterConfig: ComponentConfig = {
   tags: ["footer", "marquee", "motion", "infinite", "scroll"],
   componentPath: "app/meta/footer/EndlessMotionFooter/EndlessMotionFooter.tsx",
   npmPackageName: "@reactbytes/endless-motion-footer",
-  version: "1.0.0",
+  version: "1.0.1",
   dependencies: {
     gsap: "^3.15.0",
     lenis: "^1.3.23",
@@ -17,7 +17,7 @@ export const endlessMotionFooterConfig: ComponentConfig = {
     "react-dom": "^19.0.0",
   },
   containerClassName:
-    "w-full h-[400px] relative overflow-hidden flex items-center justify-center rounded-xl border border-white/5 bg-[#0b84ff] shadow-xl",
+    "w-full h-[400px] relative overflow-hidden flex items-center justify-center rounded-xl border border-white/5 bg-[#000000] shadow-xl",
   props: [
     {
       name: "text",
@@ -90,7 +90,7 @@ export const endlessMotionFooterConfig: ComponentConfig = {
     {
       name: "bgColor",
       type: "color",
-      default: "#0b84ff",
+      default: "#000000",
       description: "The CSS background color of the footer section.",
     },
   ],
@@ -100,7 +100,7 @@ export const endlessMotionFooterConfig: ComponentConfig = {
       label: "Classic Ocean",
       config: {
         text: "React Bytes",
-        bgColor: "#0b84ff",
+        bgColor: "#000000",
         textColor: "#e8e5d8",
         minScale: 0.5,
         lineCount: 5,

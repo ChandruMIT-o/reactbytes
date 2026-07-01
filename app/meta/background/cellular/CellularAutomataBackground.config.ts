@@ -119,7 +119,7 @@ export const cellularAutomataConfig: ComponentConfig = {
         intensity: 1.3,
         opacity: 1.0,
         vignetteIntensity: 0.6,
-        blurAmount: 0,
+        blurAmount: 1,
       },
     },
     {
