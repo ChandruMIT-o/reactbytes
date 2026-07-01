@@ -87,8 +87,8 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
             : prop.type,
         defaultValue:
           prop.type === "string" ||
-          prop.type === "color" ||
-          prop.type === "select"
+            prop.type === "color" ||
+            prop.type === "select"
             ? `'${prop.default}'`
             : String(prop.default),
         description: prop.description,
@@ -159,7 +159,7 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
             options={prop.options || []}
             value={val}
             onChange={(v) => handlePropChange(prop.name, v)}
-            dynamicWidth={true}
+            dynamicWidth={false}
           />
         );
       default:
@@ -242,7 +242,6 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
           extraLibraries={(() => {
             const libs = [
               ...Object.keys(dbEntry.dependencies || {}),
-              ...Object.keys(dbEntry.peerDependencies || {}),
             ];
             return libs.length > 0 ? libs : undefined;
           })()}

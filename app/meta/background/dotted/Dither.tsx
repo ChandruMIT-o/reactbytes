@@ -1,4 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+"use client";
+
+import React, { useEffect, useRef } from 'react';
+import gsap from 'gsap';
 
 /**
  * Optimized Inline Perlin Noise Implementation
@@ -80,23 +83,9 @@ export const Dither: React.FC<DitherProps> = ({
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [gsapLoaded, setGsapLoaded] = useState(false);
+
 
     useEffect(() => {
-        if ((window as any).gsap) {
-            setGsapLoaded(true);
-            return;
-        }
-        const script = document.createElement('script');
-        script.src = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js";
-        script.onload = () => setGsapLoaded(true);
-        document.body.appendChild(script);
-    }, []);
-
-    useEffect(() => {
-        if (!gsapLoaded) return;
-        const gsap = (window as any).gsap;
-
         const canvas = canvasRef.current;
         const container = containerRef.current;
         if (!canvas || !container) return;
@@ -206,7 +195,7 @@ export const Dither: React.FC<DitherProps> = ({
             resizeObserver.disconnect();
             if (tl) tl.kill();
         };
-    }, [gsapLoaded, spacing, scale, intensity, duration, stagger, colorDark, colorLight, colorBg]);
+    }, [spacing, scale, intensity, duration, stagger, colorDark, colorLight, colorBg]);
 
     return (
         <div 

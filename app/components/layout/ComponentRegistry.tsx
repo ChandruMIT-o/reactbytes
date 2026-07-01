@@ -39,6 +39,7 @@ const baseRegistry: Record<string, RegistryEntry> = {
       { id: "welcome", label: "Welcome" },
       { id: "mission", label: "Our Mission" },
       { id: "principles", label: "Core Principles" },
+      { id: "contributions", label: "Contributors" }
     ],
     component: dynamic(() =>
       import("../../pages/IntroductionPage/IntroductionPage").then(

@@ -41,24 +41,4 @@ export const creditsData = [
 			},
 		],
 	},
-	{
-		title: "Core Stack",
-		items: [
-			{
-				name: "Next.js 16",
-				role: "Framework",
-				url: "https://nextjs.org",
-			},
-			{
-				name: "Tailwind CSS v4",
-				role: "Styling Engine",
-				url: "https://tailwindcss.com",
-			},
-			{
-				name: "Framer Motion",
-				role: "Animation Library",
-				url: "https://framer.com/motion",
-			},
-		],
-	},
 ];

@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-
-// Declaration for Three.js script injection
-declare global {
-  interface Window {
-    THREE: any;
-  }
-}
+import * as THREE from "three";
 
 // Shader code definitions
 const vertexShaderSource = `
@@ -176,7 +170,6 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
   className = "",
   children,
 }) => {
-  const [threeLoaded, setThreeLoaded] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const uniformsRef = useRef<any>(null);
@@ -221,31 +214,7 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
     }
   }, [complex, speed, scale, seed, mouseInfluence, brightness, colorR, colorG, colorB, paused]);
 
-  // Inject Three.js dynamically to avoid bundler import restrictions
-  useEffect(() => {
-    if (window.THREE) {
-      setThreeLoaded(true);
-      return;
-    }
 
-    const existingScript = document.querySelector('script[src*="three.min.js"]') as HTMLScriptElement;
-    if (existingScript) {
-      const handleLoad = () => setThreeLoaded(true);
-      existingScript.addEventListener('load', handleLoad);
-      if (window.THREE) {
-        setThreeLoaded(true);
-      }
-      return () => {
-        existingScript.removeEventListener('load', handleLoad);
-      };
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
-    script.async = true;
-    script.onload = () => setThreeLoaded(true);
-    document.head.appendChild(script);
-  }, []);
 
   const isVisibleRef = useRef(true);
   const isLoopingRef = useRef(false);
@@ -272,13 +241,11 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
 
   // Three.js Scene Setup and rendering Loop
   useEffect(() => {
-    if (!threeLoaded || !canvasRef.current || !containerRef.current) return;
+    if (!canvasRef.current || !containerRef.current) return;
 
     if (!observeVisibility) {
       isVisibleRef.current = true;
     }
-
-    const THREE = window.THREE;
     const canvas = canvasRef.current;
     const container = containerRef.current;
 
@@ -393,7 +360,7 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
       material.dispose();
       renderer.dispose();
     };
-  }, [threeLoaded]);
+  }, []);
 
   const hasHeight = className.includes("h-") || className.includes("height-");
   const hasPosition = className.includes("fixed") || className.includes("absolute") || className.includes("relative") || className.includes("sticky");
@@ -405,11 +372,7 @@ export const FbmNoise: React.FC<FbmNoiseProps> = ({
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />
       
-      {!threeLoaded && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral-950/90 z-20">
-          <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin"></div>
-        </div>
-      )}
+
 
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center pointer-events-none">
         {children}

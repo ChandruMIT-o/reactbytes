@@ -9,9 +9,9 @@ export const fbmNoiseConfig: ComponentConfig = {
   showDemoByDefault: true,
   demoVariant: "card",
   npmPackageName: "@reactbytes/fbm-noise",
-  version: "1.0.0",
+  version: "1.0.1",
   dependencies: {
-    three: "^0.128.0",
+    three: "^0.184.0",
   },
   peerDependencies: {
     react: "^18.0.0",

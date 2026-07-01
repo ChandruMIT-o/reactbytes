@@ -18,7 +18,7 @@ export const singularityConfig: ComponentConfig = {
   demoVariant: "text",
   componentPath: "app/meta/background/space/Singularity.tsx",
   npmPackageName: "@reactbytes/singularity",
-  version: "1.0.0",
+  version: "1.0.1",
   description: "A premium responsive 3D black hole Schwarzschild singularity background component utilizing Three.js and custom GLSL noise shaders.",
   dependencies: {
     three: "^0.184.0",

@@ -314,7 +314,7 @@ export const InstallationTabs: React.FC<InstallationTabsProps> = ({
 			</div>
 
 			{/* Main Content Outer Wrapper (Acts as the thick grey border) */}
-			<div className={`bg-rb-neutral-3 p-1.5 rounded-[24px] sm:rounded-tl-none sm:rounded-tr-none w-full relative ${showPkgSelector ? 'rounded-b-none sm:rounded-b-[24px]' : ''}`}>
+			<div className="bg-rb-neutral-3 p-1.5 rounded-t-none rounded-b-[24px] w-full relative">
 				{/* Actual Content Area */}
 				<div
 					ref={containerRef}

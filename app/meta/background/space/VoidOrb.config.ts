@@ -8,9 +8,9 @@ export const voidOrbConfig: ComponentConfig = {
   componentPath: "app/meta/background/space/VoidOrb.tsx",
   description: "A highly optimized, interactive WebGL void orb background component.",
   npmPackageName: "@reactbytes/void-orb",
-  version: "1.0.0",
+  version: "1.0.1",
   dependencies: {
-    "three": "^0.150.0"
+    "three": "^0.184.0"
   },
   peerDependencies: {
     "react": "^18.0.0",

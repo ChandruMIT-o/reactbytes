@@ -8,9 +8,9 @@ export const ditherConfig: ComponentConfig = {
   showDemoByDefault: true,
   demoVariant: "hero",
   npmPackageName: "@reactbytes/dither",
-  version: "1.0.0",
+  version: "1.0.1",
   dependencies: {
-    "gsap": ">=3.12.0",
+    "gsap": "^3.15.0",
   },
   peerDependencies: {
     "react": ">=18.0.0"

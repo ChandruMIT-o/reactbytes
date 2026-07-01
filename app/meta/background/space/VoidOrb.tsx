@@ -1,13 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import * as THREE from 'three';
-
-declare global {
-    interface Window {
-        THREE: any;
-    }
-}
 
 export interface VoidOrbProps {
     primaryColor?: string;
@@ -50,37 +44,11 @@ export default function VoidOrb({
     const mouseRef = useRef<any>(null);
     const smoothedMouseRef = useRef<any>(null);
 
-    const [threeLoaded, setThreeLoaded] = useState(false);
 
-    // Dynamic THREE.js script injection
-    useEffect(() => {
-        if (window.THREE) {
-            setThreeLoaded(true);
-            return;
-        }
-
-        const existingScript = document.querySelector('script[src*="three.min.js"]') as HTMLScriptElement;
-        if (existingScript) {
-            const handleLoad = () => setThreeLoaded(true);
-            existingScript.addEventListener('load', handleLoad);
-            if (window.THREE) {
-                setThreeLoaded(true);
-            }
-            return () => {
-                existingScript.removeEventListener('load', handleLoad);
-            };
-        }
-
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-        script.async = true;
-        script.onload = () => setThreeLoaded(true);
-        document.head.appendChild(script);
-    }, []);
 
     // Sync interactive props directly with WebGL uniform values in real-time
     useEffect(() => {
-        if (shaderMaterialRef.current && window.THREE) {
+        if (shaderMaterialRef.current) {
             const uniforms = shaderMaterialRef.current.uniforms;
 
             // OPTIMIZATION: Mutate colors in place using Three's native hex string parser.
@@ -117,10 +85,7 @@ export default function VoidOrb({
 
     // Handle localized Three.js lifecycle sequence
     useEffect(() => {
-        if (!threeLoaded || !canvasRef.current || !containerRef.current) return;
-
-        const THREE = window.THREE;
-        if (!THREE) return;
+        if (!canvasRef.current || !containerRef.current) return;
 
         const container = containerRef.current;
         const scene = new THREE.Scene();
@@ -330,7 +295,7 @@ export default function VoidOrb({
             plane.geometry.dispose();
             shaderMaterial.dispose();
         };
-    }, [threeLoaded]);
+    }, []);
 
     // OPTIMIZATION: Memoized pointer listeners via useCallback
     const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -373,14 +338,7 @@ export default function VoidOrb({
                 style={{ filter: 'url(#noise-generator-voidorb)', mixBlendMode: 'overlay' }}
             />
 
-            {!threeLoaded && (
-                <div className="absolute inset-0 bg-neutral-950/90 flex flex-col justify-center items-center z-10 transition-opacity duration-300">
-                    <div className="w-10 h-10 border-2 border-white/5 border-t-white/80 rounded-full animate-spin mb-4" />
-                    <p className="font-mono text-[9px] uppercase text-neutral-400 tracking-widest animate-pulse">
-                        Configuring WebGL Canvas...
-                    </p>
-                </div>
-            )}
+
 
             <canvas
                 ref={canvasRef}

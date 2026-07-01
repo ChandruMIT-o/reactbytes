@@ -254,7 +254,7 @@ export const PreviewTab: React.FC<PreviewTabProps> = ({
 
                 <button
                   onClick={handleOpenFullPreview}
-                  className="p-2.5 flex items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
+                  className="hidden md:flex p-2.5 items-center justify-center rounded-full bg-rb-neutral-3 text-rb-accent-2/40 border border-rb-neutral-4 hover:text-rb-accent-2 hover:bg-rb-neutral-4 transition-all group"
                   title="Expand Preview"
                 >
                   <Maximize2

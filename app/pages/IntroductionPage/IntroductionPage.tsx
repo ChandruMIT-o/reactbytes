@@ -320,7 +320,7 @@ export const IntroductionPage = () => {
 				className="max-w-6xl mx-auto w-full px-4 pt-10"
 			>
 				<div className="mb-12 text-center flex flex-col items-center">
-					<HeaderText text="Meet the Contributors" option={4} />
+					<HeaderText id="contributions" text="Meet the Contributors" option={4} />
 					<p className="text-[14px] text-rb-accent-2/50 font-light max-w-md mt-2">
 						The creative minds helping build the next generation of interactive React UI components.
 					</p>
