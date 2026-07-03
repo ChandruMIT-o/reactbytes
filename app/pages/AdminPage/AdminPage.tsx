@@ -157,7 +157,10 @@ export const AdminPage = () => {
 		if (showRefresh) setRefreshing(true);
 		try {
 			const res = await fetch("/api/checklist");
-			if (!res.ok) throw new Error("Failed to fetch checklist");
+			if (!res.ok) {
+				console.error(`Failed to fetch checklist. Status: ${res.status}, StatusText: ${res.statusText}`);
+				throw new Error(`Failed to fetch checklist: ${res.status} ${res.statusText}`);
+			}
 			const data = await res.json();
 			const savedChecklist = data.checklist || {};
 

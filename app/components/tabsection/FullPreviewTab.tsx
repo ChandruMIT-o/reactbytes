@@ -139,7 +139,7 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
                     <div className="flex-1 relative flex flex-col h-full bg-[radial-gradient(circle_at_50%_50%,_var(--rb-neutral-2)_0%,_var(--rb-neutral-1)_100%)]">
 
                         {/* Top Header Controls */}
-                        <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-[1100]">
+                        <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-[9999]">
                             <div className="flex items-center gap-4">
                                 <button
                                     onClick={onClose}
@@ -290,13 +290,13 @@ export const FullPreviewTab: React.FC<FullPreviewTabProps> = ({
 
                         {/* Absolute positioning for the floating DemoToggle */}
                         {isBackground && (
-                            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[1100]">
+                            <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[9999]">
                                 <DemoToggle checked={showDemo} onChange={setShowDemo} />
                             </div>
                         )}
 
                         {/* Bottom Navigation Controls */}
-                        <div className="absolute bottom-6 left-0 right-0 px-6 flex items-center justify-between z-[1100]">
+                        <div className="absolute bottom-6 left-0 right-0 px-6 flex items-center justify-between z-[9999]">
                             {/* Prev Button Container */}
                             <div className="w-[25%] flex justify-start">
                                 {prevItem && (

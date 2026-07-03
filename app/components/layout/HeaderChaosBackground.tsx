@@ -193,46 +193,100 @@ export default function HeaderChaosBackground({ isHovered, isPressed, flippedX, 
 		const canvas = canvasRef.current;
 		if (!canvas) return;
 
-		const gl = canvas.getContext("webgl", { alpha: false, antialias: true });
-		if (!gl) return;
-		glRef.current = gl;
+		let gl: WebGLRenderingContext | null = null;
+		let vertexShader: WebGLShader | null = null;
+		let fragmentShader: WebGLShader | null = null;
+		let program: WebGLProgram | null = null;
+		let buffer: WebGLBuffer | null = null;
 
-		const vertexShader = compileShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
-		const fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
-		if (!vertexShader || !fragmentShader) return;
+		const initWebGL = () => {
+			gl = canvas.getContext("webgl", { alpha: false, antialias: true });
+			if (!gl || gl.isContextLost()) return;
+			glRef.current = gl;
 
-		const program = gl.createProgram();
-		if (!program) return;
-		gl.attachShader(program, vertexShader);
-		gl.attachShader(program, fragmentShader);
-		gl.linkProgram(program);
+			vertexShader = compileShader(gl, gl.VERTEX_SHADER, vertexShaderSource);
+			fragmentShader = compileShader(gl, gl.FRAGMENT_SHADER, fragmentShaderSource);
+			if (!vertexShader || !fragmentShader) return;
 
-		if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-			console.error("Program link error:", gl.getProgramInfoLog(program));
-			return;
-		}
+			program = gl.createProgram();
+			if (!program) return;
+			gl.attachShader(program, vertexShader);
+			gl.attachShader(program, fragmentShader);
+			gl.linkProgram(program);
 
-		programRef.current = program;
-		gl.useProgram(program);
+			if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+				console.error("Program link error:", gl.getProgramInfoLog(program));
+				return;
+			}
 
-		const positions = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
-		const buffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-		gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+			programRef.current = program;
+			gl.useProgram(program);
 
-		const positionLocation = gl.getAttribLocation(program, "a_position");
-		gl.enableVertexAttribArray(positionLocation);
-		gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+			const positions = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+			buffer = gl.createBuffer();
+			gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+			gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
 
-		uniformLocationsRef.current = {
-			resolution: gl.getUniformLocation(program, "u_resolution"),
-			time: gl.getUniformLocation(program, "u_time"),
-			tap: gl.getUniformLocation(program, "u_tap"),
-			speed: gl.getUniformLocation(program, "u_speed"),
-			amplitude: gl.getUniformLocation(program, "u_amplitude"),
-			pulseMin: gl.getUniformLocation(program, "u_pulseMin"),
-			pulseMax: gl.getUniformLocation(program, "u_pulseMax"),
-			noiseType: gl.getUniformLocation(program, "u_noiseType"),
+			const positionLocation = gl.getAttribLocation(program, "a_position");
+			gl.enableVertexAttribArray(positionLocation);
+			gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+			uniformLocationsRef.current = {
+				resolution: gl.getUniformLocation(program, "u_resolution"),
+				time: gl.getUniformLocation(program, "u_time"),
+				tap: gl.getUniformLocation(program, "u_tap"),
+				speed: gl.getUniformLocation(program, "u_speed"),
+				amplitude: gl.getUniformLocation(program, "u_amplitude"),
+				pulseMin: gl.getUniformLocation(program, "u_pulseMin"),
+				pulseMax: gl.getUniformLocation(program, "u_pulseMax"),
+				noiseType: gl.getUniformLocation(program, "u_noiseType"),
+			};
+
+			handleResize();
+
+			// Start rendering if not already running
+			if (!requestRef.current) {
+				requestRef.current = requestAnimationFrame(render);
+			}
+		};
+
+		const cleanupWebGL = () => {
+			if (requestRef.current) {
+				cancelAnimationFrame(requestRef.current);
+				requestRef.current = 0;
+			}
+
+			if (gl) {
+				if (buffer) {
+					gl.deleteBuffer(buffer);
+					buffer = null;
+				}
+				if (program) {
+					if (vertexShader) {
+						gl.detachShader(program, vertexShader);
+						gl.deleteShader(vertexShader);
+						vertexShader = null;
+					}
+					if (fragmentShader) {
+						gl.detachShader(program, fragmentShader);
+						gl.deleteShader(fragmentShader);
+						fragmentShader = null;
+					}
+					gl.deleteProgram(program);
+					program = null;
+					programRef.current = null;
+				}
+
+				const isRealUnmount = !canvas.isConnected || !document.body.contains(canvas);
+				if (isRealUnmount) {
+					const loseContextExt = gl.getExtension("WEBGL_lose_context");
+					if (loseContextExt) {
+						loseContextExt.loseContext();
+					}
+				}
+				glRef.current = null;
+				gl = null;
+			}
 		};
 
 		const handleResize = () => {
@@ -244,13 +298,14 @@ export default function HeaderChaosBackground({ isHovered, isPressed, flippedX, 
 			canvas.width = rect.width * dpr;
 			canvas.height = rect.height * dpr;
 			gl.viewport(0, 0, canvas.width, canvas.height);
-			gl.uniform2f(uniformLocationsRef.current.resolution, canvas.width, canvas.height);
+			if (uniformLocationsRef.current.resolution) {
+				gl.uniform2f(uniformLocationsRef.current.resolution, canvas.width, canvas.height);
+			}
 		};
 
-		window.addEventListener("resize", handleResize);
-		handleResize();
-
 		const render = () => {
+			if (!gl || gl.isContextLost()) return;
+
 			const time = (Date.now() - startTimeRef.current) / 1000;
 			const deltaTime = time - lastTimeRef.current;
 			lastTimeRef.current = time;
@@ -310,10 +365,29 @@ export default function HeaderChaosBackground({ isHovered, isPressed, flippedX, 
 			requestRef.current = requestAnimationFrame(render);
 		};
 
-		requestRef.current = requestAnimationFrame(render);
+		const handleContextLost = (e: Event) => {
+			e.preventDefault();
+			if (requestRef.current) {
+				cancelAnimationFrame(requestRef.current);
+				requestRef.current = 0;
+			}
+		};
+
+		const handleContextRestored = () => {
+			initWebGL();
+		};
+
+		canvas.addEventListener("webglcontextlost", handleContextLost, false);
+		canvas.addEventListener("webglcontextrestored", handleContextRestored, false);
+		window.addEventListener("resize", handleResize);
+
+		// Initial setup
+		initWebGL();
 
 		return () => {
-			if (requestRef.current) cancelAnimationFrame(requestRef.current);
+			cleanupWebGL();
+			canvas.removeEventListener("webglcontextlost", handleContextLost);
+			canvas.removeEventListener("webglcontextrestored", handleContextRestored);
 			window.removeEventListener("resize", handleResize);
 		};
 	}, []);

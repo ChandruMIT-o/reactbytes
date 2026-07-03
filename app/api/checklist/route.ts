@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
 
+export const dynamic = "force-dynamic";
+
 const filePath = path.join(process.cwd(), "lib", "checklist.json");
 
 async function getChecklistData() {
@@ -9,10 +11,7 @@ async function getChecklistData() {
 		const data = await fs.readFile(filePath, "utf-8");
 		return JSON.parse(data);
 	} catch (error) {
-		const defaultData = {};
-		await fs.mkdir(path.dirname(filePath), { recursive: true });
-		await fs.writeFile(filePath, JSON.stringify(defaultData, null, 2), "utf-8");
-		return defaultData;
+		return {};
 	}
 }
 
@@ -59,6 +58,7 @@ export async function POST(request: Request) {
 			fileData[componentId][field] = !!value;
 		}
 
+		await fs.mkdir(path.dirname(filePath), { recursive: true });
 		await fs.writeFile(filePath, JSON.stringify(fileData, null, 2), "utf-8");
 		return NextResponse.json({ success: true, updated: fileData[componentId] });
 	} catch (error: any) {
