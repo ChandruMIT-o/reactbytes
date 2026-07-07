@@ -13,7 +13,7 @@ import ToggleComponent from "@/app/components/buttongroup/ToggleComponent";
 import DefaultComboBox from "@/app/components/combobox/DefaultComboBox";
 import { RotateCcw } from "lucide-react";
 import { BookmarkButton } from "@/app/components/buttons/BookmarkButton";
-
+import { CopyPromptButton } from "../buttons/CopyPromptButton";
 import { ComponentConfig, PropConfig } from "@/app/registry/ComponentDatabase";
 import { ComponentMap } from "@/app/registry/ComponentMap";
 
@@ -87,8 +87,8 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
             : prop.type,
         defaultValue:
           prop.type === "string" ||
-            prop.type === "color" ||
-            prop.type === "select"
+          prop.type === "color" ||
+          prop.type === "select"
             ? `'${prop.default}'`
             : String(prop.default),
         description: prop.description,
@@ -203,7 +203,12 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
           usageCode={usageCode}
           codeContent={codeContent}
           collapsible={true}
-          tabsAction={<BookmarkButton slug={dbEntry.slug} />}
+          tabsAction={
+            <div className="flex items-center gap-2">
+              <BookmarkButton slug={dbEntry.slug} />
+              <CopyPromptButton slug={dbEntry.slug} liveUsageCode={usageCode} />
+            </div>
+          }
           header={
             <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
@@ -240,9 +245,7 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
           componentSlug={dbEntry.slug}
           componentName={dbEntry.npmPackageName || "react-bytes"}
           extraLibraries={(() => {
-            const libs = [
-              ...Object.keys(dbEntry.dependencies || {}),
-            ];
+            const libs = [...Object.keys(dbEntry.dependencies || {})];
             return libs.length > 0 ? libs : undefined;
           })()}
         />

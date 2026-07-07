@@ -5,7 +5,7 @@ import { ComponentCodeDatabase } from "@/app/registry/ComponentCodeDatabase";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
 
@@ -14,7 +14,7 @@ export async function GET(
   if (!component) {
     return NextResponse.json(
       { error: `Component "${slug}" not found in registry database.` },
-      { status: 404 }
+      { status: 404 },
     );
   }
 
@@ -23,7 +23,7 @@ export async function GET(
   if (!lazyLoad) {
     return NextResponse.json(
       { error: `Component source code not found in bundled code database.` },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -40,6 +40,7 @@ export async function GET(
     componentPath: component.componentPath,
     version: component.version || null,
     npmPackageName: component.npmPackageName || null,
+    dependencies: component.dependencies || {}, // ← add this line
     lastModified,
     context: {
       context_from_dev: component.context_from_dev || null,
