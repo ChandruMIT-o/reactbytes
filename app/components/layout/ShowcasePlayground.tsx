@@ -16,6 +16,7 @@ import { BookmarkButton } from "@/app/components/buttons/BookmarkButton";
 import { CopyPromptButton } from "../buttons/CopyPromptButton";
 import { ComponentConfig, PropConfig } from "@/app/registry/ComponentDatabase";
 import { ComponentMap } from "@/app/registry/ComponentMap";
+import { extractExportName } from "@/lib/extractExportName";
 
 interface ShowcasePlaygroundProps {
   dbEntry: Omit<ComponentConfig, "component">;
@@ -56,6 +57,10 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
   };
 
   const generateUsageCode = () => {
+    const exportName = extractExportName(
+      codeContent,
+      dbEntry.name.replace(/\s+/g, ""),
+    );
     const propStrings = dbEntry.props
       .map((prop) => {
         const val = propStates[prop.name];
@@ -71,7 +76,7 @@ export const ShowcasePlayground: React.FC<ShowcasePlaygroundProps> = ({
       })
       .filter(Boolean)
       .join("\n");
-    return `<${dbEntry.name.replace(/\s+/g, "")}\n${propStrings}\n/>`;
+    return `<${exportName}\n${propStrings}\n/>`;
   };
 
   const loaderProps = [

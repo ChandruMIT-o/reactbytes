@@ -1,3 +1,5 @@
+import { extractExportName } from "./extractExportName";
+
 interface McpComponentResponse {
   name: string;
   slug: string;
@@ -22,7 +24,7 @@ export function buildPrompt(
   data: McpComponentResponse,
   liveUsageCode?: string,
 ): string {
-  const componentName = toPascalCase(data.name);
+  const componentName = extractExportName(data.code, toPascalCase(data.name));
   const deps = data.dependencies ? Object.keys(data.dependencies) : [];
   const suggestedPath = `components/${data.category}/${componentName}.tsx`;
   const isClientComponent = data.code.trimStart().startsWith('"use client"');
@@ -52,12 +54,12 @@ ${deps.length > 0 ? deps.map((d) => `  - ${d}`).join("\n") : "  - none"}
 You are helping integrate an open-source React component into an existing application.
 
 ${metadataBlock}
+${currentConfigSection}
 
 ---
 
 ${data.context.readme}
 ${dependenciesSection}
-${currentConfigSection}
 ### Compatibility
 
 - React 18+
