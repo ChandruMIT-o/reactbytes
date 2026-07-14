@@ -1,211 +1,239 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { createTimeline, Timeline } from 'animejs';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import RevealUnder from '../../meta/text/TextEnter/RevealUnder';
-
-// Target SVG paths of the brand logo parts
-const LOGO_TOP_PATH = "M19 0C19 2.49497 18.5084 4.96544 17.5537 7.27051C16.5989 9.57569 15.1989 11.6703 13.4346 13.4346C11.6703 15.1989 9.57569 16.5989 7.27051 17.5537C4.96544 18.5084 2.49497 19 0 19V6.91504C0.325311 6.96963 0.659174 7 1 7C4.31371 7 7 4.31371 7 1C7 0.659174 6.96963 0.325311 6.91504 0H19Z";
-const LOGO_BOTTOM_PATH = "M19 30C19 28.5555 18.7155 27.1251 18.1627 25.7905C17.6099 24.4559 16.7996 23.2433 15.7782 22.2218C14.7567 21.2004 13.5441 20.3901 12.2095 19.8373C10.8749 19.2845 9.44454 19 8 19L8 30H19Z";
-
-interface Point {
-  x: number;
-  y: number;
-}
-
-// Returns a standard SVG circle path string
-function getCirclePath(cx: number, cy: number, r: number): string {
-  if (r <= 0) return "";
-  return `M ${cx} ${cy - r} A ${r} ${r} 0 1 1 ${cx} ${cy + r} A ${r} ${r} 0 1 1 ${cx} ${cy - r} Z`;
-}
-
-// Samples points safely (Client-side only)
-function samplePathPoints(pathData: string, numPoints: number = 120): Point[] {
-  const svgNS = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(svgNS, "svg");
-  const path = document.createElementNS(svgNS, "path");
-
-  svg.style.position = "absolute";
-  svg.style.width = "0";
-  svg.style.height = "0";
-  path.setAttribute("d", pathData);
-  svg.appendChild(path);
-  document.body.appendChild(svg);
-
-  const points: Point[] = [];
-  try {
-    const length = path.getTotalLength();
-    for (let i = 0; i < numPoints; i++) {
-      const pt = path.getPointAtLength((i / numPoints) * length);
-      points.push({ x: pt.x, y: pt.y });
-    }
-  } catch (e) {
-    for (let i = 0; i < numPoints; i++) points.push({ x: 9.5, y: 15 });
-  } finally {
-    document.body.removeChild(svg);
-  }
-  return points;
-}
 
 export interface LogoMorphLoadingProps {
   onComplete: () => void;
 }
 
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+}
+
 export default function LogoMorphLoading({ onComplete }: LogoMorphLoadingProps) {
   const [isMounted, setIsMounted] = useState(false);
-  const [isReady, setIsReady] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
-
-  // DOM Refs
-  const bigPathRef = useRef<SVGPathElement>(null);
-  const smallPathRef = useRef<SVGPathElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-
-  // Animation instance refs for cleanup
-  const timelineRef = useRef<Timeline | null>(null);
-
-  // The mathematical source of truth for the vectors
-  const pointsRef = useRef({
-    bigStart: [] as Point[],
-    bigEnd: [] as Point[],
-    smallStart: [] as Point[],
-    smallEnd: [] as Point[],
-  });
-
-  // The proxy object Anime.js will animate
-  const animStateRef = useRef({ bigScale: 0, smallY: -20, roll: 0, morph: 0 });
+  const [particles, setParticles] = useState<Particle[]>([]);
 
   useEffect(() => {
-    // Flag that component has safely loaded on the client browser
     setIsMounted(true);
 
-    // 1. Sample all points securely on mount
-    pointsRef.current = {
-      bigStart: samplePathPoints(getCirclePath(9.5, 15, 6)),
-      smallStart: samplePathPoints(getCirclePath(9.5, 24.5, 3.5)),
-      bigEnd: samplePathPoints(LOGO_TOP_PATH),
-      smallEnd: samplePathPoints(LOGO_BOTTOM_PATH),
-    };
+    // Create client-safe random particle array for subtle bg atmosphere
+    const generated = Array.from({ length: 20 }).map((_, i) => ({
+      id: i,
+      x: Math.random() * 100 - 50,
+      y: Math.random() * 100 - 50,
+      size: Math.random() * 2 + 1,
+      duration: Math.random() * 12 + 12,
+      delay: Math.random() * -20,
+    }));
+    setParticles(generated);
 
-    setIsReady(true);
+    // Sequence timing:
+    // 3.2s: Begin loader screen fade-out (gives ample time for text reveal to sit)
+    const fadeTimer = setTimeout(() => {
+      setIsFadingOut(true);
+    }, 3200);
 
-    // 2. The High-Performance Render Loop (Vertex Math)
-    const renderFrame = () => {
-      const state = animStateRef.current;
-      const pts = pointsRef.current;
-      if (!pts.bigStart.length) return;
-
-      // Pipeline for Top Path (Big Circle)
-      const bigPts = pts.bigStart.map((pt, i) => {
-        let x = 9.5 + (pt.x - 9.5) * state.bigScale;
-        let y = 15 + (pt.y - 15) * state.bigScale;
-
-        x += (pts.bigEnd[i].x - x) * state.morph;
-        y += (pts.bigEnd[i].y - y) * state.morph;
-        return `${i === 0 ? 'M' : 'L'} ${x.toFixed(3)} ${y.toFixed(3)}`;
-      });
-      if (bigPathRef.current) bigPathRef.current.setAttribute('d', bigPts.join(' ') + ' Z');
-
-      // Pipeline for Bottom Path (Small Circle)
-      let cx = 9.5;
-      let cy = state.smallY;
-
-      // Calculate roll trajectory
-      if (state.roll > 0) {
-        const angle = -Math.PI / 2 + Math.PI * state.roll;
-        cx = 9.5 + 9.5 * Math.cos(angle);
-        cy = 15 + 9.5 * Math.sin(angle);
-      }
-
-      const smallPts = pts.smallStart.map((pt, i) => {
-        let x = cx + (pt.x - 9.5);
-        let y = cy + (pt.y - 24.5);
-
-        x += (pts.smallEnd[i].x - x) * state.morph;
-        y += (pts.smallEnd[i].y - y) * state.morph;
-        return `${i === 0 ? 'M' : 'L'} ${x.toFixed(3)} ${y.toFixed(3)}`;
-      });
-      if (smallPathRef.current) smallPathRef.current.setAttribute('d', smallPts.join(' ') + ' Z');
-    };
-
-    // 3. Build the Anime.js Timeline
-    const buildTimeline = () => {
-      const tl = createTimeline({
-        autoplay: true,
-        onComplete: () => {
-          // Fade out the overlay and finish loading
-          setTimeout(() => {
-            setIsFadingOut(true);
-            setTimeout(onComplete, 700); // Matches transition duration
-          }, 400);
-        }
-      });
-
-      timelineRef.current = tl;
-
-      tl.add(animStateRef.current, {
-        bigScale: 1,
-        duration: 1200,
-        ease: 'outElastic(1, 0.6)', // Snappy pop-in
-        onUpdate: renderFrame
-      })
-        .add(animStateRef.current, {
-          smallY: 5.5,
-          duration: 1100,
-          ease: 'outBounce', // Physical gravity bounce on impact
-          onUpdate: renderFrame
-        }, '-=1000')
-        .add(animStateRef.current, {
-          roll: 1,
-          duration: 1000,
-          ease: 'inOutQuart', // Butter-smooth sweep
-          onUpdate: renderFrame
-        }, '-=150')
-        .add(animStateRef.current, {
-          morph: 1,
-          duration: 1400,
-          ease: 'outElastic(1, 0.75)', // The liquid overshoot snap
-          onUpdate: renderFrame
-        }, '-=100');
-    };
-
-    // Slight delay guarantees React has mounted the SVG paths before anime hooks them
-    const timer = setTimeout(buildTimeline, 50);
+    // 3.9s: Trigger AppShell dashboard transition
+    const completeTimer = setTimeout(() => {
+      onComplete();
+    }, 3900);
 
     return () => {
-      clearTimeout(timer);
-      if (timelineRef.current) timelineRef.current.pause();
+      clearTimeout(fadeTimer);
+      clearTimeout(completeTimer);
     };
   }, [onComplete]);
 
-  // Critical fix: Returns nothing on Server-side render pass to keep DOM clean.
   if (!isMounted) return null;
 
   return (
     <div
-      className={`fixed inset-0 flex flex-col items-center justify-center gap-8 bg-[#060010] select-none overflow-hidden z-[9999] transition-all duration-700 ease-in-out ${isFadingOut ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'
-        }`}
+      className={`fixed inset-0 flex flex-col items-center justify-center gap-6 bg-[#060010] select-none overflow-hidden z-[9999] transition-all duration-700 ease-in-out ${
+        isFadingOut ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'
+      }`}
     >
-      <div className="relative flex flex-col items-center justify-center w-70 h-70">
-        {/* SVG Container: Fade in once points are sampled */}
+      {/* Cosmic background radial gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(25,18,52,0.45)_0%,rgba(6,0,16,1)_85%)]" />
+
+      {/* Floating Particles Field */}
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-indigo-400/20 blur-[0.5px]"
+          style={{
+            width: p.size,
+            height: p.size,
+            left: `calc(50% + ${p.x}vw)`,
+            top: `calc(50% + ${p.y}vh)`,
+          }}
+          animate={{
+            x: [0, Math.random() * 30 - 15, 0],
+            y: [0, Math.random() * 30 - 15, 0],
+            opacity: [0.1, 0.4, 0.1],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
+
+      {/* Ambient background glowing orbs */}
+      <motion.div
+        className="absolute w-[320px] h-[320px] rounded-full bg-[#A9B7FB]/10 blur-[80px]"
+        animate={{
+          scale: [1, 1.25, 1],
+          opacity: [0.4, 0.7, 0.4],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+      <motion.div
+        className="absolute w-[260px] h-[260px] rounded-full bg-[#8b5cf6]/8 blur-[70px]"
+        animate={{
+          scale: [1.2, 0.9, 1.2],
+          opacity: [0.3, 0.6, 0.3],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          ease: 'easeInOut',
+          delay: 0.5,
+        }}
+      />
+
+      {/* Central SVG Container - Compact height to center the entire group perfectly */}
+      <div className="relative flex flex-col items-center justify-center w-32 h-28">
         <svg
-          ref={svgRef}
-          viewBox="0 0 19 30"
-          className={`w-24 h-auto relative z-10 overflow-visible transition-opacity duration-700 ${isReady ? 'opacity-100' : 'opacity-0'}`}
+          viewBox="0 0 20 23"
+          className="w-24 h-auto relative z-10 overflow-visible"
         >
-          <path ref={bigPathRef} fill="#F2EEE9" />
-          <path ref={smallPathRef} fill="#D4C9E8" />
+          {/* Path 1: Bottom-Left Lavender Arc (Draw outline -> Rotate & Fade In Fill) */}
+          <motion.path
+            d="M8.98438 22.9611C8.98438 21.7856 8.75199 20.6217 8.30048 19.5357C7.84897 18.4497 7.18719 17.463 6.35291 16.6318C5.51864 15.8006 4.52821 15.1413 3.43817 14.6915C2.34814 14.2417 1.17984 14.0102 0 14.0102L3.9272e-07 22.9611H8.98438Z"
+            fill="#A9B7FB"
+            style={{
+              transformOrigin: '4.5px 18.5px',
+            }}
+            initial={{
+              pathLength: 0,
+              stroke: '#A9B7FB',
+              strokeWidth: 0.4,
+              strokeOpacity: 0.8,
+              fillOpacity: 0,
+              rotate: -90,
+              scale: 0.8,
+            }}
+            animate={{
+              pathLength: 1,
+              fillOpacity: 1,
+              strokeOpacity: 0,
+              rotate: 0,
+              scale: 1,
+            }}
+            transition={{
+              pathLength: { duration: 1.0, ease: 'easeInOut', delay: 0.4 },
+              fillOpacity: { duration: 0.6, ease: 'easeOut', delay: 1.0 },
+              strokeOpacity: { duration: 0.6, ease: 'easeOut', delay: 1.0 },
+              rotate: { type: 'spring', stiffness: 140, damping: 11, delay: 1.0 },
+              scale: { type: 'spring', stiffness: 140, damping: 11, delay: 1.0 },
+            }}
+          />
+
+          {/* Path 2: Bottom-Right Lavender Arc (Draw outline -> Rotate opposite & Fade In Fill) */}
+          <motion.path
+            d="M20 23C20 21.5946 19.7221 20.2029 19.1823 18.9044C18.6425 17.606 17.8512 16.4262 16.8537 15.4324C15.8562 14.4386 14.672 13.6503 13.3687 13.1125C12.0654 12.5746 10.6685 12.2978 9.25781 12.2978L9.25781 19.3449C9.7396 19.3449 10.2167 19.4395 10.6618 19.6232C11.1069 19.8069 11.5113 20.0761 11.852 20.4155C12.1927 20.7549 12.4629 21.1578 12.6473 21.6013C12.8316 22.0447 12.9265 22.52 12.9265 23H20Z"
+            fill="#A9B7FB"
+            style={{
+              transformOrigin: '15px 18.5px',
+            }}
+            initial={{
+              pathLength: 0,
+              stroke: '#A9B7FB',
+              strokeWidth: 0.4,
+              strokeOpacity: 0.8,
+              fillOpacity: 0,
+              rotate: 90,
+              scale: 0.8,
+            }}
+            animate={{
+              pathLength: 1,
+              fillOpacity: 1,
+              strokeOpacity: 0,
+              rotate: 0,
+              scale: 1,
+            }}
+            transition={{
+              pathLength: { duration: 1.0, ease: 'easeInOut', delay: 0.4 },
+              fillOpacity: { duration: 0.6, ease: 'easeOut', delay: 1.0 },
+              strokeOpacity: { duration: 0.6, ease: 'easeOut', delay: 1.0 },
+              rotate: { type: 'spring', stiffness: 140, damping: 11, delay: 1.0 },
+              scale: { type: 'spring', stiffness: 140, damping: 11, delay: 1.0 },
+            }}
+          />
+
+          {/* Path 3: Main Body (Cream/White - Draw outline -> Fade In Fill & Scale Up) */}
+          <motion.path
+            d="M20 0C20 6.291 15.5925 11.4002 10.1292 11.4796L9.87076 11.4815C4.40747 11.5609 3.9272e-07 16.6701 3.9272e-07 22.9611L0 0H20ZM10 2.7242C8.4467 2.7242 7.1875 3.97871 7.1875 5.52623C7.1875 7.07375 8.4467 8.32826 10 8.32826C11.5533 8.32826 12.8125 7.07375 12.8125 5.52623C12.8125 3.97871 11.5533 2.7242 10 2.7242Z"
+            fill="#F2EEE9"
+            style={{
+              transformOrigin: '10px 11.5px',
+            }}
+            initial={{
+              pathLength: 0,
+              stroke: '#F2EEE9',
+              strokeWidth: 0.4,
+              strokeOpacity: 0.8,
+              fillOpacity: 0,
+              scale: 0.95,
+            }}
+            animate={{
+              pathLength: 1,
+              fillOpacity: 1,
+              strokeOpacity: 0,
+              scale: 1,
+            }}
+            transition={{
+              pathLength: { duration: 1.1, ease: 'easeInOut', delay: 0.2 },
+              fillOpacity: { duration: 0.6, ease: 'easeOut', delay: 0.9 },
+              strokeOpacity: { duration: 0.6, ease: 'easeOut', delay: 0.9 },
+              scale: { type: 'spring', stiffness: 140, damping: 11, delay: 0.9 },
+            }}
+          />
         </svg>
+
+        {/* Dynamic drop shadow aura behind the SVG logo */}
+        <motion.div
+          className="absolute w-24 h-24 rounded-full bg-[#A9B7FB]/25 blur-xl pointer-events-none z-0"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: [0.5, 1.1, 1], opacity: [0, 0.6, 0.4] }}
+          transition={{ duration: 1.8, delay: 0.6, ease: 'easeOut' }}
+        />
       </div>
 
+      {/* Typography Enter Animation */}
       <div className="w-full flex items-center justify-center pointer-events-none">
         <RevealUnder
           firstWord="React"
           secondWord="Bytes"
           uppercase={true}
-          textClassName="font-sans font-bold text-4xl tracking-[0.2em] translate-x-[0.1em]"
+          textClassName="font-sans font-bold text-4xl tracking-[0.25em] translate-x-[0.125em]"
           color="#f1f5f9"
-          delay={2.2}
+          delay={1.2}
           duration={1.2}
         />
       </div>
