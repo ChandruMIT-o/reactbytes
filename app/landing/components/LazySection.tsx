@@ -19,11 +19,28 @@ export const LazySection: React.FC<LazySectionProps> = ({
     const el = ref.current;
     if (!el) return;
 
-    const observer = new IntersectionObserver(
+    let observer: IntersectionObserver | null = null;
+
+    const handleUnlock = () => {
+      setIsInView(true);
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      if ((window as any).__disableLazyLoading) {
+        setIsInView(true);
+        return;
+      }
+      window.addEventListener("scroll-recorder-unlocked", handleUnlock);
+    }
+
+    observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsInView(true);
-          observer.disconnect(); // Once loaded, keep it mounted
+          observer?.disconnect();
         }
       },
       {
@@ -35,7 +52,12 @@ export const LazySection: React.FC<LazySectionProps> = ({
     observer.observe(el);
 
     return () => {
-      observer.disconnect();
+      if (typeof window !== "undefined") {
+        window.removeEventListener("scroll-recorder-unlocked", handleUnlock);
+      }
+      if (observer) {
+        observer.disconnect();
+      }
     };
   }, []);
 

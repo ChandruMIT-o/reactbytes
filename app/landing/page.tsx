@@ -8,6 +8,9 @@ import CreativeNavbar from "./components/CreativeNavbar";
 import ScrollTimeline from "./components/ScrollTimeline";
 import CreativeFooter from "./components/CreativeFooter";
 import SmoothScrollProvider from "./components/SmoothScrollProvider";
+import AutomaticScrollRecorder from "./components/AutomaticScrollRecorder";
+import { ArrowCursor } from "../meta/cursor/ArrowCursor";
+
 
 
 // Lazy-loaded section components for performance optimization
@@ -183,6 +186,8 @@ export default function LandingPage() {
   return (
     <SmoothScrollProvider>
       <div className="relative min-h-screen bg-[#060010] text-[#f2eee9] font-sans selection:bg-[#c0dedd]/30 selection:text-white overflow-x-hidden">
+        <ArrowCursor color="#c0dedd" />
+        <AutomaticScrollRecorder />
 
         {/* Floating Layout Indicators */}
         {/* <CreativeNavbar activeSection={activeSection} /> */}
